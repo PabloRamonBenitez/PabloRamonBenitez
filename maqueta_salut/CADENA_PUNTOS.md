@@ -19,3 +19,8 @@ Regla: en cada eslabón la foto debe ver **a la vez** puntos ya seguros (para fi
 | 4 | F47/F24 (terraza) | D, G | bar (inicio y fin), ventanas del ala | F23 |
 
 Problema conocido: la torre es casi simétrica y no fija hacia dónde mira la cámara; por eso cada eslabón necesita al menos dos puntos seguros fuera de la torre (en F02: C y el bloque alto; en F18: el arranque del chaflán del eslabón 1).
+
+## Eslabón 1 (F02) – resultado: FALLIDO
+- Ajuste aparente bueno (7,8 px; deformación vertical 0,96), pero la torre sale a 145 m de D: solución degenerada.
+- Causa: en F02 solo se ven dos puntos seguros fuera de la torre (B y C, en la misma arista). Con la torre simétrica, dos puntos en línea no fijan la orientación ni la distancia: hay infinitas cámaras que los explican.
+- Para que el eslabón funcione hacen falta ≥ 3 puntos seguros no alineados en la misma foto. Ninguna de las fotos grandes ve a la vez A-B-C y D.

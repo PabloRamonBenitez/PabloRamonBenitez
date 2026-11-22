@@ -262,7 +262,7 @@ def estilobato():
     sol = [Manifold.extrude(CrossSection([pl["PB"]]), Z_PB + 0.01),
            Manifold.extrude(CrossSection([pl["P1"]]), Z_P1 - Z_PB).translate((0, 0, Z_PB))]
     # ala corta (seccion AA): bloque alto con lucernarios detras de la banda; bloque de ladrillo sobre pilares
-    sol.append(caja(-L_C + 5.0, -2.5, 5.5, W_C, 0, 12.0))
+    sol.append(caja(-L_C + 5.0, -4.0, 5.5, W_C, 0, 12.0))       # no asoma por delante de la PB del chaflan
     for i in range(6):
         pir = Manifold.extrude(CrossSection.square((1.5, 1.5), True), 1.1, 0, 0, (0.05, 0.05))
         sol.append(pir.translate((-L_C + 6.6 + 2.2 * i, 8.5, 11.99)))
@@ -283,7 +283,7 @@ def estilobato():
         x, y, z = v
         ys = y0a + x * (y0b - y0a)
         return (W_P - 0.05 + x * (W_L - W_P + 0.05) * (1 - y), ys + y * (y1 - ys),
-                z * Z_P1 * math.sqrt(max(0.0, 1 - y ** 2)))
+                z * Z_P1 * max(0.0, 1 - y) ** 1.6)          # baja enseguida: las ventanas quedan por encima
     sol.append(Manifold.cube((1, 1, 1)).refine(32).warp(_f))
     est = Manifold.batch_boolean(sol, OpType.Add)
     # huecos de ventanas (franjas continuas casi a paño, 0,3 m) en la planta primera
@@ -291,8 +291,8 @@ def estilobato():
     Y_V = 26.7
     for k in range(10):                                                                   # ala larga: 2 filas de 10
         yk = Y_V + 0.6 + 2.3 * k
-        for z0 in (5.2, 6.9):
-            hue.append(caja(W_P - 0.3, W_P + 1, yk, yk + 1.2, z0, z0 + 1.1))
+        for z0 in (6.0, 7.3):
+            hue.append(caja(W_P - 0.3, W_P + 1, yk, yk + 1.2, z0, z0 + 0.95))
     est = est - Manifold.batch_boolean(hue, OpType.Add)
     est = _a_torre(est)
     Y_F = -RET

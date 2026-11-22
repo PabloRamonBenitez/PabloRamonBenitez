@@ -15,7 +15,7 @@ COTAS = {
  "Z_CON":  (8.5,  "arranque de la concha / muro del relieve", "F09, F18"),
  # --- torre
  "Z_CU0":  (10.4, "base del cuello", "F09"),
- "Z_CU1":  (12.2, "cara superior del cuello", "F02, F18, F50"),
+ "Z_CU1":  (14.4, "cara superior del cuello (cilindro macizo de cara vertical)", "A1 sobre F09 + recorte del usuario"),
  "Z_ALE":  (15.2, "borde inferior de las aletas (fin de las ménsulas)", "F09"),
  "Z_B0":   (13.9, "primer forjado del barril", "F09 (paso 3,10)"),
  "F":      (3.10, "altura de planta del barril", "F09: dinteles cada 40 px"),

@@ -193,9 +193,11 @@ def detalles():
     L.cota(ax, (E.R_B - 0.25, E.Z_B0 + 0.45), (E.R_B - 0.25, E.Z_B0 + 0.75), -1.2, "ranura", fs=5.5)
     # alzado de 3 modulos
     ax2 = fig.add_axes([0.47, 0.06, 0.25, 0.86])
-    m = M.rotate((0, 0, -(math.degrees(E.A_CH) - 0))).rotate((-90, 0, 0))
+    a_ = math.degrees(math.atan2(E.N[1], E.N[0])) - 90.0
+    m = M.rotate((0, 0, -a_)).rotate((-90, 0, 0))
+    tx = E.T[0] * math.cos(math.radians(-a_)) - E.T[1] * math.sin(math.radians(-a_))
     L.dibujar_vista(ax2, m, res=0.02)
-    ejes(ax2, (-6, 6), (E.Z_B0 - 3, E.Z_B0 + 3 * E.F + 0.5))
+    ejes(ax2, (tx - 6, tx + 6), (E.Z_B0 - 3, E.Z_B0 + 3 * E.F + 0.5))
     ax2.set_title("alzado frontal de 3 módulos (aletas cada 360/19 = 18,9°)", fontsize=8, loc="left")
     foto(fig.add_axes([0.74, 0.52, 0.25, 0.40]), "4.webp", "comprobación F04: poyete alto, ranura, aletas")
     foto(fig.add_axes([0.74, 0.08, 0.25, 0.40]), "6.webp", "comprobación F06")
@@ -235,10 +237,11 @@ def coherencia():
         # excluir la caja de escalera (sector trasero, en linea con el ala larga) y el estilobato
         ce = np.array(E.T)
         ang = np.degrees(np.arctan2(a[:, 1] - ce[1], a[:, 0] - ce[0]))
-        dir_esc = math.degrees(math.atan2(E.ESC_Y1 - E.T[1], (E.W_BAR / 2 + 0.5) - E.T[0]))
+        dir_esc = math.degrees(math.atan2(E.ESC_Y1 - E.T[1], E._v["ESC_X"] - E.T[0]))
         lejos = np.abs((ang - dir_esc + 180) % 360 - 180) > 45
         dist = np.hypot(*(a - c).T)
         sel = lejos & (dist < 17.5)
+        if not sel.any(): sel = dist < 17.5
         dm = 2 * np.percentile(dist[sel], 99.5)
         filas.append((nom, foto_v, dm, fuente))
     fig = hoja("COMPROBACIÓN CRUZADA – medidas de las fotos frente a los planos")

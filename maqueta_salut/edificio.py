@@ -45,6 +45,19 @@ import os
 A_CH = math.radians(float(os.environ.get("ACH", "57")))   # angulo del chaflan con la calle [provisional]
 TH_L = math.radians(float(os.environ.get("THL", "112")))   # angulo interior de la L (calle - ala larga) [FASE 2: F35/F58 ~102]
 REST, COL, HOT = 14.3, 6.5, 11.4            # tramos del chaflan    [C04 calibrada: 14,3 + 6,5 + 11,4]
+# ====== FUENTE UNICA: todas las cotas se leen del CUADRO DE COTAS (cotas.py); lo de arriba queda como historial
+import cotas as _K
+_v = _K.V
+Z_PB, Z_P1, Z_BAR, Z_BAR_C, Z_ALTO = _v["Z_PB"], _v["Z_P1"], _v["Z_BAR"], _v["Z_BARC"], _v["Z_ALTO"]
+Z_CU0, Z_CU1, Z_ALETA0, Z_B0, F, N_PL = _v["Z_CU0"], _v["Z_CU1"], _v["Z_ALE"], _v["Z_B0"], _v["F"], int(_v["N_PL"])
+Z_B1 = Z_B0 + N_PL * F
+Z_T1, Z_G1, Z_V1, Z_R1 = _v["Z_T1"], _v["Z_G1"], _v["Z_V1"], _v["Z_R1"]
+R_COL, R_CU, R_B, R_AL, R_T, R_G, R_V, R_R = _v["R_COL"], _v["R_CU"], _v["R_B"], _v["R_AL"], _v["R_T"], _v["R_G"], _v["R_V"], _v["R_R"]
+OFF_V, OFF_R, N_AL = (_v["OV_X"], _v["OV_Y"]), (_v["OR_X"], 0.0), int(_v["N_AL"])
+W_P, W_BAR, L_L, L_FIN, W_EXT = _v["W_P"], _v["W_BAR"], _v["L_L"], _v["L_FIN"], _v["W_EXT"]
+Y_CUNA = L_L - _v["D_CUNA"]
+A_CH, TH_L = math.radians(_v["ACH"]), math.radians(_v["THL"])
+REST, COL, HOT = _v["REST"], _v["COL"], _v["HOT"]
 L_CH = REST + COL + HOT
 KC = (W_EXT, 0.0)                           # esquina exterior de la L antes del chaflan
 PHI = TH_L - math.pi / 2                    # giro de la calle respecto a la posicion perpendicular
@@ -57,11 +70,11 @@ A1 = (KC[0] + _a * US[0], KC[1] + _a * US[1])   # arranque del chaflan en la cal
 C = (KC[0], KC[1] + _c)                     # fin del chaflan en el borde exterior de la concha
 U = ((C[0] - A1[0]) / L_CH, (C[1] - A1[1]) / L_CH)
 N = (-U[1], U[0])                           # hacia dentro
-RET = 1.5           # la columna asoma por delante de la planta primera [F09/F18]
-RETR = 2.5          # retranqueo de la planta baja bajo la planta primera [F09, F14, F47]
+RET = _v["RET"]           # la columna asoma por delante de la planta primera [F09/F18]
+RETR = _v["RETR"]          # retranqueo de la planta baja bajo la planta primera [F09, F14, F47]
 _k = REST + COL / 2
 T = (A1[0] + _k * U[0] + (R_COL - RET) * N[0], A1[1] + _k * U[1] + (R_COL - RET) * N[1])   # eje de la torre
-L_C, W_C = 24.0, 12.0       # ala corta: extremo de la calle en x=-L_C, fondo 12   [F01, estimado]
+L_C, W_C = _v["L_C"], _v["W_C"]       # ala corta: extremo de la calle en x=-L_C, fondo 12   [F01, estimado]
 D_FAR = W_EXT + L_C         # longitud de la fachada a la calle desde la esquina exterior
 
 
@@ -75,9 +88,9 @@ def _inter(p, d, q, e):
     den = d[0] * e[1] - d[1] * e[0]
     s = ((q[0] - p[0]) * e[1] - (q[1] - p[1]) * e[0]) / den
     return (p[0] + s * d[0], p[1] + s * d[1])
-L_LADR = 5.0                # bloque de ladrillo del extremo, sobre pilares       [F01]
+L_LADR = _v["L_LAD"]                # bloque de ladrillo del extremo, sobre pilares       [F01]
 # escalera trasera: en linea con el ala larga, dentro de la L [usuario]
-ESC_W, ESC_Y0, ESC_Y1 = 10.0, T[1] + 10.0, T[1] + R_AL + 1.0
+ESC_W, ESC_Y0, ESC_Y1 = _v["ESC_W"], T[1] + 10.0, T[1] + R_AL + 1.0
 
 
 def P(X, Y):
@@ -122,7 +135,7 @@ def base():
     sc = []
     # ala corta: bloque alto (detras de la banda del restaurante) y ladrillo sobre pilares en el extremo
     sc.append(caja(-L_C + L_LADR, xA - 1.0, 5.5, W_C, Z_P1 - 0.01, Z_ALTO))
-    sc.append(caja(-L_C, -L_C + L_LADR, 0, W_C, 5.0, Z_LADR + 1.0))   # caja de ladrillo elevada sobre la calle [PASADA 1: F19]
+    sc.append(caja(-L_C, -L_C + L_LADR, 0, W_C, _v["Z_LAD0"], _v["Z_LAD1"]))   # caja de ladrillo elevada sobre la calle [PASADA 1: F19]
     for xp in (-L_C + 0.6, -L_C + L_LADR - 0.6):
         for yp in (0.6, W_C - 0.6):
             sc.append(caja(xp - 0.35, xp + 0.35, yp - 0.35, yp + 0.35, 0, 5.01))
@@ -178,13 +191,13 @@ def torre():
          Manifold.cylinder(4.0, R_COL * 1.5, R_COL, SEG).translate((T[0], T[1], 0)),   # pie conico [PASADA 1: F15, F01] cil(T, R_CU, Z_CU0, Z_CU1 + 0.05),
          cil(T, R_CU + 0.6, Z_CU0, Z_CU0 + 0.6)]                       # losa inferior del cuello, volada [F18, F50]
     # vigas radiales bajo el barril y barril con forjados/poyetes + aletas
-    s.append(Manifold.cylinder(Z_B0 - Z_CU1 + 0.05, R_CU, R_B - 0.1, SEG).translate((T[0], T[1], Z_CU1)))   # fondo inclinado
-    for k in range(N_AL):                                   # 19 menculas triangulares bajo las aletas [F18, F50, F03]
+    s.append(cil(T, R_B - 0.1, Z_CU1 - 0.01, Z_ALETA0 + 0.05))   # fondo del barril (sofito plano a la cota de las aletas)
+    for k in range(N_AL):                                   # 19 ménsulas triangulares: de la punta de la aleta al borde del cuello
         a = math.degrees(2 * math.pi * k / N_AL)
-        pts = [(R_CU - 0.3, Z_CU1), (R_CU - 0.3, Z_B0 + 0.2), (R_AL, Z_ALETA0 + 0.05), (R_AL, Z_ALETA0 - 0.7)]
-        if sum(pts[i][0] * pts[(i + 1) % 4][1] - pts[(i + 1) % 4][0] * pts[i][1] for i in range(4)) < 0:
-            pts = pts[::-1]
+        pts = [(R_CU - 0.3, Z_CU1), (R_CU - 0.3, Z_ALETA0 + 0.05), (R_AL, Z_ALETA0 + 0.05)]
         pl_ = Manifold.extrude(CrossSection([pts]), 0.4).translate((0, 0, -0.2)).rotate((90, 0, 0))
+        if pl_.volume() <= 0:
+            pl_ = Manifold.extrude(CrossSection([pts[::-1]]), 0.4).translate((0, 0, -0.2)).rotate((90, 0, 0))
         s.append(pl_.rotate((0, 0, a)).translate((T[0], T[1], 0)))
     rf = R_B - 1.8
     s.append(cil(T, rf, Z_B0, Z_B1 + 0.4))
@@ -213,7 +226,7 @@ def torre():
     s.append(cil(pv, R_V, Z_G1, Z_V1))
     s.append(cil(pr, R_R, Z_V1, Z_R1))
     # escalera trasera, en linea con el ala larga [usuario, F11-F13]
-    xe = T[0]                                     # escalera en linea con el eje de la torre [PASADA 3]
+    xe = _v["ESC_X"]                             # eje de la escalera (cuadro de cotas)
     s.append(caja(xe - ESC_W / 2, xe + ESC_W / 2, ESC_Y0, ESC_Y1, 0.0, Z_T1 + 1.0))   # la escalera baja hasta el suelo [coherencia]
     m = Manifold.batch_boolean(s, OpType.Add)
     # ventanas de las habitaciones: un hueco por modulo entre aletas, sobre el poyete [F04, F06, F09]

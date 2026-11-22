@@ -11,7 +11,7 @@ import edificio as E
 T = tuple(E.T); P = E.P
 yf = -(E.R_COL - E.RET)                 # frente de la planta primera en el chaflan (coordenada de torre)
 pl = E.plantas_base(); Qy = pl["Q"][1]; A1 = E.A1; C = E.C
-xe = E.T[0]
+xe = E._v["ESC_X"]
 xA = E.W_EXT - E._a                     # arranque del chaflan en coordenadas "de L recta"
 Y_V = 52.0                              # inicio de las ventanas del ala larga [F47]
 

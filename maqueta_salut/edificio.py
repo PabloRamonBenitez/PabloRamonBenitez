@@ -9,13 +9,13 @@ SEG = 96
 # ------------------------------------------------------------------ alturas [F09, F14]
 Z_PB = 3.9          # techo planta baja                          [F09 3,9 / F14 3,6]
 Z_P1 = 7.3          # coronacion planta primera = terraza         [F09 7,3 / F14 7,2]
-Z_BAR = 10.6        # techo del bar (una planta sobre la terraza) [F47 proporcion con la banda]
-Z_BAR_C = 11.1      # cubierta volada del bar
+Z_BAR = 11.0        # techo del bar [coherencia: misma planta que el bloque alto del ala corta (seccion AA/BB)]
+Z_BAR_C = 11.5      # cubierta volada del bar = bloque alto
 Z_ALTO = 11.5       # bloque alto del ala corta                    [F01, seccion AA del usuario ~12]
 Z_LADR = 9.0        # bloque de ladrillo                           [F01]
 Z_CU0 = 10.4                   # cuello (base)                     [F09; se revisa en fase 4]
 Z_B0, N_PL, F = 13.9, 6, 3.1   # barril: 6 plantas de 3,1 (5 con ventanas + pavés) [FASE 1: F09, dinteles cada 40 px]
-Z_CU1 = Z_B0
+Z_CU1 = 12.2                   # cara superior del cuello; encima, menculas y fondo inclinado hasta el barril [FASE 4: F02, F18, F50]
 Z_ALETA0 = 15.2                # borde inferior visible de las aletas; debajo, ménsulas [F09]
 Z_B1 = Z_B0 + N_PL * F         # 32,6
 Z_T1 = 38.2                    # tambor de ojos                    [F09 5,4]
@@ -24,7 +24,7 @@ Z_V1 = 43.7                    # visera                            [F09 3,2]
 Z_R1 = 49.1                    # remate (sin antenas)              [F09 total 49,1]
 # ------------------------------------------------------------------ radios / anchos [F09, F14, F01]
 R_COL = 3.25        # columna 6,5                                   [F09 6,5 / F14 6,0]
-R_CU = 7.5          # cuello 15,0                                   [F09]
+R_CU = 9.0          # cuello Ø18 [FASE 4: F01 16,9 · F02 19,4 · época 0,63 D]
 R_B = 14.4          # borde de balcones; aletas hasta 15,3 (30,6)   [escala]
 R_AL = 15.3
 R_T = 13.55         # tambor de ojos 27,1                           [F01, F09, F14]
@@ -142,7 +142,7 @@ def base():
     def f(v):
         x, y, z = v
         y = min(max(y, 0.0), 1.0)
-        return (W_P - 0.02 + x * max(0.05, (W_EXT - W_P) * (1 - y)), y0 + y * (Y_CUNA - y0), Z_PB * (1 - y) + z * max(0.05, (Z_P1 - Z_PB * (1 - y)) * max(0.0, 1 - y) ** 1.3))
+        return (W_P - 0.02 + x * max(0.05, (W_EXT - W_P) * (1 - y)), y0 + y * (Y_CUNA - y0), Z_PB * (1 - y) + z * max(0.05, (Z_P1 + 1.0 - Z_PB * (1 - y)) * max(0.0, 1 - y) ** 1.3))
     concha = Manifold.cube((1, 1, 1)).refine(30).warp(f)
     s.append(concha)
     m = Manifold.batch_boolean(s, OpType.Add)
@@ -171,9 +171,17 @@ def base():
 
 
 def torre():
-    s = [cil(T, R_COL, 0, Z_CU0 + 0.1), cil(T, R_CU, Z_CU0, Z_CU1 + 0.05)]
+    s = [cil(T, R_COL, 0, Z_CU0 + 0.1), cil(T, R_CU, Z_CU0, Z_CU1 + 0.05),
+         cil(T, R_CU + 0.6, Z_CU0, Z_CU0 + 0.6)]                       # losa inferior del cuello, volada [F18, F50]
     # vigas radiales bajo el barril y barril con forjados/poyetes + aletas
-    s.append(Manifold.cylinder(Z_B0 - Z_CU1 + 0.05, R_CU, R_B - 0.1, SEG).translate((T[0], T[1], Z_CU1)))
+    s.append(Manifold.cylinder(Z_B0 - Z_CU1 + 0.05, R_CU, R_B - 0.1, SEG).translate((T[0], T[1], Z_CU1)))   # fondo inclinado
+    for k in range(N_AL):                                   # 19 menculas triangulares bajo las aletas [F18, F50, F03]
+        a = math.degrees(2 * math.pi * k / N_AL)
+        pts = [(R_CU - 0.3, Z_CU1), (R_CU - 0.3, Z_B0 + 0.2), (R_AL, Z_ALETA0 + 0.05), (R_AL, Z_ALETA0 - 0.7)]
+        if sum(pts[i][0] * pts[(i + 1) % 4][1] - pts[(i + 1) % 4][0] * pts[i][1] for i in range(4)) < 0:
+            pts = pts[::-1]
+        pl_ = Manifold.extrude(CrossSection([pts]), 0.4).translate((0, 0, -0.2)).rotate((90, 0, 0))
+        s.append(pl_.rotate((0, 0, a)).translate((T[0], T[1], 0)))
     rf = R_B - 1.8
     s.append(cil(T, rf, Z_B0, Z_B1 + 0.4))
     for i in range(N_PL):
@@ -202,7 +210,7 @@ def torre():
     s.append(cil(pr, R_R, Z_V1, Z_R1))
     # escalera trasera, en linea con el ala larga [usuario, F11-F13]
     xe = W_BAR / 2 + 0.5
-    s.append(caja(xe - ESC_W / 2, xe + ESC_W / 2, ESC_Y0, ESC_Y1, Z_P1 - 0.01, Z_T1 + 1.0))
+    s.append(caja(xe - ESC_W / 2, xe + ESC_W / 2, ESC_Y0, ESC_Y1, 0.0, Z_T1 + 1.0))   # la escalera baja hasta el suelo [coherencia]
     m = Manifold.batch_boolean(s, OpType.Add)
     # ventanas de las habitaciones: un hueco por modulo entre aletas, sobre el poyete [F04, F06, F09]
     hue = []

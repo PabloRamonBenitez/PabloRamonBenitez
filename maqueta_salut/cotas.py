@@ -6,7 +6,7 @@ import numpy as np
 COTAS = {
  # --- alturas de la base
  "Z_PB":   (3.2,  "techo de planta baja, única en toda la base", "F15 (época, autobús como escala)"),
- "Z_P1":   (7.3,  "coronación de planta primera = terraza", "F09 7,3 / F14 7,2 / F15 7,2"),
+ "Z_P1":   (7.2,  "coronación de planta primera = terraza (7,1 ± 0,3)", "rangos: F09 7,3 · F14 7,2 · F15 7,2 · F70 6,5"),
  "Z_BAR":  (11.0, "techo del bar sobre la terraza", "coherencia: = bloque alto ala corta"),
  "Z_BARC": (11.5, "cubierta volada del bar", "= bloque alto (sección AA/BB)"),
  "Z_ALTO": (11.5, "bloque alto del ala corta", "F01, sección AA del usuario"),
@@ -17,7 +17,7 @@ COTAS = {
  "Z_CON":  (7.8,  "llegada de la rampa arriba (superficie; el peto de 1 m llega a ≈ +8,8)", "rangos: peto arriba F09 +8,3 ± 0,8 / F71 +9,6 ± 1,2 → +8,8"),
  # --- torre
  "Z_CU0":  (10.4, "base del cuello", "F09"),
- "Z_CU1":  (14.4, "cara superior del cuello (cilindro macizo de cara vertical)", "A1 sobre F09 + recorte del usuario"),
+ "Z_CU1":  (13.9, "cara superior del cuello = cara inferior del barril (primer forjado)", "F09 14,4 ± 0,6 ajustado por coherencia con Z_B0 (pasada 7)"),
  "Z_ALE":  (15.2, "borde inferior de las aletas (fin de las ménsulas)", "F09"),
  "Z_B0":   (13.9, "primer forjado del barril", "F09 (paso 3,10)"),
  "F":      (3.10, "altura de planta del barril", "F09: dinteles cada 40 px"),
@@ -34,7 +34,7 @@ COTAS = {
  "R_T":    (13.55,"radio del tambor de ojos (Ø 27,1)", "F01, F09, F14"),
  "R_G":    (10.85,"radio de la banda acristalada (Ø 21,7)", "F09"),
  "R_V":    (12.8, "radio de la visera (Ø 25,6)", "F09; Google 24,35"),
- "R_R":    (5.6,  "radio del remate (Ø 11,2)", "F09"),
+ "R_R":    (5.15, "radio del remate (Ø 10,3 ± 0,5)", "rangos: F09 11,2 · F14 10,3 · F01 10,0 · F70 9,6"),
  "OV_X":   (-0.4, "desplazamiento de la visera a lo largo del chaflán", "ajuste C02 + C04"),
  "OV_Y":   (-4.2, "desplazamiento de la visera hacia la plaza (−)", "ajuste C02 + C04"),
  "OR_X":   (0.6,  "desplazamiento del remate", "F09"),

@@ -285,13 +285,17 @@ def estilobato():
         ys = y0a + x * (y0b - y0a)
         return (W_P - 0.05 + x * (W_L - W_P + 0.05) * (1 - y), ys + y * (y1 - ys),
                 z * Z_P1 * max(0.0, 1 - y) ** 1.6)          # baja enseguida: las ventanas quedan por encima
-    sol.append(Manifold.cube((1, 1, 1)).refine(32).warp(_f))
+    concha = Manifold.cube((1, 1, 1)).refine(32).warp(_f)
+    # F47 / F09: debajo de la concha la planta baja queda hundida en sombra (bajos comerciales, tienda Ridne)
+    concha = concha - caja(W_P - 0.1, W_L + 1, 0, L_L, -1, Z_PB - 0.6)
+    sol.append(concha)
     est = Manifold.batch_boolean(sol, OpType.Add)
     # huecos de ventanas (franjas continuas casi a paño, 0,3 m) en la planta primera
-    hue = [caja(-L_C + 0.3, pl["P1"][1][0] - 0.3, -1, 0.3, 4.5, 6.6)]                     # calle, ala corta
-    Y_V = L_L - 30.0                                                                      # ventanas AL FINAL del ala (F01, F24, F33)
-    for k in range(12):                                                                   # ala larga: 2 filas de 12
-        yk = Y_V + 0.6 + 2.3 * k
+    hue = [caja(-L_C + 0.3, pl["P1"][1][0] - 0.3, -1, 0.3, 4.5, 6.6)]
+    hue.append(caja(W_P - 2.0, W_P + 1, y0a + 0.5, y1, -1, Z_PB - 0.6))                 # PB hundida bajo la concha                     # calle, ala corta
+    Y_V = 52.0                                                                            # F47: ventanas en la mitad del fondo del ala
+    for k in range(10):                                                                   # 2 filas de 10, cada ~4 m, hasta el final
+        yk = Y_V + 1.2 + 4.0 * k
         for z0 in (4.6, 5.9):
             hue.append(caja(W_P - 0.3, W_P + 1, yk, yk + 1.2, z0, z0 + 0.95))
     est = est - Manifold.batch_boolean(hue, OpType.Add)

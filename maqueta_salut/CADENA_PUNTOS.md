@@ -24,3 +24,8 @@ Problema conocido: la torre es casi simétrica y no fija hacia dónde mira la c�
 - Ajuste aparente bueno (7,8 px; deformación vertical 0,96), pero la torre sale a 145 m de D: solución degenerada.
 - Causa: en F02 solo se ven dos puntos seguros fuera de la torre (B y C, en la misma arista). Con la torre simétrica, dos puntos en línea no fijan la orientación ni la distancia: hay infinitas cámaras que los explican.
 - Para que el eslabón funcione hacen falta ≥ 3 puntos seguros no alineados en la misma foto. Ninguna de las fotos grandes ve a la vez A-B-C y D.
+
+## Eslabón F73 (ala larga desde su extremo) – resultado: FALLIDO
+- Con la torre + las dos esquinas del extremo (D, E a 17 m, peto ~+8,3) la cámara no converge: la torre se va al límite (171 m de D), error 17,7 px.
+- Causa probable: no conozco con seguridad la cota del bloque final (en F73 y en la maqueta F76 parece más alto que la terraza) ni qué esquina es cuál; con eso mal, el cálculo no tiene solución física.
+- Lectura cualitativa que sí vale: la escalera se ve pegada al barril del lado del ala; el ala tiene dos filas de ventanas pequeñas; al final hay un bloque con barandilla en cubierta; el peto del ala va recto hasta ese bloque.

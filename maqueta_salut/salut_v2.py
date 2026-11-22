@@ -28,9 +28,9 @@ R_B = 14.4                   # borde de balcones (D = 28,8 m)
 FONDO_BALCON = 1.8
 R_CUELLO, R_COL = 9.1, 2.8   # foto de epoca: cuello 0,63 D, columna 0,19 D
 R_OJOS = 12.7                # el tambor deja una terraza de servicio de ~1,7 m
-R_VID, R_VIS, R_VIS_INF = 9.4, 12.1, 9.7
+R_VID, R_VIS, R_VIS_INF = 8.9, 11.9, 9.2
 R_TOP = 4.8
-OFF_VIS = (-2.7, -1.0)       # visera + banda acristalada descentradas (hacia delante-izquierda)
+OFF_VIS = (-3.2, -1.8)       # visera + banda acristalada descentradas ~3,7 m hacia delante-izquierda (3 fotos)
 OFF_TOP = (0.0, 0.5)         # tambor superior casi en el eje, algo hacia la escalera
 # --- caja de escalera trasera ---
 ESC_MEDIO = 4.5
@@ -205,19 +205,23 @@ def base_y_estilobato():
     for k in range(16):   # anillo de piramides invertidas bajo el cuello
         p.append(placa_rz([(R_COL - 0.2, Z_CUELLO0 + 0.05), (R_CUELLO - 0.3, Z_CUELLO0 + 0.05),
                            (R_COL + 0.3, Z_TERRAZA)], 1.6, 22.5 * k + 11))
-    # estilobato (fotos): los bloques arrancan junto a la columna, a ambos lados
-    def bloque(x0, x1, y0, y1, h, frente=True):
-        b = caja(x0, x1, y0, y1, 0, h)
-        if frente:
-            b = b - caja(x0 - 1, x1 + 1, y0 - 1, y0 + 2.0, -1, 3.0)          # planta baja acristalada, retranqueada
-            b = b - caja(x0 + 1.2, x1 - 1.2, y0 - 1, y0 + 0.4, 4.2, 6.5)     # banda de ventanas
-        return b
-    # fachadas de los bloques casi en el plano de la columna (la columna se ve entera, con la fuente delante)
-    p.append(bloque(-21, -R_COL + 0.3, -3.0, 15, 8.2))   # bloque oeste (restaurante)
-    p.append(caja(-29, -17, 1, 17, 0, 11.5))             # cuerpo alto al oeste (detras)
-    p.append(bloque(R_COL - 0.3, 28, -2.5, 15, Z_TERRAZA))  # bloque este (hotel), con terraza
-    p.append(caja(26, 40, -1.5, 19, 0, 9.6))             # muro del relieve / ala hacia el Dnipro
-    p.append(caja(-8, 8, 2, 22, 0, Z_TERRAZA))           # cuerpo trasero (bajo la escalera)
+    # estilobato: bloque largo medido en Google Maps (94,8 x 15,7 m) hacia el NE (Dnipro).
+    # La columna queda encajada en su extremo SO, asomando un poco por delante; chaflan en la esquina de la calle.
+    X0, X1, YF, YB, CHAF = -14.5, 80.3, -2.0, 13.7, 7.0
+    planta_est = CrossSection([[(X0, YB), (X0, YF + CHAF), (X0 + CHAF, YF), (X1, YF), (X1, YB)]])
+    def tramo(xa, xb, h):
+        return Manifold.extrude(planta_est, h) ^ caja(xa, xb, YF - 1, YB + 1, -1, h + 1)
+    p.append(tramo(X0, -R_COL + 0.3, 8.2))                              # restaurante (oeste)
+    p.append(tramo(-R_COL - 0.3, X1, Z_TERRAZA))                        # hotel + ala larga
+    p.append(caja(X0, -6, 4, YB, 0, 11.5))                              # cuerpo alto detras del restaurante
+    huecos = [
+        caja(X0 + CHAF - 0.5, -R_COL - 0.2, YF - 1, YF + 2.0, -1, 3.0),  # planta baja del restaurante, retranqueada
+        caja(X0 + CHAF + 0.8, -R_COL - 1.2, YF - 1, YF + 0.4, 4.2, 6.5), # banda de ventanas del restaurante
+        caja(R_COL + 0.2, 13.5, YF - 1, 5.0, -1, 3.8),                   # hueco de la entrada del hotel (porche)
+        caja(R_COL + 1.2, 11.8, YF - 1, YF + 0.4, 4.6, 7.4),             # banda de ventanas sobre la entrada
+        caja(15, 62, YF - 1, YF + 4.0, -1, 3.2),                         # planta baja comercial bajo el muro del relieve
+    ]
+    p = [Manifold.batch_boolean(p, OpType.Add) - Manifold.batch_boolean(huecos, OpType.Add)]
     fuente = anillo(5.0, 5.6, 0, 0.5) - caja(-7, 7, 0, 7, -1, 1)              # fuente al pie de la columna
     p.append(fuente)
     return Manifold.batch_boolean(p, OpType.Add)

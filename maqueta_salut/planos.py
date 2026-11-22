@@ -108,16 +108,15 @@ def main():
         cota(ax, A1, A2, "C1 chaflan", off=4)
         cota(ax, (-24, 0), (A1[0], 0), "A1 frente calle ala corta", off=4)
         cota(ax, (-24, 0), (-24, 12), "A2 fondo ala corta", off=3)
-        cota(ax, (W_L, A2[1] - 8), (W_L, A2[1] + 38), "B3 bloque terraza", off=-11)
+        cota(ax, (0, 24), (0, L_L - 4), "B3 bar (largo)", off=6)
         Y_A, Y_T = A2[1] - 8, A2[1] + 38
         Y_V = Y_A + 0.45 * (Y_T - Y_A)
-        cota(ax, (0, Y_A), (0, Y_V), "B4 bar", off=3)
-        cota(ax, (W_L, Y_A + 6), (W_L, Y_A + 38), "B5 concha", off=-16)
-        cota(ax, (W_L, Y_A + 6), (W_L + 6.5, Y_A + 6), "B6 vuelo concha", off=-3)
+        cota(ax, (0, 50), (8.5, 50), "B4 ancho bar", off=2); cota(ax, (8.5, 55), (10.0, 55), "B7 voladizo", off=2)
+        cota(ax, (W_L, Y_A + 2), (W_L, Y_A + 34), "B5 concha", off=-12)
+        cota(ax, (W_L, Y_A + 2), (W_L + 4.5, Y_A + 2), "B6 ancho concha", off=-3)
         # alturas
         for tag, p in [("H1 restaurante", (-12, 2.5)), ("H2 bloque alto", (-12, 9)), ("H3 ladrillo", (-21.5, 6)),
-                       ("H4 bar", (3.5, Y_A + 14)), ("H5 terraza", (11.5, Y_A + 30)), ("H6 resto ala", (8, 75)),
-                       ("H7 remate fondo", (8, 89)), ("H8 banda hotel", tuple(cen + 9 * u - 0.2 * n))]:
+                       ("H4 bar", (4, 60)), ("H5 terraza", (13, 60)), ("H8 banda hotel", tuple(cen + 9 * u - 0.2 * n))]:
             altura(ax, p, techo(*p), tag)
         c = cen
         ax.plot(*c, "k+", ms=10); ax.text(c[0] + 1, c[1] - 2, "eje torre", fontsize=7)
@@ -126,7 +125,7 @@ def main():
         ax.annotate("", xy=(30, 95), xytext=(30, 85), arrowprops=dict(arrowstyle="->"))
         ax.text(31, 90, "hacia el Dnipro", fontsize=7)
         # lineas de seccion
-        SA = ((-12, -6), (-12, 18)); SB = ((-6, Y_A + 19), (W_L + 10, Y_A + 19))
+        SA = ((-12, -6), (-12, 18)); SB = ((-6, 30), (W_L + 10, 30))
         for (p, q), nm in ((SA, "A"), (SB, "B")):
             ax.plot(*zip(p, q), "k-.", lw=0.8)
             ax.text(*p, nm, fontsize=11, weight="bold"); ax.text(*q, nm, fontsize=11, weight="bold")

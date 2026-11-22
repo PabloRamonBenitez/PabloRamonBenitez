@@ -235,35 +235,39 @@ def base_y_estilobato():
     planta_L = CrossSection([L_pts]) - CrossSection([[A1, (W_L + 5, -5), (W_L + 5, A2[1] + (5 * math.tan(ang))), A2]])
     def caja_s(x0, x1, y0, y1, z0, z1):
         return caja(x0, x1, y0, y1, z0, z1)
-    H_ALA = 11.5
-    Y_T = A2[1] + 38.0               # fin del bloque de la terraza (foto aerea)
-    Y_A = A2[1] - 8.0                # el bloque de la terraza arranca pegado a la torre
-    Y_V = Y_A + 0.45 * (Y_T - Y_A)   # las ventanas solo en la mitad del fondo; el bar solo en la mitad delantera
-    solido = [Manifold.extrude(planta_L, H_ALA) ^ caja_s(-1, W_L + 1, Y_A, Y_T, -1, 30),            # bloque de la terraza (3 plantas)
-              Manifold.extrude(planta_L, 7.0) ^ caja_s(-1, W_L + 1, Y_T - 0.01, L_L + 1, -1, 30),     # resto del ala, mas bajo y ciego
-              Manifold.extrude(planta_L, Z_TERRAZA) ^ caja_s(-1, W_L + 1, -1, A2[1] + 0.01, -1, 30),  # tramo del hotel junto a la torre
+    # ---- ala larga: SECCION CONSTANTE en toda su longitud (seccion B del usuario) ----
+    #   bloque base hasta el nivel de la terraza (+10,4); encima, en el lado interior, el bar de una planta con su
+    #   cubierta volada sobre la terraza; la terraza (sombrillas) es la franja exterior, con peto.
+    H_ALA = 10.4                     # nivel de la terraza
+    Y_A = A2[1] - 8.0                # el ala arranca detras de la banda del hotel, pegada a la torre
+    Y_V = Y_A + 20.7                 # las ventanas (fila de 10) empiezan aqui (foto aerea)
+    Y_B0, Y_B1 = 24.0, L_L - 4.0     # bar: desde donde acaba el barril casi hasta el fondo (longitud por confirmar)
+    X_B, X_V = 8.5, 10.0             # ancho del bar y borde de su voladizo
+    solido = [Manifold.extrude(planta_L, H_ALA) ^ caja_s(-1, W_L + 1, Y_A, L_L + 1, -1, 30),        # bloque base del ala
+              Manifold.extrude(planta_L, Z_TERRAZA) ^ caja_s(-1, W_L + 1, -1, A2[1] + 0.01, -1, 30),  # banda del hotel junto a la torre
               # ---- ala corta, seccion AA: frontal volado (restaurante) + bloque alto detras ----
               Manifold.extrude(planta_L, 8.9) ^ caja_s(-L_C + 5.0, -0.01, -1, 6.0, -1, 30),         # frontal: banda del restaurante
               caja_s(-L_C + 5.0, -2.0, 5.5, W_C, 0, 12.0),                                         # bloque alto con lucernarios
               caja_s(-2.5, 0.01, 5.5, W_C, 0, 8.2),                                                # pieza baja junto a la torre
               caja_s(-L_C, -L_C + 5.0, 0, W_C, 0, 9.6),                                            # bloque de ladrillo del extremo
-              caja_s(-4, W_L + 4, L_L - 11, L_L, 0, 9.0),                                          # remate transversal del fondo (maqueta original)
-              # ---- ala larga, seccion BB: bar alto en el lado interior con voladizo sobre la terraza ----
-              caja_s(0.0, 7.0, Y_A, Y_V, 0, 12.9),                                                  # bar (cubierta verde), poco mas alto
-              caja_s(6.9, 8.6, Y_A, Y_V, 12.4, 12.9),                                               # su voladizo sobre la terraza
-              caja_s(W_L - 0.3, W_L, Y_A, Y_T, H_ALA - 0.01, H_ALA + 0.6),                          # peto de la terraza (lado exterior)
-              caja_s(7.0, W_L, Y_T - 0.3, Y_T, H_ALA - 0.01, H_ALA + 0.6),                          # peto de la terraza (final)
-              Manifold.hull_points([(6.6, Y_T + 2, 6.99), (9.0, Y_T + 2, 6.99), (7.8, Y_T + 2, 8.2),
-                                    (6.6, L_L - 13, 6.99), (9.0, L_L - 13, 6.99), (7.8, L_L - 13, 8.2)])]  # lucernario en cumbrera
+              # ---- bar sobre la terraza ----
+              caja_s(0.0, X_B, Y_B0, Y_B1, H_ALA - 0.01, H_ALA + 3.0),                              # bar (una planta)
+              caja_s(-0.01, X_V, Y_B0 - 1.5, Y_B1 + 1.5, H_ALA + 3.0, H_ALA + 3.6),                 # cubierta volada del bar
+              caja_s(W_L - 0.3, W_L, Y_A + 6, L_L, H_ALA - 0.01, H_ALA + 1.0),                      # peto de la terraza (lado exterior)
+              caja_s(X_B, W_L, L_L - 0.3, L_L, H_ALA - 0.01, H_ALA + 1.0)]                          # peto de la terraza (fondo)
     for i in range(6):                                                                              # una fila de lucernarios en diente de sierra
         pir = Manifold.extrude(CrossSection.square((1.5, 1.5), True), 1.1, 0, 0, (0.05, 0.05))
         solido.append(pir.translate((-L_C + 6.6 + 2.2 * i, 8.5, 11.99)))
     # concha curva (fotos aerea y frontal): octante de elipsoide pegado a la fachada exterior; su contorno lateral
     # baja en curva desde el bloque del hotel hasta el suelo. Debajo, un espacio cubierto en sombra.
-    U_C, L_R, H_A = 6.5, 32.0, 8.6
-    concha = Manifold.sphere(1.0, 128).scale((U_C, L_R, H_A)) ^ caja(0, U_C + 1, 0, L_R + 1, 0, H_A + 1)
-    concha = concha - caja(2.2, U_C + 1, -1, L_R + 1, -1, 2.8)
-    solido.append(concha.translate((W_L - 0.05, Y_A + 6.0, 0)))
+    U_C, L_R, H_A = 4.5, 32.0, 7.2   # franja RECTA en planta (ancho x largo); la curva esta en alzado
+    def _f(v):
+        x, y, z = v
+        h = H_A * math.sqrt(max(0.0, 1 - y ** 2)) * math.sqrt(max(0.0, 1 - x ** 2))
+        return (x * U_C, y * L_R, z * h)
+    concha = Manifold.cube((1, 1, 1)).refine(32).warp(_f)
+    concha = concha - caja(2.0, U_C + 1, -1, L_R + 1, -1, 2.6)      # espacio cubierto en sombra debajo
+    solido.append(concha.translate((W_L - 0.05, Y_A + 2.0, 0)))
     huecos = [
         # fachada a la calle del ala corta (restaurante): planta baja retranqueada + banda de ventanas
         caja_s(-L_C + 5.5, -0.5, -1, 4.2, -1, 3.0),                                                 # planta baja del restaurante, hundida bajo el volado
@@ -272,7 +276,7 @@ def base_y_estilobato():
     ]
     for k in range(10):                                                                             # dos filas de 10 ventanas, solo en la mitad del fondo
         yk = Y_V + 0.6 + 2.3 * k
-        for z0 in (7.6, 9.6):
+        for z0 in (6.6, 8.4):
             huecos.append(caja_s(W_L - 0.3, W_L + 1, yk, yk + 1.2, z0, z0 + 1.2))
     est = Manifold.batch_boolean(solido, OpType.Add) - Manifold.batch_boolean(huecos, OpType.Add)
     for xp in (-L_C + 0.6, -L_C + 4.4):                                                             # pilares del hueco

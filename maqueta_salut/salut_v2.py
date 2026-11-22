@@ -265,7 +265,7 @@ def base_y_estilobato():
     # baja en curva desde el bloque del hotel hasta el suelo. Debajo, un espacio cubierto en sombra.
     # pieza exterior (Bing): cuña entre la fachada del cuerpo principal (x = W_P) y la linea exterior; ancha junto a
     # la torre y se junta con el cuerpo principal a 35 m del fondo. Altura bajando en curva suave hacia el fondo.
-    Y_C0, Y_C1, H_A = A2[1] - 4.0, L_L - 35.0, 8.9    # arranca por detras de la esquina volada de la banda del hotel
+    Y_C0, Y_C1, H_A = 16.7, L_L - 35.0, 8.9           # arranca donde la cara a 90 grados de la banda toca su borde exterior
     def _f(v):
         x, y, z = v
         return (W_P - 0.05 + x * (W_L - W_P + 0.05) * (1 - y), Y_C0 + y * (Y_C1 - Y_C0), z * H_A * math.sqrt(max(0.0, 1 - y ** 2)))
@@ -296,10 +296,15 @@ def base_y_estilobato():
         caja(R_COL + 0.2, X_H1 - 0.3, -RET - 2, 5.5, -1, 3.8),           # hueco de la entrada del hotel
     ], OpType.Add)
     # banda de la primera planta del hotel: caja con esquina a 90 grados, volada mas alla de la fachada del ala larga
-    banda = caja(R_COL - 0.3, X_H1, -RET, -RET + 6.0, 3.8, 8.9)
-    banda = banda - caja(R_COL + 0.3, X_H1 - 0.3, -RET - 1, -RET + 0.3, 4.6, 7.6)     # franja de ventanas del frente
-    banda = banda - caja(X_H1 - 0.3, X_H1 + 1, -RET + 0.3, -RET + 5.0, 4.6, 7.6)      # y en la cara de la esquina
+    # frente de la banda volado 1,5 m sobre la planta baja (que sigue la linea del chaflan); la cara a 90 grados
+    # arranca en el borde exterior de la rampa (x solar = 15,7)
+    X_E, Y_F, D_E = 14.0, -RET - 1.5, 3.83
+    banda = caja(R_COL - 0.3, X_E, Y_F, Y_F + D_E, 3.8, 8.9)
+    banda = banda - caja(R_COL + 0.3, X_E - 0.3, Y_F - 1, Y_F + 0.3, 4.6, 7.6)        # franja de ventanas del frente
+    banda = banda - caja(X_E - 0.3, X_E + 1, Y_F + 0.3, Y_F + D_E - 0.3, 4.6, 7.6)    # y en la cara a 90 grados
     est = est + banda
+    relleno = Manifold.extrude(CrossSection([[(12.5, 14.4), (15.75, 16.85), (12.5, 16.85)]]), 5.1).translate((0, 0, 3.8))
+    est = est + a_torre(relleno)                                       # cierra el rincon entre la banda y el arranque de la rampa
     p.append(est)
     fuente = anillo(5.0, 5.6, 0, 0.5) - caja(-7, 7, 0, 7, -1, 1)              # fuente al pie de la columna
     p.append(fuente)

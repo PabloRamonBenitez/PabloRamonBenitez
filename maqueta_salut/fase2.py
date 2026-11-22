@@ -44,11 +44,12 @@ print(json.dumps(dict(ach=float(sys.argv[1]),dl=float(sys.argv[2]),rms=best[0],c
 if __name__ == "__main__":
     out = []
     import itertools
-    for a, dl in itertools.product([31, 40, 50, 57], [0, -8, -16, 8]):
-        r = subprocess.run([sys.executable, "-c", CODE, str(a), str(dl)], env=dict(os.environ, ACH=str(a)), capture_output=True, text=True)
+    for th, a in itertools.product([90, 100, 105, 110], [35, 45, 57]):
+        dl = 0
+        r = subprocess.run([sys.executable, "-c", CODE, str(a), str(dl)], env=dict(os.environ, ACH=str(a), THL=str(th)), capture_output=True, text=True)
         try:
             d = json.loads(r.stdout.strip().splitlines()[-1]); out.append(d)
-            print(f"giro ala {dl:+4.0f}°  chaflán {a:5.1f}°  error total {d['rms']:6.1f} px  | torre max {max(map(abs,d['torre'])):5.1f}  | base {np.round(d['base'],1)}")
+            print(f"L {th:3d}°  chaflán {a:5.1f}°  error total {d['rms']:6.1f} px  | torre max {max(map(abs,d['torre'])):5.1f}  | base {np.round(d['base'],1)}")
         except Exception:
             print(a, "fallo", r.stderr[-300:])
     json.dump(out, open("FASE2_barrido.json", "w"), indent=1)

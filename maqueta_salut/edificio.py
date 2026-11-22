@@ -42,19 +42,39 @@ L_FIN = 7.81        # tramo final sin bar                           [Bing 7,81]
 Y_CUNA = L_L - 35.13    # la concha se junta con la fachada a 35 m del fondo [Bing 35,13]
 W_EXT = 15.7        # ancho maximo con la concha                    [Google 15,7]
 import os
-A_CH = math.radians(float(os.environ.get("ACH", "57")))   # angulo del chaflan con la calle [F01: 55-58; provisional]
+A_CH = math.radians(float(os.environ.get("ACH", "57")))   # angulo del chaflan con la calle [provisional]
+TH_L = math.radians(float(os.environ.get("THL", "90")))   # angulo interior de la L (calle - ala larga) [FASE 2: F35/F58 ~102]
 REST, COL, HOT = 12.8, 6.5, 9.6             # tramos del chaflan    [F09]
 L_CH = REST + COL + HOT
-U = (math.cos(A_CH), math.sin(A_CH))
+KC = (W_EXT, 0.0)                           # esquina exterior de la L antes del chaflan
+PHI = TH_L - math.pi / 2                    # giro de la calle respecto a la posicion perpendicular
+US = (math.cos(math.pi / 2 + TH_L), math.sin(math.pi / 2 + TH_L))   # direccion de la calle hacia el ala corta
+NS = (US[1], -US[0])                        # normal hacia dentro de la calle
+_angC = math.pi - TH_L - A_CH               # triangulo KC-A1-C (ley de senos)
+_a = L_CH * math.sin(_angC) / math.sin(TH_L)
+_c = L_CH * math.sin(A_CH) / math.sin(TH_L)
+A1 = (KC[0] + _a * US[0], KC[1] + _a * US[1])   # arranque del chaflan en la calle
+C = (KC[0], KC[1] + _c)                     # fin del chaflan en el borde exterior de la concha
+U = ((C[0] - A1[0]) / L_CH, (C[1] - A1[1]) / L_CH)
 N = (-U[1], U[0])                           # hacia dentro
-# la esquina del hotel (fin del chaflan) cae en el borde exterior de la concha (x = W_EXT) [dibujo del usuario]
-A1 = (W_EXT - L_CH * U[0], 0.0)             # arranque del chaflan en la calle
-C = (A1[0] + L_CH * U[0], A1[1] + L_CH * U[1])
 RET = 1.5           # la columna asoma por delante de la planta primera [F09/F18]
 RETR = 2.5          # retranqueo de la planta baja bajo la planta primera [F09, F14, F47]
 _k = REST + COL / 2
 T = (A1[0] + _k * U[0] + (R_COL - RET) * N[0], A1[1] + _k * U[1] + (R_COL - RET) * N[1])   # eje de la torre
 L_C, W_C = 24.0, 12.0       # ala corta: extremo de la calle en x=-L_C, fondo 12   [F01, estimado]
+D_FAR = W_EXT + L_C         # longitud de la fachada a la calle desde la esquina exterior
+
+
+def SWP(x, y):
+    """punto del ala corta dado en coordenadas 'de L recta' (x hacia -calle, y hacia dentro) -> planta real"""
+    s, t = W_EXT - x, y
+    return (KC[0] + s * US[0] + t * NS[0], KC[1] + s * US[1] + t * NS[1])
+
+
+def _inter(p, d, q, e):
+    den = d[0] * e[1] - d[1] * e[0]
+    s = ((q[0] - p[0]) * e[1] - (q[1] - p[1]) * e[0]) / den
+    return (p[0] + s * d[0], p[1] + s * d[1])
 L_LADR = 5.0                # bloque de ladrillo del extremo, sobre pilares       [F01]
 # escalera trasera: en linea con el ala larga, dentro de la L [usuario]
 ESC_W, ESC_Y0, ESC_Y1 = 8.0, T[1] + 10.0, T[1] + R_AL + 1.0
@@ -78,38 +98,38 @@ def cil(c, r, z0, z1, seg=SEG):
 
 
 def plantas_base():
-    """poligonos de planta baja y planta primera (definicion unica)"""
-    def sobre_linea(off, k):           # punto de la paralela al chaflan desplazada 'off' hacia dentro, en x o y = k
-        pass
-    # planta primera: frente en la calle (y=0) y en la linea del chaflan; acaba en C con cara a 90 grados
-    # que vuelve hasta la fachada del ala larga (x = W_P)
+    """poligonos de planta baja y planta primera (definicion unica), con L de angulo interior TH_L"""
     t = (W_P - C[0]) / N[0]            # avance desde C hacia dentro hasta la fachada del ala
     Q = (C[0] + t * N[0], C[1] + t * N[1])
-    P1 = [(-L_C, 0.0), A1, C, Q, (W_P, Q[1]), (W_P, L_L), (0.0, L_L), (0.0, W_C), (-L_C, W_C)]
-    # planta baja: retranqueada RETR en la calle y en el chaflan; en el ala larga hasta la fachada
-    a1 = (A1[0] + RETR * (math.tan(A_CH / 2)), RETR)       # interseccion de las dos paralelas retranqueadas
-    # punto donde la paralela al chaflan (retranqueada) corta x = W_P - RETR
-    def corte_x(xk):
-        o = (A1[0] + RETR * N[0], A1[1] + RETR * N[1])
-        s = (xk - o[0]) / U[0]
-        return (xk, o[1] + s * U[1])
-    PB = [(-L_C + L_LADR, RETR), a1, corte_x(W_P - RETR), (W_P - RETR, Y_CUNA), (W_P, Y_CUNA), (W_P, L_L),
-          (0.0, L_L), (0.0, W_C), (-L_C + L_LADR, W_C)]
-    return dict(P1=P1, PB=PB, Q=Q)
+    F0 = SWP(-L_C, 0.0); F1 = SWP(-L_C, W_C)
+    IC = _inter(SWP(0, W_C), US, (0.0, 0.0), (0.0, 1.0))           # rincon interior de la L
+    P1 = [F0, A1, C, Q, (W_P, Q[1]), (W_P, L_L), (0.0, L_L), IC, F1]
+    o_s = (KC[0] + RETR * NS[0], KC[1] + RETR * NS[1])            # paralela retranqueada a la calle
+    o_c = (A1[0] + RETR * N[0], A1[1] + RETR * N[1])              # paralela retranqueada al chaflan
+    a1 = _inter(o_s, US, o_c, U)
+    b1 = _inter(o_c, U, (W_P - RETR, 0.0), (0.0, 1.0))
+    PB = [SWP(-L_C + L_LADR, RETR), a1, b1, (W_P - RETR, Y_CUNA), (W_P, Y_CUNA), (W_P, L_L),
+          (0.0, L_L), IC, SWP(-L_C + L_LADR, W_C)]
+    return dict(P1=P1, PB=PB, Q=Q, IC=IC)
 
 
 def base():
     pl = plantas_base()
     s = [prisma(pl["PB"], 0, Z_PB + 0.01), prisma(pl["P1"], Z_PB, Z_P1)]
+    xA = W_EXT - _a                     # arranque del chaflan en coordenadas 'de L recta'
+    def ROT(m):                          # coordenadas 'de L recta' -> planta real (giro de la calle alrededor de KC)
+        return m.translate((-KC[0], -KC[1], 0)).rotate((0, 0, math.degrees(PHI))).translate((KC[0], KC[1], 0))
+    sc = []
     # ala corta: bloque alto (detras de la banda del restaurante) y ladrillo sobre pilares en el extremo
-    s.append(caja(-L_C + L_LADR, A1[0] - 1.0, 5.5, W_C, Z_P1 - 0.01, Z_ALTO))
-    s.append(caja(-L_C, -L_C + L_LADR, 0, W_C, Z_PB, Z_LADR))
+    sc.append(caja(-L_C + L_LADR, xA - 1.0, 5.5, W_C, Z_P1 - 0.01, Z_ALTO))
+    sc.append(caja(-L_C, -L_C + L_LADR, 0, W_C, Z_PB, Z_LADR))
     for xp in (-L_C + 0.6, -L_C + L_LADR - 0.6):
         for yp in (0.6, W_C - 0.6):
-            s.append(caja(xp - 0.35, xp + 0.35, yp - 0.35, yp + 0.35, 0, Z_PB + 0.01))
+            sc.append(caja(xp - 0.35, xp + 0.35, yp - 0.35, yp + 0.35, 0, Z_PB + 0.01))
     for i in range(6):                                      # lucernarios en diente de sierra [F01]
         x = -L_C + L_LADR + 1.5 + 2.0 * i
-        s.append(Manifold.extrude(CrossSection.square((1.4, 1.4), True), 1.0, 0, 0, (0.05, 0.05)).translate((x, 8.5, Z_ALTO - 0.01)))
+        sc.append(Manifold.extrude(CrossSection.square((1.4, 1.4), True), 1.0, 0, 0, (0.05, 0.05)).translate((x, 8.5, Z_ALTO - 0.01)))
+    s.append(ROT(Manifold.batch_boolean(sc, OpType.Add)))
     # ala larga: bar en la mitad interior hasta el tramo final; terraza con peto en la mitad exterior [F47, Bing]
     yb0 = pl["Q"][1]
     s += [caja(0, W_BAR, yb0, L_L - L_FIN, Z_P1 - 0.01, Z_BAR),
@@ -127,14 +147,14 @@ def base():
     s.append(concha)
     m = Manifold.batch_boolean(s, OpType.Add)
     # huecos de ventanas (franjas continuas casi a paño) [F09, F14]
-    hue = [caja(-L_C + L_LADR + 0.4, A1[0], -1, 0.3, 4.6, 6.6)]
+    hue = [ROT(caja(-L_C + L_LADR + 0.4, xA, -1, 0.3, 4.6, 6.6))]
     for k in range(10):                                     # ala larga: 2 filas de 10 en la mitad del fondo [F47]
         y = 52.0 + 1.2 + 4.0 * k
         for z0 in (1.2, 4.6):
             hue.append(caja(W_P - 0.3, W_P + 1, y, y + 1.6, z0, z0 + 1.6))
     m = m - Manifold.batch_boolean(hue, OpType.Add)
     # chaflan (coordenadas de torre): franjas de ventanas restaurante / hotel
-    rot = math.degrees(A_CH)
+    rot = math.degrees(math.atan2(U[1], U[0]))
     def en_torre(mm):
         return mm.rotate((0, 0, rot)).translate((T[0], T[1], 0))
     yf = -(R_COL - RET)

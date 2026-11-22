@@ -12,7 +12,7 @@ T = tuple(E.T); P = E.P
 yf = -(E.R_COL - E.RET)                 # frente de la planta primera en el chaflan (coordenada de torre)
 pl = E.plantas_base(); Qy = pl["Q"][1]; A1 = E.A1; C = E.C
 xe = E.W_BAR / 2 + 0.5
-xA = pl["P1"][1][0]                     # x del arranque del chaflan en la calle
+xA = E.W_EXT - E._a                     # arranque del chaflan en coordenadas "de L recta"
 Y_V = 52.0                              # inicio de las ventanas del ala larga [F47]
 
 ZONAS = [
@@ -73,6 +73,16 @@ ZONAS = [
  ("Z31", "Patio interior de la L", "Escalera", "pri",
   [([(-E.L_C + E.L_LADR, E.W_C), (0, E.W_C), (0, 45), (-E.L_C + E.L_LADR, 45)], 0, 0.5)]),
 ]
+
+# las zonas del ala corta se han escrito en coordenadas "de L recta": se pasan a la planta real
+def _a_real(z):
+    k, n, g_, t, d = z
+    if k in ("Z16", "Z17", "Z18", "Z19", "Z20", "Z31"):
+        d = [([E.SWP(*p) for p in poly], z0, z1) for poly, z0, z1 in d]
+    return (k, n, g_, t, d)
+
+
+ZONAS = [_a_real(z) for z in ZONAS]
 
 JUNTAS = [
  ("Z01", "Z02", "+43,7 apoyo del remate sobre la visera"), ("Z02", "Z03", "+40,5 visera sobre la banda"),

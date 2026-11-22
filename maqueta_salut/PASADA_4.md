@@ -12,6 +12,6 @@ Cámaras calibradas solo con la torre y con la dirección limitada al frente del
 |---|---|---|---|
 | 1 | Por el lado del hotel el chaflán queda ~5,8 m corto (o la torre demasiado a la derecha): en C04 el muro del relieve debería empezar en x=455 y empieza en 391 | Z13×C04, Z21×C04 | L_CHF / T_POS |
 | 2 | La escalera asoma por la derecha del barril vista de frente | Z29×C04 | ESC_X (más hacia la izquierda/detrás) o T_POS |
-| 3 | Ángulo de la L: con 90° el ala larga y el ala corta salen mal orientadas en C02 (final del ala a 130 px); con ~110° encajaban | Z23, Z25, Z26, Z18 ×C02 | THL |
+| 3 | Ángulo de la L: medido en los mapas 2D (no en vistas inclinadas) = 94,6° (Google) / 96,4° (Bing); los edificios vecinos son paralelos a la calle y perpendiculares al ala. Los 102–112° anteriores salían de vistas 3D inclinadas: descartados. El desvío del ala en C02 tiene otra causa (posición de la torre respecto al ala o deformación de la foto de época). | Z23, Z25, Z26, Z18 ×C02 | THL = 95 (aplicado); causa del desvío en C02 abierta |
 
 Pendiente: Z21×C02 (concha) y Z29×C01, que dependen de 1 y 3.

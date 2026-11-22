@@ -47,7 +47,7 @@ COTAS = {
  "L_FIN":  (7.81, "tramo final sin bar", "Bing"),
  "D_CUNA": (35.13,"distancia del fin de la concha al fondo", "Bing"),
  "W_EXT":  (15.7, "ancho máximo con la concha", "Google"),
- "THL":    (90.0, "ángulo interior de la L: esquina original a 90°", "usuario + mapas Google/Bing (Bing ~100°)"),
+ "THL":    (95.0, "ángulo interior de la L (ala larga – calle Ivana Mazepy)", "mapas 2D: Google 94,6° · Bing 96,4°; edificios vecinos paralelos a la calle"),
  "ACH":    (45.0, "chaflán simétrico que corta la esquina de 90°", "usuario + mapa Bing (chaflán ~ bisectriz)"),
  "REST":   (14.3, "frente del restaurante en el chaflán", "C04 calibrada"),
  "COL":    (6.5,  "columna en el chaflán", "F09"),

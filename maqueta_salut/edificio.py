@@ -44,7 +44,7 @@ W_EXT = 15.7        # ancho maximo con la concha                    [Google 15,7
 import os
 A_CH = math.radians(float(os.environ.get("ACH", "57")))   # angulo del chaflan con la calle [provisional]
 TH_L = math.radians(float(os.environ.get("THL", "102")))   # angulo interior de la L (calle - ala larga) [FASE 2: F35/F58 ~102]
-REST, COL, HOT = 12.8, 6.5, 9.6             # tramos del chaflan    [F09]
+REST, COL, HOT = 14.3, 6.5, 11.4            # tramos del chaflan    [C04 calibrada: 14,3 + 6,5 + 11,4]
 L_CH = REST + COL + HOT
 KC = (W_EXT, 0.0)                           # esquina exterior de la L antes del chaflan
 PHI = TH_L - math.pi / 2                    # giro de la calle respecto a la posicion perpendicular

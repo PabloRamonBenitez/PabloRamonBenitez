@@ -44,7 +44,7 @@ print(json.dumps(dict(ach=float(sys.argv[1]),dl=float(sys.argv[2]),rms=best[0],c
 if __name__ == "__main__":
     out = []
     import itertools
-    for th, a in itertools.product([90, 100, 105, 110], [35, 45, 57]):
+    for th, a in itertools.product([92, 102, 112], [40, 57, 72]):
         dl = 0
         r = subprocess.run([sys.executable, "-c", CODE, str(a), str(dl)], env=dict(os.environ, ACH=str(a), THL=str(th)), capture_output=True, text=True)
         try:

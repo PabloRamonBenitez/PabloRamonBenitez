@@ -43,7 +43,7 @@ Y_CUNA = L_L - 35.13    # la concha se junta con la fachada a 35 m del fondo [Bi
 W_EXT = 15.7        # ancho maximo con la concha                    [Google 15,7]
 import os
 A_CH = math.radians(float(os.environ.get("ACH", "57")))   # angulo del chaflan con la calle [provisional]
-TH_L = math.radians(float(os.environ.get("THL", "102")))   # angulo interior de la L (calle - ala larga) [FASE 2: F35/F58 ~102]
+TH_L = math.radians(float(os.environ.get("THL", "112")))   # angulo interior de la L (calle - ala larga) [FASE 2: F35/F58 ~102]
 REST, COL, HOT = 14.3, 6.5, 11.4            # tramos del chaflan    [C04 calibrada: 14,3 + 6,5 + 11,4]
 L_CH = REST + COL + HOT
 KC = (W_EXT, 0.0)                           # esquina exterior de la L antes del chaflan
@@ -213,7 +213,7 @@ def torre():
     s.append(cil(pv, R_V, Z_G1, Z_V1))
     s.append(cil(pr, R_R, Z_V1, Z_R1))
     # escalera trasera, en linea con el ala larga [usuario, F11-F13]
-    xe = W_BAR / 2 + 0.5
+    xe = T[0]                                     # escalera en linea con el eje de la torre [PASADA 3]
     s.append(caja(xe - ESC_W / 2, xe + ESC_W / 2, ESC_Y0, ESC_Y1, 0.0, Z_T1 + 1.0))   # la escalera baja hasta el suelo [coherencia]
     m = Manifold.batch_boolean(s, OpType.Add)
     # ventanas de las habitaciones: un hueco por modulo entre aletas, sobre el poyete [F04, F06, F09]

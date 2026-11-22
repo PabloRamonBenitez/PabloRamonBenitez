@@ -14,24 +14,24 @@ N_DIV = 19                   # divisiones angulares (muros radiales)
 PASO = 360.0 / N_DIV
 
 # --- niveles (m) ---
-Z_COL0, Z_TERRAZA = 0.0, 9.5          # columna desde el suelo; cubierta del estilobato
-Z_CUELLO0, Z_CUELLO1 = 10.5, 15.3     # cuello
-Z_HAB0 = 15.3                         # forjado inferior de las habitaciones
+Z_COL0, Z_TERRAZA = 0.0, 9.0          # columna desde el suelo; cubierta del estilobato
+Z_CUELLO0, Z_CUELLO1 = 11.2, 15.1     # cuello; encima, intrados inclinado con vigas radiales
+Z_HAB0 = 15.8                         # forjado inferior de las habitaciones
 N_PLANTAS = 6
 Z_HAB1 = Z_HAB0 + N_PLANTAS * F       # 33.3
-Z_OJOS0, Z_OJOS1 = Z_HAB1, Z_HAB1 + 5.7   # tambor con "ojos" (~1,9 plantas)
-Z_VID0, Z_VID1 = Z_OJOS1, Z_OJOS1 + 1.8        # banda acristalada
-Z_VIS_INF, Z_VIS_BORDE, Z_VIS1 = Z_VID1, Z_VID1 + 0.6, Z_VID1 + 3.2  # visera: arranque inferior, borde, cubierta
-Z_TOP0, Z_TOP1 = Z_VIS1, Z_VIS1 + 5.3     # tambor del letrero
+Z_OJOS0, Z_OJOS1 = Z_HAB1, Z_HAB1 + 5.3   # tambor con "ojos" (~1,75 plantas)
+Z_VID0, Z_VID1 = Z_OJOS1, Z_OJOS1 + 2.6        # banda acristalada
+Z_VIS_INF, Z_VIS_BORDE, Z_VIS1 = Z_VID1, Z_VID1 + 0.3, Z_VID1 + 2.3  # visera: arranque inferior, borde, cubierta
+Z_TOP0, Z_TOP1 = Z_VIS1, Z_VIS1 + 4.6     # tambor del letrero
 # --- radios (m) ---
 R_B = 14.4                   # borde de balcones (D = 28,8 m)
 FONDO_BALCON = 1.8
-R_CUELLO, R_COL = 7.9, 3.2
+R_CUELLO, R_COL = 9.1, 2.8   # foto de epoca: cuello 0,63 D, columna 0,19 D
 R_OJOS = 12.7                # el tambor deja una terraza de servicio de ~1,7 m
-R_VID, R_VIS, R_VIS_INF = 9.9, 12.4, 10.2
-R_TOP = 5.5
-OFF_VIS = (-2.2, -1.0)       # visera + banda acristalada descentradas (hacia delante-izquierda)
-OFF_TOP = (0.4, 0.8)         # tambor superior casi en el eje, algo hacia la escalera
+R_VID, R_VIS, R_VIS_INF = 9.4, 12.1, 9.7
+R_TOP = 4.8
+OFF_VIS = (-2.7, -1.0)       # visera + banda acristalada descentradas (hacia delante-izquierda)
+OFF_TOP = (0.0, 0.5)         # tambor superior casi en el eje, algo hacia la escalera
 # --- caja de escalera trasera ---
 ESC_MEDIO = 4.5
 ESC_Y0, ESC_Y1 = 8.0, R_B + 0.4
@@ -69,6 +69,9 @@ def cuerpo_habitaciones():
     balc, fijo = [], []
     rw_min = min(radios_planta(i)[1] for i in range(N_PLANTAS))
     fijo.append(cil(rw_min, Z_HAB0, Z_HAB1 + 0.5))               # fachada de ventanas (continua)
+    # intrados inclinado: del cuello sube hasta el borde inferior del barril (paneles entre vigas)
+    fijo.append(Manifold.cylinder(Z_HAB0 - Z_CUELLO1 + 0.02, R_CUELLO, radios_planta(0)[0] - 0.05, SEG)
+                .translate((0, 0, Z_CUELLO1 - 0.01)))
     for i in range(N_PLANTAS):
         rb, rw = radios_planta(i)
         z0 = Z_HAB0 + i * F
@@ -88,8 +91,9 @@ def cuerpo_habitaciones():
                 # aleta con escalon: arriba sobresale 0,9 m, abajo 0,3 m y baja 0,6 m en angulo recto
                 balc.append(placa_rz([(rb - 0.3, z0 + 1.0), (rb + 0.9, z0 + 1.0), (rb + 0.9, z0 + F),
                                       (rb - 0.3, z0 + F)], 0.4, ang))
-                balc.append(placa_rz([(rw - 0.2, z0 - 0.6), (rb + 0.3, z0 - 0.6), (rb + 0.3, z0 + 1.05),
-                                      (rw - 0.2, z0 + 1.05)], 0.4, ang))
+                # viga radial: del cuello al borde; canto creciente hacia el centro, extremo en angulo recto
+                balc.append(placa_rz([(R_CUELLO - 0.4, z0 + 1.05), (rb + 0.3, z0 + 1.05), (rb + 0.3, z0 - 0.6),
+                                      (R_CUELLO - 0.4, Z_CUELLO1 - 0.3)], 0.5, ang))
             else:
                 balc.append(placa_rz([(rb - 0.3, z0 + 0.75), (rb + 0.9, z0 + 0.75), (rb + 0.9, z0 + F),
                                       (rb - 0.3, z0 + F)], 0.4, ang))
@@ -119,10 +123,10 @@ def tambor_ojos():
         # "ojo": aro corto con anillos concentricos (sale poco del tambor)
         def eje_x(h, r, x0):
             return Manifold.cylinder(h, r, r, 40).rotate((0, 90, 0)).translate((x0, 0, 0))
-        tubo = eje_x(0.65, 0.95, R_OJOS - 0.2)                 # aro exterior: sobresale 0,45 m
-        hueco = eje_x(0.35, 0.70, R_OJOS + 0.1)                # rebaje
-        tubo = tubo - hueco + eje_x(0.3, 0.46, R_OJOS + 0.05)  # anillo interior
-        hueco = eje_x(0.3, 0.2, R_OJOS + 0.1)                  # centro hundido
+        tubo = eje_x(0.7, 0.78, R_OJOS - 0.2)                  # aro exterior (Ø 1,56 m): sobresale 0,5 m
+        hueco = eje_x(0.4, 0.58, R_OJOS + 0.1)                 # rebaje
+        tubo = tubo - hueco + eje_x(0.3, 0.38, R_OJOS + 0.05)  # anillo interior
+        hueco = eje_x(0.3, 0.16, R_OJOS + 0.1)                 # centro hundido
         p.append((tubo - hueco).rotate((0, 0, ang)).translate((0, 0, zc)))
     t = Manifold.batch_boolean(p, OpType.Add)
     for ang in (90 - 27, 90 + 27):   # puertas de servicio a la terraza, a ambos lados de la escalera
@@ -200,14 +204,20 @@ def base_y_estilobato():
     p = [cil(R_COL, Z_COL0, Z_CUELLO0 + 0.1), cil(R_CUELLO, Z_CUELLO0, Z_CUELLO1 + 0.05)]
     for k in range(16):   # anillo de piramides invertidas bajo el cuello
         p.append(placa_rz([(R_COL - 0.2, Z_CUELLO0 + 0.05), (R_CUELLO - 0.3, Z_CUELLO0 + 0.05),
-                           (R_COL + 0.3, Z_TERRAZA - 0.05)], 1.6, 22.5 * k + 11))
-    # estilobato simplificado: bloque oeste, bloque este (hacia el Dnipro) y cuerpo trasero
-    for x0, x1, y0, y1 in [(-32, -6, -12, 14), (6, 42, -10, 16), (-8, 8, 2, 22)]:
-        b = caja(x0, x1, y0, y1, 0, Z_TERRAZA)
-        if y0 < 0:
-            b = b - caja(x0 - 1, x1 + 1, y0 - 1, y0 + 1.6, -1, 4.2)          # planta baja retranqueada
-            b = b - caja(x0 + 1, x1 - 1, y0 - 1, y0 + 0.4, 5.2, 8.0)         # banda de ventanas
-        p.append(b)
+                           (R_COL + 0.3, Z_TERRAZA)], 1.6, 22.5 * k + 11))
+    # estilobato (fotos): los bloques arrancan junto a la columna, a ambos lados
+    def bloque(x0, x1, y0, y1, h, frente=True):
+        b = caja(x0, x1, y0, y1, 0, h)
+        if frente:
+            b = b - caja(x0 - 1, x1 + 1, y0 - 1, y0 + 2.0, -1, 3.0)          # planta baja acristalada, retranqueada
+            b = b - caja(x0 + 1.2, x1 - 1.2, y0 - 1, y0 + 0.4, 4.2, 6.5)     # banda de ventanas
+        return b
+    # fachadas de los bloques casi en el plano de la columna (la columna se ve entera, con la fuente delante)
+    p.append(bloque(-21, -R_COL + 0.3, -3.0, 15, 8.2))   # bloque oeste (restaurante)
+    p.append(caja(-29, -17, 1, 17, 0, 11.5))             # cuerpo alto al oeste (detras)
+    p.append(bloque(R_COL - 0.3, 28, -2.5, 15, Z_TERRAZA))  # bloque este (hotel), con terraza
+    p.append(caja(26, 40, -1.5, 19, 0, 9.6))             # muro del relieve / ala hacia el Dnipro
+    p.append(caja(-8, 8, 2, 22, 0, Z_TERRAZA))           # cuerpo trasero (bajo la escalera)
     fuente = anillo(5.0, 5.6, 0, 0.5) - caja(-7, 7, 0, 7, -1, 1)              # fuente al pie de la columna
     p.append(fuente)
     return Manifold.batch_boolean(p, OpType.Add)

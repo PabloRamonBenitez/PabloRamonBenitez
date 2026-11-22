@@ -30,9 +30,10 @@ R_CUELLO, R_COL = 9.1, 3.0   # cuello 0,63 D; columna ~6 m de diametro (foto fro
 R_OJOS = 12.7                # el tambor deja una terraza de servicio de ~1,7 m
 R_VID, R_VIS, R_VIS_INF = 9.7, 12.1, 10.0
 R_TOP = 4.8
-OFF_VIS = (-2.2, -1.8)       # la VISERA es la que va claramente descentrada (fotos frontal, epoca y aerea)
-OFF_VID = (-0.8, -0.6)       # la banda acristalada va casi centrada sobre el tambor
-OFF_TOP = (0.0, 0.5)         # tambor superior casi en el eje, algo hacia la escalera
+ESC_ROT = -31                 # la escalera se gira para quedar en linea con el ala larga (dentro de la L)
+OFF_VIS = (-2.81, -0.41)       # la VISERA es la que va claramente descentrada (fotos frontal, epoca y aerea)
+OFF_VID = (-0.99, -0.1)       # la banda acristalada va casi centrada sobre el tambor
+OFF_TOP = (0.26, 0.43)         # tambor superior casi en el eje, algo hacia la escalera
 # --- caja de escalera trasera ---
 ESC_MEDIO = 4.5
 ESC_Y0, ESC_Y1 = 8.0, R_B + 0.4
@@ -109,7 +110,7 @@ def cuerpo_habitaciones():
         balc.append(g_.rotate((0, 0, 90 + PASO * (k + 0.5))))
     balcones = Manifold.batch_boolean(balc, OpType.Add)
     # los anillos de balcones terminan en seco contra la caja de escalera
-    balcones = balcones - caja(-ESC_MEDIO - 0.2, ESC_MEDIO + 0.2, 0, 30, Z_HAB0 - 3, Z_HAB1 + 1)
+    balcones = balcones - caja(-ESC_MEDIO - 0.2, ESC_MEDIO + 0.2, 0, 30, Z_HAB0 - 3, Z_HAB1 + 1).rotate((0, 0, ESC_ROT))
     return Manifold.batch_boolean(fijo + [balcones], OpType.Add)
 
 
@@ -119,7 +120,7 @@ def tambor_ojos():
     zc = Z_OJOS0 + 0.5 * (Z_OJOS1 - Z_OJOS0)
     for k in range(N_DIV):
         ang = 90 + PASO * (k + 0.3)
-        if abs(((ang - 90 + 180) % 360) - 180) < 36:   # junto a la escalera: muro liso con las puertas
+        if abs(((ang - 90 - ESC_ROT + 180) % 360) - 180) < 36:   # junto a la escalera: muro liso con las puertas
             continue
         # "ojo": aro corto con anillos concentricos (sale poco del tambor)
         def eje_x(h, r, x0):
@@ -130,7 +131,7 @@ def tambor_ojos():
         hueco = eje_x(0.3, 0.16, R_OJOS + 0.1)                 # centro hundido
         p.append((tubo - hueco).rotate((0, 0, ang)).translate((0, 0, zc)))
     t = Manifold.batch_boolean(p, OpType.Add)
-    for ang in (90 - 27, 90 + 27):   # puertas de servicio a la terraza, a ambos lados de la escalera
+    for ang in (90 + ESC_ROT - 27, 90 + ESC_ROT + 27):   # puertas de servicio a la terraza, a ambos lados de la escalera
         puerta = caja(R_OJOS - 0.3, R_OJOS + 0.5, -0.45, 0.45, Z_OJOS0 + 0.5, Z_OJOS0 + 2.6)
         t = t - puerta.rotate((0, 0, ang))
     return t
@@ -241,8 +242,10 @@ def base_y_estilobato():
     H_ALA = 8.9                      # nivel de la terraza = coronacion de la banda del restaurante (seccion AA)
     Y_A = A2[1] - 8.0                # el ala arranca detras de la banda del hotel, pegada a la torre
     Y_V = Y_A + 20.7                 # las ventanas (fila de 10) empiezan aqui (foto aerea)
-    Y_B0, Y_B1 = 24.0, L_L - 4.0     # bar: desde donde acaba el barril casi hasta el fondo (longitud por confirmar)
-    X_B, X_V = 8.5, 10.0             # ancho del bar y borde de su voladizo
+    Y_B0, Y_B1 = 24.0, L_L - 8.0     # bar: desde donde acaba el barril hasta el bloque final
+    W_P = 12.7                       # ancho del cuerpo principal del ala (Bing: 12,74 m)
+    L_FIN = 8.0                      # bloque final (Bing: 7,81 m)
+    X_B, X_V = 6.2, 7.7              # bar = mitad interior (Bing: 6,21 m) y borde de su voladizo
     solido = [Manifold.extrude(planta_L, H_ALA) ^ caja_s(-1, W_L + 1, Y_A, L_L + 1, -1, 30),        # bloque base del ala
               Manifold.extrude(planta_L, Z_TERRAZA) ^ caja_s(-1, W_L + 1, -1, A2[1] + 0.01, -1, 30),  # banda del hotel junto a la torre
               # ---- ala corta, seccion AA: frontal volado (restaurante) + bloque alto detras ----
@@ -253,21 +256,22 @@ def base_y_estilobato():
               # ---- bar sobre la terraza ----
               caja_s(0.0, X_B, Y_B0, Y_B1, H_ALA - 0.01, H_ALA + 2.6),                              # bar (una planta, ~2,6 m)
               caja_s(-0.01, X_V, Y_B0 - 1.5, Y_B1 + 1.5, H_ALA + 2.6, H_ALA + 3.1),                 # cubierta volada del bar (+12,0 = bloque alto AA)
-              caja_s(W_L - 0.3, W_L, Y_A + 6, L_L, H_ALA - 0.01, H_ALA + 1.0),                      # peto de la terraza (lado exterior)
-              caja_s(X_B, W_L, L_L - 0.3, L_L, H_ALA - 0.01, H_ALA + 1.0)]                          # peto de la terraza (fondo)
+              caja_s(W_P - 0.3, W_P, A2[1], L_L - L_FIN, H_ALA - 0.01, H_ALA + 1.0),                # peto de la terraza (lado exterior)
+              caja_s(X_B, W_L, L_L - 0.3, L_L, H_ALA - 0.01, H_ALA + 1.0)]                          # peto del bloque final
     for i in range(6):                                                                              # una fila de lucernarios en diente de sierra
         pir = Manifold.extrude(CrossSection.square((1.5, 1.5), True), 1.1, 0, 0, (0.05, 0.05))
         solido.append(pir.translate((-L_C + 6.6 + 2.2 * i, 8.5, 11.99)))
     # concha curva (fotos aerea y frontal): octante de elipsoide pegado a la fachada exterior; su contorno lateral
     # baja en curva desde el bloque del hotel hasta el suelo. Debajo, un espacio cubierto en sombra.
-    U_C, L_R, H_A = 4.5, 32.0, 6.2   # franja RECTA en planta; seccion maciza y baja; la curva solo en alzado
+    # pieza exterior (Bing): cuña entre la fachada del cuerpo principal (x = W_P) y la linea exterior; ancha junto a
+    # la torre y se junta con el cuerpo principal a 35 m del fondo. Altura bajando en curva suave hacia el fondo.
+    Y_C0, Y_C1, H_A = A2[1], L_L - 35.0, 6.2
     def _f(v):
         x, y, z = v
-        h = H_A * math.sqrt(max(0.0, 1 - y ** 2))
-        return (x * U_C, y * L_R, z * h)
-    concha = Manifold.cube((1, 1, 1)).refine(32).warp(_f)
-    solido.append(concha.translate((W_L - 0.05, Y_A + 2.0, 0)))
+        return (W_P - 0.05 + x * (W_L - W_P + 0.05) * (1 - y), Y_C0 + y * (Y_C1 - Y_C0), z * H_A * math.sqrt(max(0.0, 1 - y ** 2)))
+    cuna = Manifold.cube((1, 1, 1)).refine(32).warp(_f)
     huecos = [
+        caja_s(W_P, W_L + 2, A2[1], L_L - L_FIN, -1, 30),                                          # cuerpo principal a 12,7 m
         # fachada a la calle del ala corta (restaurante): planta baja retranqueada + banda de ventanas
         caja_s(-L_C + 5.5, -0.5, -1, 4.2, -1, 3.0),                                                 # planta baja del restaurante, hundida bajo el volado
         caja_s(-L_C + 6.5, A1[0], -1, 0.4, 4.4, 7.0),                                              # banda de ventanas del restaurante (calle)
@@ -276,8 +280,9 @@ def base_y_estilobato():
     for k in range(10):                                                                             # dos filas de 10 ventanas, solo en la mitad del fondo
         yk = Y_V + 0.6 + 2.3 * k
         for z0 in (5.2, 6.9):
-            huecos.append(caja_s(W_L - 0.3, W_L + 1, yk, yk + 1.2, z0, z0 + 1.1))
+            huecos.append(caja_s(W_P - 0.3, W_P + 1, yk, yk + 1.2, z0, z0 + 1.1))
     est = Manifold.batch_boolean(solido, OpType.Add) - Manifold.batch_boolean(huecos, OpType.Add)
+    est = est + cuna
     for xp in (-L_C + 0.6, -L_C + 4.4):                                                             # pilares del hueco
         for yp in (0.6, W_C - 3.0):
             est = est + caja_s(xp - 0.4, xp + 0.4, yp - 0.4, yp + 0.4, 0, 3.7)
@@ -298,7 +303,7 @@ def base_y_estilobato():
 
 
 def construir(escalar=True):
-    partes = [base_y_estilobato(), cuerpo_habitaciones(), tambor_ojos(), remate(), escalera()]
+    partes = [base_y_estilobato(), cuerpo_habitaciones(), tambor_ojos(), remate(), escalera().rotate((0, 0, ESC_ROT))]
     m = Manifold.batch_boolean(partes, OpType.Add)
     if not escalar:
         return m

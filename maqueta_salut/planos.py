@@ -104,19 +104,19 @@ def main():
         fig, ax = plt.subplots(figsize=(16.5, 11.7))
         planta(ax)
         cota(ax, (W_L, A2[1]), (W_L, L_L), "B1 largo ala", off=-6)
-        cota(ax, (0, L_L), (W_L, L_L), "B2 ancho ala", off=-2.5)
+        cota(ax, (0, 60), (12.7, 60), "B2 cuerpo principal", off=-2.5); cota(ax, (0, L_L), (W_L, L_L), "B8 ancho bloque final", off=-2.5); cota(ax, (W_L, L_L - 8), (W_L, L_L), "B9 bloque final", off=-3)
         cota(ax, A1, A2, "C1 chaflan", off=4)
         cota(ax, (-24, 0), (A1[0], 0), "A1 frente calle ala corta", off=4)
         cota(ax, (-24, 0), (-24, 12), "A2 fondo ala corta", off=3)
-        cota(ax, (0, 24), (0, L_L - 4), "B3 bar (largo)", off=6)
+        cota(ax, (0, 24), (0, L_L - 8), "B3 bar (largo)", off=6)
         Y_A, Y_T = A2[1] - 8, A2[1] + 38
         Y_V = Y_A + 0.45 * (Y_T - Y_A)
-        cota(ax, (0, 50), (8.5, 50), "B4 ancho bar", off=2); cota(ax, (8.5, 55), (10.0, 55), "B7 voladizo", off=2)
-        cota(ax, (W_L, Y_A + 2), (W_L, Y_A + 34), "B5 concha", off=-12)
-        cota(ax, (W_L, Y_A + 2), (W_L + 4.5, Y_A + 2), "B6 ancho concha", off=-3)
+        cota(ax, (0, 50), (6.2, 50), "B4 ancho bar", off=2); cota(ax, (6.2, 55), (7.7, 55), "B7 voladizo", off=2)
+        cota(ax, (12.7, L_L - 35), (12.7, L_L), "B5 fin de la cuna al fondo", off=-9)
+        cota(ax, (12.7, A2[1]), (W_L, A2[1]), "B6 cuna (ancho junto a la torre)", off=-3)
         # alturas
         for tag, p in [("H1 restaurante", (-12, 2.5)), ("H2 bloque alto", (-12, 9)), ("H3 ladrillo", (-21.5, 6)),
-                       ("H4 bar", (4, 60)), ("H5 terraza", (13, 60)), ("H8 banda hotel", tuple(cen + 9 * u - 0.2 * n))]:
+                       ("H4 bar", (4, 60)), ("H5 terraza", (10, 60)), ("H8 banda hotel", tuple(cen + 9 * u - 0.2 * n))]:
             altura(ax, p, techo(*p), tag)
         c = cen
         ax.plot(*c, "k+", ms=10); ax.text(c[0] + 1, c[1] - 2, "eje torre", fontsize=7)

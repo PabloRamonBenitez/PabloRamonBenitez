@@ -12,7 +12,7 @@ COTAS = {
  "Z_ALTO": (11.5, "bloque alto del ala corta", "F01, sección AA del usuario"),
  "Z_LAD0": (5.0,  "base de la caja de ladrillo elevada", "F19"),
  "Z_LAD1": (10.0, "coronación de la caja de ladrillo", "F01, F19"),
- "Z_CON":  (8.5,  "arranque de la concha / muro del relieve", "F09, F18"),
+ "Z_CON":  (7.3,  "arranque de la RAMPA (antes «concha»): llega a la terraza de la planta primera", "F71: rampa peatonal con peto que sube a la cubierta"),
  # --- torre
  "Z_CU0":  (10.4, "base del cuello", "F09"),
  "Z_CU1":  (14.4, "cara superior del cuello (cilindro macizo de cara vertical)", "A1 sobre F09 + recorte del usuario"),

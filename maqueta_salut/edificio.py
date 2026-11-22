@@ -154,13 +154,22 @@ def base():
     # concha: franja exterior que se estrecha de W_EXT a W_P hasta Y_CUNA; alta junto al hotel (+7,3) y baja en
     # curva al suelo; debajo, planta baja hundida [F47, F09, Bing]
     y0 = pl["Q"][1] + _v["D_HOTF"]          # la concha empieza tras la banda del hotel sobre la fachada del ala [C04]
+    # RAMPA (F71): plano inclinado de ancho constante pegado a la fachada exterior del ala; sube desde el suelo
+    # (lejos de la torre) hasta la terraza de la planta primera junto a la banda del hotel; peto en el borde exterior.
+    WR = W_EXT - W_P
     def f(v):
         x, y, z = v
         y = min(max(y, 0.0), 1.0)
-        zt = Z_PB * (1 - y) + max(0.05, (Z_P1 + 1.2 - Z_PB * (1 - y)) * max(0.0, 1 - y ** 2.5))
-        return (W_P - 0.02 + x * max(0.05, (W_EXT - W_P) * (1 - y)), y0 + y * (Y_CUNA - y0), z * zt)
-    concha = Manifold.cube((1, 1, 1)).refine(30).warp(f)
-    s.append(concha)
+        zt = max(0.15, Z_P1 * (1 - y))                      # cota de la rampa: +7,3 arriba, 0 abajo (lineal)
+        return (W_P - 0.02 + x * WR, y0 + y * (Y_CUNA - y0), z * zt)
+    rampa = Manifold.cube((1, 1, 1)).refine(30).warp(f)
+    def fp(v):
+        x, y, z = v
+        y = min(max(y, 0.0), 1.0)
+        zt = max(0.15, Z_P1 * (1 - y))
+        return (W_EXT - 0.25 + x * 0.25, y0 + y * (Y_CUNA - y0), zt - 0.01 + z * 1.0)   # peto de 1 m
+    peto = Manifold.cube((1, 1, 1)).refine(30).warp(fp)
+    s += [rampa, peto]
     m = Manifold.batch_boolean(s, OpType.Add)
     # huecos de ventanas (franjas continuas casi a paño) [F09, F14]
     hue = [ROT(caja(-L_C + L_LADR + 0.4, xA, -1, 0.3, 4.6, 6.6))]

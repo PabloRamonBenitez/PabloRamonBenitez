@@ -170,13 +170,18 @@ def remate():
     # tambor superior con cubierta ligeramente abombada
     p.append(cil(R_TOP, Z_TOP0 - 0.01, Z_TOP1, OFF_TOP))
     p.append(Manifold.sphere(R_TOP, SEG).scale((1, 1, 0.14)).translate((OFF_TOP[0], OFF_TOP[1], Z_TOP1)))
-    # letrero (placa con bastidor) delante-derecha del tambor
-    a = math.radians(-50)
-    cx, cy = OFF_TOP[0] + (R_TOP + 0.6) * math.cos(a), OFF_TOP[1] + (R_TOP + 0.6) * math.sin(a)
-    letrero = letras("САЛЮТ", 2.4, 0.35).translate((0, 0, Z_VIS1 + 0.45))
-    letrero = letrero + caja(-4.6, 4.6, -0.15, 0.15, Z_VIS1 - 0.01, Z_VIS1 + 0.5)   # bastidor
-    letrero = letrero.rotate((0, 0, -50 + 90)).translate((cx, cy, 0))
-    p.append(letrero)
+    # letrero: letras sueltas siguiendo la curva del tambor superior (delante-derecha)
+    R_L = R_TOP + 0.3
+    piezas = [letras(ch, 2.3, 0.35) for ch in "САЛЮТ"]
+    anchos = [m_.bounding_box()[3] - m_.bounding_box()[0] for m_ in piezas]
+    hueco_l = 0.35
+    total = sum(anchos) + hueco_l * (len(anchos) - 1)
+    th = math.radians(-50) - (total / 2) / R_L
+    for m_, w_ in zip(piezas, anchos):
+        th += (w_ / 2) / R_L
+        p.append(m_.translate((0, 0, Z_TOP0 + 1.2)).rotate((0, 0, math.degrees(th) + 90))
+                 .translate((OFF_TOP[0] + R_L * math.cos(th), OFF_TOP[1] + R_L * math.sin(th), 0)))
+        th += (w_ / 2 + hueco_l) / R_L
     return Manifold.batch_boolean(p, OpType.Add)
 
 
@@ -230,17 +235,25 @@ def base_y_estilobato():
     planta_L = CrossSection([L_pts]) - CrossSection([[A1, (W_L + 5, -5), (W_L + 5, A2[1] + (5 * math.tan(ang))), A2]])
     def caja_s(x0, x1, y0, y1, z0, z1):
         return caja(x0, x1, y0, y1, z0, z1)
-    solido = [Manifold.extrude(planta_L, Z_TERRAZA) ^ caja_s(-1, W_L + 1, -1, L_L + 1, -1, 30),      # ala larga 9 m
+    H_ALA = 11.5
+    Y_T = A2[1] + 38.0               # fin del tramo alto con terraza y ventanas (foto aerea)
+    solido = [Manifold.extrude(planta_L, H_ALA) ^ caja_s(-1, W_L + 1, A2[1] - 0.01, Y_T, -1, 30),   # tramo alto (3 plantas)
+              Manifold.extrude(planta_L, 7.0) ^ caja_s(-1, W_L + 1, Y_T - 0.01, L_L + 1, -1, 30),     # resto del ala, mas bajo y ciego
+              Manifold.extrude(planta_L, Z_TERRAZA) ^ caja_s(-1, W_L + 1, -1, A2[1] + 0.01, -1, 30),  # tramo del hotel junto a la torre
               Manifold.extrude(planta_L, 8.2) ^ caja_s(-L_C - 1, -0.01, -1, W_C + 1, -1, 30),         # ala corta 8,2 m
               caja_s(-L_C, -4, 4, W_C, 0, 11.5),                                                    # cuerpo alto con lucernarios
-              caja_s(-4, W_L + 4, L_L - 11, L_L, 0, 7.5)]                                           # remate transversal del fondo (maqueta original)
-    for i in range(4):                                                                              # lucernarios piramidales
-        for j in range(2):
-            pir = Manifold.extrude(CrossSection.square((1.8, 1.8), True), 1.2, 0, 0, (0.05, 0.05))
-            solido.append(pir.translate((-L_C + 2.5 + 3.0 * i, 6.0 + 3.2 * j, 11.49)))
+              caja_s(-4, W_L + 4, L_L - 11, L_L, 0, 9.0),                                          # remate transversal del fondo (maqueta original)
+              caja_s(0.5, 8.5, A2[1] - 3, A2[1] + 15, 0, 14.5),                                     # cuerpo elevado junto a la torre
+              caja_s(W_L - 0.3, W_L, A2[1], Y_T, H_ALA - 0.01, H_ALA + 1.0),                        # peto de la terraza (lado exterior)
+              caja_s(0, W_L, Y_T - 0.3, Y_T, H_ALA - 0.01, H_ALA + 1.0),                            # peto de la terraza (final)
+              Manifold.hull_points([(6.6, Y_T + 2, 6.99), (9.0, Y_T + 2, 6.99), (7.8, Y_T + 2, 8.2),
+                                    (6.6, L_L - 13, 6.99), (9.0, L_L - 13, 6.99), (7.8, L_L - 13, 8.2)])]  # lucernario en cumbrera
+    for i in range(6):                                                                              # una fila de lucernarios en diente de sierra
+        pir = Manifold.extrude(CrossSection.square((1.5, 1.5), True), 1.1, 0, 0, (0.05, 0.05))
+        solido.append(pir.translate((-L_C + 1.6 + 2.0 * i, 6.5, 11.49)))
     # superficie curva del relieve (fotos aerea y frontal): cubierta inclinada y curva pegada a la fachada exterior
     # del ala larga, desde el bloque del hotel; lleva el relieve de estrellas y cubre los bajos comerciales.
-    U_C, L_R, H_A, H_B = 5.0, 28.0, 8.8, 3.4
+    U_C, L_R, H_A, H_B = 5.0, 28.0, 7.0, 3.2
     perfil = [(0.0, 0.0), (U_C, 0.0), (U_C, H_B)]
     for k in range(1, 12):
         u = U_C * (1 - k / 12)
@@ -259,14 +272,17 @@ def base_y_estilobato():
     solido.append(relieve.translate((W_L - 0.05, A2[1], 0)))
     huecos = [
         # fachada a la calle del ala corta (restaurante): planta baja retranqueada + banda de ventanas
-        caja_s(-L_C - 1, -0.5, -1, 2.0, -1, 3.0), caja_s(-L_C + 1, -1.0, -1, 0.4, 4.2, 6.5),
+        caja_s(A1[0] + 0.5, -0.5, -1, 2.0, -1, 3.0),                                                # planta baja del restaurante (fachada a la calle)
+        caja_s(-L_C - 1, -L_C + 5.0, -1, W_C - 2.0, -1, 3.6),                                        # hueco sobre pilares en el extremo de la calle
     ]
-    for k in range(int((L_L - 24) / 3.0)):                                                         # dos filas de ventanas
-        yk = A2[1] + 30 + 3.0 * k
-        if yk > L_L - 13: break
-        for z0 in (3.6, 6.2):
-            huecos.append(caja_s(W_L - 0.3, W_L + 1, yk, yk + 1.6, z0, z0 + 1.5))
+    for k in range(11):                                                                             # dos filas de ~11 ventanas, solo en el tramo alto
+        yk = A2[1] + 3.0 + 3.1 * k
+        for z0 in (7.4, 9.4):
+            huecos.append(caja_s(W_L - 0.3, W_L + 1, yk, yk + 1.6, z0, z0 + 1.3))
     est = Manifold.batch_boolean(solido, OpType.Add) - Manifold.batch_boolean(huecos, OpType.Add)
+    for xp in (-L_C + 0.6, -L_C + 4.2):                                                             # pilares del hueco
+        for yp in (0.6, W_C - 3.0):
+            est = est + caja_s(xp - 0.4, xp + 0.4, yp - 0.4, yp + 0.4, 0, 3.7)
     est = a_torre(est)
     # huecos del chaflan (en coordenadas de la torre: chaflan en Y = -RET)
     X_R0, X_H1 = -D_REST, L_CH - D_REST                  # extremos del chaflan en coordenadas de la torre

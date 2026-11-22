@@ -188,7 +188,7 @@ def base():
 
 def torre():
     s = [cil(T, R_COL, 0, Z_CU0 + 0.1),
-         Manifold.cylinder(4.0, R_COL * 1.5, R_COL, SEG).translate((T[0], T[1], 0)),   # pie conico [PASADA 1: F15, F01] cil(T, R_CU, Z_CU0, Z_CU1 + 0.05),
+         Manifold.cylinder(4.0, _v["R_CONO"], R_COL, SEG).translate((T[0], T[1], 0)),   # pie de columna (recto: el 'cono' era un toldo) cil(T, R_CU, Z_CU0, Z_CU1 + 0.05),
          cil(T, R_CU + 0.6, Z_CU0, Z_CU0 + 0.6)]                       # losa inferior del cuello, volada [F18, F50]
     # vigas radiales bajo el barril y barril con forjados/poyetes + aletas
     s.append(cil(T, R_B - 0.1, Z_CU1 - 0.01, Z_ALETA0 + 0.05))   # fondo del barril (sofito plano a la cota de las aletas)

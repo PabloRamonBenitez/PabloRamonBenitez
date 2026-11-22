@@ -7,7 +7,7 @@ from manifold3d import Manifold, CrossSection, OpType
 
 SEG = 96
 # ------------------------------------------------------------------ alturas [F09, F14]
-Z_PB = 3.9          # techo planta baja                          [F09 3,9 / F14 3,6]
+Z_PB = 3.2          # techo planta baja, unica en toda la base   [PASADA 1: F15 época, autobús como escala]
 Z_P1 = 7.3          # coronacion planta primera = terraza         [F09 7,3 / F14 7,2]
 Z_BAR = 11.0        # techo del bar [coherencia: misma planta que el bloque alto del ala corta (seccion AA/BB)]
 Z_BAR_C = 11.5      # cubierta volada del bar = bloque alto
@@ -31,7 +31,7 @@ R_T = 13.55         # tambor de ojos 27,1                           [F01, F09, F
 R_G = 10.85         # banda acristalada 21,7                        [F09]
 R_V = 12.8          # visera 25,6                                   [F09 25,6 / F01 25,3; Google 24,35]
 R_R = 5.6           # remate 11,2                                   [F09 11,2 / F14 10,3 / F01 10,0]
-OFF_V = (-2.4, -0.4)    # visera desplazada hacia el restaurante     [F09 2,4 a la izquierda]
+OFF_V = (-0.4, -4.2)    # visera desplazada ~4,2 m hacia la plaza    [PASADA 1: ajuste conjunto C02 + C04]
 OFF_R = (0.6, 0.0)      # remate casi en el eje                     [F09]
 N_AL = 19               # muros radiales                            [fuentes + F09]
 # ------------------------------------------------------------------ planta [Bing F36-F39 + F09]
@@ -77,7 +77,7 @@ def _inter(p, d, q, e):
     return (p[0] + s * d[0], p[1] + s * d[1])
 L_LADR = 5.0                # bloque de ladrillo del extremo, sobre pilares       [F01]
 # escalera trasera: en linea con el ala larga, dentro de la L [usuario]
-ESC_W, ESC_Y0, ESC_Y1 = 8.0, T[1] + 10.0, T[1] + R_AL + 1.0
+ESC_W, ESC_Y0, ESC_Y1 = 10.0, T[1] + 10.0, T[1] + R_AL + 1.0
 
 
 def P(X, Y):
@@ -122,13 +122,15 @@ def base():
     sc = []
     # ala corta: bloque alto (detras de la banda del restaurante) y ladrillo sobre pilares en el extremo
     sc.append(caja(-L_C + L_LADR, xA - 1.0, 5.5, W_C, Z_P1 - 0.01, Z_ALTO))
-    sc.append(caja(-L_C, -L_C + L_LADR, 0, W_C, Z_PB, Z_LADR))
+    sc.append(caja(-L_C, -L_C + L_LADR, 0, W_C, 5.0, Z_LADR + 1.0))   # caja de ladrillo elevada sobre la calle [PASADA 1: F19]
     for xp in (-L_C + 0.6, -L_C + L_LADR - 0.6):
         for yp in (0.6, W_C - 0.6):
-            sc.append(caja(xp - 0.35, xp + 0.35, yp - 0.35, yp + 0.35, 0, Z_PB + 0.01))
+            sc.append(caja(xp - 0.35, xp + 0.35, yp - 0.35, yp + 0.35, 0, 5.01))
     for i in range(6):                                      # lucernarios en diente de sierra [F01]
         x = -L_C + L_LADR + 1.5 + 2.0 * i
         sc.append(Manifold.extrude(CrossSection.square((1.4, 1.4), True), 1.0, 0, 0, (0.05, 0.05)).translate((x, 8.5, Z_ALTO - 0.01)))
+    mq = Manifold.sphere(1.0, 48).scale((4.0, 2.2, 1.6)) ^ caja(-5, 5, 0, 3, 0, 2)
+    sc.append(mq.translate((xA - 7.0, 0.3, 0)))                       # marquesina curva [PASADA 1: F15]
     s.append(ROT(Manifold.batch_boolean(sc, OpType.Add)))
     # ala larga: bar en la mitad interior hasta el tramo final; terraza con peto en la mitad exterior [F47, Bing]
     yb0 = pl["Q"][1]
@@ -142,7 +144,8 @@ def base():
     def f(v):
         x, y, z = v
         y = min(max(y, 0.0), 1.0)
-        return (W_P - 0.02 + x * max(0.05, (W_EXT - W_P) * (1 - y)), y0 + y * (Y_CUNA - y0), Z_PB * (1 - y) + z * max(0.05, (Z_P1 + 1.0 - Z_PB * (1 - y)) * max(0.0, 1 - y) ** 1.3))
+        zt = Z_PB * (1 - y) + max(0.05, (Z_P1 + 1.2 - Z_PB * (1 - y)) * max(0.0, 1 - y ** 2.5))
+        return (W_P - 0.02 + x * max(0.05, (W_EXT - W_P) * (1 - y)), y0 + y * (Y_CUNA - y0), z * zt)
     concha = Manifold.cube((1, 1, 1)).refine(30).warp(f)
     s.append(concha)
     m = Manifold.batch_boolean(s, OpType.Add)
@@ -171,7 +174,8 @@ def base():
 
 
 def torre():
-    s = [cil(T, R_COL, 0, Z_CU0 + 0.1), cil(T, R_CU, Z_CU0, Z_CU1 + 0.05),
+    s = [cil(T, R_COL, 0, Z_CU0 + 0.1),
+         Manifold.cylinder(4.0, R_COL * 1.5, R_COL, SEG).translate((T[0], T[1], 0)),   # pie conico [PASADA 1: F15, F01] cil(T, R_CU, Z_CU0, Z_CU1 + 0.05),
          cil(T, R_CU + 0.6, Z_CU0, Z_CU0 + 0.6)]                       # losa inferior del cuello, volada [F18, F50]
     # vigas radiales bajo el barril y barril con forjados/poyetes + aletas
     s.append(Manifold.cylinder(Z_B0 - Z_CU1 + 0.05, R_CU, R_B - 0.1, SEG).translate((T[0], T[1], Z_CU1)))   # fondo inclinado

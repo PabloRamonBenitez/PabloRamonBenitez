@@ -39,7 +39,8 @@ L_L = 94.8          # largo total del ala larga desde la calle      [Google 94,8
 L_FIN = 7.81        # tramo final sin bar                           [Bing 7,81]
 Y_CUNA = L_L - 35.13    # la concha se junta con la fachada a 35 m del fondo [Bing 35,13]
 W_EXT = 15.7        # ancho maximo con la concha                    [Google 15,7]
-A_CH = math.radians(31)                     # angulo del chaflan con la calle [dibujo del usuario; F01 coherente]
+import os
+A_CH = math.radians(float(os.environ.get("ACH", "31")))   # angulo del chaflan con la calle [esquema; a ajustar con F01]
 REST, COL, HOT = 12.8, 6.5, 9.6             # tramos del chaflan    [F09]
 L_CH = REST + COL + HOT
 U = (math.cos(A_CH), math.sin(A_CH))

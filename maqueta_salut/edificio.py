@@ -13,8 +13,10 @@ Z_BAR = 10.6        # techo del bar (una planta sobre la terraza) [F47 proporcio
 Z_BAR_C = 11.1      # cubierta volada del bar
 Z_ALTO = 11.5       # bloque alto del ala corta                    [F01, seccion AA del usuario ~12]
 Z_LADR = 9.0        # bloque de ladrillo                           [F01]
-Z_CU0, Z_CU1 = 10.4, 15.2      # cuello                            [F09]
-Z_B0, N_PL, F = 15.2, 6, 2.9   # barril: 6 plantas de 2,9          [F09 17,4 / 6]
+Z_CU0 = 10.4                   # cuello (base)                     [F09; se revisa en fase 4]
+Z_B0, N_PL, F = 13.9, 6, 3.1   # barril: 6 plantas de 3,1 (5 con ventanas + pavés) [FASE 1: F09, dinteles cada 40 px]
+Z_CU1 = Z_B0
+Z_ALETA0 = 15.2                # borde inferior visible de las aletas; debajo, ménsulas [F09]
 Z_B1 = Z_B0 + N_PL * F         # 32,6
 Z_T1 = 38.2                    # tambor de ojos                    [F09 5,4]
 Z_G1 = 40.5                    # banda acristalada                 [F09 2,3]
@@ -149,13 +151,13 @@ def torre():
     s.append(cil(T, rf, Z_B0, Z_B1 + 0.4))
     for i in range(N_PL):
         z = Z_B0 + i * F
-        s.append(cil(T, R_B, z, z + 0.45) - cil(T, rf - 0.1, z - 0.1, z + 0.6))
-        s.append(cil(T, R_B, z + 0.75, z + 1.45) - cil(T, R_B - 0.25, z + 0.7, z + 1.5))
-    s.append(cil(T, R_B, Z_B1, Z_B1 + 0.45))
-    s.append(cil(T, R_B, Z_B1 + 0.45, Z_B1 + 1.1) - cil(T, R_B - 0.2, Z_B1, Z_B1 + 1.2))   # peto terraza de servicio
+        s.append(cil(T, R_B, z, z + 0.65) - cil(T, rf - 0.1, z - 0.1, z + 0.7))          # canto del forjado 0,65 [F09]
+        s.append(cil(T, R_B, z + 0.75, z + 1.65) - cil(T, R_B - 0.25, z + 0.7, z + 1.7))  # poyete 0,90 tras ranura 0,10 [F09]
+    s.append(cil(T, R_B, Z_B1, Z_B1 + 0.65))
+    s.append(cil(T, R_B, Z_B1 + 0.65, Z_B1 + 1.05) - cil(T, R_B - 0.2, Z_B1, Z_B1 + 1.2))   # peto terraza de servicio (+33,55) [F09]
     for k in range(N_AL):
         a = 2 * math.pi * k / N_AL
-        al = Manifold.cube((R_AL - rf + 0.2, 0.4, Z_B1 - Z_B0 + 0.6)).translate((rf - 0.1, -0.2, Z_B0 - 0.6))
+        al = Manifold.cube((R_AL - rf + 0.2, 0.4, Z_B1 + 0.65 - Z_ALETA0)).translate((rf - 0.1, -0.2, Z_ALETA0))
         s.append(al.rotate((0, 0, math.degrees(a))).translate((T[0], T[1], 0)))
     # tambor de ojos, banda, visera, remate
     s.append(cil(T, R_T, Z_B1, Z_T1))
@@ -182,9 +184,9 @@ def torre():
         for k in range(N_AL):
             a = math.degrees(2 * math.pi * (k + 0.5) / N_AL)
             if i == 0:
-                h = Manifold.cube((0.5, 2.6, 1.2)).translate((rf - 0.25, -1.3, z + 1.1))   # pavés: hueco bajo
+                h = Manifold.cube((0.5, 2.6, 1.4)).translate((rf - 0.25, -1.3, z + 1.7))   # pavés [F09]
             else:
-                h = Manifold.cube((0.5, 2.4, 1.3)).translate((rf - 0.25, -1.2, z + 1.25))
+                h = Manifold.cube((0.5, 2.4, 1.4)).translate((rf - 0.25, -1.2, z + 1.7))   # ventana hasta el forjado superior [F09]
             hue.append(h.rotate((0, 0, a)).translate((T[0], T[1], 0)))
     m = m - Manifold.batch_boolean(hue, OpType.Add)
     # lamas verticales de la escalera trasera [F11-F13]

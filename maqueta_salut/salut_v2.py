@@ -26,12 +26,12 @@ Z_TOP0, Z_TOP1 = Z_VIS1, Z_VIS1 + 5.2     # tambor del letrero
 # --- radios (m) ---
 R_B = 14.4                   # borde de balcones (D = 28,8 m)
 FONDO_BALCON = 1.8
-R_CUELLO, R_COL = 9.1, 2.8   # foto de epoca: cuello 0,63 D, columna 0,19 D
+R_CUELLO, R_COL = 9.1, 3.0   # cuello 0,63 D; columna ~6 m de diametro (foto frontal)
 R_OJOS = 12.7                # el tambor deja una terraza de servicio de ~1,7 m
 R_VID, R_VIS, R_VIS_INF = 9.7, 12.1, 10.0
 R_TOP = 4.8
-OFF_VIS = (-2.6, -1.4)       # la VISERA es la que va claramente descentrada (fotos frontal, epoca y aerea)
-OFF_VID = (-1.0, -0.5)       # la banda acristalada va casi centrada sobre el tambor
+OFF_VIS = (-2.2, -1.8)       # la VISERA es la que va claramente descentrada (fotos frontal, epoca y aerea)
+OFF_VID = (-0.8, -0.6)       # la banda acristalada va casi centrada sobre el tambor
 OFF_TOP = (0.0, 0.5)         # tambor superior casi en el eje, algo hacia la escalera
 # --- caja de escalera trasera ---
 ESC_MEDIO = 4.5
@@ -202,7 +202,8 @@ def escalera():
 
 
 def base_y_estilobato():
-    p = [cil(R_COL, Z_COL0, Z_CUELLO0 + 0.1), cil(R_CUELLO, Z_CUELLO0, Z_CUELLO1 + 0.05)]
+    p = [cil(R_COL, Z_COL0, Z_CUELLO0 + 0.1), cil(R_CUELLO, Z_CUELLO0, Z_CUELLO1 + 0.05),
+         cil(R_CUELLO + 0.4, Z_CUELLO0, Z_CUELLO0 + 0.8)]          # losa inferior del cuello, algo volada
     for k in range(16):   # anillo de piramides invertidas bajo el cuello
         p.append(placa_rz([(R_COL - 0.2, Z_CUELLO0 + 0.05), (R_CUELLO - 0.3, Z_CUELLO0 + 0.05),
                            (R_COL + 0.3, Z_TERRAZA)], 1.6, 22.5 * k + 11))
@@ -212,11 +213,15 @@ def base_y_estilobato():
     # (0,0) hasta la fachada exterior del ala larga (15,7; 9,4) y la columna queda sobre el chaflan.
     W_L, L_L = 15.7, 94.8            # ala larga (medida en Google Maps)
     L_C, W_C = 16.0, 12.0            # ala corta junto a la calle (estimada)
-    A1, A2 = (0.0, 0.0), (W_L, 9.4)  # extremos del chaflan
+    # chaflan medido en la foto frontal: restaurante 11,6 m + columna 6 m + hotel 9,6 m = 27,2 m
+    L_CH, D_REST = 27.2, 14.6        # longitud del chaflan; distancia del extremo izquierdo al eje de la columna
+    A_CH = math.radians(31)          # angulo del chaflan (del esquema; no medible en las fotos)
+    A1 = (W_L - L_CH * math.cos(A_CH), 0.0)
+    A2 = (W_L, L_CH * math.sin(A_CH))
     ang = math.atan2(A2[1] - A1[1], A2[0] - A1[0])
     ux, uy = math.cos(ang), math.sin(ang)            # direccion del chaflan  (= +X de la torre)
     nx, ny = -math.sin(ang), math.cos(ang)           # hacia el interior     (= +Y de la torre, escalera)
-    col = (5.9, 5.9 * math.tan(ang))                 # columna sobre el chaflan
+    col = (A1[0] + D_REST * ux, A1[1] + D_REST * uy)  # columna sobre el chaflan
     RET = 1.5                                        # la columna asoma 1,5 m por delante del chaflan
     cen = (col[0] + RET * nx, col[1] + RET * ny)     # eje de la torre en coordenadas de solar
     def a_torre(m):
@@ -233,29 +238,43 @@ def base_y_estilobato():
         for j in range(2):
             pir = Manifold.extrude(CrossSection.square((1.8, 1.8), True), 1.2, 0, 0, (0.05, 0.05))
             solido.append(pir.translate((-L_C + 2.5 + 3.0 * i, 6.0 + 3.2 * j, 11.49)))
-    # superficie curva (foto aerea de epoca): cuarto de elipsoide liso apoyado en la fachada exterior del ala larga,
-    # alto junto a la entrada del hotel y bajando hasta la calle
-    D_C, L_C2, H_C = 7.0, 28.0, 8.6
-    curva = Manifold.sphere(1.0, 96).scale((D_C, L_C2, H_C)) ^ caja(0, D_C + 1, 0, L_C2 + 1, 0, H_C + 1)
-    solido.append(curva.translate((W_L - 0.05, A2[1], 0)))
+    # superficie curva del relieve (fotos aerea y frontal): cubierta inclinada y curva pegada a la fachada exterior
+    # del ala larga, desde el bloque del hotel; lleva el relieve de estrellas y cubre los bajos comerciales.
+    U_C, L_R, H_A, H_B = 5.0, 28.0, 8.8, 3.4
+    perfil = [(0.0, 0.0), (U_C, 0.0), (U_C, H_B)]
+    for k in range(1, 12):
+        u = U_C * (1 - k / 12)
+        perfil.append((u, H_B + (H_A - H_B) * math.sqrt(1 - (u / U_C) ** 2)))
+    perfil.append((0.0, H_A))
+    cuerpo_r = Manifold.extrude(CrossSection([perfil]), L_R).rotate((90, 0, 0)).rotate((0, 0, 0))
+    # tras rotate(90,0,0): x=u, z=altura, y va de 0 a -L_R  -> lo damos la vuelta para que crezca en +Y
+    cuerpo_r = cuerpo_r.mirror((0, 1, 0))
+    planta_r = [(0, 0), (U_C, 0)]
+    for k in range(13):
+        t_ = k / 12; y = 16 + 12 * t_
+        planta_r.append((U_C * math.sqrt(max(0.0, 1 - t_ ** 2)), y))
+    planta_r.append((0, L_R))
+    recorte = Manifold.extrude(CrossSection([planta_r]), 20).translate((0, 0, -1))
+    relieve = (cuerpo_r ^ recorte) - caja(2.5, U_C + 1, -1, L_R + 1, -1, H_B - 0.2)    # bajos comerciales bajo el voladizo
+    solido.append(relieve.translate((W_L - 0.05, A2[1], 0)))
     huecos = [
         # fachada a la calle del ala corta (restaurante): planta baja retranqueada + banda de ventanas
         caja_s(-L_C - 1, -0.5, -1, 2.0, -1, 3.0), caja_s(-L_C + 1, -1.0, -1, 0.4, 4.2, 6.5),
     ]
     for k in range(int((L_L - 24) / 3.0)):                                                         # dos filas de ventanas
-        yk = 22 + 3.0 * k
+        yk = A2[1] + 30 + 3.0 * k
         if yk > L_L - 13: break
         for z0 in (3.6, 6.2):
             huecos.append(caja_s(W_L - 0.3, W_L + 1, yk, yk + 1.6, z0, z0 + 1.5))
-    huecos.append(caja_s(W_L - 3.0, W_L + 1, 42, 70, -1, 3.0))                                      # bajos comerciales
     est = Manifold.batch_boolean(solido, OpType.Add) - Manifold.batch_boolean(huecos, OpType.Add)
     est = a_torre(est)
     # huecos del chaflan (en coordenadas de la torre: chaflan en Y = -RET)
+    X_R0, X_H1 = -D_REST, L_CH - D_REST                  # extremos del chaflan en coordenadas de la torre
     est = est - Manifold.batch_boolean([
-        caja(-9.0, -R_COL - 0.2, -RET - 2, -RET + 2.0, -1, 3.0),        # planta baja del restaurante
-        caja(-8.0, -R_COL - 1.2, -RET - 2, -RET + 0.4, 4.2, 6.5),       # ventanas del restaurante
-        caja(R_COL + 0.2, 11.5, -RET - 2, 5.5, -1, 3.8),                # hueco de la entrada del hotel
-        caja(R_COL + 1.2, 10.5, -RET - 2, -RET + 0.4, 4.6, 7.4),        # ventanas sobre la entrada
+        caja(X_R0 - 1, -R_COL - 0.2, -RET - 2, -RET + 2.0, -1, 3.0),     # planta baja del restaurante
+        caja(X_R0 + 1.0, -R_COL - 0.8, -RET - 2, -RET + 0.4, 4.0, 6.6),  # ventanas del restaurante
+        caja(R_COL + 0.2, X_H1 - 0.3, -RET - 2, 5.5, -1, 3.8),           # hueco de la entrada del hotel
+        caja(R_COL + 0.8, X_H1 - 1.0, -RET - 2, -RET + 0.4, 4.6, 7.4),   # ventanas sobre la entrada
     ], OpType.Add)
     p.append(est)
     fuente = anillo(5.0, 5.6, 0, 0.5) - caja(-7, 7, 0, 7, -1, 1)              # fuente al pie de la columna

@@ -218,7 +218,8 @@ def escalera():
 W_L, W_P, L_L = 15.7, 12.7, 94.8     # borde exterior de la rampa; ancho del ala larga (Bing 12,74); largo total
 L_C, W_C = 24.0, 12.0                # ala corta: largo y fondo
 L_CH, D_REST = 27.2, 14.6            # chaflan (foto frontal) y posicion de la columna sobre el
-A_CH = math.radians(31)              # angulo del chaflan (esquema)
+import os
+A_CH = math.radians(float(os.environ.get("SALUT_ACH", "31")))   # angulo del chaflan (esquema; ajustable)
 RET, RETR = 1.5, 2.5                 # la columna asoma RET; la planta baja se retranquea RETR
 Z_PB, Z_P1 = 3.8, 8.9                # techo de planta baja; coronacion de la planta primera (= terraza)
 D_E = 3.8                            # largo de la cara a 90 grados de la esquina del hotel

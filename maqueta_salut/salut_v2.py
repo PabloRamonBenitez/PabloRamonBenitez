@@ -217,7 +217,7 @@ def base_y_estilobato():
     # ala corta a lo largo de la calle hacia -Xs. El chaflan corta la esquina exterior desde el rincon interior
     # (0,0) hasta la fachada exterior del ala larga (15,7; 9,4) y la columna queda sobre el chaflan.
     W_L, L_L = 15.7, 94.8            # ala larga (medida en Google Maps)
-    L_C, W_C = 16.0, 12.0            # ala corta junto a la calle (estimada)
+    L_C, W_C = 24.0, 12.0            # ala corta junto a la calle (foto aerea: bloque alto ~16 m + bloque de ladrillo)
     # chaflan medido en la foto frontal: restaurante 11,6 m + columna 6 m + hotel 9,6 m = 27,2 m
     L_CH, D_REST = 27.2, 14.6        # longitud del chaflan; distancia del extremo izquierdo al eje de la columna
     A_CH = math.radians(31)          # angulo del chaflan (del esquema; no medible en las fotos)
@@ -240,17 +240,22 @@ def base_y_estilobato():
     solido = [Manifold.extrude(planta_L, H_ALA) ^ caja_s(-1, W_L + 1, A2[1] - 0.01, Y_T, -1, 30),   # tramo alto (3 plantas)
               Manifold.extrude(planta_L, 7.0) ^ caja_s(-1, W_L + 1, Y_T - 0.01, L_L + 1, -1, 30),     # resto del ala, mas bajo y ciego
               Manifold.extrude(planta_L, Z_TERRAZA) ^ caja_s(-1, W_L + 1, -1, A2[1] + 0.01, -1, 30),  # tramo del hotel junto a la torre
-              Manifold.extrude(planta_L, 8.2) ^ caja_s(-L_C - 1, -0.01, -1, W_C + 1, -1, 30),         # ala corta 8,2 m
-              caja_s(-L_C, -4, 4, W_C, 0, 11.5),                                                    # cuerpo alto con lucernarios
+              # ---- ala corta, seccion AA: frontal volado (restaurante) + bloque alto detras ----
+              Manifold.extrude(planta_L, 8.9) ^ caja_s(-L_C + 5.0, -0.01, -1, 6.0, -1, 30),         # frontal: banda del restaurante
+              caja_s(-L_C + 5.0, -2.0, 5.5, W_C, 0, 12.0),                                         # bloque alto con lucernarios
+              caja_s(-2.5, 0.01, 5.5, W_C, 0, 8.2),                                                # pieza baja junto a la torre
+              caja_s(-L_C, -L_C + 5.0, 0, W_C, 0, 9.6),                                            # bloque de ladrillo del extremo
               caja_s(-4, W_L + 4, L_L - 11, L_L, 0, 9.0),                                          # remate transversal del fondo (maqueta original)
-              caja_s(0.5, 8.5, A2[1] - 3, A2[1] + 15, 0, 14.5),                                     # cuerpo elevado junto a la torre
+              # ---- ala larga, seccion BB: bar alto en el lado interior con voladizo sobre la terraza ----
+              caja_s(0.0, 6.0, A2[1] - 3, A2[1] + 22, 0, 14.6),                                     # bar
+              caja_s(5.9, 8.0, A2[1] - 3, A2[1] + 22, 14.0, 14.6),                                  # voladizo del bar sobre la terraza
               caja_s(W_L - 0.3, W_L, A2[1], Y_T, H_ALA - 0.01, H_ALA + 1.0),                        # peto de la terraza (lado exterior)
               caja_s(0, W_L, Y_T - 0.3, Y_T, H_ALA - 0.01, H_ALA + 1.0),                            # peto de la terraza (final)
               Manifold.hull_points([(6.6, Y_T + 2, 6.99), (9.0, Y_T + 2, 6.99), (7.8, Y_T + 2, 8.2),
                                     (6.6, L_L - 13, 6.99), (9.0, L_L - 13, 6.99), (7.8, L_L - 13, 8.2)])]  # lucernario en cumbrera
     for i in range(6):                                                                              # una fila de lucernarios en diente de sierra
         pir = Manifold.extrude(CrossSection.square((1.5, 1.5), True), 1.1, 0, 0, (0.05, 0.05))
-        solido.append(pir.translate((-L_C + 1.6 + 2.0 * i, 6.5, 11.49)))
+        solido.append(pir.translate((-L_C + 6.6 + 2.2 * i, 8.5, 11.99)))
     # superficie curva del relieve (fotos aerea y frontal): cubierta inclinada y curva pegada a la fachada exterior
     # del ala larga, desde el bloque del hotel; lleva el relieve de estrellas y cubre los bajos comerciales.
     U_C, L_R, H_A, H_B = 5.0, 28.0, 7.0, 3.2
@@ -272,7 +277,8 @@ def base_y_estilobato():
     solido.append(relieve.translate((W_L - 0.05, A2[1], 0)))
     huecos = [
         # fachada a la calle del ala corta (restaurante): planta baja retranqueada + banda de ventanas
-        caja_s(A1[0] + 0.5, -0.5, -1, 2.0, -1, 3.0),                                                # planta baja del restaurante (fachada a la calle)
+        caja_s(-L_C + 5.5, -0.5, -1, 4.2, -1, 3.0),                                                 # planta baja del restaurante, hundida bajo el volado
+        caja_s(-L_C + 6.5, A1[0], -1, 0.4, 4.4, 7.0),                                              # banda de ventanas del restaurante (calle)
         caja_s(-L_C - 1, -L_C + 5.0, -1, W_C - 2.0, -1, 3.6),                                        # hueco sobre pilares en el extremo de la calle
     ]
     for k in range(11):                                                                             # dos filas de ~11 ventanas, solo en el tramo alto
@@ -280,7 +286,7 @@ def base_y_estilobato():
         for z0 in (7.4, 9.4):
             huecos.append(caja_s(W_L - 0.3, W_L + 1, yk, yk + 1.6, z0, z0 + 1.3))
     est = Manifold.batch_boolean(solido, OpType.Add) - Manifold.batch_boolean(huecos, OpType.Add)
-    for xp in (-L_C + 0.6, -L_C + 4.2):                                                             # pilares del hueco
+    for xp in (-L_C + 0.6, -L_C + 4.4):                                                             # pilares del hueco
         for yp in (0.6, W_C - 3.0):
             est = est + caja_s(xp - 0.4, xp + 0.4, yp - 0.4, yp + 0.4, 0, 3.7)
     est = a_torre(est)

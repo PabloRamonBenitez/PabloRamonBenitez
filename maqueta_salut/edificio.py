@@ -43,7 +43,7 @@ Y_CUNA = L_L - 35.13    # la concha se junta con la fachada a 35 m del fondo [Bi
 W_EXT = 15.7        # ancho maximo con la concha                    [Google 15,7]
 import os
 A_CH = math.radians(float(os.environ.get("ACH", "57")))   # angulo del chaflan con la calle [provisional]
-TH_L = math.radians(float(os.environ.get("THL", "90")))   # angulo interior de la L (calle - ala larga) [FASE 2: F35/F58 ~102]
+TH_L = math.radians(float(os.environ.get("THL", "102")))   # angulo interior de la L (calle - ala larga) [FASE 2: F35/F58 ~102]
 REST, COL, HOT = 12.8, 6.5, 9.6             # tramos del chaflan    [F09]
 L_CH = REST + COL + HOT
 KC = (W_EXT, 0.0)                           # esquina exterior de la L antes del chaflan
@@ -158,8 +158,15 @@ def base():
     def en_torre(mm):
         return mm.rotate((0, 0, rot)).translate((T[0], T[1], 0))
     yf = -(R_COL - RET)
-    hue_t = [caja(-REST - COL / 2 + 0.4, -R_COL - 0.3, yf - 1, yf + 0.3, 4.6, 6.6),
-             caja(R_COL + 0.3, R_COL + HOT - 0.4, yf - 1, yf + 0.3, 4.6, 6.6)]
+    # FASE 3 (F50 con personas como escala, F09): seccion de las bandas del chaflan
+    #   restaurante: PB hasta +4,5 (toldos) · vidrio +4,6/+6,4 · rotulo hasta +7,3
+    #   hotel: puertas 2,3 · PB hasta +3,1 · canto de hormigon volado +3,1/+4,3 · vidrio +4,3/+6,0 · rotulo
+    xr0, xr1 = -REST - COL / 2, -R_COL
+    xh0, xh1 = R_COL, R_COL + HOT + 3.0
+    m = m - en_torre(caja(xr0 - 0.5, xr1, yf - 1, yf + RETR + 0.01, Z_PB - 0.01, 4.5))          # sofito del restaurante a +4,5
+    m = m + en_torre(caja(xh0, R_COL + HOT, yf - 0.3, yf + 2.0, 3.1, 4.3))                       # canto volado del hotel
+    hue_t = [caja(xr0 + 0.4, xr1 - 0.3, yf - 1, yf + 0.3, 4.6, 6.4),                             # vidrio restaurante
+             caja(xh0 + 0.3, R_COL + HOT - 0.4, yf - 1, yf + 0.3, 4.35, 6.0)]                    # vidrio hotel
     return m - en_torre(Manifold.batch_boolean(hue_t, OpType.Add))
 
 

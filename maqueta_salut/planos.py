@@ -104,7 +104,7 @@ def main():
         fig, ax = plt.subplots(figsize=(16.5, 11.7))
         planta(ax)
         cota(ax, (W_L, A2[1]), (W_L, L_L), "B1 largo ala", off=-6)
-        cota(ax, (0, 60), (12.7, 60), "B2 cuerpo principal", off=-2.5); cota(ax, (0, L_L), (W_L, L_L), "B8 ancho bloque final", off=-2.5); cota(ax, (W_L, L_L - 8), (W_L, L_L), "B9 bloque final", off=-3)
+        cota(ax, (0, 60), (12.7, 60), "B2 cuerpo principal", off=-2.5); cota(ax, (12.7, L_L - 8), (12.7, L_L), "B9 tramo final sin bar", off=-3)
         cota(ax, A1, A2, "C1 chaflan", off=4)
         cota(ax, (-24, 0), (A1[0], 0), "A1 frente calle ala corta", off=4)
         cota(ax, (-24, 0), (-24, 12), "A2 fondo ala corta", off=3)

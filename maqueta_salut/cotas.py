@@ -52,6 +52,8 @@ COTAS = {
  "REST":   (14.3, "frente del restaurante en el chaflán", "C04 calibrada"),
  "COL":    (6.5,  "columna en el chaflán", "F09"),
  "HOT":    (11.4, "frente del hotel en el chaflán", "C04 calibrada"),
+ "L_CHF":  (20.0, "longitud del chaflán (reducido: la torre baja hacia la calle y deja sitio al vestíbulo)", "usuario"),
+ "T_POS":  (0.58, "posición del eje de la torre a lo largo del chaflán (0 = calle, 1 = ala larga): algo a la derecha", "usuario"),
  "RET":    (1.5,  "lo que asoma la columna delante de la planta primera", "F09/F18"),
  "RETR":   (2.5,  "retranqueo de la planta baja bajo la planta primera", "F09, F14, F47"),
  "L_C":    (24.0, "largo del ala corta desde la esquina exterior", "F01 (estimado)"),
@@ -69,13 +71,13 @@ for _k in ("ACH", "THL"):
 def planta():
     g = dict(V)
     th, a = math.radians(V["THL"]), math.radians(V["ACH"])
-    LCH = V["REST"] + V["COL"] + V["HOT"]
+    LCH = V["L_CHF"]
     angC = math.pi - th - a
     _a = LCH * math.sin(angC) / math.sin(th); _c = LCH * math.sin(a) / math.sin(th)
     US = np.array([math.cos(math.pi / 2 + th), math.sin(math.pi / 2 + th)]); NS = np.array([US[1], -US[0]])
     KC = np.array([V["W_P"], 0.0]); A1 = KC + _a * US; C = KC + np.array([0, _c])
     U = (C - A1) / LCH; N = np.array([-U[1], U[0]])
-    T = A1 + (V["REST"] + V["COL"] / 2) * U + (V["R_COL"] - V["RET"]) * N
+    T = A1 + V["T_POS"] * LCH * U + (V["R_COL"] - V["RET"]) * N
     def SWP(x, y):             # ala corta en coordenadas "de L recta"
         return KC + (V["W_P"] - x) * US + y * NS
     def inter(p, d, q, e):

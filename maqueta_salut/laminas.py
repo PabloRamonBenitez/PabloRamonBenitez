@@ -55,8 +55,11 @@ def cotas_planta(ax):
     L.cota(ax, (-E.L_C, 0), (-E.L_C, E.W_C), 3, "")
     L.cota(ax, (E.W_P, E.C[1]), E.C, 2, "")
     U = np.array(E.U); A1 = np.array(E.A1)
-    L.cota(ax, A1, A1 + E.REST * U, 5, "rest."); L.cota(ax, A1 + E.REST * U, A1 + (E.REST + E.COL) * U, 5, "col.")
-    L.cota(ax, A1 + (E.REST + E.COL) * U, np.array(E.C), 5, "hotel")
+    k = E._k
+    L.cota(ax, A1, A1 + (k - E.R_COL) * U, 5, "rest."); L.cota(ax, A1 + (k - E.R_COL) * U, A1 + (k + E.R_COL) * U, 5, "col.")
+    L.cota(ax, A1 + (k + E.R_COL) * U, np.array(E.C), 5, "hotel")
+    pv = np.array(E.P(0, 9.0)); ax.text(*pv, "vestíbulo /\ncirculaciones", fontsize=7, ha="center", va="center", style="italic", zorder=70,
+                                        bbox=dict(fc="white", ec="0.5", lw=0.4, pad=1))
     xe = E._v["ESC_X"]; L.cota(ax, (xe - E.ESC_W / 2, E.ESC_Y1 + 1), (xe + E.ESC_W / 2, E.ESC_Y1 + 1), 1.2, "escalera")
     L.cota(ax, (0, E.ESC_Y0), (0, E.ESC_Y1), -1.2, "")
     ax.text(E.KC[0] + 1, 2, f"L {math.degrees(E.TH_L):.0f}°", fontsize=8, color="k")
@@ -86,9 +89,10 @@ def plantas():
         ax2 = fig.add_axes([0.66, 0.30, 0.33, 0.62])
         planta(ax2, zc, "detalle torre / chaflán", aerea=zc is None)
         ejes(ax2, (E.T[0] - 20, E.T[0] + 20), (E.T[1] - 18, E.T[1] + 22))
-        fig.text(0.66, 0.25, "Datos de planta: ala larga 12,74 / bar 6,21 / tramo final 7,81 / concha hasta 35,13 del fondo\n"
-                 "(Bing). Largo total 94,82 y ancho máx. 15,7 (Google). Chaflán: restaurante 12,8 + columna 6,5 + hotel 9,6 (F09).\n"
-                 "Ángulo del chaflán 31° (tu esquema). Torre: eje sobre el chaflán; la columna asoma 1,5 m.", fontsize=7, va="top")
+        fig.text(0.66, 0.25, "Datos de planta: ala larga 12,74 / bar 6,21 / tramo final 7,81 / concha hasta 35,13 del fondo (Bing).\n"
+                 f"Largo total 94,82 (Google). Esquina original a 90° con chaflán de {E.L_CH:.1f} m a {math.degrees(E.A_CH):.0f}°.\n"
+                 f"Torre sobre el chaflán al {E._v['T_POS']*100:.0f} % desde la calle (algo a la derecha); la columna asoma 1,5 m.\n"
+                 "Detrás de la torre: vestíbulo y circulaciones.", fontsize=7, va="top")
         OUT.append(fig)
 
 

@@ -58,7 +58,7 @@ W_P, W_BAR, L_L, L_FIN, W_EXT = _v["W_P"], _v["W_BAR"], _v["L_L"], _v["L_FIN"], 
 Y_CUNA = L_L - _v["D_CUNA"]
 A_CH, TH_L = math.radians(_v["ACH"]), math.radians(_v["THL"])
 REST, COL, HOT = _v["REST"], _v["COL"], _v["HOT"]
-L_CH = REST + COL + HOT
+L_CH = _v["L_CHF"]                          # chaflan reducido [usuario]
 KC = (W_P, 0.0)                             # esquina exterior de la L: un solo chaflan que muere en la fachada del ala larga [usuario: sin doble chaflán]
 PHI = TH_L - math.pi / 2                    # giro de la calle respecto a la posicion perpendicular
 US = (math.cos(math.pi / 2 + TH_L), math.sin(math.pi / 2 + TH_L))   # direccion de la calle hacia el ala corta
@@ -72,7 +72,7 @@ U = ((C[0] - A1[0]) / L_CH, (C[1] - A1[1]) / L_CH)
 N = (-U[1], U[0])                           # hacia dentro
 RET = _v["RET"]           # la columna asoma por delante de la planta primera [F09/F18]
 RETR = _v["RETR"]          # retranqueo de la planta baja bajo la planta primera [F09, F14, F47]
-_k = REST + COL / 2
+_k = _v["T_POS"] * L_CH                     # eje de la torre sobre el chaflan, algo a la derecha [usuario]
 T = (A1[0] + _k * U[0] + (R_COL - RET) * N[0], A1[1] + _k * U[1] + (R_COL - RET) * N[1])   # eje de la torre
 L_C, W_C = _v["L_C"], _v["W_C"]       # ala corta: extremo de la calle en x=-L_C, fondo 12   [F01, estimado]
 D_FAR = W_EXT + L_C         # longitud de la fachada a la calle desde la esquina exterior
@@ -177,12 +177,12 @@ def base():
     # FASE 3 (F50 con personas como escala, F09): seccion de las bandas del chaflan
     #   restaurante: PB hasta +4,5 (toldos) · vidrio +4,6/+6,4 · rotulo hasta +7,3
     #   hotel: puertas 2,3 · PB hasta +3,1 · canto de hormigon volado +3,1/+4,3 · vidrio +4,3/+6,0 · rotulo
-    xr0, xr1 = -REST - COL / 2, -R_COL
+    xr0, xr1 = -_k, -R_COL
     xh0, xh1 = R_COL, R_COL + HOT + 3.0
     m = m - en_torre(caja(xr0 - 0.5, xr1, yf - 1, yf + RETR + 0.01, Z_PB - 0.01, 4.5))          # sofito del restaurante a +4,5
-    m = m + en_torre(caja(xh0, R_COL + HOT, yf - 0.3, yf + 2.0, 3.1, 4.3))                       # canto volado del hotel
+    m = m + en_torre(caja(xh0, L_CH - _k, yf - 0.3, yf + 2.0, 3.1, 4.3))                       # canto volado del hotel
     hue_t = [caja(xr0 + 0.4, xr1 - 0.3, yf - 1, yf + 0.3, 4.6, 6.4),                             # vidrio restaurante
-             caja(xh0 + 0.3, R_COL + HOT - 0.4, yf - 1, yf + 0.3, 4.35, 6.0)]                    # vidrio hotel
+             caja(xh0 + 0.3, L_CH - _k - 0.4, yf - 1, yf + 0.3, 4.35, 6.0)]                    # vidrio hotel
     return m - en_torre(Manifold.batch_boolean(hue_t, OpType.Add))
 
 

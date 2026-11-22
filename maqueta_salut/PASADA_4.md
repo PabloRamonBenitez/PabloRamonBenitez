@@ -28,3 +28,12 @@ Lectura:
 - C04 (la foto fiable) pide que el chaflán se prolongue por el lado del hotel: con la torre fija, el chaflán sigue ~6 m más hacia el ala larga. Eso equivale a torre **más a la izquierda** del centro del chaflán (≈30 %), no a la derecha.
 - Ninguna combinación oculta la escalera en C04 y encaja a la vez el ala en C02: o la escalera no está donde la tenemos, o C02 (foto de época) no es fiable para el ala.
 - No aplicado: contradice la hipótesis de torre algo a la derecha; pendiente de decisión.
+
+## DECISIÓN de implantación (por medición en planta real, no por perspectiva)
+Método: el mapa 2D de Google es una proyección ortogonal de la planta. Se miden ahí directamente, sin cámaras:
+- escala = ancho del ala (12,74 m) → 12,26 px/m; comprobación: círculo gris = columna, radio 2,9 m (cuadro 3,25) ✔
+- eje de la torre (centro del círculo gris) a **3,4 m de la cara exterior del ala** y 9,3 m de la interior.
+- ángulo ala–calle 94,6° (Bing 96,4°).
+Con chaflán de 20 m a 45° eso sitúa la torre al **84 %** del chaflán (a la derecha, junto a la fachada exterior del ala).
+Comprobación independiente en C04 (foto frontal): el arranque del chaflán cae en x=92 (foto: banda del restaurante acaba en 80) y la banda del hotel sigue **10,6 m por la fachada exterior del ala** hasta x=455, donde empieza el muro del relieve (concha). Las dos fuentes son coherentes.
+Aplicado en el cuadro: T_POS = 0,837 · D_HOTF = 10,6. Queda abierto: la escalera sigue asomando en C04.

@@ -153,7 +153,7 @@ def base():
           caja(W_BAR, W_P, L_L - 0.3, L_L, Z_P1 - 0.01, Z_P1 + 1.0)]
     # concha: franja exterior que se estrecha de W_EXT a W_P hasta Y_CUNA; alta junto al hotel (+7,3) y baja en
     # curva al suelo; debajo, planta baja hundida [F47, F09, Bing]
-    y0 = pl["Q"][1]
+    y0 = pl["Q"][1] + _v["D_HOTF"]          # la concha empieza tras la banda del hotel sobre la fachada del ala [C04]
     def f(v):
         x, y, z = v
         y = min(max(y, 0.0), 1.0)
@@ -180,9 +180,15 @@ def base():
     xr0, xr1 = -_k, -R_COL
     xh0, xh1 = R_COL, R_COL + HOT + 3.0
     m = m - en_torre(caja(xr0 - 0.5, xr1, yf - 1, yf + RETR + 0.01, Z_PB - 0.01, 4.5))          # sofito del restaurante a +4,5
-    m = m + en_torre(caja(xh0, L_CH - _k, yf - 0.3, yf + 2.0, 3.1, 4.3))                       # canto volado del hotel
-    hue_t = [caja(xr0 + 0.4, xr1 - 0.3, yf - 1, yf + 0.3, 4.6, 6.4),                             # vidrio restaurante
-             caja(xh0 + 0.3, L_CH - _k - 0.4, yf - 1, yf + 0.3, 4.35, 6.0)]                    # vidrio hotel
+    hue_t = [caja(xr0 + 0.4, xr1 - 0.3, yf - 1, yf + 0.3, 4.6, 6.4)]                            # vidrio restaurante
+    if L_CH - _k - R_COL > 1.0:                                                                    # tramo de hotel en el chaflan (si queda)
+        m = m + en_torre(caja(xh0, L_CH - _k, yf - 0.3, yf + 2.0, 3.1, 4.3))
+        hue_t.append(caja(xh0 + 0.3, L_CH - _k - 0.4, yf - 1, yf + 0.3, 4.35, 6.0))
+    # banda del hotel sobre la fachada exterior del ala larga, desde el fin del chaflan hasta la concha [C04]
+    yc0, yc1 = C[1] + 0.3, C[1] + _v["D_HOTF"] - 0.3
+    m = m + caja(W_P - 2.0, W_P + 0.3, C[1], C[1] + _v["D_HOTF"], 3.1, 4.3)                      # canto volado
+    m = m - caja(W_P - 0.3, W_P + 1.0, yc0, yc1, 4.35, 6.0)                                       # vidrio
+    m = m - caja(W_P - RETR, W_P + 1.0, C[1], C[1] + _v["D_HOTF"], -1, 3.1)                       # entrada del hotel en hueco                    # vidrio hotel
     return m - en_torre(Manifold.batch_boolean(hue_t, OpType.Add))
 
 

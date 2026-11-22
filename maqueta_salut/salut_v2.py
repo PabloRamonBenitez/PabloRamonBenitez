@@ -207,105 +207,109 @@ def escalera():
     return Manifold.batch_boolean(p, OpType.Add)
 
 
+# =====================================================================================================
+#  ESTILOBATO DEFINIDO POR PLANTAS (coordenadas de "solar", metros)
+#  Ala larga a lo largo de +Y (calle en y = 0); ala corta a lo largo de -X. Chaflan entre las dos calles con la
+#  torre encima. Regla unica: la PLANTA PRIMERA tiene su frente en la calle (y = 0) y en la linea del chaflan; la
+#  PLANTA BAJA queda retranqueada RETR bajo ese frente en ambas fachadas. La columna asoma 1,5 m por delante de la
+#  planta primera. En la esquina del hotel la planta primera acaba con una cara a 90 grados que nace en el borde
+#  exterior de la rampa; la rampa arranca en el plano de la fachada de la planta baja.
+# =====================================================================================================
+W_L, W_P, L_L = 15.7, 12.7, 94.8     # borde exterior de la rampa; ancho del ala larga (Bing 12,74); largo total
+L_C, W_C = 24.0, 12.0                # ala corta: largo y fondo
+L_CH, D_REST = 27.2, 14.6            # chaflan (foto frontal) y posicion de la columna sobre el
+A_CH = math.radians(31)              # angulo del chaflan (esquema)
+RET, RETR = 1.5, 2.5                 # la columna asoma RET; la planta baja se retranquea RETR
+Z_PB, Z_P1 = 3.8, 8.9                # techo de planta baja; coronacion de la planta primera (= terraza)
+D_E = 3.8                            # largo de la cara a 90 grados de la esquina del hotel
+_A1 = (W_L - L_CH * math.cos(A_CH), 0.0)
+_A2 = (W_L, L_CH * math.sin(A_CH))
+_ANG = math.atan2(_A2[1] - _A1[1], _A2[0] - _A1[0])
+_U = (math.cos(_ANG), math.sin(_ANG))                 # +X de la torre
+_N = (-math.sin(_ANG), math.cos(_ANG))                # +Y de la torre (hacia dentro)
+CEN = (_A1[0] + D_REST * _U[0] + RET * _N[0], _A1[1] + D_REST * _U[1] + RET * _N[1])
+
+
+def solar(X, Y):
+    """coordenadas de torre -> solar"""
+    return (CEN[0] + X * _U[0] + Y * _N[0], CEN[1] + X * _U[1] + Y * _N[1])
+
+
+def _corte(Yt, eje, k):
+    """punto de la linea 'Y de torre = Yt' que cumple x = k (eje='x') o y = k (eje='y')"""
+    i = 0 if eje == "x" else 1
+    X = (k - CEN[i] - Yt * _N[i]) / _U[i]
+    return solar(X, Yt)
+
+
+def plantas():
+    Y_F, Y_G = -RET, -RET + RETR                       # frente de planta primera / planta baja (Y de torre)
+    Q = _corte(Y_F + D_E, "x", W_L)                    # la cara a 90 grados nace en el borde de la rampa
+    Xq = (Q[0] - CEN[0]) * _U[0] + (Q[1] - CEN[1]) * _U[1]
+    C = solar(Xq, Y_F)                                 # esquina volada
+    P1 = [(-L_C, 0.0), _corte(Y_F, "y", 0.0), C, Q, (W_P, Q[1]), (W_P, L_L), (0.0, L_L), (0.0, W_C), (-L_C, W_C)]
+    PB = [(-L_C + 5.0, RETR), _corte(Y_G, "y", RETR), _corte(Y_G, "x", W_P), (W_P, L_L), (0.0, L_L), (0.0, W_C),
+          (-L_C + 5.0, W_C)]
+    return dict(P1=P1, PB=PB, C=C, Q=Q, Xq=Xq, G_r=_corte(Y_G, "x", W_L), G_c=_corte(Y_G, "x", W_P))
+
+
+def _a_torre(m):
+    return m.translate((-CEN[0], -CEN[1], 0)).rotate((0, 0, -math.degrees(_ANG)))
+
+
+def estilobato():
+    pl = plantas()
+    sol = [Manifold.extrude(CrossSection([pl["PB"]]), Z_PB + 0.01),
+           Manifold.extrude(CrossSection([pl["P1"]]), Z_P1 - Z_PB).translate((0, 0, Z_PB))]
+    # ala corta (seccion AA): bloque alto con lucernarios detras de la banda; bloque de ladrillo sobre pilares
+    sol.append(caja(-L_C + 5.0, -2.5, 5.5, W_C, 0, 12.0))
+    for i in range(6):
+        pir = Manifold.extrude(CrossSection.square((1.5, 1.5), True), 1.1, 0, 0, (0.05, 0.05))
+        sol.append(pir.translate((-L_C + 6.6 + 2.2 * i, 8.5, 11.99)))
+    sol.append(caja(-L_C, -L_C + 5.0, 0, W_C, Z_PB, 9.6))
+    for xp in (-L_C + 0.6, -L_C + 4.4):
+        for yp in (0.6, W_C - 0.6):
+            sol.append(caja(xp - 0.4, xp + 0.4, yp - 0.4, yp + 0.4, 0, Z_PB + 0.01))
+    # ala larga (seccion B constante): terraza a +8,9 con peto; bar de una planta con cubierta volada hasta +12
+    X_B, X_V, Y_B0, Y_B1 = 6.2, 7.7, 24.0, L_L - 8.0
+    sol += [caja(0.0, X_B, Y_B0, Y_B1, Z_P1 - 0.01, Z_P1 + 2.6),
+            caja(-0.01, X_V, Y_B0 - 1.5, Y_B1 + 1.5, Z_P1 + 2.6, Z_P1 + 3.1),
+            caja(W_P - 0.3, W_P, pl["Q"][1], L_L, Z_P1 - 0.01, Z_P1 + 1.0),
+            caja(X_B, W_P, L_L - 0.3, L_L, Z_P1 - 0.01, Z_P1 + 1.0)]
+    # rampa: franja entre la fachada (x = W_P) y el borde exterior (x = W_L), que se estrecha hasta juntarse con la
+    # fachada a 35 m del fondo; arranca en el plano de la planta baja y baja en curva desde +8,9 hasta el suelo
+    y0a, y0b, y1 = pl["G_c"][1], pl["G_r"][1], L_L - 35.0
+    def _f(v):
+        x, y, z = v
+        ys = y0a + x * (y0b - y0a)
+        return (W_P - 0.05 + x * (W_L - W_P + 0.05) * (1 - y), ys + y * (y1 - ys),
+                z * Z_P1 * math.sqrt(max(0.0, 1 - y ** 2)))
+    sol.append(Manifold.cube((1, 1, 1)).refine(32).warp(_f))
+    est = Manifold.batch_boolean(sol, OpType.Add)
+    # huecos de ventanas (franjas continuas casi a paño, 0,3 m) en la planta primera
+    hue = [caja(-L_C + 0.3, pl["P1"][1][0] - 0.3, -1, 0.3, 4.6, 7.6)]                     # calle, ala corta
+    Y_V = 26.7
+    for k in range(10):                                                                   # ala larga: 2 filas de 10
+        yk = Y_V + 0.6 + 2.3 * k
+        for z0 in (5.2, 6.9):
+            hue.append(caja(W_P - 0.3, W_P + 1, yk, yk + 1.2, z0, z0 + 1.1))
+    est = est - Manifold.batch_boolean(hue, OpType.Add)
+    est = _a_torre(est)
+    Y_F = -RET
+    X0 = (_corte(Y_F, "y", 0.0)[0] - CEN[0]) * _U[0] + (_corte(Y_F, "y", 0.0)[1] - CEN[1]) * _U[1]
+    hue_t = [caja(X0 + 0.3, -R_COL - 0.3, Y_F - 1, Y_F + 0.3, 4.6, 7.6),                  # chaflan: restaurante
+             caja(R_COL + 0.3, pl["Xq"] - 0.3, Y_F - 1, Y_F + 0.3, 4.6, 7.6),             # chaflan: hotel
+             caja(pl["Xq"] - 0.3, pl["Xq"] + 1, Y_F + 0.3, Y_F + D_E - 0.3, 4.6, 7.6)]    # cara a 90 grados
+    return est - Manifold.batch_boolean(hue_t, OpType.Add)
+
+
 def base_y_estilobato():
     p = [cil(R_COL, Z_COL0, Z_CUELLO0 + 0.1), cil(R_CUELLO, Z_CUELLO0, Z_CUELLO1 + 0.05),
          cil(R_CUELLO + 0.4, Z_CUELLO0, Z_CUELLO0 + 0.8)]          # losa inferior del cuello, algo volada
     for k in range(16):   # anillo de piramides invertidas bajo el cuello
         p.append(placa_rz([(R_COL - 0.2, Z_CUELLO0 + 0.05), (R_CUELLO - 0.3, Z_CUELLO0 + 0.05),
                            (R_COL + 0.3, Z_TERRAZA)], 1.6, 22.5 * k + 11))
-    # ---------------- estilobato en L con chaflan (esquema del usuario + Google Maps) ----------------
-    # Coordenadas de "solar": ala larga a lo largo de +Ys (94,8 x 15,7 m), su borde inferior (Ys=0) es la calle;
-    # ala corta a lo largo de la calle hacia -Xs. El chaflan corta la esquina exterior desde el rincon interior
-    # (0,0) hasta la fachada exterior del ala larga (15,7; 9,4) y la columna queda sobre el chaflan.
-    W_L, L_L = 15.7, 94.8            # ala larga (medida en Google Maps)
-    L_C, W_C = 24.0, 12.0            # ala corta junto a la calle (foto aerea: bloque alto ~16 m + bloque de ladrillo)
-    # chaflan medido en la foto frontal: restaurante 11,6 m + columna 6 m + hotel 9,6 m = 27,2 m
-    L_CH, D_REST = 27.2, 14.6        # longitud del chaflan; distancia del extremo izquierdo al eje de la columna
-    A_CH = math.radians(31)          # angulo del chaflan (del esquema; no medible en las fotos)
-    A1 = (W_L - L_CH * math.cos(A_CH), 0.0)
-    A2 = (W_L, L_CH * math.sin(A_CH))
-    ang = math.atan2(A2[1] - A1[1], A2[0] - A1[0])
-    ux, uy = math.cos(ang), math.sin(ang)            # direccion del chaflan  (= +X de la torre)
-    nx, ny = -math.sin(ang), math.cos(ang)           # hacia el interior     (= +Y de la torre, escalera)
-    col = (A1[0] + D_REST * ux, A1[1] + D_REST * uy)  # columna sobre el chaflan
-    RET = 1.5                                        # la columna asoma 1,5 m por delante del chaflan
-    cen = (col[0] + RET * nx, col[1] + RET * ny)     # eje de la torre en coordenadas de solar
-    def a_torre(m):
-        return m.translate((-cen[0], -cen[1], 0)).rotate((0, 0, -math.degrees(ang)))
-    L_pts = [(-L_C, 0), (W_L, 0), (W_L, L_L), (0, L_L), (0, W_C), (-L_C, W_C)]
-    planta_L = CrossSection([L_pts]) - CrossSection([[A1, (W_L + 5, -5), (W_L + 5, A2[1] + (5 * math.tan(ang))), A2]])
-    def caja_s(x0, x1, y0, y1, z0, z1):
-        return caja(x0, x1, y0, y1, z0, z1)
-    # ---- ala larga: SECCION CONSTANTE en toda su longitud (seccion B del usuario) ----
-    #   bloque base hasta el nivel de la terraza (+10,4); encima, en el lado interior, el bar de una planta con su
-    #   cubierta volada sobre la terraza; la terraza (sombrillas) es la franja exterior, con peto.
-    H_ALA = 8.9                      # nivel de la terraza = coronacion de la banda del restaurante (seccion AA)
-    Y_A = A2[1] - 8.0                # el ala arranca detras de la banda del hotel, pegada a la torre
-    Y_V = Y_A + 20.7                 # las ventanas (fila de 10) empiezan aqui (foto aerea)
-    Y_B0, Y_B1 = 24.0, L_L - 8.0     # bar: desde donde acaba el barril hasta el bloque final
-    W_P = 12.7                       # ancho del cuerpo principal del ala (Bing: 12,74 m)
-    L_FIN = 8.0                      # bloque final (Bing: 7,81 m)
-    X_B, X_V = 6.2, 7.7              # bar = mitad interior (Bing: 6,21 m) y borde de su voladizo
-    solido = [Manifold.extrude(planta_L, H_ALA) ^ caja_s(-1, W_L + 1, Y_A, L_L + 1, -1, 30),        # bloque base del ala
-              Manifold.extrude(planta_L, Z_TERRAZA) ^ caja_s(-1, W_L + 1, -1, A2[1] + 0.01, -1, 30),  # banda del hotel junto a la torre
-              # ---- ala corta, seccion AA: frontal volado (restaurante) + bloque alto detras ----
-              Manifold.extrude(planta_L, 8.9) ^ caja_s(-L_C + 5.0, -0.01, -1, 6.0, -1, 30),         # frontal: banda del restaurante
-              caja_s(-L_C + 5.0, -2.0, 5.5, W_C, 0, 12.0),                                         # bloque alto con lucernarios
-              caja_s(-2.5, 0.01, 5.5, W_C, 0, 8.2),                                                # pieza baja junto a la torre
-              caja_s(-L_C, -L_C + 5.0, 0, W_C, 0, 9.6),                                            # bloque de ladrillo del extremo
-              # ---- bar sobre la terraza ----
-              caja_s(0.0, X_B, Y_B0, Y_B1, H_ALA - 0.01, H_ALA + 2.6),                              # bar (una planta, ~2,6 m)
-              caja_s(-0.01, X_V, Y_B0 - 1.5, Y_B1 + 1.5, H_ALA + 2.6, H_ALA + 3.1),                 # cubierta volada del bar (+12,0 = bloque alto AA)
-              caja_s(W_P - 0.3, W_P, A2[1], L_L, H_ALA - 0.01, H_ALA + 1.0),                # peto de la terraza (lado exterior)
-              caja_s(X_B, W_P, L_L - 0.3, L_L, H_ALA - 0.01, H_ALA + 1.0)]                          # peto del bloque final
-    for i in range(6):                                                                              # una fila de lucernarios en diente de sierra
-        pir = Manifold.extrude(CrossSection.square((1.5, 1.5), True), 1.1, 0, 0, (0.05, 0.05))
-        solido.append(pir.translate((-L_C + 6.6 + 2.2 * i, 8.5, 11.99)))
-    # concha curva (fotos aerea y frontal): octante de elipsoide pegado a la fachada exterior; su contorno lateral
-    # baja en curva desde el bloque del hotel hasta el suelo. Debajo, un espacio cubierto en sombra.
-    # pieza exterior (Bing): cuña entre la fachada del cuerpo principal (x = W_P) y la linea exterior; ancha junto a
-    # la torre y se junta con el cuerpo principal a 35 m del fondo. Altura bajando en curva suave hacia el fondo.
-    Y_C0, Y_C1, H_A = 16.7, L_L - 35.0, 8.9           # arranca donde la cara a 90 grados de la banda toca su borde exterior
-    def _f(v):
-        x, y, z = v
-        return (W_P - 0.05 + x * (W_L - W_P + 0.05) * (1 - y), Y_C0 + y * (Y_C1 - Y_C0), z * H_A * math.sqrt(max(0.0, 1 - y ** 2)))
-    cuna = Manifold.cube((1, 1, 1)).refine(32).warp(_f)
-    huecos = [
-        caja_s(W_P, W_L + 2, -5, L_L + 2, -1, 30),                                               # el ala (y su chaflan) acaba en x = W_P                                          # cuerpo principal a 12,7 m
-        # fachada a la calle del ala corta (restaurante): planta baja retranqueada + banda de ventanas
-        caja_s(-L_C + 5.5, -0.5, -1, 4.2, -1, 3.0),                                                 # planta baja del restaurante, hundida bajo el volado
-        caja_s(-L_C + 5.3, A1[0] + 0.5, -1, 0.3, 4.4, 7.0),                                              # banda de ventanas del restaurante (calle)
-        caja_s(-L_C - 1, -L_C + 5.0, -1, W_C - 2.0, -1, 3.6),                                        # hueco sobre pilares en el extremo de la calle
-    ]
-    for k in range(10):                                                                             # dos filas de 10 ventanas, solo en la mitad del fondo
-        yk = Y_V + 0.6 + 2.3 * k
-        for z0 in (5.2, 6.9):
-            huecos.append(caja_s(W_P - 0.3, W_P + 1, yk, yk + 1.2, z0, z0 + 1.1))
-    est = Manifold.batch_boolean(solido, OpType.Add) - Manifold.batch_boolean(huecos, OpType.Add)
-    est = est + cuna
-    for xp in (-L_C + 0.6, -L_C + 4.4):                                                             # pilares del hueco
-        for yp in (0.6, W_C - 3.0):
-            est = est + caja_s(xp - 0.4, xp + 0.4, yp - 0.4, yp + 0.4, 0, 3.7)
-    est = a_torre(est)
-    # huecos del chaflan (en coordenadas de la torre: chaflan en Y = -RET)
-    X_R0, X_H1 = -D_REST, L_CH - D_REST                  # extremos del chaflan en coordenadas de la torre
-    est = est - caja(R_COL - 0.5, 40, -RET - 3, -RET + 5.0, 8.9, 30)  # banda del hotel a +8,9   # banda del hotel a 8,9 m delante del bloque de la terraza
-    est = est - Manifold.batch_boolean([
-        caja(X_R0 - 1, -R_COL - 0.2, -RET - 2, -RET + 2.0, -1, 3.0),     # planta baja del restaurante
-        caja(X_R0 + 0.3, -R_COL - 0.3, -RET - 2, -RET + 0.3, 4.0, 6.6),  # ventanas del restaurante: franja continua hasta el final
-        caja(R_COL + 0.2, X_H1 - 0.3, -RET - 2, 5.5, -1, 3.8),           # hueco de la entrada del hotel
-    ], OpType.Add)
-    # banda de la primera planta del hotel: caja con esquina a 90 grados, volada mas alla de la fachada del ala larga
-    # frente de la banda volado 1,5 m sobre la planta baja (que sigue la linea del chaflan); la cara a 90 grados
-    # arranca en el borde exterior de la rampa (x solar = 15,7)
-    X_E, Y_F, D_E = 14.0, -RET - 1.5, 3.83
-    banda = caja(R_COL - 0.3, X_E, Y_F, Y_F + D_E, 3.8, 8.9)
-    banda = banda - caja(R_COL + 0.3, X_E - 0.3, Y_F - 1, Y_F + 0.3, 4.6, 7.6)        # franja de ventanas del frente
-    banda = banda - caja(X_E - 0.3, X_E + 1, Y_F + 0.3, Y_F + D_E - 0.3, 4.6, 7.6)    # y en la cara a 90 grados
-    est = est + banda
-    relleno = Manifold.extrude(CrossSection([[(12.5, 14.4), (15.75, 16.85), (12.5, 16.85)]]), 5.1).translate((0, 0, 3.8))
-    est = est + a_torre(relleno)                                       # cierra el rincon entre la banda y el arranque de la rampa
-    p.append(est)
+    p.append(estilobato())
     fuente = anillo(5.0, 5.6, 0, 0.5) - caja(-7, 7, 0, 7, -1, 1)              # fuente al pie de la columna
     p.append(fuente)
     return Manifold.batch_boolean(p, OpType.Add)

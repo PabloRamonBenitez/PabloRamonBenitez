@@ -59,6 +59,10 @@ COTAS = {
  "L_LAD":  (5.0,  "largo de la caja de ladrillo", "F01"),
 }
 V = {k: v[0] for k, v in COTAS.items()}
+import os as _os
+for _k in ("ACH", "THL"):
+    if _os.environ.get(_k):
+        V[_k] = float(_os.environ[_k])
 
 
 # ======================================================================== geometria de planta (2D)
@@ -69,15 +73,15 @@ def planta():
     angC = math.pi - th - a
     _a = LCH * math.sin(angC) / math.sin(th); _c = LCH * math.sin(a) / math.sin(th)
     US = np.array([math.cos(math.pi / 2 + th), math.sin(math.pi / 2 + th)]); NS = np.array([US[1], -US[0]])
-    KC = np.array([V["W_EXT"], 0.0]); A1 = KC + _a * US; C = KC + np.array([0, _c])
+    KC = np.array([V["W_P"], 0.0]); A1 = KC + _a * US; C = KC + np.array([0, _c])
     U = (C - A1) / LCH; N = np.array([-U[1], U[0]])
     T = A1 + (V["REST"] + V["COL"] / 2) * U + (V["R_COL"] - V["RET"]) * N
     def SWP(x, y):             # ala corta en coordenadas "de L recta"
-        return KC + (V["W_EXT"] - x) * US + y * NS
+        return KC + (V["W_P"] - x) * US + y * NS
     def inter(p, d, q, e):
         den = d[0] * e[1] - d[1] * e[0]; s = ((q[0] - p[0]) * e[1] - (q[1] - p[1]) * e[0]) / den
         return p + s * d
-    t = (V["W_P"] - C[0]) / N[0]; Q = C + t * N
+    Q = C.copy()
     IC = inter(SWP(0, V["W_C"]), US, np.array([0.0, 0.0]), np.array([0.0, 1.0]))
     P1 = [SWP(-V["L_C"], 0), A1, C, Q, np.array([V["W_P"], Q[1]]), np.array([V["W_P"], V["L_L"]]),
           np.array([0, V["L_L"]]), IC, SWP(-V["L_C"], V["W_C"])]
@@ -88,7 +92,7 @@ def planta():
           np.array([V["W_P"], YC]), np.array([V["W_P"], V["L_L"]]), np.array([0, V["L_L"]]), IC,
           SWP(-V["L_C"] + V["L_LAD"], V["W_C"])]
     P = lambda X, Y: T + X * U + Y * N
-    return dict(T=T, U=U, N=N, A1=A1, C=C, Q=Q, KC=KC, US=US, NS=NS, SWP=SWP, P=P, P1=P1, PB=PB, IC=IC, YC=YC, xA=V["W_EXT"] - _a)
+    return dict(T=T, U=U, N=N, A1=A1, C=C, Q=Q, KC=KC, US=US, NS=NS, SWP=SWP, P=P, P1=P1, PB=PB, IC=IC, YC=YC, xA=V["W_P"] - _a)
 
 
 # ======================================================================== elementos (tipo, nombre, huella, z0, z1)

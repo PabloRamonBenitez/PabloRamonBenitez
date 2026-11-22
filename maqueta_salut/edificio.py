@@ -59,7 +59,7 @@ Y_CUNA = L_L - _v["D_CUNA"]
 A_CH, TH_L = math.radians(_v["ACH"]), math.radians(_v["THL"])
 REST, COL, HOT = _v["REST"], _v["COL"], _v["HOT"]
 L_CH = REST + COL + HOT
-KC = (W_EXT, 0.0)                           # esquina exterior de la L antes del chaflan
+KC = (W_P, 0.0)                             # esquina exterior de la L: un solo chaflan que muere en la fachada del ala larga [usuario: sin doble chaflán]
 PHI = TH_L - math.pi / 2                    # giro de la calle respecto a la posicion perpendicular
 US = (math.cos(math.pi / 2 + TH_L), math.sin(math.pi / 2 + TH_L))   # direccion de la calle hacia el ala corta
 NS = (US[1], -US[0])                        # normal hacia dentro de la calle
@@ -80,7 +80,7 @@ D_FAR = W_EXT + L_C         # longitud de la fachada a la calle desde la esquina
 
 def SWP(x, y):
     """punto del ala corta dado en coordenadas 'de L recta' (x hacia -calle, y hacia dentro) -> planta real"""
-    s, t = W_EXT - x, y
+    s, t = W_P - x, y
     return (KC[0] + s * US[0] + t * NS[0], KC[1] + s * US[1] + t * NS[1])
 
 
@@ -112,7 +112,7 @@ def cil(c, r, z0, z1, seg=SEG):
 
 def plantas_base():
     """poligonos de planta baja y planta primera (definicion unica), con L de angulo interior TH_L"""
-    t = (W_P - C[0]) / N[0]            # avance desde C hacia dentro hasta la fachada del ala
+    t = 0.0                            # sin cara a 90 grados: el chaflan llega directo a la fachada del ala
     Q = (C[0] + t * N[0], C[1] + t * N[1])
     F0 = SWP(-L_C, 0.0); F1 = SWP(-L_C, W_C)
     IC = _inter(SWP(0, W_C), US, (0.0, 0.0), (0.0, 1.0))           # rincon interior de la L
@@ -129,7 +129,7 @@ def plantas_base():
 def base():
     pl = plantas_base()
     s = [prisma(pl["PB"], 0, Z_PB + 0.01), prisma(pl["P1"], Z_PB, Z_P1)]
-    xA = W_EXT - _a                     # arranque del chaflan en coordenadas 'de L recta'
+    xA = W_P - _a                     # arranque del chaflan en coordenadas 'de L recta'
     def ROT(m):                          # coordenadas 'de L recta' -> planta real (giro de la calle alrededor de KC)
         return m.translate((-KC[0], -KC[1], 0)).rotate((0, 0, math.degrees(PHI))).translate((KC[0], KC[1], 0))
     sc = []

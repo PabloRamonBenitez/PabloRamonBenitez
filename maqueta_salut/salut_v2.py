@@ -238,7 +238,7 @@ def base_y_estilobato():
     # ---- ala larga: SECCION CONSTANTE en toda su longitud (seccion B del usuario) ----
     #   bloque base hasta el nivel de la terraza (+10,4); encima, en el lado interior, el bar de una planta con su
     #   cubierta volada sobre la terraza; la terraza (sombrillas) es la franja exterior, con peto.
-    H_ALA = 10.4                     # nivel de la terraza
+    H_ALA = 8.9                      # nivel de la terraza = coronacion de la banda del restaurante (seccion AA)
     Y_A = A2[1] - 8.0                # el ala arranca detras de la banda del hotel, pegada a la torre
     Y_V = Y_A + 20.7                 # las ventanas (fila de 10) empiezan aqui (foto aerea)
     Y_B0, Y_B1 = 24.0, L_L - 4.0     # bar: desde donde acaba el barril casi hasta el fondo (longitud por confirmar)
@@ -251,8 +251,8 @@ def base_y_estilobato():
               caja_s(-2.5, 0.01, 5.5, W_C, 0, 8.2),                                                # pieza baja junto a la torre
               caja_s(-L_C, -L_C + 5.0, 0, W_C, 0, 9.6),                                            # bloque de ladrillo del extremo
               # ---- bar sobre la terraza ----
-              caja_s(0.0, X_B, Y_B0, Y_B1, H_ALA - 0.01, H_ALA + 3.0),                              # bar (una planta)
-              caja_s(-0.01, X_V, Y_B0 - 1.5, Y_B1 + 1.5, H_ALA + 3.0, H_ALA + 3.6),                 # cubierta volada del bar
+              caja_s(0.0, X_B, Y_B0, Y_B1, H_ALA - 0.01, H_ALA + 2.6),                              # bar (una planta, ~2,6 m)
+              caja_s(-0.01, X_V, Y_B0 - 1.5, Y_B1 + 1.5, H_ALA + 2.6, H_ALA + 3.1),                 # cubierta volada del bar (+12,0 = bloque alto AA)
               caja_s(W_L - 0.3, W_L, Y_A + 6, L_L, H_ALA - 0.01, H_ALA + 1.0),                      # peto de la terraza (lado exterior)
               caja_s(X_B, W_L, L_L - 0.3, L_L, H_ALA - 0.01, H_ALA + 1.0)]                          # peto de la terraza (fondo)
     for i in range(6):                                                                              # una fila de lucernarios en diente de sierra
@@ -260,13 +260,12 @@ def base_y_estilobato():
         solido.append(pir.translate((-L_C + 6.6 + 2.2 * i, 8.5, 11.99)))
     # concha curva (fotos aerea y frontal): octante de elipsoide pegado a la fachada exterior; su contorno lateral
     # baja en curva desde el bloque del hotel hasta el suelo. Debajo, un espacio cubierto en sombra.
-    U_C, L_R, H_A = 4.5, 32.0, 7.2   # franja RECTA en planta (ancho x largo); la curva esta en alzado
+    U_C, L_R, H_A = 4.5, 32.0, 6.2   # franja RECTA en planta; seccion maciza y baja; la curva solo en alzado
     def _f(v):
         x, y, z = v
-        h = H_A * math.sqrt(max(0.0, 1 - y ** 2)) * math.sqrt(max(0.0, 1 - x ** 2))
+        h = H_A * math.sqrt(max(0.0, 1 - y ** 2))
         return (x * U_C, y * L_R, z * h)
     concha = Manifold.cube((1, 1, 1)).refine(32).warp(_f)
-    concha = concha - caja(2.0, U_C + 1, -1, L_R + 1, -1, 2.6)      # espacio cubierto en sombra debajo
     solido.append(concha.translate((W_L - 0.05, Y_A + 2.0, 0)))
     huecos = [
         # fachada a la calle del ala corta (restaurante): planta baja retranqueada + banda de ventanas
@@ -276,8 +275,8 @@ def base_y_estilobato():
     ]
     for k in range(10):                                                                             # dos filas de 10 ventanas, solo en la mitad del fondo
         yk = Y_V + 0.6 + 2.3 * k
-        for z0 in (6.6, 8.4):
-            huecos.append(caja_s(W_L - 0.3, W_L + 1, yk, yk + 1.2, z0, z0 + 1.2))
+        for z0 in (5.2, 6.9):
+            huecos.append(caja_s(W_L - 0.3, W_L + 1, yk, yk + 1.2, z0, z0 + 1.1))
     est = Manifold.batch_boolean(solido, OpType.Add) - Manifold.batch_boolean(huecos, OpType.Add)
     for xp in (-L_C + 0.6, -L_C + 4.4):                                                             # pilares del hueco
         for yp in (0.6, W_C - 3.0):

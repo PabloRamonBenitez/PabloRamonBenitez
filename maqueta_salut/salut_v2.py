@@ -265,16 +265,16 @@ def base_y_estilobato():
     # baja en curva desde el bloque del hotel hasta el suelo. Debajo, un espacio cubierto en sombra.
     # pieza exterior (Bing): cuña entre la fachada del cuerpo principal (x = W_P) y la linea exterior; ancha junto a
     # la torre y se junta con el cuerpo principal a 35 m del fondo. Altura bajando en curva suave hacia el fondo.
-    Y_C0, Y_C1, H_A = A2[1] - 0.05, L_L - 35.0, 8.9   # arranca enrasada con la banda del hotel (+8,9), sin escalon
+    Y_C0, Y_C1, H_A = A2[1] - 4.0, L_L - 35.0, 8.9    # arranca por detras de la esquina volada de la banda del hotel
     def _f(v):
         x, y, z = v
         return (W_P - 0.05 + x * (W_L - W_P + 0.05) * (1 - y), Y_C0 + y * (Y_C1 - Y_C0), z * H_A * math.sqrt(max(0.0, 1 - y ** 2)))
     cuna = Manifold.cube((1, 1, 1)).refine(32).warp(_f)
     huecos = [
-        caja_s(W_P, W_L + 2, A2[1], L_L + 2, -1, 30),                                          # cuerpo principal a 12,7 m
+        caja_s(W_P, W_L + 2, -5, L_L + 2, -1, 30),                                               # el ala (y su chaflan) acaba en x = W_P                                          # cuerpo principal a 12,7 m
         # fachada a la calle del ala corta (restaurante): planta baja retranqueada + banda de ventanas
         caja_s(-L_C + 5.5, -0.5, -1, 4.2, -1, 3.0),                                                 # planta baja del restaurante, hundida bajo el volado
-        caja_s(-L_C + 6.5, A1[0], -1, 1.5, 4.4, 7.0),                                              # banda de ventanas del restaurante (calle)
+        caja_s(-L_C + 5.3, A1[0] + 0.5, -1, 0.3, 4.4, 7.0),                                              # banda de ventanas del restaurante (calle)
         caja_s(-L_C - 1, -L_C + 5.0, -1, W_C - 2.0, -1, 3.6),                                        # hueco sobre pilares en el extremo de la calle
     ]
     for k in range(10):                                                                             # dos filas de 10 ventanas, solo en la mitad del fondo
@@ -292,10 +292,14 @@ def base_y_estilobato():
     est = est - caja(R_COL - 0.5, 40, -RET - 3, -RET + 5.0, 8.9, 30)  # banda del hotel a +8,9   # banda del hotel a 8,9 m delante del bloque de la terraza
     est = est - Manifold.batch_boolean([
         caja(X_R0 - 1, -R_COL - 0.2, -RET - 2, -RET + 2.0, -1, 3.0),     # planta baja del restaurante
-        caja(X_R0 + 1.0, -R_COL - 0.8, -RET - 2, -RET + 1.5, 4.0, 6.6),  # ventanas del restaurante (hundidas)
+        caja(X_R0 + 0.3, -R_COL - 0.3, -RET - 2, -RET + 0.3, 4.0, 6.6),  # ventanas del restaurante: franja continua hasta el final
         caja(R_COL + 0.2, X_H1 - 0.3, -RET - 2, 5.5, -1, 3.8),           # hueco de la entrada del hotel
-        caja(R_COL + 0.8, X_H1 - 1.0, -RET - 2, -RET + 1.5, 4.6, 7.4),   # ventanas sobre la entrada (hundidas)
     ], OpType.Add)
+    # banda de la primera planta del hotel: caja con esquina a 90 grados, volada mas alla de la fachada del ala larga
+    banda = caja(R_COL - 0.3, X_H1, -RET, -RET + 6.0, 3.8, 8.9)
+    banda = banda - caja(R_COL + 0.3, X_H1 - 0.3, -RET - 1, -RET + 0.3, 4.6, 7.6)     # franja de ventanas del frente
+    banda = banda - caja(X_H1 - 0.3, X_H1 + 1, -RET + 0.3, -RET + 5.0, 4.6, 7.6)      # y en la cara de la esquina
+    est = est + banda
     p.append(est)
     fuente = anillo(5.0, 5.6, 0, 0.5) - caja(-7, 7, 0, 7, -1, 1)              # fuente al pie de la columna
     p.append(fuente)

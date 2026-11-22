@@ -1,0 +1,27 @@
+{
+ "mejor": {
+  "L_CHF": 22.0,
+  "T_POS": 0.3,
+  "ESC_X": 5.0,
+  "error": 36.77847943713682,
+  "res": {
+   "C04 fin chafl\u00e1n (hotel) x=455": 5.376252233437356,
+   "C04 escalera oculta (borde dcho <= 495)": 35.44806881154261,
+   "C02 arista ala por (500,415)": 37.206123398863106,
+   "C02 fin ala (628,357) dx": -62.84311968848772,
+   "C02 fin ala dy": 38.6900028062671,
+   "escalera dentro de la L": 0.0
+  }
+ },
+ "actual": {
+  "error": 52.29486470985898,
+  "res": {
+   "C04 fin chafl\u00e1n (hotel) x=455": -75.53025679911877,
+   "C04 escalera oculta (borde dcho <= 495)": 22.536711239507895,
+   "C02 arista ala por (500,415)": 15.260330926478735,
+   "C02 fin ala (628,357) dx": -90.68833096148137,
+   "C02 fin ala dy": 41.69584070307383,
+   "escalera dentro de la L": 0.0
+  }
+ }
+}

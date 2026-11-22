@@ -10,9 +10,11 @@ COTAS = {
  "Z_BAR":  (11.0, "techo del bar sobre la terraza", "coherencia: = bloque alto ala corta"),
  "Z_BARC": (11.5, "cubierta volada del bar", "= bloque alto (sección AA/BB)"),
  "Z_ALTO": (11.5, "bloque alto del ala corta", "F01, sección AA del usuario"),
- "Z_LAD0": (5.0,  "base de la caja de ladrillo elevada", "F19"),
+ "Z_LAD0": (0.0,  "el ladrillo arranca del suelo", "F72"),
+ "Z_FIN":  (10.3, "cubierta del bloque final del ala larga (más alto que la terraza, con barandilla)", "F73 + maqueta F76 (estimado ± 1,5)"),
+ "L_HOR":  (6.0,  "cuerpo de hormigón sobre pilares en el extremo del ala corta", "F72 (estimado ± 2)"),
  "Z_LAD1": (10.0, "coronación de la caja de ladrillo", "F01, F19"),
- "Z_CON":  (7.3,  "arranque de la RAMPA (antes «concha»): llega a la terraza de la planta primera", "F71: rampa peatonal con peto que sube a la cubierta"),
+ "Z_CON":  (7.8,  "llegada de la rampa arriba (superficie; el peto de 1 m llega a ≈ +8,8)", "rangos: peto arriba F09 +8,3 ± 0,8 / F71 +9,6 ± 1,2 → +8,8"),
  # --- torre
  "Z_CU0":  (10.4, "base del cuello", "F09"),
  "Z_CU1":  (14.4, "cara superior del cuello (cilindro macizo de cara vertical)", "A1 sobre F09 + recorte del usuario"),

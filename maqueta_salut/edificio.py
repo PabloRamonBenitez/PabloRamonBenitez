@@ -135,8 +135,10 @@ def base():
     sc = []
     # ala corta: bloque alto (detras de la banda del restaurante) y ladrillo sobre pilares en el extremo
     sc.append(caja(-L_C + L_LADR, xA - 1.0, 5.5, W_C, Z_P1 - 0.01, Z_ALTO))
-    sc.append(caja(-L_C, -L_C + L_LADR, 0, W_C, _v["Z_LAD0"], _v["Z_LAD1"]))   # caja de ladrillo elevada sobre la calle [PASADA 1: F19]
-    for xp in (-L_C + 0.6, -L_C + L_LADR - 0.6):
+    L_HOR = _v["L_HOR"]
+    sc.append(caja(-L_C, -L_C + L_HOR, 0, W_C, _v["Z_PB"], _v["Z_P1"]))                     # extremo: cuerpo de hormigon sobre pilares [F72]
+    sc.append(caja(-L_C + L_HOR, -L_C + L_HOR + L_LADR, 0, W_C, 0, _v["Z_LAD1"]))          # volumen de ladrillo del suelo a cubierta [F72]
+    for xp in (-L_C + 0.6, -L_C + _v["L_HOR"] - 0.6):
         for yp in (0.6, W_C - 0.6):
             sc.append(caja(xp - 0.35, xp + 0.35, yp - 0.35, yp + 0.35, 0, 5.01))
     for i in range(6):                                      # lucernarios en diente de sierra [F01]
@@ -150,7 +152,9 @@ def base():
     s += [caja(0, W_BAR, yb0, L_L - L_FIN, Z_P1 - 0.01, Z_BAR),
           caja(0, W_BAR + 1.2, yb0, L_L - L_FIN, Z_BAR, Z_BAR_C),
           caja(W_P - 0.3, W_P, yb0, L_L, Z_P1 - 0.01, Z_P1 + 1.0),
-          caja(W_BAR, W_P, L_L - 0.3, L_L, Z_P1 - 0.01, Z_P1 + 1.0)]
+          caja(W_BAR, W_P, L_L - 0.3, L_L, Z_P1 - 0.01, Z_P1 + 1.0),
+          caja(0, W_P, L_L - L_FIN, L_L, Z_P1 - 0.01, _v["Z_FIN"]),                          # bloque final, mas alto que la terraza [F73, F76]
+          caja(0, W_P, L_L - L_FIN - 0.15, L_L - L_FIN, _v["Z_FIN"] - 0.01, _v["Z_FIN"] + 1.0)]   # barandilla/peto en su cubierta
     # concha: franja exterior que se estrecha de W_EXT a W_P hasta Y_CUNA; alta junto al hotel (+7,3) y baja en
     # curva al suelo; debajo, planta baja hundida [F47, F09, Bing]
     y0 = pl["Q"][1] + _v["D_HOTF"]          # la concha empieza tras la banda del hotel sobre la fachada del ala [C04]
@@ -160,13 +164,13 @@ def base():
     def f(v):
         x, y, z = v
         y = min(max(y, 0.0), 1.0)
-        zt = max(0.15, Z_P1 * (1 - y))                      # cota de la rampa: +7,3 arriba, 0 abajo (lineal)
+        zt = max(0.15, _v["Z_CON"] * (1 - y))              # cota de la rampa: Z_CON arriba, 0 abajo (lineal) [F71]
         return (W_P - 0.02 + x * WR, y0 + y * (Y_CUNA - y0), z * zt)
     rampa = Manifold.cube((1, 1, 1)).refine(30).warp(f)
     def fp(v):
         x, y, z = v
         y = min(max(y, 0.0), 1.0)
-        zt = max(0.15, Z_P1 * (1 - y))
+        zt = max(0.15, _v["Z_CON"] * (1 - y))
         return (W_EXT - 0.25 + x * 0.25, y0 + y * (Y_CUNA - y0), zt - 0.01 + z * 1.0)   # peto de 1 m
     peto = Manifold.cube((1, 1, 1)).refine(30).warp(fp)
     s += [rampa, peto]

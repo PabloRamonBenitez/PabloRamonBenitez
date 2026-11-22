@@ -14,3 +14,10 @@ Barril y módulo, pavés y ménsulas, tambor (25,9-27,8 vs 27,1), visera (24,4-2
 
 ## Al límite (revisar márgenes)
 Remate 9,6 vs 11,2; coronación de la banda del restaurante ~+6,5 vs +7,3.
+
+## Pasada 6 – NO aplicados y filas repasadas
+| # | Corrección en el cuadro | Repaso |
+|---|---|---|
+| 1 | Rampa: llegada +7,8 con peto hasta +8,8 (combinando F09 +8,3 y F71 +9,6) | OK* en C04 y C20 |
+| 2 | Bloque final del ala: Z_FIN = +10,3 con barandilla (estimado ± 1,5) | OK* en C22 |
+| 3 | Extremo del ala corta: cuerpo de hormigón sobre pilares (6 m) + ladrillo del suelo a cubierta | OK* en C21 y C09 |

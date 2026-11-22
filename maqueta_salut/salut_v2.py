@@ -14,22 +14,22 @@ N_DIV = 19                   # divisiones angulares (muros radiales)
 PASO = 360.0 / N_DIV
 
 # --- niveles (m) ---
-Z_COL0, Z_TERRAZA = 0.0, 9.0          # columna desde el suelo; cubierta del estilobato
+Z_COL0, Z_TERRAZA = 0.0, 7.4          # columna desde el suelo; cubierta del estilobato (F09, F14: ~7,3)
 Z_CUELLO0, Z_CUELLO1 = 11.2, 15.1     # cuello; encima, intrados inclinado con vigas radiales
 Z_HAB0 = 15.8                         # forjado inferior de las habitaciones
 N_PLANTAS = 6
 Z_HAB1 = Z_HAB0 + N_PLANTAS * F       # 33.3
 Z_OJOS0, Z_OJOS1 = Z_HAB1, Z_HAB1 + 5.3   # tambor con "ojos" (~1,75 plantas)
 Z_VID0, Z_VID1 = Z_OJOS1, Z_OJOS1 + 2.6        # banda acristalada
-Z_VIS_INF, Z_VIS_BORDE, Z_VIS1 = Z_VID1, Z_VID1 + 0.3, Z_VID1 + 2.3  # visera: arranque inferior, borde, cubierta
+Z_VIS_INF, Z_VIS_BORDE, Z_VIS1 = Z_VID1, Z_VID1 + 0.2, Z_VID1 + 2.6  # visera: arranque inferior, borde, cubierta
 Z_TOP0, Z_TOP1 = Z_VIS1, Z_VIS1 + 5.2     # tambor del letrero
 # --- radios (m) ---
 R_B = 14.4                   # borde de balcones (D = 28,8 m)
 FONDO_BALCON = 1.8
 R_CUELLO, R_COL = 9.1, 3.0   # cuello 0,63 D; columna ~6 m de diametro (foto frontal)
-R_OJOS = 12.7                # el tambor deja una terraza de servicio de ~1,7 m
+R_OJOS = 13.5                # tambor de ojos Ø ~27 m (F01, F09, F14)
 R_VID, R_VIS, R_VIS_INF = 9.7, 12.1, 10.0
-R_TOP = 4.8
+R_TOP = 5.15                 # tambor del letrero Ø ~10,3 m (F01, F14; F09 ~11)
 ESC_ROT = -31                 # la escalera se gira para quedar en linea con el ala larga (dentro de la L)
 OFF_VIS = (-2.81, -0.41)       # la VISERA es la que va claramente descentrada (fotos frontal, epoca y aerea)
 OFF_VID = (-0.99, -0.1)       # la banda acristalada va casi centrada sobre el tambor
@@ -221,7 +221,7 @@ L_CH, D_REST = 27.2, 14.6            # chaflan (foto frontal) y posicion de la c
 import os
 A_CH = math.radians(float(os.environ.get("SALUT_ACH", "31")))   # angulo del chaflan (esquema; ajustable)
 RET, RETR = 1.5, 2.5                 # la columna asoma RET; la planta baja se retranquea RETR
-Z_PB, Z_P1 = 3.8, 8.9                # techo de planta baja; coronacion de la planta primera (= terraza)
+Z_PB, Z_P1 = 3.9, 7.4                # techo de PB; coronacion de planta primera = terraza (F09 y F14: 3,9 / 7,3)
 D_E = 3.8                            # largo de la cara a 90 grados de la esquina del hotel
 _A1 = (W_L - L_CH * math.cos(A_CH), 0.0)
 _A2 = (W_L, L_CH * math.sin(A_CH))
@@ -273,8 +273,8 @@ def estilobato():
             sol.append(caja(xp - 0.4, xp + 0.4, yp - 0.4, yp + 0.4, 0, Z_PB + 0.01))
     # ala larga (seccion B constante): terraza a +8,9 con peto; bar de una planta con cubierta volada hasta +12
     X_B, X_V, Y_B0, Y_B1 = 6.2, 7.7, 24.0, L_L - 8.0
-    sol += [caja(0.0, X_B, Y_B0, Y_B1, Z_P1 - 0.01, Z_P1 + 2.6),
-            caja(-0.01, X_V, Y_B0 - 1.5, Y_B1 + 1.5, Z_P1 + 2.6, Z_P1 + 3.1),
+    sol += [caja(0.0, X_B, Y_B0, Y_B1, Z_P1 - 0.01, 11.5),
+            caja(-0.01, X_V, Y_B0 - 1.5, Y_B1 + 1.5, 11.5, 12.0),
             caja(W_P - 0.3, W_P, pl["Q"][1], L_L, Z_P1 - 0.01, Z_P1 + 1.0),
             caja(X_B, W_P, L_L - 0.3, L_L, Z_P1 - 0.01, Z_P1 + 1.0)]
     # rampa: franja entre la fachada (x = W_P) y el borde exterior (x = W_L), que se estrecha hasta juntarse con la
@@ -288,19 +288,19 @@ def estilobato():
     sol.append(Manifold.cube((1, 1, 1)).refine(32).warp(_f))
     est = Manifold.batch_boolean(sol, OpType.Add)
     # huecos de ventanas (franjas continuas casi a paño, 0,3 m) en la planta primera
-    hue = [caja(-L_C + 0.3, pl["P1"][1][0] - 0.3, -1, 0.3, 4.6, 7.6)]                     # calle, ala corta
+    hue = [caja(-L_C + 0.3, pl["P1"][1][0] - 0.3, -1, 0.3, 4.5, 6.6)]                     # calle, ala corta
     Y_V = L_L - 30.0                                                                      # ventanas AL FINAL del ala (F01, F24, F33)
     for k in range(12):                                                                   # ala larga: 2 filas de 12
         yk = Y_V + 0.6 + 2.3 * k
-        for z0 in (6.0, 7.3):
+        for z0 in (4.6, 5.9):
             hue.append(caja(W_P - 0.3, W_P + 1, yk, yk + 1.2, z0, z0 + 0.95))
     est = est - Manifold.batch_boolean(hue, OpType.Add)
     est = _a_torre(est)
     Y_F = -RET
     X0 = (_corte(Y_F, "y", 0.0)[0] - CEN[0]) * _U[0] + (_corte(Y_F, "y", 0.0)[1] - CEN[1]) * _U[1]
-    hue_t = [caja(X0 + 0.3, -R_COL - 0.3, Y_F - 1, Y_F + 0.3, 4.6, 7.6),                  # chaflan: restaurante
-             caja(R_COL + 0.3, pl["Xq"] - 0.3, Y_F - 1, Y_F + 0.3, 4.6, 7.6),             # chaflan: hotel
-             caja(pl["Xq"] - 0.3, pl["Xq"] + 1, Y_F + 0.3, Y_F + D_E - 0.3, 4.6, 7.6)]    # cara a 90 grados
+    hue_t = [caja(X0 + 0.3, -R_COL - 0.3, Y_F - 1, Y_F + 0.3, 4.5, 6.6),                  # chaflan: restaurante
+             caja(R_COL + 0.3, pl["Xq"] - 0.3, Y_F - 1, Y_F + 0.3, 4.5, 6.6),             # chaflan: hotel
+             caja(pl["Xq"] - 0.3, pl["Xq"] + 1, Y_F + 0.3, Y_F + D_E - 0.3, 4.5, 6.6)]    # cara a 90 grados
     return est - Manifold.batch_boolean(hue_t, OpType.Add)
 
 

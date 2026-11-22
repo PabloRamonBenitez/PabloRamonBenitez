@@ -54,6 +54,20 @@ def cotas_planta(ax):
     L.cota(ax, (-E.L_C, 0), E.A1, -3, "calle")
     L.cota(ax, (-E.L_C, 0), (-E.L_C, E.W_C), 3, "")
     L.cota(ax, (E.W_P, E.C[1]), E.C, 2, "")
+    U = np.array(E.U); A1 = np.array(E.A1)
+    L.cota(ax, A1, A1 + E.REST * U, 5, "rest."); L.cota(ax, A1 + E.REST * U, A1 + (E.REST + E.COL) * U, 5, "col.")
+    L.cota(ax, A1 + (E.REST + E.COL) * U, np.array(E.C), 5, "hotel")
+    xe = E._v["ESC_X"]; L.cota(ax, (xe - E.ESC_W / 2, E.ESC_Y1 + 1), (xe + E.ESC_W / 2, E.ESC_Y1 + 1), 1.2, "escalera")
+    L.cota(ax, (0, E.ESC_Y0), (0, E.ESC_Y1), -1.2, "")
+    ax.text(E.KC[0] + 1, 2, f"L {math.degrees(E.TH_L):.0f}°", fontsize=8, color="k")
+    # cota de cubierta de cada volumen
+    for (x, y), z in (((3, 70), E.Z_BAR_C), ((10, 70), E.Z_P1 + 1.0), ((tuple(E.SWP(-12, 9))), E.Z_ALTO), ((tuple(E.SWP(-21.5, 6))), E._v["Z_LAD1"]),
+                      ((xe, (E.ESC_Y0 + E.ESC_Y1) / 2), E.Z_T1 + 1.0), ((14.2, 30), E._v["Z_CON"])):
+        ax.text(x, y, f"+{z:.2f}".replace(".", ","), fontsize=6.5, color="navy", ha="center", bbox=dict(fc="white", ec="navy", lw=0.4, pad=0.6), zorder=70)
+    # trazas de las secciones
+    for k, p0, p1, _ in SECC:
+        ax.plot(*zip(p0, p1), "-.", color="crimson", lw=0.7, zorder=65)
+        ax.text(*p0, k, color="crimson", fontsize=8, weight="bold", zorder=66); ax.text(*p1, k, color="crimson", fontsize=8, weight="bold", zorder=66)
 
 
 def plantas():
@@ -98,7 +112,8 @@ def seccion(ax, p0, p1, titulo):
     for z, t in ((E.Z_PB, "techo PB"), (E.Z_P1, "terraza / planta 1"), (E.Z_BAR, "bar"), (E.Z_ALTO, "bloque alto"),
                  (E.Z_B0, "1ª planta hab."), (E.Z_B1, "cubierta hab."), (E.Z_T1, "tambor"), (E.Z_V1, "visera"), (E.Z_R1, "remate")):
         L.nivel(ax, Lg + 1, z, t)
-    ejes(ax, (-2, Lg + 12), (-2, 52))
+    cruces(ax, p0, p1, titulo.split(':')[0].replace('SECCIÓN ', '').strip())
+    ejes(ax, (-2, Lg + 12), (-2, 53))
     ax.set_title(titulo, fontsize=9, loc="left")
 
 
@@ -121,16 +136,38 @@ def foto(ax, f, titulo):
     ax.imshow(Image.open(IMG + f).convert("RGB")); ax.axis("off"); ax.set_title(titulo, fontsize=8, loc="left")
 
 
-SECC = [
-    ("S1", (22, 26.0), (-8, 26.0), "transversal del ala larga por la escalera y el arranque de la concha (mirando hacia la torre)"),
-    ("S2", (22, 45.0), (-8, 45.0), "transversal del ala larga por el bar, la terraza y la concha"),
-    ("S3", (22, 75.0), (-8, 75.0), "transversal del ala larga por el bar y las ventanas"),
-    ("S4", (22, 91.0), (-8, 91.0), "transversal del ala larga, tramo final sin bar"),
-    ("S5", (-14.0, 20), (-14.0, -6), "transversal del ala corta: restaurante + bloque alto (mirando hacia la torre)"),
-    ("L1", (3.1, 100), (3.1, -8), "LONGITUDINAL del ala larga por el bar (mirando hacia fuera)"),
-    ("L2", (11.0, -8), (11.0, 100), "LONGITUDINAL del ala larga por la terraza (mirando hacia dentro)"),
-    ("L3", (-28, E.T[1]), (32, E.T[1]), "LONGITUDINAL del ala corta por el eje de la torre"),
-]
+def _secc():
+    T = np.array(E.T); U = np.array(E.U); N = np.array(E.N); pl = E.plantas_base()
+    xe = E._v["ESC_X"]; yc = (E.ESC_Y0 + E.ESC_Y1) / 2
+    return [
+     ("L1", (xe, -10), (xe, 100), "LONGITUDINAL por el eje de la escalera: escalera, barril, cuello, bar y ala larga entera"),
+     ("L2", ((E.W_P + E.W_EXT) / 2, pl["Q"][1] - 6), ((E.W_P + E.W_EXT) / 2, 100), "LONGITUDINAL por la concha: su perfil curvo y la terraza detrás"),
+     ("L3", tuple(T - 32 * U), tuple(T + 26 * U), "LONGITUDINAL por el eje de la torre paralela al chaflán: restaurante, columna, hotel y esquina a 90°"),
+     ("S1", tuple(T - 18 * N), tuple(T + 32 * N), "por el eje de la torre perpendicular al chaflán: columna, cuello, ménsulas, barril, visera desplazada y escalera"),
+     ("S2", (-8, yc), (24, yc), "transversal del ala larga por la escalera (encuentro escalera – barril – ala)"),
+     ("S3", (-8, (pl["Q"][1] + E.Y_CUNA) / 2), (24, (pl["Q"][1] + E.Y_CUNA) / 2), "transversal del ala larga por el bar, la terraza y la concha"),
+     ("S4", (-8, E.L_L - 4), (24, E.L_L - 4), "transversal del ala larga por el tramo final (sin bar)"),
+     ("S5", tuple(E.SWP(-14, -6)), tuple(E.SWP(-14, 18)), "transversal del ala corta: banda del restaurante, bloque alto y patio"),
+    ]
+
+
+SECC = _secc()
+
+
+def cruces(ax, p0, p1, k0, ytop=50):
+    """marca en la seccion k0 donde la cortan las demas secciones (relacion entre secciones)"""
+    p0, p1 = np.array(p0, float), np.array(p1, float); d = p1 - p0; L_ = np.linalg.norm(d); t = d / L_
+    for k, q0, q1, _ in SECC:
+        if k == k0: continue
+        q0, q1 = np.array(q0, float), np.array(q1, float); e = q1 - q0
+        den = t[0] * e[1] - t[1] * e[0]
+        if abs(den) < 1e-6: continue
+        s = ((q0[0] - p0[0]) * e[1] - (q0[1] - p0[1]) * e[0]) / den
+        u = ((q0[0] - p0[0]) * t[1] - (q0[1] - p0[1]) * t[0]) / den
+        if 0 <= s <= L_ and 0 <= u <= 1:
+            ax.plot([s, s], [-1, ytop], color="crimson", lw=0.7, ls="-.", zorder=60)
+            ax.text(s, ytop + 0.5, k, color="crimson", fontsize=8, weight="bold", ha="center", zorder=60)
+
 
 
 def secciones():
@@ -143,7 +180,7 @@ def secciones():
         ax.text(*p0, k, color="crimson", fontsize=10, weight="bold"); ax.text(*p1, k, color="crimson", fontsize=10, weight="bold")
     ejes(ax, (-32, 36), (-12, 102))
     OUT.append(fig)
-    for grupo in (SECC[0:2], SECC[2:4], SECC[4:5], SECC[5:6], SECC[6:7], SECC[7:8]):
+    for grupo in [[s] for s in SECC]:
         fig = hoja("SECCIONES " + " / ".join(k for k, *_ in grupo))
         n = len(grupo)
         for i, (k, p0, p1, t) in enumerate(grupo):

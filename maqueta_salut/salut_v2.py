@@ -289,8 +289,8 @@ def estilobato():
     est = Manifold.batch_boolean(sol, OpType.Add)
     # huecos de ventanas (franjas continuas casi a paño, 0,3 m) en la planta primera
     hue = [caja(-L_C + 0.3, pl["P1"][1][0] - 0.3, -1, 0.3, 4.6, 7.6)]                     # calle, ala corta
-    Y_V = 26.7
-    for k in range(10):                                                                   # ala larga: 2 filas de 10
+    Y_V = L_L - 30.0                                                                      # ventanas AL FINAL del ala (F01, F24, F33)
+    for k in range(12):                                                                   # ala larga: 2 filas de 12
         yk = Y_V + 0.6 + 2.3 * k
         for z0 in (6.0, 7.3):
             hue.append(caja(W_P - 0.3, W_P + 1, yk, yk + 1.2, z0, z0 + 0.95))

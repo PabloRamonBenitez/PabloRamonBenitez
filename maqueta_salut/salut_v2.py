@@ -28,9 +28,10 @@ R_B = 14.4                   # borde de balcones (D = 28,8 m)
 FONDO_BALCON = 1.8
 R_CUELLO, R_COL = 9.1, 2.8   # foto de epoca: cuello 0,63 D, columna 0,19 D
 R_OJOS = 12.7                # el tambor deja una terraza de servicio de ~1,7 m
-R_VID, R_VIS, R_VIS_INF = 8.9, 11.9, 9.2
+R_VID, R_VIS, R_VIS_INF = 9.7, 12.1, 10.0
 R_TOP = 4.8
-OFF_VIS = (-3.2, -1.8)       # visera + banda acristalada descentradas ~3,7 m hacia delante-izquierda (3 fotos)
+OFF_VIS = (-2.6, -1.4)       # la VISERA es la que va claramente descentrada (fotos frontal, epoca y aerea)
+OFF_VID = (-1.0, -0.5)       # la banda acristalada va casi centrada sobre el tambor
 OFF_TOP = (0.0, 0.5)         # tambor superior casi en el eje, algo hacia la escalera
 # --- caja de escalera trasera ---
 ESC_MEDIO = 4.5
@@ -150,11 +151,11 @@ def letras(texto, alto, espesor):
 def remate():
     p = []
     # banda acristalada con montantes
-    p.append(cil(R_VID - 0.2, Z_VID0, Z_VIS_INF + 0.2, OFF_VIS))
+    p.append(cil(R_VID - 0.2, Z_VID0, Z_VIS_INF + 0.2, OFF_VID))
     n_mont = int(2 * math.pi * R_VID / 2.4)
     for k in range(n_mont):
         p.append(placa_rz([(R_VID - 0.3, Z_VID0), (R_VID + 0.15, Z_VID0), (R_VID + 0.15, Z_VIS_INF + 0.1),
-                           (R_VID - 0.3, Z_VIS_INF + 0.1)], 0.3, 360 * k / n_mont, OFF_VIS))
+                           (R_VID - 0.3, Z_VIS_INF + 0.1)], 0.3, 360 * k / n_mont, OFF_VID))
     # visera: intrados inclinado + canto + nervios radiales debajo
     p.append(Manifold.cylinder(Z_VIS_BORDE - Z_VIS_INF, R_VIS_INF, R_VIS, SEG)
              .translate((OFF_VIS[0], OFF_VIS[1], Z_VIS_INF)))
@@ -232,12 +233,11 @@ def base_y_estilobato():
         for j in range(2):
             pir = Manifold.extrude(CrossSection.square((1.8, 1.8), True), 1.2, 0, 0, (0.05, 0.05))
             solido.append(pir.translate((-L_C + 2.5 + 3.0 * i, 6.0 + 3.2 * j, 11.49)))
-    # rampa curva: superficie inclinada pegada a la fachada exterior del ala larga, sube de la calle hacia la torre
-    pts = []
-    for k in range(13):
-        t_ = k / 12; y = 10 + 30 * t_; h = 8.6 * (1 - t_ ** 1.6)
-        pts += [(W_L - 0.01, y, h), (W_L - 0.01, y, 0), (W_L + 6.0 * (1 - 0.6 * t_), y, 0)]
-    solido.append(Manifold.hull_points(pts))
+    # superficie curva (foto aerea de epoca): cuarto de elipsoide liso apoyado en la fachada exterior del ala larga,
+    # alto junto a la entrada del hotel y bajando hasta la calle
+    D_C, L_C2, H_C = 7.0, 28.0, 8.6
+    curva = Manifold.sphere(1.0, 96).scale((D_C, L_C2, H_C)) ^ caja(0, D_C + 1, 0, L_C2 + 1, 0, H_C + 1)
+    solido.append(curva.translate((W_L - 0.05, A2[1], 0)))
     huecos = [
         # fachada a la calle del ala corta (restaurante): planta baja retranqueada + banda de ventanas
         caja_s(-L_C - 1, -0.5, -1, 2.0, -1, 3.0), caja_s(-L_C + 1, -1.0, -1, 0.4, 4.2, 6.5),

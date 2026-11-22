@@ -19,7 +19,7 @@ Z_CUELLO0, Z_CUELLO1 = 10.5, 15.3     # cuello
 Z_HAB0 = 15.3                         # forjado inferior de las habitaciones
 N_PLANTAS = 6
 Z_HAB1 = Z_HAB0 + N_PLANTAS * F       # 33.3
-Z_OJOS0, Z_OJOS1 = Z_HAB1, Z_HAB1 + 5.3   # tambor con "ojos"
+Z_OJOS0, Z_OJOS1 = Z_HAB1, Z_HAB1 + 5.7   # tambor con "ojos" (~1,9 plantas)
 Z_VID0, Z_VID1 = Z_OJOS1, Z_OJOS1 + 1.8        # banda acristalada
 Z_VIS_INF, Z_VIS_BORDE, Z_VIS1 = Z_VID1, Z_VID1 + 0.6, Z_VID1 + 3.2  # visera: arranque inferior, borde, cubierta
 Z_TOP0, Z_TOP1 = Z_VIS1, Z_VIS1 + 5.3     # tambor del letrero
@@ -27,7 +27,7 @@ Z_TOP0, Z_TOP1 = Z_VIS1, Z_VIS1 + 5.3     # tambor del letrero
 R_B = 14.4                   # borde de balcones (D = 28,8 m)
 FONDO_BALCON = 1.8
 R_CUELLO, R_COL = 7.9, 3.2
-R_OJOS = 13.1
+R_OJOS = 12.7                # el tambor deja una terraza de servicio de ~1,7 m
 R_VID, R_VIS, R_VIS_INF = 9.9, 12.4, 10.2
 R_TOP = 5.5
 OFF_VIS = (-2.2, -1.0)       # visera + banda acristalada descentradas (hacia delante-izquierda)
@@ -73,20 +73,35 @@ def cuerpo_habitaciones():
         rb, rw = radios_planta(i)
         z0 = Z_HAB0 + i * F
         fijo.append(cil(rw, z0, z0 + F))
-        balc.append(anillo(rw - 0.1, rb - 0.05, z0, z0 + 0.25))   # losa del balcon
-        balc.append(anillo(rb - 0.35, rb - 0.05, z0, z0 + 0.55))  # canto del forjado
-        balc.append(anillo(rb - 0.25, rb, z0 + 0.75, z0 + 1.35))  # antepecho elevado (ranura debajo)
+        if i == 0:
+            # primera planta del barril: cerrada con pavés, banda inferior gruesa a paño del borde
+            balc.append(anillo(rw - 0.1, rb, z0, z0 + 1.0))
+            balc.append(anillo(rw - 0.1, rb - 1.0, z0 + 1.0, z0 + F))
+        else:
+            balc.append(anillo(rw - 0.1, rb - 0.05, z0, z0 + 0.25))   # losa del balcon
+            balc.append(anillo(rb - 0.35, rb - 0.05, z0, z0 + 0.5))   # canto del forjado
+            balc.append(anillo(rb - 0.25, rb, z0 + 0.75, z0 + 1.5))   # poyete elevado (ranura debajo)
         for k in range(N_DIV):
             ang = 90 + PASO * k
-            # aleta: parte interior a toda altura + parte que sobresale del antepecho
             balc.append(placa_rz([(rw - 0.2, z0), (rb - 0.2, z0), (rb - 0.2, z0 + F), (rw - 0.2, z0 + F)], 0.4, ang))
-            balc.append(placa_rz([(rb - 0.3, z0 + 0.75), (rb + 0.9, z0 + 0.75), (rb + 0.9, z0 + F),
-                                  (rb - 0.3, z0 + F)], 0.4, ang))
-            if i == 0:   # la ultima fila de aletas baja algo y acaba en angulo recto
-                balc.append(placa_rz([(rw - 0.2, z0 - 0.6), (rb + 0.9, z0 - 0.6), (rb + 0.9, z0 + 0.8),
-                                      (rw - 0.2, z0 + 0.8)], 0.4, ang))
+            if i == 0:
+                # aleta con escalon: arriba sobresale 0,9 m, abajo 0,3 m y baja 0,6 m en angulo recto
+                balc.append(placa_rz([(rb - 0.3, z0 + 1.0), (rb + 0.9, z0 + 1.0), (rb + 0.9, z0 + F),
+                                      (rb - 0.3, z0 + F)], 0.4, ang))
+                balc.append(placa_rz([(rw - 0.2, z0 - 0.6), (rb + 0.3, z0 - 0.6), (rb + 0.3, z0 + 1.05),
+                                      (rw - 0.2, z0 + 1.05)], 0.4, ang))
+            else:
+                balc.append(placa_rz([(rb - 0.3, z0 + 0.75), (rb + 0.9, z0 + 0.75), (rb + 0.9, z0 + F),
+                                      (rb - 0.3, z0 + F)], 0.4, ang))
+            # canalon / gargola: un punto en el centro de cada balcon, en el canto del forjado
+            if i > 0:
+                g_ = Manifold.cylinder(0.45, 0.13, 0.13, 16).rotate((0, 90, 0)).translate((rb - 0.25, 0, z0 + 0.28))
+                balc.append(g_.rotate((0, 0, ang + PASO / 2)))
     rb, rw = radios_planta(N_PLANTAS - 1)
     balc.append(anillo(rw - 0.1, rb - 0.05, Z_HAB1, Z_HAB1 + 0.5))   # cubierta / canto superior
+    for k in range(N_DIV):
+        g_ = Manifold.cylinder(0.45, 0.13, 0.13, 16).rotate((0, 90, 0)).translate((rb - 0.25, 0, Z_HAB1 + 0.28))
+        balc.append(g_.rotate((0, 0, 90 + PASO * (k + 0.5))))
     balcones = Manifold.batch_boolean(balc, OpType.Add)
     # los anillos de balcones terminan en seco contra la caja de escalera
     balcones = balcones - caja(-ESC_MEDIO - 0.2, ESC_MEDIO + 0.2, 0, 30, Z_HAB0 - 3, Z_HAB1 + 1)
@@ -94,11 +109,12 @@ def cuerpo_habitaciones():
 
 
 def tambor_ojos():
-    p = [cil(R_OJOS, Z_OJOS0, Z_OJOS1)]
+    p = [cil(R_OJOS, Z_OJOS0, Z_OJOS1) - cil(R_OJOS - 0.35, Z_OJOS1 - 0.9, Z_OJOS1 + 1)]   # peto de 0,9 m
+    p.append(cil(R_OJOS - 0.3, Z_OJOS1 - 0.95, Z_OJOS1 - 0.85))
     zc = Z_OJOS0 + 0.5 * (Z_OJOS1 - Z_OJOS0)
     for k in range(N_DIV):
         ang = 90 + PASO * (k + 0.3)
-        if abs(((ang - 90 + 180) % 360) - 180) < 22:   # tapados por la escalera
+        if abs(((ang - 90 + 180) % 360) - 180) < 36:   # junto a la escalera: muro liso con las puertas
             continue
         # "ojo": aro corto con anillos concentricos (sale poco del tambor)
         def eje_x(h, r, x0):
@@ -108,7 +124,11 @@ def tambor_ojos():
         tubo = tubo - hueco + eje_x(0.3, 0.46, R_OJOS + 0.05)  # anillo interior
         hueco = eje_x(0.3, 0.2, R_OJOS + 0.1)                  # centro hundido
         p.append((tubo - hueco).rotate((0, 0, ang)).translate((0, 0, zc)))
-    return Manifold.batch_boolean(p, OpType.Add)
+    t = Manifold.batch_boolean(p, OpType.Add)
+    for ang in (90 - 27, 90 + 27):   # puertas de servicio a la terraza, a ambos lados de la escalera
+        puerta = caja(R_OJOS - 0.3, R_OJOS + 0.5, -0.45, 0.45, Z_OJOS0 + 0.5, Z_OJOS0 + 2.6)
+        t = t - puerta.rotate((0, 0, ang))
+    return t
 
 
 def letras(texto, alto, espesor):
@@ -158,11 +178,11 @@ def remate():
 def escalera():
     p = [caja(-ESC_MEDIO, ESC_MEDIO, ESC_Y0, ESC_Y1, Z_TERRAZA - 0.1, ESC_Z1)]
     # tramo izquierdo retranqueado (jaula de escalera abierta)
-    hueco = caja(-ESC_MEDIO - 0.1, -2.3, ESC_Y1 - 1.0, ESC_Y1 + 0.1, Z_CUELLO1, Z_OJOS1 - 0.5)
+    hueco = caja(2.3, ESC_MEDIO + 0.1, ESC_Y1 - 1.0, ESC_Y1 + 0.1, Z_CUELLO1, Z_OJOS1 - 0.5)
     p = [p[0] - hueco]
     # lamas verticales en tres planos escalonados
-    x = -2.1
-    while x < ESC_MEDIO - 0.1:
+    x = -ESC_MEDIO + 0.2
+    while x < 2.1:
         dy = 0.35 if (x // 2.2) % 2 == 0 else 0.0
         p.append(caja(x - 0.15, x + 0.15, ESC_Y1 - 0.05, ESC_Y1 + 0.35 + dy, Z_TERRAZA + 0.5, Z_OJOS1 - 0.3))
         x += 0.9

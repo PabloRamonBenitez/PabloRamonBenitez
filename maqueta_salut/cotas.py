@@ -15,11 +15,6 @@ COTAS = {
  "N_VEN": (11, "huecos fila alta", "F73 11 · F01 11 · F47 11"),
  "VEN_W": (1.6, "ancho del hueco (0,47 S)", "F73 ajuste proyectivo: hueco/intereje 0,47"),
  "VEN_FIN": (2.94, "macizo esquina testero → borde del 1er hueco (1,1 S al centro)", "F01 1,22 S · F47 1,05 S (F73 actual 2,5 S: anotado)"),
- "VEN_PTA":(7,    "nº de hueco (desde la torre) donde la fila baja es puerta", "F47 y F01: puerta clara al pie de la fachada"),
- "ESC_L":  (7.5,  "salida de la caja de escalera más allá del barril (planta alargada, radial)", "F73 asoma ~7-8 m a la derecha de la torre · F13 · F75"),
- "ESC_REC": (2.0, "profundidad del entrante", "F11, F75 (estimado ± 0,5)"),
- "ESC_RL": (4.5,  "largo del entrante de la escalera", "F75 (≈ 1/3 de la cara)"),
- "R_MES":  (3.0,  "meseta de llegada de la rampa junto a la banda del hotel", "F71: tramo alto casi horizontal"),
  "Z_ARC":  (3.2,  "arranque del arco bajo la rampa (hueco de la planta baja hundida)", "F47 vacío oscuro bajo la concha · F71 curva · F76 arco"),
  "U_ARC":  (0.72, "fracción de la rampa donde el arco llega al suelo", "F71 / F47 (estimado ± 0,1)"),
  "S_VEN": (3.4, "intereje de huecos del ala larga", "fila equiespaciada (F73 1,0 px, F01 1,3, F47 1,6); escala: huecos ~cuadrados (usuario) y arco a 35 m (Bing) → 2,94–3,55 → 3,4"),
@@ -31,12 +26,10 @@ COTAS = {
  "R2_W": (2.4, "rampa 2: ancho", "F71 / F76 (estimado ± 0,5)"),
  "R2_PLAT": (2.5, "meseta de llegada de la rampa 2 a +11,5 delante de la escalera: une rampa, puerta de la escalera y azotea del bar", "lógica de recorrido · F71 (arco bajo la llegada)"),
  "ARC2_W": (3.0, "arco bajo la llegada de la rampa 2 (paso)", "F71 arco junto al fin de la rampa · F76 arco en el extremo del bar hacia la torre"),
- "Y_CA":   (59.05, "fin alto de la concha/rampa exterior sobre la fachada (arranque de la curva final)", "F73: curva en s = 9,65 S (entre huecos 10 y 11) → 59,05 · Bing 59,67"),
+ "Y_CA": (55.9, "arranque de la curva final de la concha (fin de la coronación alta)", "F73 ve el hueco 11 (y 56,3–57,9) por encima de la concha → la curva debe empezar antes; pie de la curva 58,9 ≈ Bing 59,67"),
  "R_FIN":  (3.0,  "desarrollo de la curva final de la concha (cae casi vertical arriba y se abre abajo)", "F73 (tramo alto casi vertical), F71, F47 (estimado ± 2)"),
  "ESC_Y": (22.71, "centro de la caja a lo largo del eje radial", "F58 · ESC_R0/ESC_R1"),
- "ESC_WY": (5.0, "ancho de la caja (testa que mira al patio)", "F11/F08: hueco 2,3 + paño de lamas 2,5"),
- "ESC_RW": (2.3, "ancho del entrante en la testa (lado del barril)", "F11/F08: rellanos vistos junto al barril"),
- "ESC_Z1": (39.0, "coronación de la caja de escalera", "F08: a ras del tambor / base de la banda acristalada · F73"),
+ "ESC_Z1": (40.5, "coronación del cuerpo de escalera: llega a la cara inferior de la visera", "F08: la caja sube por delante del tambor hasta debajo de la visera"),
  "ESC_R0": (5.65, "escalera: muro interior en arco (borde del pasillo anular)", "radio del núcleo 3,25 + pasillo 2,2 + muro"),
  "ESC_R1": (15.9, "cara exterior de la pantalla de lamas (separada 0,3 del cuerpo)", "F08, F11: lamas separadas del muro"),
  "R2_X": (8.05, "rampa 2: borde interior (por fuera de la caja de escalera)", "coherencia con la escalera dentro del ala"),
@@ -44,6 +37,8 @@ COTAS = {
  "ESC_RC": (15.3, "cara exterior del cuerpo cerrado de la escalera", "F08: lamas al nivel de las puntas de las aletas"),
  "ESC_SECB": (25.0, "cuerpo de escalera en cuña (grados), centrado en el hueco, forrado de lamas", "F08: lamas de 18,5° hasta ~43° (su cara lateral se ve en escorzo) · usuario"),
  "ESC_RR": (11.0, "fachada retranqueada con ventanas a cada lado de la cuña (radio)", "F08 franja oscura 9,5°–18,5° con barandillas y huecos, ~1,6 m detrás de la línea de vidrio · F11 · usuario"),
+ "H_PT": (1.0, "peto del tambor sobre el pasillo de servicio entre tambor y banda", "F08: pasillo y peto entre el tambor y la banda acristalada"),
+ "R_ENT": (3.0, "abertura del peto de la terraza donde llega la rampa 1", "lógica de recorrido"),
  "H_PET":  (1.3,  "peto exterior de la terraza del ala larga (corona ≈ +8,5)", "F73 esquina del testero +8,5 ± 0,6"),
  "VA_0": (4.63, "alféizar fila alta (0,545 H)", "F73 vertical exacta, 3 huecos ±0,006 H"),
  "VA_1": (6.32, "dintel fila alta (0,743 H)", "F73 vertical exacta, 3 huecos ±0,002 H"),
@@ -62,7 +57,7 @@ COTAS = {
  "Z_T1":   (38.2, "coronación del tambor de ojos", "F09"),
  "Z_G1":   (40.5, "coronación de la banda acristalada", "F09"),
  "Z_V1":   (43.7, "coronación de la visera", "F09"),
- "Z_R1":   (49.1, "coronación del remate (sin antenas)", "F09"),
+ "Z_R1": (50.1, "coronación del remate (sin antenas)", "F09: 6,4 m sobre el borde superior de la visera (12,9 px/m de los forjados) · antes 49,1"),
  "R_COL":  (3.25, "radio de la columna (Ø 6,5)", "F09, F14"),
  "R_CONO": (3.25, "pie de la columna: recto (lo que parecía un cono era un toldo)", "usuario; F15/F18"),
  "R_CU":   (9.0,  "radio del cuello (Ø 18)", "F01, F02"),
@@ -71,9 +66,9 @@ COTAS = {
  "R_T":    (13.55,"radio del tambor de ojos (Ø 27,1)", "F01, F09, F14"),
  "R_G":    (10.85,"radio de la banda acristalada (Ø 21,7)", "F09"),
  "R_V":    (12.8, "radio de la visera (Ø 25,6)", "F09; Google 24,35"),
- "R_R":    (5.15, "radio del remate (Ø 10,3 ± 0,5)", "rangos: F09 11,2 · F14 10,3 · F01 10,0 · F70 9,6"),
- "OV_X":   (-0.4, "desplazamiento de la visera a lo largo del chaflán", "ajuste C02 + C04"),
- "OV_Y":   (-4.2, "desplazamiento de la visera hacia la plaza (−)", "ajuste C02 + C04"),
+ "R_R": (4.95, "radio del remate", "F09 9,8 · F08 9,7 · F14 10,3 · F01 10,0 · F70 9,6 (diámetros)"),
+ "OV_X": (-2.4, "desplazamiento de la visera a lo largo del chaflán", "F09 (frontal): centro de la visera 2,3–2,5 m a la izquierda del tambor + F08 (otra dirección): 1,7 m → resuelto en 2 direcciones"),
+ "OV_Y": (-2.15, "desplazamiento de la visera hacia la plaza (−)", "F09 + F08 (ver OV_X); antes −4,2 (calibración C02/C04)"),
  "OR_X":   (0.6,  "desplazamiento del remate", "F09"),
  "N_AL":   (19,   "aletas / muros radiales", "fuentes + F09"),
  "ESC_W": (8.8, "largo radial de la caja (ESC_R1 − ESC_R0)", "F36 cubierta 8,3–8,8 m"),
@@ -84,7 +79,6 @@ COTAS = {
  "V_BAR":  (1.2,  "vuelo de la cubierta del bar sobre la terraza", "F47"),
  "L_L":    (94.8, "largo total del ala larga desde la calle", "Google 94,82"),
  "L_FIN":  (7.81, "tramo final sin bar: el bar llega casi al testero", "Bing (usuario) 7,81 · F73 extremo del bar tras el testero · F47 fachada acristalada del bar con barandilla a lo largo de la terraza"),
- "D_CUNA": (35.13,"distancia del fin de la concha al fondo", "Bing"),
  "W_EXT":  (15.7, "ancho máximo con la concha", "Google"),
  "THL":  (95.0, "ángulo interior de la L (ala larga – calle)", "estimación por rangos: 95,0 ± 2,3° (ESTIMACIONES.md)"),
  "ACH":    (45.0, "chaflán simétrico que corta la esquina de 90°", "usuario + mapa Bing (chaflán ~ bisectriz)"),
@@ -129,7 +123,7 @@ def planta():
           np.array([0, V["L_L"]]), IC, SWP(-V["L_C"], V["W_C"])]
     o_s = KC + V["RETR"] * NS; o_c = A1 + V["RETR"] * N
     a1 = inter(o_s, US, o_c, U); b1 = inter(o_c, U, np.array([V["W_P"] - V["RETR"], 0]), np.array([0.0, 1.0]))
-    YC = V["L_L"] - V["D_CUNA"]
+    YC = V["Y_CA"] + V["R_FIN"]
     PB = [SWP(-V["L_C"] + V["L_LAD"], V["RETR"]), a1, b1, np.array([V["W_P"] - V["RETR"], YC]),
           np.array([V["W_P"], YC]), np.array([V["W_P"], V["L_L"]]), np.array([0, V["L_L"]]), IC,
           SWP(-V["L_C"] + V["L_LAD"], V["W_C"])]
@@ -163,11 +157,13 @@ def elementos():
     zb1 = V_["Z_B0"] + V_["N_PL"] * V_["F"]
     cil("barril", T, V_["R_AL"], V_["Z_ALE"], zb1 + 0.65, "Z06")
     cil("tambor de ojos", T, V_["R_T"], zb1 + 0.65, V_["Z_T1"], "Z04")
-    cil("banda acristalada", T, V_["R_G"], V_["Z_T1"], V_["Z_G1"], "Z03")
+    cil("banda acristalada", T, V_["R_G"], V_["Z_T1"] - V_["H_PT"], V_["Z_G1"], "Z03")
     cil("visera", P(V_["OV_X"], V_["OV_Y"]), V_["R_V"], V_["Z_G1"], V_["Z_V1"], "Z02")
     cil("remate", P(V_["OR_X"], 0), V_["R_R"], V_["Z_V1"], V_["Z_R1"], "Z01")
-    xe = V_["ESC_X"]; y0 = V_["ESC_Y"] - V_["ESC_WY"] / 2; y1 = V_["ESC_Y"] + V_["ESC_WY"] / 2
-    pri("escalera", [(xe - V_["ESC_W"] / 2, y0), (xe + V_["ESC_W"] / 2, y0), (xe + V_["ESC_W"] / 2, y1), (xe - V_["ESC_W"] / 2, y1)], 0, V_["ESC_Z1"], "Z29")
+    import math as _m
+    _ang = _m.atan2(V_["ESC_Y"] - T[1], V_["ESC_X"] - T[0]); _hb = _m.radians(V_["ESC_SECB"]) / 2
+    _pt = lambda r, d: (T[0] + r * _m.cos(_ang + d), T[1] + r * _m.sin(_ang + d))
+    pri("escalera (cuña)", [_pt(V_["ESC_RC"], -_hb + 2 * _hb * k / 8) for k in range(9)] + [_pt(V_["ESC_R0"], _hb - 2 * _hb * k / 8) for k in range(9)], 0, V_["ESC_Z1"], "Z29")
     return E, g
 
 
@@ -183,7 +179,7 @@ RANGOS = {
  "Z_LAD1": 1.0, "Z_CON": 0.8, "Z_CU0": 0.6, "Z_CU1": 0.6, "Z_ALE": 0.6, "Z_B0": 0.4, "F": 0.05, "N_PL": 0,
  "Z_T1": 0.5, "Z_G1": 0.5, "Z_V1": 0.5, "Z_R1": 0.6, "R_COL": 0.3, "R_CONO": 0.3, "R_CU": 0.5, "R_B": 0.3,
  "R_AL": 0.3, "R_T": 0.5, "R_G": 0.5, "R_V": 0.6, "R_R": 0.25, "OV_X": 1.0, "OV_Y": 1.5, "OR_X": 0.5, "N_AL": 0,
- "ESC_W": 1.5, "ESC_X": 1.0, "ESC_SEC": 4.0, "ESC_SECB": 4.0, "ESC_RR": 0.8, "ESC_RC": 1.0, "R2_X": 0.5, "ESC_Y": 2.0, "ESC_WY": 0.8, "ESC_RW": 0.5, "ESC_Z1": 0.8, "W_P": 0.5, "W_BAR": 0.5, "V_BAR": 0.5, "L_L": 1.0, "L_FIN": 0.5, "Y_CA": 0.6, "R_FIN": 2.0, "S_VEN": 0.3, "N_VEN_B": 0, "MAR_P": 0.02, "MAR_B": 0.05, "MAR_R": 0.04, "R2_L": 3.0, "R2_W": 0.5, "R2_PLAT": 0.5, "ARC2_W": 1.0, "N_VEN": 0, "VEN_W": 0.2, "VEN_FIN": 1.5, "ESC_L": 1.5, "ESC_REC": 0.5, "ESC_RL": 1.0, "R_MES": 1.0, "Z_ARC": 0.5, "U_ARC": 0.1, "D_CUNA": 1.0,
+ "ESC_W": 1.5, "ESC_X": 1.0, "H_PT": 0.3, "R_ENT": 1.0, "ESC_SEC": 4.0, "ESC_SECB": 4.0, "ESC_RR": 0.8, "ESC_RC": 1.0, "R2_X": 0.5, "ESC_Y": 2.0, "ESC_Z1": 0.8, "W_P": 0.5, "W_BAR": 0.5, "V_BAR": 0.5, "L_L": 1.0, "L_FIN": 0.5, "Y_CA": 0.6, "R_FIN": 2.0, "S_VEN": 0.3, "N_VEN_B": 0, "MAR_P": 0.02, "MAR_B": 0.05, "MAR_R": 0.04, "R2_L": 3.0, "R2_W": 0.5, "R2_PLAT": 0.5, "ARC2_W": 1.0, "N_VEN": 0, "VEN_W": 0.2, "VEN_FIN": 1.5, "Z_ARC": 0.5, "U_ARC": 0.1, "D_CUNA": 1.0,
  "W_EXT": 1.0, "THL": 2.3, "ACH": 8.0, "REST": 1.0, "COL": 0.3, "HOT": 1.0, "L_CHF": 3.0, "T_POS": 0.1,
  "D_HOTF": 2.0, "RET": 0.5, "RETR": 0.5, "L_C": 3.0, "W_C": 1.0, "L_LAD": 1.5,
 }

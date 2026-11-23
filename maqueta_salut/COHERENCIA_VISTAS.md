@@ -25,7 +25,7 @@
 | escalera: ventana en la fachada retranqueada (vacío = 1) | 1.00 | 1.00 | OK |
 | escalera: lamas a los lados de la cuña | 1.00 | 1.00 | OK |
 | escalera: no sobresale más allá de las lamas | 1.00 | 1.00 | OK |
-| escalera: coronación (cubierta en cuña, borde exterior) | 39.00 | 39.00 | OK |
+| escalera: coronación (cubierta en cuña, borde exterior) | 40.50 | 40.50 | OK |
 | escalera: baja al suelo | 0.00 | 0.00 | OK |
 | rampa 1 llega a la cota de la terraza (sin escalón) | 7.20 | 7.20 | OK |
 | rampa 2 abajo = terraza | 7.27 | 7.27 | OK |
@@ -38,3 +38,11 @@
 | paso bajo la meseta por el arco, a cota de terraza (vacío = 1) | 1.00 | 1.00 | OK |
 | relieve del marco (frente) | 12.82 | 12.82 | OK |
 | huecos del catálogo abiertos en el 3D (ala + torre) | 120.00 | 120.00 | OK |
+| hueco 11 por encima de la concha (concha bajo su alféizar) | 1.57 | 1.57 | OK |
+| barandilla en la cubierta de la visera | 1.00 | 1.00 | OK |
+| pasillo entre tambor y banda (vacío a +Z_T1−0,5) | 1.00 | 1.00 | OK |
+| peto del tambor hasta +Z_T1 | 1.00 | 1.00 | OK |
+| remate: coronación | 50.10 | 50.10 | OK |
+| peto de la terraza sobre la banda del hotel | 8.50 | 8.50 | OK |
+| abertura del peto donde llega la rampa 1 | 7.20 | 7.20 | OK |
+| barandilla en el lado largo de la azotea del bar | 12.50 | 12.50 | OK |

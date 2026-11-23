@@ -39,7 +39,6 @@ W_P = 12.74         # ancho del ala larga                           [Bing 12,74]
 W_BAR = 6.21        # bar (mitad interior)                          [Bing 6,21]
 L_L = 94.8          # largo total del ala larga desde la calle      [Google 94,82]
 L_FIN = 7.81        # tramo final sin bar                           [Bing 7,81]
-Y_CUNA = L_L - 35.13    # la concha se junta con la fachada a 35 m del fondo [Bing 35,13]
 W_EXT = 15.7        # ancho maximo con la concha                    [Google 15,7]
 import os
 A_CH = math.radians(float(os.environ.get("ACH", "57")))   # angulo del chaflan con la calle [provisional]
@@ -55,7 +54,7 @@ Z_T1, Z_G1, Z_V1, Z_R1 = _v["Z_T1"], _v["Z_G1"], _v["Z_V1"], _v["Z_R1"]
 R_COL, R_CU, R_B, R_AL, R_T, R_G, R_V, R_R = _v["R_COL"], _v["R_CU"], _v["R_B"], _v["R_AL"], _v["R_T"], _v["R_G"], _v["R_V"], _v["R_R"]
 OFF_V, OFF_R, N_AL = (_v["OV_X"], _v["OV_Y"]), (_v["OR_X"], 0.0), int(_v["N_AL"])
 W_P, W_BAR, L_L, L_FIN, W_EXT = _v["W_P"], _v["W_BAR"], _v["L_L"], _v["L_FIN"], _v["W_EXT"]
-Y_CUNA = L_L - _v["D_CUNA"]
+Y_CUNA = _v["Y_CA"] + _v["R_FIN"]           # pie de la concha sobre la fachada (≈ Bing 59,67)
 A_CH, TH_L = math.radians(_v["ACH"]), math.radians(_v["THL"])
 REST, COL, HOT = _v["REST"], _v["COL"], _v["HOT"]
 L_CH = _v["L_CHF"]                          # chaflan reducido [usuario]
@@ -179,7 +178,8 @@ def base():
     s += [caja(0, W_BAR, yb0, yb1, Z_P1 - 0.01, Z_BAR),
           caja(0, W_BAR + _v["V_BAR"], yb0, yb1 + _v["V_BAR"], Z_BAR, Z_BAR_C),     # cubierta volada en frente y extremo
           caja(0, 0.1, yb1, L_L, Z_P1 - 0.01, Z_P1 + 1.1),                         # barandilla borde patio de la terraza abierta [F47]
-          caja(W_P - 0.3, W_P, yb0, L_L, Z_P1 - 0.01, Z_P1 + _v["H_PET"]),             # peto exterior terraza [F73 +8,5]
+          caja(W_P - 0.3, W_P, pl["Q"][1], pl["Q"][1] + _v["D_HOTF"], Z_P1 - 0.01, Z_P1 + _v["H_PET"]),   # peto sobre la banda del hotel
+          caja(W_P - 0.3, W_P, pl["Q"][1] + _v["D_HOTF"] + _v["R_ENT"], L_L, Z_P1 - 0.01, Z_P1 + _v["H_PET"]),  # peto exterior [F73 +8,5]; abertura R_ENT a la rampa 1
           caja(0, W_P - 0.3, L_L - 0.25, L_L - 0.15, _v["Z_FIN"] - 0.01, _v["Z_FIN"] + 1.1)]   # testero a cota terraza + barandilla [F73]
     # concha: franja exterior que se estrecha de W_EXT a W_P hasta Y_CUNA; alta junto al hotel (+7,3) y baja en
     # curva al suelo; debajo, planta baja hundida [F47, F09, Bing]
@@ -241,10 +241,12 @@ def base():
         zt = Z_BAR_C - u * (Z_BAR_C - Z_P1)
         return (xr2 + W2 - 0.2 + x * 0.2, y_top + u * (y_low - y_top), zt - 0.01 + z * 1.0)
     s += [rampa2, Manifold.cube((1, 1, 1)).refine(30).warp(f2p),
-          caja(0, xr2 + W2, y_esc - 0.3, y_top, Z_BAR, Z_BAR_C),                                   # meseta (losa) a +Z_BARC
-          caja(xr2 + W2 - 0.1, xr2 + W2, y_esc - 0.3, y_top, Z_BAR_C - 0.01, Z_BAR_C + 1.0),       # barandilla meseta
+          caja(0, xr2 + W2, y_esc, y_top, Z_BAR, Z_BAR_C),                                   # meseta (losa) a +Z_BARC
+          caja(xr2 + W2 - 0.1, xr2 + W2, y_esc, y_top, Z_BAR_C - 0.01, Z_BAR_C + 1.0),       # barandilla meseta
           caja(xr2 - 0.1, xr2 + W2, y_top - 0.3, y_top, Z_P1 - 0.01, Z_BAR),                      # muro bajo la llegada (con arco)
-          caja(0, W_BAR + _v["V_BAR"], yb1 + _v["V_BAR"] - 0.1, yb1 + _v["V_BAR"], Z_BAR_C - 0.01, Z_BAR_C + 1.0)]   # barandilla azotea
+          caja(0, W_BAR + _v["V_BAR"], yb1 + _v["V_BAR"] - 0.1, yb1 + _v["V_BAR"], Z_BAR_C - 0.01, Z_BAR_C + 1.0),    # barandilla azotea (extremo)
+          caja(W_BAR + _v["V_BAR"] - 0.1, W_BAR + _v["V_BAR"], y_top, yb1 + _v["V_BAR"], Z_BAR_C - 0.01, Z_BAR_C + 1.0), # lado largo (F73 barandilla roja)
+          caja(0, 0.1, y_top, yb1 + _v["V_BAR"], Z_BAR_C - 0.01, Z_BAR_C + 1.0)]                                     # lado patio
     m = Manifold.batch_boolean(s, OpType.Add)
     arc = Manifold.cylinder(1.0, _v["ARC2_W"] / 2, _v["ARC2_W"] / 2, 48).rotate((90, 0, 0))     # arco de paso bajo la llegada [F71, F76]
     xa = xr2 + W2 / 2
@@ -312,25 +314,27 @@ def torre():
         s.append(cil(T, R_B, z, z + 0.65) - cil(T, rf - 0.1, z - 0.1, z + 0.7))          # canto del forjado 0,65 [F09]
         s.append(cil(T, R_B, z + 0.75, z + 1.65) - cil(T, R_B - 0.25, z + 0.7, z + 1.7))  # poyete 0,90 tras ranura 0,10 [F09]
     s.append(cil(T, R_B, Z_B1, Z_B1 + 0.65))
-    s.append(cil(T, R_B, Z_B1 + 0.65, Z_B1 + 1.05) - cil(T, R_B - 0.2, Z_B1, Z_B1 + 1.2))   # peto terraza de servicio (+33,55) [F09]
+    s.append(cil(T, R_B, Z_B1 + 0.65, Z_B1 + 1.75) - cil(T, R_B - 0.2, Z_B1, Z_B1 + 1.9))   # peto + barandilla 1,1 m de la cubierta del barril [F09, F08]
     for k in range(N_AL):
         a = 2 * math.pi * k / N_AL
         al = Manifold.cube((R_AL - rf + 0.2, 0.4, Z_B1 + 0.65 - Z_ALETA0)).translate((rf - 0.1, -0.2, Z_ALETA0))
         s.append(al.rotate((0, 0, math.degrees(a))).translate((T[0], T[1], 0)))
     # tambor de ojos, banda, visera, remate
-    s.append(cil(T, R_T, Z_B1, Z_T1))
+    zp = Z_T1 - _v["H_PT"]                                  # pasillo de servicio entre tambor y banda [F08]
+    s.append(cil(T, R_T, Z_B1, zp) + (cil(T, R_T, zp - 0.01, Z_T1) - cil(T, R_T - 0.25, zp, Z_T1 + 0.1)))   # tambor + peto
     import ventanas as VT0
     for oj in [h for h in VT0.catalogo() if h["tipo"] == "ojo"]:
         a = math.degrees(math.atan2(oj["n"][1], oj["n"][0]))
         ojo = Manifold.cylinder(0.5, 0.8, 0.8, 24).rotate((0, 90, 0)).translate((R_T - 0.1, 0, (Z_B1 + Z_T1) / 2))
         s.append(ojo.rotate((0, 0, a)).translate((T[0], T[1], 0)))
     pv = P(*OFF_V); pr = P(*OFF_R)
-    s.append(cil(T, R_G - 0.3, Z_T1, Z_G1))
+    s.append(cil(T, R_G - 0.3, Z_T1 - _v["H_PT"], Z_G1))
     nm = int(2 * math.pi * R_G / 2.4)
     for k in range(nm):                                     # montantes de la banda acristalada [F10, F17]
-        mt = Manifold.cube((0.5, 0.25, Z_G1 - Z_T1)).translate((R_G - 0.45, -0.125, Z_T1))
+        mt = Manifold.cube((0.5, 0.25, Z_G1 - Z_T1 + _v["H_PT"])).translate((R_G - 0.45, -0.125, Z_T1 - _v["H_PT"]))
         s.append(mt.rotate((0, 0, 360 * k / nm)).translate((T[0], T[1], 0)))
     s.append(cil(pv, R_V, Z_G1, Z_V1))
+    s.append(cil(pv, R_V, Z_V1 - 0.01, Z_V1 + 1.0) - cil(pv, R_V - 0.08, Z_V1 - 0.1, Z_V1 + 1.1))   # barandilla de la cubierta de la visera [F08]
     s.append(cil(pr, R_R, Z_V1, Z_R1))
     # ESCALERA en sector: quita las plantas/balcones/aletas del barril en ese sector y pone el núcleo cerrado
     def sector(r0, r1, z0, z1, da0=None, da1=None):

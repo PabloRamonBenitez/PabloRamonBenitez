@@ -32,7 +32,7 @@ xs = [hueco(0, y0 + 3 + k * 0.25, V["VA_0"] + 0.5) or 99 for k in range(16)]
 chk.append(("sin ventanas donde la rampa es alta", min(x for x in xs if x is not None), V["W_P"] + 0.0))
 # recuento de huecos en la fila alta y la baja a lo largo de toda la fachada exterior
 def contar(z):
-    ys = np.arange(E.Y_CUNA - 5, V["L_L"], 0.1); dentro = [ (hueco(0, y, z) or 99) < V["W_P"] - 0.04 for y in ys ]
+    ys = np.arange(E.Y_CUNA + 0.2 if z < 3 else E._v["Y_CA"] - 1, V["L_L"], 0.1); dentro = [ (hueco(0, y, z) or 99) < V["W_P"] - 0.04 for y in ys ]
     return sum(1 for a, b in zip(dentro, dentro[1:]) if b and not a)
 chk.append(("nº ventanas fila alta (tramo tras la rampa)", contar((V["VA_0"] + V["VA_1"]) / 2), V["N_VEN"]))
 chk.append(("nº huecos fila baja", contar((V["VB_0"] + V["VB_1"]) / 2), V["N_VEN_B"]))
@@ -78,6 +78,19 @@ for h in VT.catalogo():
     r = tm_ ^ E.caja(px - 0.03, px + 0.03, py - 0.03, py + 0.03, zc_ - 0.03, zc_ + 0.03)
     okh += r.is_empty()
 chk.append(("huecos del catálogo abiertos en el 3D (ala + torre)", okh, tot))
+# nuevas (pasada 16)
+_px, _py = E.esc_ang_pt(E.R_B, 0.0)
+chk.append(("hueco 11 por encima de la concha (concha bajo su alféizar)", ztop(V["W_P"] + 0.5, V["L_L"] - V["VEN_FIN"] - 10 * V["S_VEN"] - V["VEN_W"] / 2), 0.0 if False else min(ztop(V["W_P"] + 0.5, V["L_L"] - V["VEN_FIN"] - 10 * V["S_VEN"] - V["VEN_W"] / 2), V["VA_0"])))
+_t = E.torre()
+_v_ = E.P(*E.OFF_V)
+chk.append(("barandilla en la cubierta de la visera", float((_t ^ E.caja(_v_[0] + E.R_V - 0.06, _v_[0] + E.R_V - 0.02, _v_[1] - 0.05, _v_[1] + 0.05, E.Z_V1 + 0.5, E.Z_V1 + 0.6)).is_empty() == False), 1.0))
+_q = (E.T[0] - E.R_T + 0.6, E.T[1])
+chk.append(("pasillo entre tambor y banda (vacío a +Z_T1−0,5)", float((_t ^ E.caja(_q[0] - .05, _q[0] + .05, _q[1] - .05, _q[1] + .05, E.Z_T1 - 0.5, E.Z_T1 - 0.4)).is_empty()), 1.0))
+chk.append(("peto del tambor hasta +Z_T1", float(not (_t ^ E.caja(E.T[0] - E.R_T + 0.05, E.T[0] - E.R_T + 0.15, E.T[1] - .05, E.T[1] + .05, E.Z_T1 - 0.2, E.Z_T1 - 0.1)).is_empty()), 1.0))
+chk.append(("remate: coronación", (_t ^ E.caja(*(lambda p: (p[0]-.2, p[0]+.2, p[1]-.2, p[1]+.2))(E.P(*E.OFF_R)), 40, 60)).bounding_box()[5], V["Z_R1"]))
+chk.append(("peto de la terraza sobre la banda del hotel", ztop(V["W_P"] - 0.15, E.plantas_base()["Q"][1] + 2.0), V["Z_P1"] + V["H_PET"]))
+chk.append(("abertura del peto donde llega la rampa 1", ztop(V["W_P"] - 0.15, E.plantas_base()["Q"][1] + V["D_HOTF"] + V["R_ENT"] / 2), V["Z_P1"]))
+chk.append(("barandilla en el lado largo de la azotea del bar", ztop(V["W_BAR"] + V["V_BAR"] - 0.05, 60.0), E.Z_BAR_C + 1.0))
 out = ["| comprobación | medido en la geometría | cuadro | estado |", "|---|---|---|---|"]
 for n, a, b in chk:
     ok = abs(a - b) < (0.25 if "curva" in n else 0.12) or (n.startswith("sin ventanas") and a > V["W_P"] - 0.05)

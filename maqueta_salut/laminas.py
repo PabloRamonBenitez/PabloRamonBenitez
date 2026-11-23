@@ -21,7 +21,7 @@ OUT = []
 def hoja(titulo, w=16.5, h=11.7):
     fig = plt.figure(figsize=(w, h))
     fig.text(0.01, 0.985, "HOTEL SALUT (Kyiv, 1984) – " + titulo, fontsize=13, weight="bold", va="top")
-    fig.text(0.01, 0.962, "Cotas en m. Medidas tomadas de fotos (F01, F09, F14, F47) y de Bing/Google. Trazo grueso con trama: cortado. "
+    fig.text(0.01, 0.962, "Cotas en m. Medidas de fotos (F01, F08, F09, F14, F36, F47, F58, F70–F73…, ver CUADRO DE COTAS) y de Bing/Google. Trazo grueso con trama: cortado. "
              "Fino: visto. Discontinuo: por encima.", fontsize=8, va="top")
     return fig
 
@@ -95,7 +95,7 @@ def cotas_planta(ax):
     L.cota(ax, (0, E.L_L), (E.W_P, E.L_L), 2.5, "ala")
     L.cota(ax, (0, E.L_L - 20), (E.W_BAR, E.L_L - 20), 1.5, "bar")
     L.cota(ax, (E.W_P, pl["Q"][1]), (E.W_P, E.L_L), -5, "")
-    L.cota(ax, (E.W_P, E.Y_CUNA), (E.W_P, E.L_L), -2.5, "")
+    L.cota(ax, (E.W_P, E.Y_CUNA), (E.W_P, E.L_L), -2.5, "pie concha")
     L.cota(ax, (E.W_P, E.L_L - E.L_FIN), (E.W_P, E.L_L), -1.0, "")
     L.cota(ax, E.A1, E.C, -3, "chaflán")
     L.cota(ax, (-E.L_C, 0), E.A1, -3, "calle")
@@ -118,7 +118,7 @@ def cotas_planta(ax):
     ax.text(E.W_P + 10.5, yA - 6 * V_["S_VEN"], f"{int(V_['N_VEN'])} huecos a {V_['S_VEN']:.2f}\n(PB: los {int(V_['N_VEN_B'])} junto al testero)".replace(".", ","),
             fontsize=6, rotation=90, va="center")
     # cota de cubierta de cada volumen
-    for (x, y), z in (((3, 70), E.Z_BAR_C), ((10, 70), E.Z_P1 + 1.0), ((tuple(E.SWP(-12, 9))), E.Z_ALTO), ((tuple(E.SWP(-21.5, 6))), E._v["Z_LAD1"]),
+    for (x, y), z in (((3, 70), E.Z_BAR_C), ((10, 70), E.Z_P1 + E._v["H_PET"]), ((tuple(E.SWP(-12, 9))), E.Z_ALTO), ((tuple(E.SWP(-21.5, 6))), E._v["Z_LAD1"]),
                       (E.esc_pt((E.ESC_R0 + E.ESC_R1) / 2, 0), E._v["ESC_Z1"]), ((14.2, 30), E._v["Z_CON"])):
         ax.text(x, y, f"+{z:.2f}".replace(".", ","), fontsize=6.5, color="navy", ha="center", bbox=dict(fc="white", ec="navy", lw=0.4, pad=0.6), zorder=70)
     # trazas de las secciones
@@ -130,20 +130,20 @@ def cotas_planta(ax):
 def plantas():
     lst = [(1.8, "PLANTA 0 (baja) – corte a +1,80"), (5.6, "PLANTA 1 – corte a +5,60 (bandas de ventanas)"),
            (9.2, "PLANTA 2 – corte a +9,20 (terraza, bar, bloque alto)"), (13.0, "PLANTA 3 – corte a +13,00 (cuello)"),
-           (E.Z_B0 + 3 * E.F + 2.0, "PLANTA 4 – planta tipo de habitaciones (corte a +25,9)"),
-           (E.Z_B1 + 2.5, "PLANTA ÚLTIMA – tambor de ojos y terraza de servicio (corte a +35,1)"), (None, "PLANTA AÉREA – cubiertas")]
+           (E.Z_B0 + 3 * E.F + 2.0, f"PLANTA 4 – planta tipo de habitaciones (corte a +{E.Z_B0 + 3 * E.F + 2.0:.2f})".replace(".", ",")),
+           (E.Z_B1 + 2.5, f"PLANTA ÚLTIMA – tambor de ojos y terraza de servicio (corte a +{E.Z_B1 + 2.5:.2f})".replace(".", ",")), (None, "PLANTA AÉREA – cubiertas")]
     for zc, tit in lst:
         fig = hoja(tit)
         ax = fig.add_axes([0.04, 0.04, 0.6, 0.9])
         planta(ax, zc, "", aerea=zc is None)
         cotas_planta(ax)
         ejes(ax, (-30, 34), (-10, 100))
-        ax.annotate("N aprox.", xy=(30, 96), xytext=(30, 88), arrowprops=dict(arrowstyle="-|>"), fontsize=7, ha="center")
+        ax.annotate("N", xy=(28 - 0.914 * 5, 88 + 0.407 * 5), xytext=(28, 88), arrowprops=dict(arrowstyle="-|>"), fontsize=8, ha="center")   # ala larga a ~66° del N (F36, Google norte arriba)
         # detalle ampliado de la torre y el chaflan
         ax2 = fig.add_axes([0.66, 0.30, 0.33, 0.62])
         planta(ax2, zc, "detalle torre / chaflán", aerea=zc is None)
         ejes(ax2, (E.T[0] - 20, E.T[0] + 20), (E.T[1] - 18, E.T[1] + 22))
-        fig.text(0.66, 0.25, f"Datos de planta: ala larga 12,74 / bar 6,21 (Bing) / tramo final sin bar {E.L_FIN:.2f} (Bing, F73) / concha hasta {E.L_L - E._v['Y_CA']:.2f} del fondo (F73; Bing 35,13).\n"
+        fig.text(0.66, 0.25, f"Datos de planta: ala larga 12,74 / bar 6,21 (Bing) / tramo final sin bar {E.L_FIN:.2f} (Bing, F73) / pie de la concha a {E.L_L - E.Y_CUNA:.2f} del fondo (F73; Bing 35,13).\n"
                  f"Largo total 94,82 (Google). Esquina original a 90° con chaflán de {E.L_CH:.1f} m a {math.degrees(E.A_CH):.0f}°.\n"
                  f"Torre sobre el chaflán al {E._v['T_POS']*100:.0f} % desde la calle (algo a la derecha); la columna asoma 1,5 m.\n"
                  f"Detrás de la torre: vestíbulo y circulaciones. Escalera: hueco de {E._v['ESC_SEC']:.0f}° en el cilindro; cuerpo en cuña de {E._v['ESC_SECB']:.0f}° forrado de lamas; a los lados, fachada retranqueada con ventanas (F08, F11, F58, usuario).", fontsize=7, va="top")
@@ -236,7 +236,7 @@ def alzado(ax, d, titulo):
     V = np.asarray(m.to_mesh().vert_properties)[:, :2]
     x0, x1 = V[:, 0].min(), V[:, 0].max()
     ax.axhline(0, color="k", lw=1.6)
-    for z, t in ((E.Z_PB, "techo PB"), (E.Z_P1, "planta 1 / terraza"), (E.Z_ALTO, "bloque alto"), (E.Z_B0, "1ª hab."),
+    for z, t in ((E.Z_PB, "techo PB"), (E.Z_P1, "planta 1 / terraza"), (E.Z_ALTO, "cub. bar / bloque alto"), (E.Z_B0, "1ª hab."),
                  (E.Z_B1, "cub. hab."), (E.Z_T1, "tambor"), (E.Z_G1, "banda"), (E.Z_V1, "visera"), (E.Z_R1, "remate")):
         L.nivel(ax, x1 + 1, z, t)
     ejes(ax, (x0 - 2, x1 + 13), (-2, 52))
@@ -415,7 +415,7 @@ def coherencia():
         txt.append(f"{n:<25} {fv:>7.2f}   {mv:>9.2f}   {mv - fv:>+5.2f}   {s}")
     alt = [("techo PB", 3.9, E.Z_PB), ("planta 1 / terraza", 7.3, E.Z_P1), ("borde inferior barril", 15.2, E.Z_B0),
            ("cubierta habitaciones", 32.6, E.Z_B1), ("tambor", 38.2, E.Z_T1), ("banda", 40.5, E.Z_G1), ("visera", 43.7, E.Z_V1),
-           ("remate", 49.1, E.Z_R1)]
+           ("remate", 50.1, E.Z_R1)]
     txt += ["", "Cota                      foto (m)   planos (m)   dif.", "-" * 70]
     for n, fv, mv in alt:
         txt.append(f"{n:<25} {fv:>7.2f}   {mv:>9.2f}   {mv - fv:>+5.2f}   F09/F14")
@@ -424,10 +424,10 @@ def coherencia():
             f"{'ala larga ancho':<25} {12.74:>7.2f}   {E.W_P:>9.2f}   Bing",
             f"{'bar ancho':<25} {6.21:>7.2f}   {E.W_BAR:>9.2f}   Bing",
             f"{'tramo final':<25} {7.81:>7.2f}   {E.L_FIN:>9.2f}   Bing / F73",
-            f"{'concha hasta el fondo':<25} {35.13:>7.2f}   {E.L_L - E.Y_CUNA:>9.2f}   Bing",
-            f"{'chaflán (P1)':<25} {28.9:>7.2f}   {math.dist(E.A1, E.C):>9.2f}   F09 (12,8+6,5+9,6)",
+            f"{'pie de la concha al fondo':<25} {35.13:>7.2f}   {E.L_L - E.Y_CUNA:>9.2f}   Bing (F73 hueco 11 visible)",
+            f"{'chaflán (P1)':<25} {20.0:>7.2f}   {E.L_CH:>9.2f}   Google / usuario",
             f"{'largo total':<25} {94.82:>7.2f}   {E.L_L:>9.2f}   Google",
-            "", "Pendiente (no medible en fotos inclinadas): ángulo del chaflán (31°, de tu esquema) y fondo del ala corta (12 m)."]
+            "", f"Pendiente: ángulo de la L ({math.degrees(E.TH_L):.0f}° ± 2,3) y fondo del ala corta (12,74 m) sin foto frontal."]
     ax.text(0, 1, "\n".join(txt), family="monospace", fontsize=9, va="top")
     OUT.append(fig)
 

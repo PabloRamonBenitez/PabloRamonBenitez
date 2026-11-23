@@ -159,7 +159,7 @@ def comprobacion():
      ("Concha arranca por encima de la banda del hotel (sin escalón hacia abajo)", V["Z_CON"] >= V["Z_P1"], f"{V['Z_CON']} ≥ {V['Z_P1']}"),
      ("Chaflán: restaurante + columna + hotel = longitud del chaflán", True, f"{V['REST']} + {V['COL']} + {V['HOT']} = {V['REST'] + V['COL'] + V['HOT']:.1f}"),
      ("Escalera: cuña dentro del hueco, retranqueo detrás de la línea de vidrio", V["ESC_SECB"] < V["ESC_SEC"] and V["ESC_RR"] < V["R_B"] - 1.8 and V["ESC_R1"] <= V["R_AL"] + 0.7, f"sector {V['ESC_SEC']}°, r {V['ESC_R0']}…{V['ESC_R1']}"),
-     ("Muros de la escalera paralelos y dirigidos al centro de la torre", True, "por construcción: caja en coordenadas radiales"),
+     ("Escalera: cuña centrada en el hueco y sube hasta la visera", abs(V["ESC_Z1"] - V["Z_G1"]) < 0.05 and V["ESC_SECB"] < V["ESC_SEC"], f"cuña {V['ESC_SECB']}° en hueco {V['ESC_SEC']}°, corona +{V['ESC_Z1']}"),
      ("Ala larga recta de ancho constante", True, f"W_P = {V['W_P']}"),
     ]
     return R

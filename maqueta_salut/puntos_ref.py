@@ -46,13 +46,13 @@ def generar():
         add(f"TOR-COL-{k:02d}", "TORRE columna", f"columna pie {k}", circ(T, E.R_COL, 0.0, 12, k))
         add(f"TOR-CUE-{k:02d}", "TORRE cuello", f"cuello losa {k}", circ(T, E.R_CU + 0.6, E.Z_CU0 + 0.6, 12, k))
     # ---------------- ESCALERA (caja radial insertada en el cilindro)
-    for nr, r in (("IN", E.ESC_R0), ("EX", E.ESC_R1)):
-        for nv, v in (("A", -E.ESC_WY / 2), ("B", E.ESC_WY / 2)):
+    for nr, r in (("IN", E.ESC_R0), ("EX", E.ESC_RC)):
+        for nv, v in (("A", -E.ESC_HB * r), ("B", E.ESC_HB * r)):
             for z, nz in ((0.0, "0"), (E.Z_P1, "P1"), (V["ESC_Z1"], "SUP")):
                 add(f"ESC-{nr}{nv}-{nz}", "ESCALERA caja", f"esquina r={r:.1f} v={v:.1f} z={z:.1f}", (*E.esc_pt(r, v), z))
-    for nv, v in (("A", E.ESC_WY / 2 - V["ESC_RW"]), ("B", E.ESC_WY / 2)):
-        for z, nz in ((3.2, "INF"), (V["ESC_Z1"] - 0.8, "SUP")):
-            add(f"ESC-REC-{nv}-{nz}", "ESCALERA entrante", f"entrante v={v:.1f} {nz}", (*E.esc_pt(E.ESC_R1, v), z))
+    for nv, d in (("A", -E.ESC_HA), ("B", E.ESC_HA)):
+        for z, nz in ((E.Z_B0, "INF"), (E.Z_B1, "SUP")):
+            add(f"ESC-HUE-{nv}-{nz}", "ESCALERA hueco", f"borde del hueco en el cilindro {nv} {nz}", (*E.esc_ang_pt(E.R_B, d), z))
     # ---------------- ALA LARGA: fachada exterior, testero
     W_P, L_L = V["W_P"], V["L_L"]
     for yy in np.arange(Q[1], L_L + 0.01, 2.5):

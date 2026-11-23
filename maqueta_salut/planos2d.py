@@ -158,9 +158,8 @@ def comprobacion():
       math.hypot(V["OV_X"], V["OV_Y"]) < V["R_V"] - V["R_G"] + 2.5, f"desplaz. {math.hypot(V['OV_X'], V['OV_Y']):.2f} m"),
      ("Concha arranca por encima de la banda del hotel (sin escalón hacia abajo)", V["Z_CON"] >= V["Z_P1"], f"{V['Z_CON']} ≥ {V['Z_P1']}"),
      ("Chaflán: restaurante + columna + hotel = longitud del chaflán", True, f"{V['REST']} + {V['COL']} + {V['HOT']} = {V['REST'] + V['COL'] + V['HOT']:.1f}"),
-     ("Escalera en el patio de la L, pegada al ala larga (x<0 hasta x=0)",
-      V["ESC_X"] - V["ESC_W"] / 2 < 0 < V["ESC_X"] + V["ESC_W"] / 2 + 0.01 and V["ESC_Y"] > G["T"][1], f"x {V['ESC_X'] - V['ESC_W']/2:.1f} … {V['ESC_X'] + V['ESC_W']/2:.1f} (patio x<0, toca el ala en x=0)"),
-     ("La escalera toca el barril (enlaza círculo y rectángulo)", ((min(max(G["T"][0], V["ESC_X"] - V["ESC_W"]/2), V["ESC_X"] + V["ESC_W"]/2) - G["T"][0])**2 + (min(max(G["T"][1], V["ESC_Y"] - V["ESC_WY"]/2), V["ESC_Y"] + V["ESC_WY"]/2) - G["T"][1])**2) ** 0.5 < V["R_B"], "esquina de la caja dentro del barril"),
+     ("Escalera radial insertada en el cilindro (entra en el barril y sale al patio)", V["ESC_R0"] < V["R_B"] - 2 and V["ESC_R1"] > V["R_AL"] + 1, f"r {V['ESC_R0']} … {V['ESC_R1']} (barril {V['R_B']})"),
+     ("Muros de la escalera paralelos y dirigidos al centro de la torre", True, "por construcción: caja en coordenadas radiales"),
      ("Ala larga recta de ancho constante", True, f"W_P = {V['W_P']}"),
     ]
     return R

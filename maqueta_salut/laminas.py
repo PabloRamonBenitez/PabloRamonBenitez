@@ -50,6 +50,14 @@ def estructura_torre(ax, zc):
     (0,20) en la dirección de cada aleta; solo en las plantas de habitaciones."""
     from matplotlib.patches import Circle, Polygon
     T = np.array(E.T)
+    da_esc = math.atan2(E.ESC_WY / 2 + 0.6, E.ESC_R0)
+    # muros de carga de la escalera dentro del edificio: dos muros paralelos hacia el centro + testero interior
+    if zc < E._v["ESC_Z1"]:
+        m_ = VT.MURO; hw = E.ESC_WY / 2; rr = E.ESC_R0
+        rin = E.R_B if zc > E.Z_CU0 else E.R_B
+        for v0, v1 in ((-hw, -hw + m_), (hw - m_, hw)):
+            ax.add_patch(Polygon([E.esc_pt(rr, v0), E.esc_pt(rin, v0), E.esc_pt(rin, v1), E.esc_pt(rr, v1)], closed=True, fc="#9a9a9a", ec="k", lw=1.0, zorder=7.3))
+        ax.add_patch(Polygon([E.esc_pt(rr, -hw), E.esc_pt(rr + m_, -hw), E.esc_pt(rr + m_, hw), E.esc_pt(rr, hw)], closed=True, fc="#9a9a9a", ec="k", lw=1.0, zorder=7.3))
     if zc < E.Z_CU0:
         return
     ax.add_patch(Circle(T, E.R_COL, fc="none", ec="k", lw=1.3, zorder=7))
@@ -62,6 +70,7 @@ def estructura_torre(ax, zc):
     ax.add_patch(Wedge(T, rc + VT.PART, 0, 360, width=VT.PART, fc="#bdbdbd", ec="k", lw=0.6, zorder=7.2))
     for k in range(E._v["N_AL"]):
         a = 2 * math.pi * k / E._v["N_AL"]; c, s_ = math.cos(a), math.sin(a); n_ = np.array([-s_, c]) * VT.PART / 2
+        if abs((a - E.ESC_ANG + math.pi) % (2 * math.pi) - math.pi) < da_esc: continue          # dentro de la escalera
         p0, p1 = T + rc * np.array([c, s_]), T + (rf - VT.MURO) * np.array([c, s_])
         ax.add_patch(Polygon([p0 - n_, p1 - n_, p1 + n_, p0 + n_], closed=True, fc="#bdbdbd", ec="k", lw=0.6, zorder=7.2))
     ax.text(*T, "núcleo", fontsize=6, ha="center", va="center", zorder=8)
@@ -84,8 +93,9 @@ def cotas_planta(ax):
     L.cota(ax, A1 + (k + E.R_COL) * U, np.array(E.C), 5, "hotel")
     pv = np.array(E.P(0, 9.0)); ax.text(*pv, "vestíbulo /\ncirculaciones", fontsize=7, ha="center", va="center", style="italic", zorder=70,
                                         bbox=dict(fc="white", ec="0.5", lw=0.4, pad=1))
-    xe = E._v["ESC_X"]; L.cota(ax, (xe - E.ESC_W / 2, E.ESC_Y1 + 1), (xe + E.ESC_W / 2, E.ESC_Y1 + 1), 1.2, "escalera")
-    L.cota(ax, (0, E.ESC_Y0), (0, E.ESC_Y1), -1.2, "")
+    xe = E._v["ESC_X"]
+    L.cota(ax, E.esc_pt(E.ESC_R0, -E.ESC_WY / 2), E.esc_pt(E.ESC_R1, -E.ESC_WY / 2), -1.5, "escalera")
+    L.cota(ax, E.esc_pt(E.ESC_R1, -E.ESC_WY / 2), E.esc_pt(E.ESC_R1, E.ESC_WY / 2), -1.5, "")
     ax.text(E.KC[0] + 1, 2, f"L {math.degrees(E.TH_L):.0f}°", fontsize=8, color="k")
     V_ = E._v; yA = E.L_L - V_["VEN_FIN"]
     L.cota(ax, (E.W_P, E.L_L), (E.W_P, yA), 7.0, "macizo", fs=5.5)
@@ -95,7 +105,7 @@ def cotas_planta(ax):
             fontsize=6, rotation=90, va="center")
     # cota de cubierta de cada volumen
     for (x, y), z in (((3, 70), E.Z_BAR_C), ((10, 70), E.Z_P1 + 1.0), ((tuple(E.SWP(-12, 9))), E.Z_ALTO), ((tuple(E.SWP(-21.5, 6))), E._v["Z_LAD1"]),
-                      ((xe, (E.ESC_Y0 + E.ESC_Y1) / 2), E.Z_T1 + 1.0), ((14.2, 30), E._v["Z_CON"])):
+                      (E.esc_pt((E.ESC_R0 + E.ESC_R1) / 2, 0), E._v["ESC_Z1"]), ((14.2, 30), E._v["Z_CON"])):
         ax.text(x, y, f"+{z:.2f}".replace(".", ","), fontsize=6.5, color="navy", ha="center", bbox=dict(fc="white", ec="navy", lw=0.4, pad=0.6), zorder=70)
     # trazas de las secciones
     for k, p0, p1, _ in SECC:
@@ -119,10 +129,10 @@ def plantas():
         ax2 = fig.add_axes([0.66, 0.30, 0.33, 0.62])
         planta(ax2, zc, "detalle torre / chaflán", aerea=zc is None)
         ejes(ax2, (E.T[0] - 20, E.T[0] + 20), (E.T[1] - 18, E.T[1] + 22))
-        fig.text(0.66, 0.25, f"Datos de planta: ala larga 12,74 / bar 6,21 (Bing) / bar 1984 hasta el hueco 11: tramo final {E.L_FIN:.2f} (F01, F47; Bing actual 7,81) / concha hasta {E.L_L - E._v['Y_CA']:.2f} del fondo (F73; Bing 35,13).\n"
+        fig.text(0.66, 0.25, f"Datos de planta: ala larga 12,74 / bar 6,21 (Bing) / tramo final sin bar {E.L_FIN:.2f} (Bing, F73) / concha hasta {E.L_L - E._v['Y_CA']:.2f} del fondo (F73; Bing 35,13).\n"
                  f"Largo total 94,82 (Google). Esquina original a 90° con chaflán de {E.L_CH:.1f} m a {math.degrees(E.A_CH):.0f}°.\n"
                  f"Torre sobre el chaflán al {E._v['T_POS']*100:.0f} % desde la calle (algo a la derecha); la columna asoma 1,5 m.\n"
-                 f"Detrás de la torre: vestíbulo y circulaciones. Escalera en el patio: {E.ESC_W:.1f} × {E._v['ESC_WY']:.1f} m (F36, F62, F73, F08, F11).", fontsize=7, va="top")
+                 f"Detrás de la torre: vestíbulo y circulaciones. Escalera: caja radial insertada en el cilindro, {E.ESC_W:.1f} × {E.ESC_WY:.1f} m, muros hacia el centro (usuario, F36, F73, F08).", fontsize=7, va="top")
         OUT.append(fig)
 
 
@@ -232,7 +242,7 @@ def _secc():
      ("L2", ((E.W_P + E.W_EXT) / 2, pl["Q"][1] - 6), ((E.W_P + E.W_EXT) / 2, 100), "LONGITUDINAL por la concha: su perfil curvo y la terraza detrás"),
      ("L3", tuple(T - 32 * U), tuple(T + 26 * U), "LONGITUDINAL por el eje de la torre paralela al chaflán: restaurante, columna, hotel y esquina a 90°"),
      ("S1", tuple(T - 18 * N), tuple(T + 32 * N), "por el eje de la torre perpendicular al chaflán: columna, cuello, ménsulas, barril, visera desplazada y escalera"),
-     ("S2", (-8, yc), (24, yc), "transversal del ala larga por la escalera (encuentro escalera – barril – ala)"),
+     ("S2", E.esc_pt(E.ESC_R1 + 6, 0), E.esc_pt(-8, 0), "por el eje de la escalera, radial al cilindro: caja insertada en la torre y su salida al patio"),
      ("S3", (-8, (pl["Q"][1] + E.Y_CUNA) / 2), (24, (pl["Q"][1] + E.Y_CUNA) / 2), "transversal del ala larga por el bar, la terraza y la concha"),
      ("S4", (-8, E.L_L - E._v["VEN_FIN"] - E._v["S_VEN"] - E._v["VEN_W"] / 2), (24, E.L_L - E._v["VEN_FIN"] - E._v["S_VEN"] - E._v["VEN_W"] / 2), "transversal del ala larga por el eje del hueco 2 (tramo final sin bar): huecos alto y bajo cortados"),
      ("S5", tuple(E.SWP(-14, -6)), tuple(E.SWP(-14, 18)), "transversal del ala corta: banda del restaurante, bloque alto y patio"),
@@ -289,14 +299,14 @@ def alzados():
              f"alturas: fila alta {V['VA_0']}–{V['VA_1']}, baja {V['VB_0']}–{V['VB_1']} (verticales exactas en F73); marco que sale {V['MAR_P']}, vidrio {V['MAR_R']} adentro",
              f"rampa 1 al nivel de la terraza: meseta a +{V['Z_CON']} y pendiente hasta el suelo; arco debajo (F71, F73, F47, F76)",
              f"rampa 2 a la azotea del bar: +{V['Z_P1']} → +{V['Z_BARC']} en {V['R2_L']} m junto a la torre, arco de paso en su llegada, barandilla roja (F71, F73, F76)",
-             f"bar 1984: acaba sobre el hueco 11 ({V['L_FIN']} m del testero) (F01, F47); peto +{V['Z_P1'] + V['H_PET']:.1f}; testero +{V['Z_FIN']}"]),
+             f"bar hasta {V['L_FIN']} m del testero (Bing, F73, F47); peto +{V['Z_P1'] + V['H_PET']:.1f}; testero +{V['Z_FIN']}"]),
            ((0, 1), "ALZADO 3 – CALLE (ala corta)", [("1.webp", "F01"), ("19.webp", "F19"), ("72.webp", "F72")], []),
            ((1, 0), "ALZADO 4 – PATIO INTERIOR DE LA L", [("75.png", "F75 (escalera desde el patio)")], []),
            ((0, -1), "ALZADO 5 – TESTERO DEL ALA LARGA (hacia la torre)",
             [("73.webp", "F73"), ("13.webp", "F13"), ("12.png", "F12")],
             [f"testero +{V['Z_FIN']} con barandilla, puerta de servicio con marquesina y ventana encima (F73)",
-             f"F73 es ACTUAL: lo que asoma tras el testero a ≈ +11 es el bar ampliado después; en 1984 (F01, F47) el bar acaba a {V['L_FIN']} m del testero",
-             f"caja de escalera: lado corto {V['ESC_W']} m visto desde aquí (F73), sale {V['ESC_L']} m del barril, entrante hacia el patio (F75, F13)"])]
+             f"lo que asoma tras el testero a ≈ +11,3 es el extremo del bar, a {V['L_FIN']} m",
+             f"caja de escalera radial (muros hacia el centro de la torre): entra en el cilindro hasta r={V['ESC_R0']} y sale hasta r={V['ESC_R1']}, ancho {V['ESC_WY']} (usuario, F36, F73)"])]
     for d, t, fotos, notas in lst:
         fig = hoja(t)
         ax = fig.add_axes([0.04, 0.16, 0.58, 0.78])
@@ -377,7 +387,7 @@ def coherencia():
         # excluir la caja de escalera (sector trasero, en linea con el ala larga) y el estilobato
         ce = np.array(E.T)
         ang = np.degrees(np.arctan2(a[:, 1] - ce[1], a[:, 0] - ce[0]))
-        dir_esc = math.degrees(math.atan2(E.ESC_Y1 - E.T[1], E._v["ESC_X"] - E.T[0]))
+        dir_esc = math.degrees(E.ESC_ANG)
         lejos = np.abs((ang - dir_esc + 180) % 360 - 180) > 45
         dist = np.hypot(*(a - c).T)
         sel = lejos & (dist < 17.5)
@@ -399,7 +409,7 @@ def coherencia():
     txt += ["", "Planta                    fuente (m)  planos (m)", "-" * 70,
             f"{'ala larga ancho':<25} {12.74:>7.2f}   {E.W_P:>9.2f}   Bing",
             f"{'bar ancho':<25} {6.21:>7.2f}   {E.W_BAR:>9.2f}   Bing",
-            f"{'tramo final (1984)':<25} {37.74:>7.2f}   {E.L_FIN:>9.2f}   F01/F47 (Bing actual 7,81)",
+            f"{'tramo final':<25} {7.81:>7.2f}   {E.L_FIN:>9.2f}   Bing / F73",
             f"{'concha hasta el fondo':<25} {35.13:>7.2f}   {E.L_L - E.Y_CUNA:>9.2f}   Bing",
             f"{'chaflán (P1)':<25} {28.9:>7.2f}   {math.dist(E.A1, E.C):>9.2f}   F09 (12,8+6,5+9,6)",
             f"{'largo total':<25} {94.82:>7.2f}   {E.L_L:>9.2f}   Google",

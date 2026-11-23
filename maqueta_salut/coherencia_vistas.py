@@ -13,10 +13,10 @@ def hueco(x, y, z):    # sonda horizontal: cara mas exterior del solido a esa al
     return None if r.is_empty() else float(r.bounding_box()[3])
 y0 = E.plantas_base()["Q"][1] + V["D_HOTF"]
 chk = [
- ("terraza ala larga (planta / secc. S3 / alzado 2)", ztop(V["W_BAR"] + 2, 70), V["Z_P1"]),
+ ("terraza ala larga junto al bar (planta / secc. S3 / alzado 2)", ztop(V["W_BAR"] + V["V_BAR"] + 3.0, 50), V["Z_P1"]),
  ("peto exterior terraza", ztop(V["W_P"] - 0.15, 70), V["Z_P1"] + V["H_PET"]),
  ("cubierta del bar (a mitad del bar)", ztop(2, (E.plantas_base()["Q"][1] + V["L_L"] - V["L_FIN"]) / 2), V["Z_BARC"]),
- ("terraza abierta tras el bar (1984)", ztop(3, V["L_L"] - V["L_FIN"] + 5), V["Z_P1"]),
+ ("terraza tras el fin del bar", ztop(3, V["L_L"] - V["L_FIN"] + 5), V["Z_P1"]),
  ("tramo final sin bar (testero)", ztop(3, V["L_L"] - 3), V["Z_FIN"]),
  ("barandilla del testero", ztop(3, V["L_L"] - 0.2), V["Z_FIN"] + 1.1),
  ("rampa arriba (superficie)", ztop(V["W_P"] + 1.5, y0 + 0.3), V["Z_CON"]),
@@ -39,11 +39,17 @@ chk.append(("nº huecos fila baja", contar((V["VB_0"] + V["VB_1"]) / 2), V["N_VE
 r = m ^ E.caja(V["W_P"] + 1.4, V["W_P"] + 1.6, y0 + 1, y0 + 1.2, 0.5, 1.0)
 chk.append(("hueco bajo el arco junto al hotel (vacío = 0)", 0.0 if r.is_empty() else 1.0, 0.0))
 t = E.torre()
-bb = (t ^ E.caja(-60, 60, E.ESC_Y0 + 0.1, E.ESC_Y1 - 0.1, 20, 21)).bounding_box()
-chk.append(("escalera: extremo hacia el patio (x, con lamas)", bb[0] + 0.5, V["ESC_X"] - V["ESC_W"] / 2))
-bb2 = (t ^ E.caja(V["ESC_X"] - 1, V["ESC_X"] + 1, -60, 80, 20, 21)).bounding_box()
-chk.append(("escalera: cara hacia el testero (y, con lamas)", bb2[4] - 0.5, E.ESC_Y1))
-bb3 = (t ^ E.caja(V["ESC_X"] - 1, V["ESC_X"] + 1, E.ESC_Y0 - 1, E.ESC_Y1 + 1, 0, 80)).bounding_box()
+import math as _m
+def _r_ext(v, z):
+    best = None
+    for r in [x / 10 for x in range(80, 230)]:
+        px, py = E.esc_pt(r, v)
+        if not (t ^ E.caja(px - 0.04, px + 0.04, py - 0.04, py + 0.04, z - 0.04, z + 0.04)).is_empty(): best = r
+    return best
+chk.append(("escalera: frente exterior (radial, bajo el entrante)", _r_ext(1.0, 2.0), V["ESC_R1"]))
+chk.append(("escalera: entrante en la testa", _r_ext(1.0, 20.0), V["ESC_R1"] - V["ESC_REC"]))
+px, py = E.esc_pt((V["ESC_R0"] + V["ESC_R1"]) / 2, 0)
+bb3 = (t ^ E.caja(px - 0.5, px + 0.5, py - 0.5, py + 0.5, -1, 80)).bounding_box()
 chk.append(("escalera: coronación", bb3[5], V["ESC_Z1"]))
 chk.append(("escalera: baja al suelo", bb3[2], 0.0))
 yb0_ = E.plantas_base()["Q"][1]

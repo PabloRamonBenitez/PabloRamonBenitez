@@ -67,7 +67,7 @@ ZONAS = [
   [([(0, E.W_C), (1.0, E.W_C), (1.0, E.L_L), (0, E.L_L)], 0, E.Z_BAR_C)]),
  # ---------------------------------------------------------------- ESCALERA Y PATIO
  ("Z29", "Escalera trasera: cuerpo, lamas y caja superior", "Escalera", "pri",
-  [([(xe - E.ESC_W / 2, E.ESC_Y0), (xe + E.ESC_W / 2, E.ESC_Y0), (xe + E.ESC_W / 2, E.ESC_Y1 + 0.5), (xe - E.ESC_W / 2, E.ESC_Y1 + 0.5)], E.Z_P1, E.Z_T1 + 1.0)]),
+  [([tuple(p) for p in E.ESC_POLY], E.Z_P1, E._v["ESC_Z1"])]),
  ("Z30", "Encuentro escalera – barril – ala larga", "Escalera", "pri",
   [([(xe - E.ESC_W / 2 - 1, E.ESC_Y0 - 3), (xe + E.ESC_W / 2 + 1, E.ESC_Y0 - 3), (xe + E.ESC_W / 2 + 1, E.ESC_Y0 + 1), (xe - E.ESC_W / 2 - 1, E.ESC_Y0 + 1)], E.Z_P1, E.Z_B1)]),
  ("Z31", "Patio interior de la L", "Escalera", "pri",

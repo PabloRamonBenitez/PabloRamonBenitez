@@ -58,10 +58,13 @@ def catalogo():
     _h(H, "AC1", "ala corta banda calle", "banda", ((a[0] + b[0]) / 2, (a[1] + b[1]) / 2), tt, (tt[1], -tt[0]), x1 - x0, 4.6, 6.6)
     # 6. torre: un hueco por módulo entre aletas y por planta, en la línea de vidrio rf [F04, F06, F09]
     T = E.T; rf = E.R_B - 1.8
+    def en_escalera(a_, r_):          # módulo ocupado por la caja de la escalera insertada en el cilindro
+        return abs((a_ - E.ESC_ANG + math.pi) % (2 * math.pi) - math.pi) < math.atan2(E.ESC_WY / 2 + 1.2, r_)
     for i in range(V["N_PL"]):
         z = E.Z_B0 + i * E.F
         for k in range(V["N_AL"]):
             a_ = 2 * math.pi * (k + 0.5) / V["N_AL"]
+            if en_escalera(a_, rf): continue
             c, s = math.cos(a_), math.sin(a_)
             _h(H, f"T{i}{k:02d}", f"torre planta {i + 1}", "ventana", (T[0] + rf * c, T[1] + rf * s), (-s, c), (c, s),
                2.6 if i == 0 else 2.4, z + 1.7, z + 3.1)
@@ -69,6 +72,7 @@ def catalogo():
     zt = (E.Z_B1 + E.Z_T1) / 2
     for k in range(V["N_AL"]):
         a_ = 2 * math.pi * (k + 0.5) / V["N_AL"]
+        if en_escalera(a_, E.R_T): continue
         c, s = math.cos(a_), math.sin(a_)
         _h(H, f"OJ{k:02d}", "tambor ojos", "ojo", (T[0] + E.R_T * c, T[1] + E.R_T * s), (-s, c), (c, s), 1.6, zt - 0.8, zt + 0.8)
     return H

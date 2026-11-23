@@ -55,33 +55,45 @@ def rampas(ax, zc):
     pmin = V["Z_CON"] * (1 - V["RAMPA_C"]) / (E.Y_CUNA - y0) * 100
     eje_rampa(ax, [(xr, E.Y_CUNA - 0.3), (xr, y0)], 0.0, V["Z_CON"],
               f"RAMPA DE ACCESO · sube · P = {pmin:.0f}–{pmax:.0f} %", discont=arriba)
-    # continuación en curva (meseta a +7,2) alrededor de la esquina
-    poly, borde = E.curva_poligono()
-    WR = E.W_EXT - E.W_P
-    arco = np.array(borde[1:-1])
-    A, B, C = arco[0], arco[len(arco) // 2], arco[-1]           # centro del arco (circuncentro)
-    d_ = 2 * (A[0] * (B[1] - C[1]) + B[0] * (C[1] - A[1]) + C[0] * (A[1] - B[1]))
-    ux = ((A @ A) * (B[1] - C[1]) + (B @ B) * (C[1] - A[1]) + (C @ C) * (A[1] - B[1])) / d_
-    uy = ((A @ A) * (C[0] - B[0]) + (B @ B) * (A[0] - C[0]) + (C @ C) * (B[0] - A[0])) / d_
-    cen = np.array([ux, uy]); Ro = np.linalg.norm(A - cen)
-    eje = [tuple(cen + (p - cen) * (Ro - WR / 2) / Ro) for p in arco[::3]]
-    eje = [(xr, y0)] + eje
-    xs, ys = zip(*eje)
-    ax.plot(xs, ys, color=K, lw=0.6, ls=(0, (5, 3)) if arriba else "-", zorder=81)
-    ax.add_patch(FancyArrowPatch(eje[-2], eje[-1], arrowstyle="-|>", mutation_scale=7, color=K, lw=0.6, zorder=81))
-    mm = eje[len(eje) // 2]
-    ax.text(mm[0] + 1.2, mm[1], "meseta en curva +7,20\n(entrada del hotel debajo)".replace(".", ","), fontsize=4.6, zorder=81)
+    # recorrido del coche en lo alto: gira a la izquierda (hacia fuera, plataforma de giro) y luego a la derecha
+    # hasta el arranque de la rampa del techo del restaurante, que pasa bajo la escalera
+    Qy = pl["Q"][1]; xg = V["GIRO_X"]
+    yb0 = Qy + 0.5; xb = (E.W_BAR + V["V_BAR"]) / 2
+    ctrl = [np.array([xr, y0 + 0.5]), np.array([xg - 1.2, y0 - 0.5]), np.array([xg - 2.0, Qy + 1.2]),
+            np.array([E.W_P - 1.0, Qy + 1.5]), np.array([xb + 2.5, Qy + 0.8]), np.array([xb, yb0 + 2.5])]
+    def bez(P, n=60):                                             # B-spline uniforme cuadrática por los puntos de control
+        out = []
+        for i in range(len(P) - 2):
+            p0, p1, p2 = (P[i] + P[i + 1]) / 2, P[i + 1], (P[i + 1] + P[i + 2]) / 2
+            if i == 0: p0 = P[0]
+            if i == len(P) - 3: p2 = P[-1]
+            for t in np.linspace(0, 1, n // (len(P) - 2)):
+                out.append((1 - t) ** 2 * p0 + 2 * (1 - t) * t * p1 + t ** 2 * p2)
+        return np.array(out)
+    cam = bez(ctrl)
+    ax.plot(cam[:, 0], cam[:, 1], color="#1a5fb4", lw=0.8, ls=(0, (6, 2, 1, 2)), zorder=81)
+    ax.add_patch(FancyArrowPatch(tuple(cam[-4]), tuple(cam[-1]), arrowstyle="-|>", mutation_scale=7, color="#1a5fb4", lw=0.8, zorder=81))
+    ax.text(xg - 1.0, (Qy + y0) / 2, "giro\n+7,20".replace(".", ","), fontsize=4.6, color="#1a5fb4", ha="center", zorder=81)
+    ax.text(xg + 0.4, Qy - 1.6, "plataforma de giro +7,20 (entrada del hotel libre)", fontsize=4.4, style="italic", zorder=81)
     # 2) techo del restaurante en rampa: +7,2 → +11,5
-    yb0 = E.T[1] + V["ESC_R1"] + 0.3; xb = (E.W_BAR + V["V_BAR"]) / 2
     p2 = (E.Z_BAR_C - V["Z_P1"]) / V["R2_L"] * 100
     eje_rampa(ax, [(xb, yb0 + 0.3), (xb, yb0 + V["R2_L"])], V["Z_P1"], E.Z_BAR_C,
-              f"TECHO DEL RESTAURANTE EN RAMPA · sube · P = {p2:.0f} %", discont=zc is not None and zc < E.Z_BAR_C)
+              f"TECHO DEL RESTAURANTE EN RAMPA (bajo la escalera) · sube · P = {p2:.0f} %", discont=zc is not None and zc < E.Z_BAR_C)
 
 
 def escalera(ax, zc):
     """escalera de ida y vuelta dentro de la cuña: dos tramos radiales separados por el muro central"""
     V = E._v
     if zc is None or zc >= V["ESC_Z1"]:
+        return
+    if zc < V["ESC_Z0"]:                                          # la caja queda por encima: contorno en discontinua
+        n = 12
+        pts = [E.esc_ang_pt(V["ESC_RC"], -E.ESC_HB + 2 * E.ESC_HB * k / n) for k in range(n + 1)] + \
+              [E.esc_ang_pt(V["ESC_R0"], E.ESC_HB - 2 * E.ESC_HB * k / n) for k in range(n + 1)]
+        ax.add_patch(Polygon(pts, closed=True, fill=False, ec="0.25", lw=0.8, ls=(0, (6, 3)), zorder=79))
+        c = E.esc_ang_pt((V["ESC_R0"] + V["ESC_RC"]) / 2, 0)
+        ax.text(c[0], c[1], f"caja de escalera\npor encima (+{V['ESC_Z0']:.2f})".replace(".", ","), fontsize=4.3, ha="center", va="center",
+                style="italic", color="0.25", zorder=79)
         return
     r0, r1 = V["ESC_R0"] + 0.3, V["ESC_RC"] - 0.3
     ra, rb = r0 + 1.3, r1 - 1.3                                   # rellanos en los extremos

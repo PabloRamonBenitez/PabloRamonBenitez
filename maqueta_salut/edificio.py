@@ -151,21 +151,16 @@ def plantas_base():
     return dict(P1=P1, PB=PB, Q=Q, IC=IC)
 
 
-def curva_poligono(n=24):
-    """planta de la plataforma curva de la esquina (coordenadas reales) y su borde exterior"""
-    Q = (W_P, plantas_base()["Q"][1]); WR = W_EXT - W_P; Ro = _v["R_CURVA"]
-    nN = (-N[0], -N[1])                                            # hacia fuera del chaflán
-    cx = W_EXT - Ro
-    cy = Q[1] + ((WR - Ro) - nN[0] * (cx - Q[0])) / nN[1]
-    a0, a1 = 0.0, math.atan2(nN[1], nN[0])                         # de +x a la normal exterior del chaflán (sentido horario)
-    arco = [(cx + Ro * math.cos(a0 + (a1 - a0) * k / n), cy + Ro * math.sin(a0 + (a1 - a0) * k / n)) for k in range(n + 1)]
-    T2 = arco[-1]
-    s_ = (T2[0] - T[0]) * U[0] + (T2[1] - T[1]) * U[1] - (R_COL + 0.3)
-    E2 = (T2[0] - s_ * U[0], T2[1] - s_ * U[1])
-    E1 = (E2[0] - WR * nN[0], E2[1] - WR * nN[1])
-    y0 = Q[1] + _v["D_HOTF"]
-    poly = [Q, (W_P, y0), (W_EXT, y0)] + arco + [E2, E1]
-    borde = [(W_EXT, y0)] + arco + [E2]
+def curva_poligono(n=16):
+    """plataforma de giro a +7,2 en lo alto de la rampa de acceso, por delante de la banda del hotel del ala larga:
+    de la fachada del ala (x = W_P) hacia fuera hasta GIRO_X, entre el arranque de la banda (Q) y la llegada de la rampa;
+    esquinas exteriores redondeadas (curva convexa hacia fuera). No toca la fachada del chaflán (entrada del hotel)."""
+    Qy = plantas_base()["Q"][1]; y1 = Qy + _v["D_HOTF"] + _v["R_ENT"]
+    xg = _v["GIRO_X"]; r = _v["R_GIRO"]
+    arco1 = [(xg - r + r * math.cos(-math.pi / 2 + (math.pi / 2) * k / n), Qy + r + r * math.sin(-math.pi / 2 + (math.pi / 2) * k / n)) for k in range(n + 1)]
+    arco2 = [(xg - r + r * math.cos((math.pi / 2) * k / n), y1 - r + r * math.sin((math.pi / 2) * k / n)) for k in range(n + 1)]
+    poly = [(W_P, Qy)] + arco1 + arco2 + [(W_EXT, y1), (W_P, y1)]
+    borde = [(W_P + 0.3, Qy)] + arco1 + arco2 + [(W_EXT, y1)]
     return poly, borde
 
 
@@ -175,14 +170,13 @@ def plataforma_curva():
     poly, borde = curva_poligono()
     P = orient(SP(poly).buffer(0), 1.0)
     out = [prisma(list(P.exterior.coords)[:-1], Z_P1 - _v["E_PLAT"], Z_P1)]
-    anillo = LineString(borde).buffer(0.25, single_sided=True)
-    for side in (anillo, LineString(borde).buffer(-0.25, single_sided=True)):
-        g = side.intersection(P)
+    for side in (True, False):
+        g = LineString(borde).buffer(0.25 if side else -0.25, single_sided=True).intersection(P)
         if g.area > 1.0:
             for gm in getattr(g, "geoms", [g]):
                 if gm.geom_type == "Polygon" and gm.area > 0.05:
                     gm = orient(gm, 1.0)
-                    out.append(prisma(list(gm.exterior.coords)[:-1], Z_P1 - 0.01, Z_P1 + 1.0))       # peto curvo 1 m
+                    out.append(prisma(list(gm.exterior.coords)[:-1], Z_P1 - 0.01, Z_P1 + 1.0))       # peto 1 m
             break
     return out
 
@@ -209,13 +203,12 @@ def base():
     sc.append(mq.translate((xA - 7.0, 0.3, 0)))                       # marquesina curva [PASADA 1: F15]
     s.append(ROT(Manifold.batch_boolean(sc, OpType.Add)))
     # ala larga: bar en la mitad interior hasta el tramo final; terraza con peto en la mitad exterior [F47, Bing]
-    yb0 = max(pl["Q"][1], T[1] + _v["ESC_R1"] + 0.3)          # el bar empieza detrás de la caja de escalera
+    yb0 = pl["Q"][1] + 0.5                                              # la rampa del techo arranca junto a la torre y pasa bajo la escalera
     yb1 = L_L - L_FIN                                                   # 1984: el bar acaba sobre la 1a ventana [F01, F47]
     yr1 = yb0 + _v["R2_L"]                                              # fin de la rampa-cubierta
     s += [caja(0, W_BAR, yr1 - 0.01, yb1, Z_P1 - 0.01, Z_BAR),
           caja(0, W_BAR + _v["V_BAR"], yr1 - 0.01, yb1 + _v["V_BAR"], Z_BAR, Z_BAR_C),     # cubierta plana volada en frente y extremo
           caja(0, 0.1, yb1, L_L, Z_P1 - 0.01, Z_P1 + 1.1),                         # barandilla borde patio de la terraza abierta [F47]
-          caja(W_P - 0.3, W_P, pl["Q"][1], pl["Q"][1] + _v["D_HOTF"], Z_P1 - 0.01, Z_P1 + _v["H_PET"]),   # peto sobre la banda del hotel
           caja(W_P - 0.3, W_P, pl["Q"][1] + _v["D_HOTF"] + _v["R_ENT"], L_L, Z_P1 - 0.01, Z_P1 + _v["H_PET"]),  # peto exterior [F73 +8,5]; abertura R_ENT a la rampa 1
           caja(0, W_P - 0.3, L_L - 0.25, L_L - 0.15, _v["Z_FIN"] - 0.01, _v["Z_FIN"] + 1.1)]   # testero a cota terraza + barandilla [F73]
     # concha: franja exterior que se estrecha de W_EXT a W_P hasta Y_CUNA; alta junto al hotel (+7,3) y baja en
@@ -242,9 +235,10 @@ def base():
         lo, hi = zs(yy), zr(yy)
         return (W_P - 0.02 + x * WR, yy, lo + z * (hi - lo))
     rampa = Manifold.cube((1, 1, 1)).refine(60).warp(f)
+    yp = y0 + _v["R_ENT"]                                                         # el peto empieza al salir de la plataforma de giro
     def fp(v):
         x, y, z = v
-        yy = y0 + min(max(y, 0.0), 1.0) * LR
+        yy = yp + min(max(y, 0.0), 1.0) * (YB - yp)
         return (W_P + WR - 0.25 + x * 0.25, yy, zr(yy) - 0.01 + z * 1.0)          # peto de 1 m en el borde exterior
     peto = Manifold.cube((1, 1, 1)).refine(40).warp(fp)
     s += [rampa, peto]
@@ -369,7 +363,7 @@ def torre():
     m = Manifold.batch_boolean(s, OpType.Add)
     # 1) el cilindro se interrumpe en ESC_SEC grados (balcones, aletas, forjados, fachada)
     m = m - sector(ESC_R0 + 0.3, R_AL + 1.0, Z_CU1, _v["ESC_Z1"] + 0.5, -ESC_HA + 0.01, ESC_HA - 0.01)
-    esc = [sector(ESC_R0, ESC_RC, 0.0, _v["ESC_Z1"], -ESC_HB, ESC_HB)]                # 2) cuerpo de escalera en cuña (cerrado)
+    esc = [sector(ESC_R0, ESC_RC, _v["ESC_Z0"], _v["ESC_Z1"], -ESC_HB, ESC_HB)]       # 2) cuerpo en cuña; por debajo pasa la rampa
     RR = _v["ESC_RR"]
     for d0, d1 in ((-ESC_HA, -ESC_HB), (ESC_HB, ESC_HA)):                              # 3) franjas retranqueadas a cada lado
         esc.append(sector(ESC_R0, RR, Z_CU1, Z_B1 + 0.65, d0, d1))                     #    fachada retranqueada (macizo detrás)
@@ -400,7 +394,7 @@ def torre():
     # pantalla de lamas que forra el cuerpo en cuña por su cara exterior y sus dos caras laterales, separada 0,3 [F08, F11, F13]
     lam = []
     def lama(r, da, rot_r=True):
-        return (caja(-0.25, 0.25, -0.12, 0.12, Z_P1 + 0.3, _v["ESC_Z1"] - 0.4) if rot_r else caja(-0.12, 0.12, -0.25, 0.25, Z_P1 + 0.3, _v["ESC_Z1"] - 0.4)) \
+        return (caja(-0.25, 0.25, -0.12, 0.12, _v["ESC_Z0"] + 0.3, _v["ESC_Z1"] - 0.4) if rot_r else caja(-0.12, 0.12, -0.25, 0.25, _v["ESC_Z0"] + 0.3, _v["ESC_Z1"] - 0.4)) \
             .translate((r, 0, 0)).rotate((0, 0, math.degrees(ESC_ANG + da))).translate((T[0], T[1], 0))
     nl = int(2 * ESC_HB * ESC_R1 / 0.8)
     for k in range(nl + 1):

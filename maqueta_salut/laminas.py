@@ -64,7 +64,7 @@ def estructura_torre(ax, zc):
     T = np.array(E.T)
     da_esc = E.ESC_HA + 0.02
     # muros de carga de la escalera dentro del edificio: dos muros paralelos hacia el centro + testero interior
-    if zc < E._v["ESC_Z1"]:                     # escalera: cuerpo en cuña (muros 0,30) forrado de lamas
+    if E._v["ESC_Z0"] < zc < E._v["ESC_Z1"]:     # escalera: cuerpo en cuña (muros 0,30) forrado de lamas
         def sec(r0, r1, d0, d1, n=12):
             return [E.esc_ang_pt(r1, d0 + (d1 - d0) * k / n) for k in range(n + 1)] + [E.esc_ang_pt(r0, d1 - (d1 - d0) * k / n) for k in range(n + 1)]
         HB, mw = E.ESC_HB, math.atan2(VT.MURO, E.ESC_RC)
@@ -72,7 +72,7 @@ def estructura_torre(ax, zc):
             ax.add_patch(Polygon(sec(E.ESC_R0, E.ESC_RC, d0, d1), closed=True, fc="#9a9a9a", ec="k", lw=1.0, zorder=7.3))
         for r0 in (E.ESC_R0, E.ESC_RC - VT.MURO):
             ax.add_patch(Polygon(sec(r0, r0 + VT.MURO, -HB, HB), closed=True, fc="#9a9a9a", ec="k", lw=1.0, zorder=7.3))
-        if zc > E.Z_P1:
+        if zc > E._v["ESC_Z0"]:
             nl = int(2 * HB * E.ESC_R1 / 0.8)
             for k in range(nl + 1):
                 da = -HB + 2 * HB * k / nl

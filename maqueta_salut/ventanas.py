@@ -79,7 +79,7 @@ def catalogo():
                0.7 * RR * (E.ESC_HA - E.ESC_HB), z + 1.0, z + 2.6)
     # 6c. puerta de la escalera a la terraza (+Z_P1), junto al arranque de la rampa del techo del restaurante
     c, s = math.cos(E.ESC_ANG), math.sin(E.ESC_ANG)
-    for nm, z0 in (("EP1", E.Z_P1),):
+    for nm, z0 in ():
         _h(H, nm, "escalera puertas", "puerta", (T[0] + V["ESC_RC"] * c, T[1] + V["ESC_RC"] * s), (-s, c), (c, s), 1.2, z0, z0 + 2.2)
     # 7. tambor: 19 ojos circulares [F01, F09]
     zt = (E.Z_B1 + E.Z_T1) / 2

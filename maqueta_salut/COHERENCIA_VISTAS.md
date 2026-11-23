@@ -8,7 +8,7 @@
 | terraza tras el fin del bar | 7.20 | 7.20 | OK |
 | tramo final sin bar (testero) | 7.20 | 7.20 | OK |
 | barandilla del testero | 8.30 | 8.30 | OK |
-| rampa arriba (superficie) | 7.16 | 7.20 | OK |
+| rampa arriba (superficie) | 7.20 | 7.20 | OK |
 | rampa de acceso a mitad (perfil curvo) | 3.97 | 3.96 | OK |
 | largo ala larga L_L (muro, sin la marquesina) | 94.80 | 94.80 | OK |
 | vidrio fila alta (MAR_R tras el frente del marco) | 12.66 | 12.66 | OK |
@@ -25,13 +25,12 @@
 | escalera: lamas a los lados de la cuña | 1.00 | 1.00 | OK |
 | escalera: no sobresale más allá de las lamas | 1.00 | 1.00 | OK |
 | escalera: coronación (cubierta en cuña, borde exterior) | 40.50 | 40.50 | OK |
-| escalera: baja al suelo | 0.00 | 0.00 | OK |
+| escalera: arranca sobre la rampa (ESC_Z0) | 12.50 | 12.50 | OK |
 | rampa 1 llega a la cota de la terraza (sin escalón) | 7.20 | 7.20 | OK |
 | techo del restaurante: arranca a cota de terraza junto a la torre | 7.25 | 7.25 | OK |
 | techo del restaurante: a mitad de la rampa | 9.36 | 9.35 | OK |
 | techo del restaurante: llega a la azotea | 11.50 | 11.50 | OK |
-| la rampa del techo no pisa la escalera | 1.00 | 1.00 | OK |
-| puerta de la escalera a la terraza abierta (vacío = 1) | 1.00 | 1.00 | OK |
+| la rampa del techo pasa bajo la escalera con ≥ 2,5 m libres | 1.00 | 1.00 | OK |
 | relieve del marco (frente) | 12.82 | 12.82 | OK |
 | huecos del catálogo abiertos en el 3D (ala + torre) | 120.00 | 120.00 | OK |
 | hueco 11 por encima de la concha (concha bajo su alféizar) | 0.40 | 0.40 | OK |
@@ -39,9 +38,8 @@
 | pasillo entre tambor y banda (vacío a +Z_T1−0,5) | 1.00 | 1.00 | OK |
 | peto del tambor hasta +Z_T1 | 1.00 | 1.00 | OK |
 | remate: coronación | 50.10 | 50.10 | OK |
-| peto de la terraza sobre la banda del hotel | 8.50 | 8.50 | OK |
-| abertura del peto donde llega la rampa 1 | 7.20 | 7.20 | OK |
+| entrada a la terraza abierta sobre la banda del hotel | 7.20 | 7.20 | OK |
 | barandilla en el lado largo de la azotea del bar | 12.50 | 12.50 | OK |
-| rampa: da la vuelta a la esquina en curva (losa a +7,2 en mitad del arco) | 7.20 | 7.20 | OK |
-| peto curvo en el borde exterior de la curva | 8.20 | 8.20 | OK |
-| bajo la curva, paso libre (entrada del hotel) | 1.00 | 1.00 | OK |
+| plataforma de giro a +7,2 (curva exterior) | 7.20 | 7.20 | OK |
+| peto curvo de la plataforma de giro | 8.20 | 8.20 | OK |
+| fachada del chaflán libre: entrada del hotel sin losa delante | 1.00 | 1.00 | OK |

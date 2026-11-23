@@ -152,7 +152,7 @@ def comprobacion():
      ("Ménsulas cierran cuello → aletas sin hueco", V["Z_CU1"] < V["Z_ALE"], f"{V['Z_CU1']} → {V['Z_ALE']}"),
      ("Primer forjado del barril dentro de las ménsulas/aletas", V["Z_CU1"] <= V["Z_B0"] <= V["Z_ALE"], f"Z_B0 = {V['Z_B0']}"),
      ("Planta tipo del barril habitable (≥ 2,9 m)", V["F"] >= 2.9, f"F = {V['F']}"),
-     ("Escalera baja al suelo y llega por encima del tambor", V["ESC_Z1"] > V["Z_T1"], f"0 → {V['ESC_Z1']}"),
+     ("Escalera llega por encima del tambor y deja paso a la rampa debajo", V["ESC_Z1"] > V["Z_T1"] and V["ESC_Z0"] > V["Z_P1"] + 2.5, f"{V['ESC_Z0']} → {V['ESC_Z1']}"),
      ("Visera mayor que la banda que la sostiene", V["R_V"] > V["R_G"], f"{V['R_V']} > {V['R_G']}"),
      ("La visera desplazada sigue apoyando en la banda (desplazamiento < R_V − R_G + margen)",
       math.hypot(V["OV_X"], V["OV_Y"]) < V["R_V"] - V["R_G"] + 2.5, f"desplaz. {math.hypot(V['OV_X'], V['OV_Y']):.2f} m"),

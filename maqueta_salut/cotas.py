@@ -22,7 +22,7 @@ COTAS = {
  "MAR_P": (0.08, "relieve del marco del hueco sobre el muro", "F73 perfiles: 0,08 / 0,07 / 0,07"),
  "MAR_B": (0.27, "banda del marco", "F73: 0,08–0,09 S"),
  "MAR_R": (0.16, "del frente del marco al vidrio (2 × relieve)", "F73 escalón interior ≈ 2× exterior · usuario"),
- "R2_L": (19.0, "rampa del techo del restaurante: desde la terraza junto a la torre (+7,2) hasta la cubierta plana del bar (+11,5)", "usuario · F76 (la cubierta baja hasta la terraza junto a la torre) · F71 (tramo inclinado junto a la torre)"),
+ "R2_L": (19.0, "rampa del techo del restaurante: arranca junto a la torre a +7,2, pasa bajo la caja de escaleras y llega a la cubierta plana del bar (+11,5)", "usuario · F76 (la cubierta baja hasta la terraza junto a la torre) · F71 (tramo inclinado junto a la torre)"),
  "Y_CA":   (55.9, "pie de la rampa de acceso − R_FIN (el pie sobre la fachada es Y_CA + R_FIN = 58,9)", "Bing 59,67 · F73: el hueco 11 se ve por encima de la rampa"),
  "R_FIN":  (3.0,  "desarrollo de la curva final de la concha (cae casi vertical arriba y se abre abajo)", "F73 (tramo alto casi vertical), F71, F47 (estimado ± 2)"),
  "ESC_Y": (22.71, "centro de la caja a lo largo del eje radial", "F58 · ESC_R0/ESC_R1"),
@@ -36,7 +36,9 @@ COTAS = {
  "H_PT": (1.0, "peto del tambor sobre el pasillo de servicio entre tambor y banda", "F08: pasillo y peto entre el tambor y la banda acristalada"),
  "R_ENT": (3.0, "abertura del peto de la terraza donde llega la rampa 1", "lógica de recorrido"),
  "RAMPA_C": (0.2, "convexidad del perfil de la rampa de acceso: z = Z_CON·(1−u)·(1+c·u); pendiente 14 % arriba, 22 % abajo", "F76 (maqueta: rampa curva desde la plaza), F47, F71"),
- "R_CURVA": (8.0, "radio exterior de la curva con la que la rampa de acceso da la vuelta a la esquina del chaflán (a +7,2)", "F76 maqueta (curva con arco debajo junto a la torre) · foto Sam Glover (cara curva bajo el barril) · foto del hotel (entrada bajo la losa)"),
+ "R_GIRO": (3.0, "radio de la esquina curva (convexa hacia fuera) de la plataforma de giro en lo alto de la rampa de acceso", "usuario: el coche gira a la izquierda y luego a la derecha · F76 · foto S. Glover"),
+ "GIRO_X": (19.0, "borde exterior de la plataforma de giro (x)", "espacio de giro de un coche (Ø ≈ 11 m entre fachada del ala y borde)"),
+ "ESC_Z0": (12.5, "arranque inferior del cuerpo de escalera: la rampa del techo del restaurante pasa por debajo", "usuario: la rampa sube por debajo de la caja de escaleras"),
  "E_PLAT": (1.0, "canto de la losa de la curva / plataforma sobre la entrada del hotel", "estimado"),
  "H_PET":  (1.3,  "peto exterior de la terraza del ala larga (corona ≈ +8,5)", "F73 esquina del testero +8,5 ± 0,6"),
  "VA_0": (4.63, "alféizar fila alta (0,545 H)", "F73 vertical exacta, 3 huecos ±0,006 H"),
@@ -141,7 +143,7 @@ def elementos():
     xA = g["xA"]
     pri("bloque alto ala corta", [SWP(-V_["L_C"] + V_["L_LAD"], 5.5), SWP(xA - 1, 5.5), SWP(xA - 1, V_["W_C"]), SWP(-V_["L_C"] + V_["L_LAD"], V_["W_C"])], V_["Z_P1"], V_["Z_ALTO"], "Z18")
     pri("caja de ladrillo", [SWP(-V_["L_C"], 0), SWP(-V_["L_C"] + V_["L_LAD"], 0), SWP(-V_["L_C"] + V_["L_LAD"], V_["W_C"]), SWP(-V_["L_C"], V_["W_C"])], V_["Z_LAD0"], V_["Z_LAD1"], "Z19")
-    yb0 = max(g["Q"][1], T[1] + V_["ESC_R1"] + 0.3)          # el bar empieza detrás de la escalera
+    yb0 = g["Q"][1] + 0.5                                     # la rampa del techo arranca junto a la torre, bajo la escalera
     import math as _mm
     pri("techo del restaurante en rampa", [(0, yb0), (V_["W_BAR"] + V_["V_BAR"], yb0), (V_["W_BAR"] + V_["V_BAR"], yb0 + V_["R2_L"]), (0, yb0 + V_["R2_L"])], V_["Z_P1"], V_["Z_BARC"], "Z25")
     pri("bar", [(0, yb0), (V_["W_BAR"], yb0), (V_["W_BAR"], V_["L_L"] - V_["L_FIN"]), (0, V_["L_L"] - V_["L_FIN"])], V_["Z_P1"], V_["Z_BAR"], "Z25")
@@ -178,7 +180,7 @@ RANGOS = {
  "Z_LAD1": 1.0, "Z_CON": 0.8, "Z_CU0": 0.6, "Z_CU1": 0.6, "Z_ALE": 0.6, "Z_B0": 0.4, "F": 0.05, "N_PL": 0,
  "Z_T1": 0.5, "Z_G1": 0.5, "Z_V1": 0.5, "Z_R1": 0.6, "R_COL": 0.3, "R_CONO": 0.3, "R_CU": 0.5, "R_B": 0.3,
  "R_AL": 0.3, "R_T": 0.5, "R_G": 0.5, "R_V": 0.6, "R_R": 0.25, "OV_X": 1.0, "OV_Y": 1.5, "OR_X": 0.5, "N_AL": 0,
- "ESC_W": 1.5, "ESC_X": 1.0, "H_PT": 0.3, "R_ENT": 1.0, "R_CURVA": 3.0, "E_PLAT": 0.3, "RAMPA_C": 0.1, "ESC_SEC": 4.0, "ESC_SECB": 4.0, "ESC_RR": 0.8, "ESC_RC": 1.0, "ESC_Y": 2.0, "ESC_Z1": 0.8, "W_P": 0.5, "W_BAR": 0.5, "V_BAR": 0.5, "L_L": 1.0, "L_FIN": 0.5, "Y_CA": 0.6, "R_FIN": 2.0, "S_VEN": 0.3, "N_VEN_B": 0, "MAR_P": 0.02, "MAR_B": 0.05, "MAR_R": 0.04, "R2_L": 3.0, "N_VEN": 0, "VEN_W": 0.2, "VEN_FIN": 1.5, "Z_ARC": 0.5, "U_ARC": 0.1, "D_CUNA": 1.0,
+ "ESC_W": 1.5, "ESC_X": 1.0, "H_PT": 0.3, "R_ENT": 1.0, "R_GIRO": 1.0, "GIRO_X": 2.0, "ESC_Z0": 1.0, "E_PLAT": 0.3, "RAMPA_C": 0.1, "ESC_SEC": 4.0, "ESC_SECB": 4.0, "ESC_RR": 0.8, "ESC_RC": 1.0, "ESC_Y": 2.0, "ESC_Z1": 0.8, "W_P": 0.5, "W_BAR": 0.5, "V_BAR": 0.5, "L_L": 1.0, "L_FIN": 0.5, "Y_CA": 0.6, "R_FIN": 2.0, "S_VEN": 0.3, "N_VEN_B": 0, "MAR_P": 0.02, "MAR_B": 0.05, "MAR_R": 0.04, "R2_L": 3.0, "N_VEN": 0, "VEN_W": 0.2, "VEN_FIN": 1.5, "Z_ARC": 0.5, "U_ARC": 0.1, "D_CUNA": 1.0,
  "W_EXT": 1.0, "THL": 2.3, "ACH": 8.0, "REST": 1.0, "COL": 0.3, "HOT": 1.0, "L_CHF": 3.0, "T_POS": 0.1,
  "D_HOTF": 2.0, "RET": 0.5, "RETR": 0.5, "L_C": 3.0, "W_C": 1.0, "L_LAD": 1.5,
 }

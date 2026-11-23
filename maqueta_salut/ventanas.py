@@ -77,9 +77,9 @@ def catalogo():
             c, s = math.cos(a_), math.sin(a_)
             _h(H, f"ER{i}{nm}", "escalera retranqueo", "ventana", (T[0] + RR * c, T[1] + RR * s), (-s, c), (c, s),
                0.7 * RR * (E.ESC_HA - E.ESC_HB), z + 1.0, z + 2.6)
-    # 6c. puertas de la escalera en su cara exterior: a la terraza (+Z_P1, bajo la meseta) y a la meseta / azotea del bar (+Z_BARC)
+    # 6c. puerta de la escalera a la terraza (+Z_P1), junto al arranque de la rampa del techo del restaurante
     c, s = math.cos(E.ESC_ANG), math.sin(E.ESC_ANG)
-    for nm, z0 in (("EP1", E.Z_P1), ("EP2", E.Z_BAR_C)):
+    for nm, z0 in (("EP1", E.Z_P1),):
         _h(H, nm, "escalera puertas", "puerta", (T[0] + V["ESC_RC"] * c, T[1] + V["ESC_RC"] * s), (-s, c), (c, s), 1.2, z0, z0 + 2.2)
     # 7. tambor: 19 ojos circulares [F01, F09]
     zt = (E.Z_B1 + E.Z_T1) / 2

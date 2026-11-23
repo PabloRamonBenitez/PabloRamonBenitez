@@ -27,14 +27,11 @@
 | escalera: coronación (cubierta en cuña, borde exterior) | 40.50 | 40.50 | OK |
 | escalera: baja al suelo | 0.00 | 0.00 | OK |
 | rampa 1 llega a la cota de la terraza (sin escalón) | 7.20 | 7.20 | OK |
-| rampa 2 abajo = terraza | 7.27 | 7.27 | OK |
-| rampa 2 a mitad | 9.36 | 9.35 | OK |
-| rampa 2 arriba = meseta = azotea del bar | 11.50 | 11.50 | OK |
-| rampa 2 no pisa la escalera (sin sólido de escalera en su huella) | 1.00 | 1.00 | OK |
-| puerta escalera a la terraza abierta (vacío = 1) | 1.00 | 1.00 | OK |
-| puerta escalera a la meseta abierta (vacío = 1) | 1.00 | 1.00 | OK |
-| puerta inferior (+7,2) da al bar contiguo (hueco escalera-bar ≤ 0,5) | 1.00 | 1.00 | OK |
-| paso bajo la meseta por el arco, a cota de terraza (vacío = 1) | 1.00 | 1.00 | OK |
+| techo del restaurante: arranca a cota de terraza junto a la torre | 7.25 | 7.25 | OK |
+| techo del restaurante: a mitad de la rampa | 9.36 | 9.35 | OK |
+| techo del restaurante: llega a la azotea | 11.50 | 11.50 | OK |
+| la rampa del techo no pisa la escalera | 1.00 | 1.00 | OK |
+| puerta de la escalera a la terraza abierta (vacío = 1) | 1.00 | 1.00 | OK |
 | relieve del marco (frente) | 12.82 | 12.82 | OK |
 | huecos del catálogo abiertos en el 3D (ala + torre) | 120.00 | 120.00 | OK |
 | hueco 11 por encima de la concha (concha bajo su alféizar) | 0.40 | 0.40 | OK |
@@ -45,3 +42,6 @@
 | peto de la terraza sobre la banda del hotel | 8.50 | 8.50 | OK |
 | abertura del peto donde llega la rampa 1 | 7.20 | 7.20 | OK |
 | barandilla en el lado largo de la azotea del bar | 12.50 | 12.50 | OK |
+| rampa: da la vuelta a la esquina en curva (losa a +7,2 en mitad del arco) | 7.20 | 7.20 | OK |
+| peto curvo en el borde exterior de la curva | 8.20 | 8.20 | OK |
+| bajo la curva, paso libre (entrada del hotel) | 1.00 | 1.00 | OK |

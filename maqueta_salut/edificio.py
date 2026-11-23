@@ -151,6 +151,42 @@ def plantas_base():
     return dict(P1=P1, PB=PB, Q=Q, IC=IC)
 
 
+def curva_poligono(n=24):
+    """planta de la plataforma curva de la esquina (coordenadas reales) y su borde exterior"""
+    Q = (W_P, plantas_base()["Q"][1]); WR = W_EXT - W_P; Ro = _v["R_CURVA"]
+    nN = (-N[0], -N[1])                                            # hacia fuera del chaflán
+    cx = W_EXT - Ro
+    cy = Q[1] + ((WR - Ro) - nN[0] * (cx - Q[0])) / nN[1]
+    a0, a1 = 0.0, math.atan2(nN[1], nN[0])                         # de +x a la normal exterior del chaflán (sentido horario)
+    arco = [(cx + Ro * math.cos(a0 + (a1 - a0) * k / n), cy + Ro * math.sin(a0 + (a1 - a0) * k / n)) for k in range(n + 1)]
+    T2 = arco[-1]
+    s_ = (T2[0] - T[0]) * U[0] + (T2[1] - T[1]) * U[1] - (R_COL + 0.3)
+    E2 = (T2[0] - s_ * U[0], T2[1] - s_ * U[1])
+    E1 = (E2[0] - WR * nN[0], E2[1] - WR * nN[1])
+    y0 = Q[1] + _v["D_HOTF"]
+    poly = [Q, (W_P, y0), (W_EXT, y0)] + arco + [E2, E1]
+    borde = [(W_EXT, y0)] + arco + [E2]
+    return poly, borde
+
+
+def plataforma_curva():
+    from shapely.geometry import Polygon as SP, LineString
+    from shapely.geometry.polygon import orient
+    poly, borde = curva_poligono()
+    P = orient(SP(poly).buffer(0), 1.0)
+    out = [prisma(list(P.exterior.coords)[:-1], Z_P1 - _v["E_PLAT"], Z_P1)]
+    anillo = LineString(borde).buffer(0.25, single_sided=True)
+    for side in (anillo, LineString(borde).buffer(-0.25, single_sided=True)):
+        g = side.intersection(P)
+        if g.area > 1.0:
+            for gm in getattr(g, "geoms", [g]):
+                if gm.geom_type == "Polygon" and gm.area > 0.05:
+                    gm = orient(gm, 1.0)
+                    out.append(prisma(list(gm.exterior.coords)[:-1], Z_P1 - 0.01, Z_P1 + 1.0))       # peto curvo 1 m
+            break
+    return out
+
+
 def base():
     pl = plantas_base()
     s = [prisma(pl["PB"], 0, Z_PB + 0.01), prisma(pl["P1"], Z_PB, Z_P1)]
@@ -175,8 +211,9 @@ def base():
     # ala larga: bar en la mitad interior hasta el tramo final; terraza con peto en la mitad exterior [F47, Bing]
     yb0 = max(pl["Q"][1], T[1] + _v["ESC_R1"] + 0.3)          # el bar empieza detrás de la caja de escalera
     yb1 = L_L - L_FIN                                                   # 1984: el bar acaba sobre la 1a ventana [F01, F47]
-    s += [caja(0, W_BAR, yb0, yb1, Z_P1 - 0.01, Z_BAR),
-          caja(0, W_BAR + _v["V_BAR"], yb0, yb1 + _v["V_BAR"], Z_BAR, Z_BAR_C),     # cubierta volada en frente y extremo
+    yr1 = yb0 + _v["R2_L"]                                              # fin de la rampa-cubierta
+    s += [caja(0, W_BAR, yr1 - 0.01, yb1, Z_P1 - 0.01, Z_BAR),
+          caja(0, W_BAR + _v["V_BAR"], yr1 - 0.01, yb1 + _v["V_BAR"], Z_BAR, Z_BAR_C),     # cubierta plana volada en frente y extremo
           caja(0, 0.1, yb1, L_L, Z_P1 - 0.01, Z_P1 + 1.1),                         # barandilla borde patio de la terraza abierta [F47]
           caja(W_P - 0.3, W_P, pl["Q"][1], pl["Q"][1] + _v["D_HOTF"], Z_P1 - 0.01, Z_P1 + _v["H_PET"]),   # peto sobre la banda del hotel
           caja(W_P - 0.3, W_P, pl["Q"][1] + _v["D_HOTF"] + _v["R_ENT"], L_L, Z_P1 - 0.01, Z_P1 + _v["H_PET"]),  # peto exterior [F73 +8,5]; abertura R_ENT a la rampa 1
@@ -211,35 +248,32 @@ def base():
         return (W_P + WR - 0.25 + x * 0.25, yy, zr(yy) - 0.01 + z * 1.0)          # peto de 1 m en el borde exterior
     peto = Manifold.cube((1, 1, 1)).refine(40).warp(fp)
     s += [rampa, peto]
-    # RAMPA 2 (F71, F76) con lógica de recorrido: nace en la terraza (+Z_P1) lejos de la torre y SUBE HACIA LA TORRE
-    # hasta una meseta a la cota de la azotea del bar (+Z_BARC) delante de la escalera; la escalera tiene puerta a la
-    # terraza (bajo la meseta, por el arco) y a la meseta. Nunca se pasa de rampa a peldaños.
-    xr2, W2 = _v["R2_X"], _v["R2_W"]
-    y_esc = T[1] + _v["ESC_R1"]                       # frente de lamas de la escalera
-    y_top = y_esc + _v["R2_PLAT"]; y_low = y_top + _v["R2_L"]
-    def f2(v):
-        x, y, z = v
-        u = min(max(y, 0.0), 1.0)                     # u=0 arriba (junto a la torre), u=1 abajo
-        zt = Z_BAR_C - u * (Z_BAR_C - Z_P1)
-        return (xr2 + x * W2, y_top + u * (y_low - y_top), Z_P1 - 0.01 + z * (zt - Z_P1 + 0.01))
-    rampa2 = Manifold.cube((1, 1, 1)).refine(30).warp(f2)
-    def f2p(v):
+    # LA RAMPA DA LA VUELTA A LA ESQUINA EN CURVA [usuario; F76, foto S. Glover, foto del hotel]: a +7,2 la rampa sigue
+    # por delante de la banda del hotel, gira con radio R_CURVA alrededor de la esquina y llega delante del chaflán
+    # hasta la columna, donde enlaza con la cubierta de la base; debajo queda la entrada del hotel.
+    s += plataforma_curva()
+    # EL TECHO DEL RESTAURANTE EMPIEZA EN RAMPA [usuario, F76, F71]: junto a la torre la cubierta del bar nace a la
+    # cota de la terraza (+Z_P1) y sube en rampa, en todo el ancho de la cubierta, hasta la cubierta plana (+Z_BARC);
+    # debajo, el restaurante con techo inclinado. Se sube a la azotea andando por la propia cubierta.
+    WB = W_BAR + _v["V_BAR"]
+    def fw(v):
         x, y, z = v
         u = min(max(y, 0.0), 1.0)
-        zt = Z_BAR_C - u * (Z_BAR_C - Z_P1)
-        return (xr2 + W2 - 0.2 + x * 0.2, y_top + u * (y_low - y_top), zt - 0.01 + z * 1.0)
-    s += [rampa2, Manifold.cube((1, 1, 1)).refine(30).warp(f2p),
-          caja(0, xr2 + W2, y_esc, y_top, Z_BAR, Z_BAR_C),                                   # meseta (losa) a +Z_BARC
-          caja(xr2 + W2 - 0.1, xr2 + W2, y_esc, y_top, Z_BAR_C - 0.01, Z_BAR_C + 1.0),       # barandilla meseta
-          caja(xr2 - 0.1, xr2 + W2, y_top - 0.3, y_top, Z_P1 - 0.01, Z_BAR),                      # muro bajo la llegada (con arco)
-          caja(0, W_BAR + _v["V_BAR"], yb1 + _v["V_BAR"] - 0.1, yb1 + _v["V_BAR"], Z_BAR_C - 0.01, Z_BAR_C + 1.0),    # barandilla azotea (extremo)
-          caja(W_BAR + _v["V_BAR"] - 0.1, W_BAR + _v["V_BAR"], y_top, yb1 + _v["V_BAR"], Z_BAR_C - 0.01, Z_BAR_C + 1.0), # lado largo (F73 barandilla roja)
-          caja(0, 0.1, y_top, yb1 + _v["V_BAR"], Z_BAR_C - 0.01, Z_BAR_C + 1.0)]                                     # lado patio
+        zt = Z_P1 + u * (Z_BAR_C - Z_P1)
+        return (x * WB, yb0 + u * (yr1 - yb0), Z_P1 - 0.01 + z * (zt - Z_P1 + 0.01))
+    cuna = Manifold.cube((1, 1, 1)).refine(30).warp(fw)
+    def barand(x0_):
+        def g(v):
+            x, y, z = v
+            u = min(max(y, 0.0), 1.0)
+            zt = Z_P1 + u * (Z_BAR_C - Z_P1)
+            return (x0_ + x * 0.1, yb0 + u * (yr1 - yb0), zt - 0.01 + z * 1.0)
+        return Manifold.cube((1, 1, 1)).refine(20).warp(g)
+    s += [cuna, barand(WB - 0.1), barand(0.0),
+          caja(0, WB, yb1 + _v["V_BAR"] - 0.1, yb1 + _v["V_BAR"], Z_BAR_C - 0.01, Z_BAR_C + 1.0),    # barandilla azotea (extremo)
+          caja(WB - 0.1, WB, yr1 - 0.01, yb1 + _v["V_BAR"], Z_BAR_C - 0.01, Z_BAR_C + 1.0),           # lado largo (F73 barandilla roja)
+          caja(0, 0.1, yr1 - 0.01, yb1 + _v["V_BAR"], Z_BAR_C - 0.01, Z_BAR_C + 1.0)]                 # lado patio
     m = Manifold.batch_boolean(s, OpType.Add)
-    arc = Manifold.cylinder(1.0, _v["ARC2_W"] / 2, _v["ARC2_W"] / 2, 48).rotate((90, 0, 0))     # arco de paso bajo la llegada [F71, F76]
-    xa = xr2 + W2 / 2
-    arc = arc.translate((xa, y_top + 0.35, Z_P1 + 1.6)) + caja(xa - _v["ARC2_W"] / 2, xa + _v["ARC2_W"] / 2, y_top - 0.65, y_top + 0.35, Z_P1, Z_P1 + 1.6)
-    m = m - arc
     # huecos de ventanas (franjas continuas casi a paño) [F09, F14]
     hue = [ROT(caja(-L_C + L_LADR + 0.4, xA, -1, 0.3, 4.6, 6.6))]
     # HUECOS DEL ALA LARGA (pasada 11, proporciones F73/F01/F47): 11 arriba, 7 abajo bajo los 7 más cercanos al

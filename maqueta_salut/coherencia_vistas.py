@@ -54,19 +54,15 @@ px, py = E.esc_ang_pt(V["ESC_RC"] - 0.3, 0)
 bb3 = (t ^ E.caja(px - 0.1, px + 0.1, py - 0.1, py + 0.1, -1, 80)).bounding_box()
 chk.append(("escalera: coronación (cubierta en cuña, borde exterior)", bb3[5], V["ESC_Z1"]))
 chk.append(("escalera: baja al suelo", (t ^ E.caja(*(lambda q: (q[0]-.05, q[0]+.05, q[1]-.05, q[1]+.05))(E.esc_ang_pt(9.0, 0.0)), -1, 1)).bounding_box()[2], 0.0))
-y_esc_ = E.T[1] + V["ESC_R1"]; y_top_ = y_esc_ + V["R2_PLAT"]; y_low_ = y_top_ + V["R2_L"]
+yb0_ = E.T[1] + V["ESC_R1"] + 0.3; yr1_ = yb0_ + V["R2_L"]
 chk.append(("rampa 1 llega a la cota de la terraza (sin escalón)", V["Z_CON"], V["Z_P1"]))
-chk.append(("rampa 2 abajo = terraza", ztop(V["R2_X"] + 1.2, y_low_ - 0.3), E.Z_P1 + (E.Z_BAR_C - E.Z_P1) * 0.3 / V["R2_L"]))
-chk.append(("rampa 2 a mitad", ztop(V["R2_X"] + 1.2, (y_top_ + y_low_) / 2), (E.Z_P1 + E.Z_BAR_C) / 2))
-chk.append(("rampa 2 arriba = meseta = azotea del bar", ztop(V["R2_X"] + 1.2, y_top_ - 1.0), E.Z_BAR_C))
+chk.append(("techo del restaurante: arranca a cota de terraza junto a la torre", ztop(3.0, yb0_ + 0.2), E.Z_P1 + (E.Z_BAR_C - E.Z_P1) * 0.2 / V["R2_L"]))
+chk.append(("techo del restaurante: a mitad de la rampa", ztop(3.0, (yb0_ + yr1_) / 2), (E.Z_P1 + E.Z_BAR_C) / 2))
+chk.append(("techo del restaurante: llega a la azotea", ztop(3.0, yr1_ + 1.0), E.Z_BAR_C))
 _tt = E.torre(); _m2 = E.base()
-chk.append(("rampa 2 no pisa la escalera (sin sólido de escalera en su huella)", float((_tt ^ E.caja(V["R2_X"], V["R2_X"] + V["R2_W"], y_top_, y_low_, 0, 40)).is_empty()), 1.0))
-for _nm, _z in (("puerta escalera a la terraza", E.Z_P1 + 1.0), ("puerta escalera a la meseta", E.Z_BAR_C + 1.0)):
-    _px, _py = E.esc_ang_pt(V["ESC_RC"] - 0.15, 0.0)
-    chk.append((_nm + " abierta (vacío = 1)", float((_tt ^ E.caja(_px - .05, _px + .05, _py - .05, _py + .05, _z, _z + .1)).is_empty()), 1.0))
-chk.append(("puerta inferior (+7,2) da al bar contiguo (hueco escalera-bar ≤ 0,5)", float(max(E.plantas_base()["Q"][1], E.T[1] + V["ESC_R1"] + 0.3) - (E.T[1] + V["ESC_R1"]) <= 0.5), 1.0))
-_px, _py = 9.25, E.T[1] + V["ESC_R1"] + V["R2_PLAT"] - 0.5
-chk.append(("paso bajo la meseta por el arco, a cota de terraza (vacío = 1)", float((_m2 ^ E.caja(_px - .05, _px + .05, _py - .05, _py + .05, E.Z_P1 + 1.0, E.Z_P1 + 1.1)).is_empty()), 1.0))
+chk.append(("la rampa del techo no pisa la escalera", float((_tt ^ E.caja(0, V["W_BAR"] + V["V_BAR"], yb0_, yr1_, 0, 40)).is_empty()), 1.0))
+_px, _py = E.esc_ang_pt(V["ESC_RC"] - 0.15, 0.0)
+chk.append(("puerta de la escalera a la terraza abierta (vacío = 1)", float((_tt ^ E.caja(_px - .05, _px + .05, _py - .05, _py + .05, E.Z_P1 + 1.0, E.Z_P1 + 1.1)).is_empty()), 1.0))
 chk.append(("relieve del marco (frente)", float((m ^ E.caja(V["W_P"], V["W_P"] + 1, V["L_L"] - V["VEN_FIN"] + 0.1, V["L_L"] - V["VEN_FIN"] + 0.2, V["VA_1"] + 0.1, V["VA_1"] + 0.2)).bounding_box()[3]), V["W_P"] + V["MAR_P"]))
 import ventanas as VT
 tm_ = E.edificio(); okh = 0; tot = 0
@@ -90,6 +86,12 @@ chk.append(("remate: coronación", (_t ^ E.caja(*(lambda p: (p[0]-.2, p[0]+.2, p
 chk.append(("peto de la terraza sobre la banda del hotel", ztop(V["W_P"] - 0.15, E.plantas_base()["Q"][1] + 2.0), V["Z_P1"] + V["H_PET"]))
 chk.append(("abertura del peto donde llega la rampa 1", ztop(V["W_P"] - 0.15, E.plantas_base()["Q"][1] + V["D_HOTF"] + V["R_ENT"] / 2), V["Z_P1"]))
 chk.append(("barandilla en el lado largo de la azotea del bar", ztop(V["W_BAR"] + V["V_BAR"] - 0.05, 60.0), E.Z_BAR_C + 1.0))
+_pc, _bc = E.curva_poligono()
+_mid = _bc[len(_bc) // 2]
+chk.append(("rampa: da la vuelta a la esquina en curva (losa a +7,2 en mitad del arco)", ztop(_mid[0] + 0.15 * (_pc[0][0] - _mid[0]), _mid[1] + 0.15 * (_pc[0][1] - _mid[1])), V["Z_P1"]))
+chk.append(("peto curvo en el borde exterior de la curva", ztop(_mid[0] + 0.04 * (_pc[0][0] - _mid[0]), _mid[1] + 0.04 * (_pc[0][1] - _mid[1])), V["Z_P1"] + 1.0))
+_r = m ^ E.caja(14.0, 14.2, 13.0, 13.2, 1.0, 5.0)
+chk.append(("bajo la curva, paso libre (entrada del hotel)", float(_r.is_empty()), 1.0))
 out = ["| comprobación | medido en la geometría | cuadro | estado |", "|---|---|---|---|"]
 for n, a, b in chk:
     ok = abs(a - b) < (0.25 if "curva" in n else 0.12) or (n.startswith("sin ventanas") and a > V["W_P"] - 0.05)

@@ -26,6 +26,7 @@ def plan_girada(ax, zc, e):
     for a in set(ax.get_children()) - antes:
         try:
             a.set_transform(tr)
+            a.set_clip_on(True)
         except Exception:
             pass
     return e, n

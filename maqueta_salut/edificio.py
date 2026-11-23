@@ -95,7 +95,8 @@ ESC_ANG = math.atan2(_v["ESC_Y"] - T[1], _v["ESC_X"] - T[0])        # eje del se
 ESC_R0, ESC_R1, ESC_RC = _v["ESC_R0"], _v["ESC_R1"], _v["ESC_RC"]
 ESC_HA = math.radians(_v["ESC_SEC"]) / 2                             # semiángulo
 ESC_W = ESC_R1 - ESC_R0
-ESC_WY = 2 * ESC_R1 * math.sin(ESC_HA)                               # cuerda exterior
+ESC_HB = math.radians(_v["ESC_SECB"]) / 2                            # semiángulo del cuerpo en cuña
+ESC_WY = 2 * ESC_R1 * math.sin(ESC_HB)                               # cuerda exterior del cuerpo
 
 
 def esc_ang_pt(r, da):
@@ -337,15 +338,16 @@ def torre():
         if cs.area() <= 0: cs = CrossSection([pts[::-1]])
         return Manifold.extrude(cs, z1 - z0).translate((0, 0, z0))
     m = Manifold.batch_boolean(s, OpType.Add)
+    # 1) el cilindro se interrumpe en ESC_SEC grados (balcones, aletas, forjados, fachada)
     m = m - sector(ESC_R0 + 0.3, R_AL + 1.0, Z_CU1, _v["ESC_Z1"] + 0.5, -ESC_HA + 0.01, ESC_HA - 0.01)
-    mw = math.atan2(0.3, ESC_RC)
-    esc = [sector(ESC_R0, ESC_RC, 0.0, _v["ESC_Z1"], -ESC_HA, -ESC_HA + mw),          # muros radiales de carga
-           sector(ESC_R0, ESC_RC, 0.0, _v["ESC_Z1"], ESC_HA - mw, ESC_HA),
-           sector(ESC_R0, ESC_R0 + 0.3, 0.0, _v["ESC_Z1"]),                           # muro interior en arco
-           sector(ESC_R0, ESC_R1, _v["ESC_Z1"] - 0.4, _v["ESC_Z1"])]                  # cubierta en cuña
-    for k in range(int((_v["ESC_Z1"] - Z_P1) / (F / 2))):                              # rellanos al aire tras las lamas
-        zr = Z_P1 + 0.5 + k * F / 2
-        esc.append(sector(ESC_RC, ESC_R1 - 0.6, zr, zr + 0.25, -ESC_HA + mw, ESC_HA - mw))
+    esc = [sector(ESC_R0, ESC_RC, 0.0, _v["ESC_Z1"], -ESC_HB, ESC_HB)]                # 2) cuerpo de escalera en cuña (cerrado)
+    RR = _v["ESC_RR"]
+    for d0, d1 in ((-ESC_HA, -ESC_HB), (ESC_HB, ESC_HA)):                              # 3) franjas retranqueadas a cada lado
+        esc.append(sector(ESC_R0, RR, Z_CU1, Z_B1 + 0.65, d0, d1))                     #    fachada retranqueada (macizo detrás)
+        for i in range(N_PL + 1):                                                       #    forjados vistos con barandilla [F08, F11]
+            z = Z_B0 + i * F
+            esc.append(sector(RR, rf, z, z + 0.3, d0, d1))
+            esc.append(sector(rf - 0.08, rf, z + 0.3, z + 1.3, d0, d1))
     m = m + Manifold.batch_boolean(esc, OpType.Add)
     # ventanas de las habitaciones: un hueco por modulo entre aletas, sobre el poyete [F04, F06, F09]
     import ventanas as VT                                # catálogo único de huecos (mismo que planos)
@@ -355,14 +357,25 @@ def torre():
         a = math.degrees(math.atan2(hh["n"][1], hh["n"][0]))
         h = Manifold.cube((0.5, hh["w"], hh["z1"] - hh["z0"])).translate((rf - 0.25, -hh["w"] / 2, hh["z0"]))
         hue.append(h.rotate((0, 0, a)).translate((T[0], T[1], 0)))
+    for hh in VT.catalogo():
+        if hh["grupo"] != "escalera retranqueo": continue
+        a = math.degrees(math.atan2(hh["n"][1], hh["n"][0]))
+        h = Manifold.cube((0.8, hh["w"], hh["z1"] - hh["z0"])).translate((_v["ESC_RR"] - 0.5, -hh["w"] / 2, hh["z0"]))
+        hue.append(h.rotate((0, 0, a)).translate((T[0], T[1], 0)))
     m = m - Manifold.batch_boolean(hue, OpType.Add)
-    # pantalla de lamas verticales en el arco exterior, separada de los tramos [F08, F11, F13]
+    # pantalla de lamas que forra el cuerpo en cuña por su cara exterior y sus dos caras laterales, separada 0,3 [F08, F11, F13]
     lam = []
-    nl = int(2 * ESC_HA * ESC_R1 / 0.8)
+    def lama(r, da, rot_r=True):
+        return (caja(-0.25, 0.25, -0.12, 0.12, Z_P1 + 0.3, _v["ESC_Z1"] - 0.4) if rot_r else caja(-0.12, 0.12, -0.25, 0.25, Z_P1 + 0.3, _v["ESC_Z1"] - 0.4)) \
+            .translate((r, 0, 0)).rotate((0, 0, math.degrees(ESC_ANG + da))).translate((T[0], T[1], 0))
+    nl = int(2 * ESC_HB * ESC_R1 / 0.8)
     for k in range(nl + 1):
-        da = -ESC_HA + 2 * ESC_HA * k / nl
-        lam.append(caja(ESC_R1 - 0.5, ESC_R1, -0.12, 0.12, Z_P1 + 0.3, _v["ESC_Z1"] - 0.4)
-                   .rotate((0, 0, math.degrees(ESC_ANG + da))).translate((T[0], T[1], 0)))
+        lam.append(lama(ESC_R1 - 0.25, -ESC_HB + 2 * ESC_HB * k / nl))
+    for sg in (-1, 1):
+        r = rf + 0.2
+        while r < ESC_R1 - 0.3:
+            lam.append(lama(r, sg * (ESC_HB + math.atan2(0.45, r)), rot_r=False))
+            r += 0.8
     return m + Manifold.batch_boolean(lam, OpType.Add)
 
 

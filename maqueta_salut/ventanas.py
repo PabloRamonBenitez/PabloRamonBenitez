@@ -68,6 +68,15 @@ def catalogo():
             c, s = math.cos(a_), math.sin(a_)
             _h(H, f"T{i}{k:02d}", f"torre planta {i + 1}", "ventana", (T[0] + rf * c, T[1] + rf * s), (-s, c), (c, s),
                2.6 if i == 0 else 2.4, z + 1.7, z + 3.1)
+    # 6b. fachada retranqueada a cada lado del cuerpo de escalera: una ventana por planta y lado [F08, F11]
+    RR = V["ESC_RR"]
+    for i in range(V["N_PL"]):
+        z = E.Z_B0 + i * E.F
+        for sg, nm in ((-1, "a"), (1, "b")):
+            a_ = E.ESC_ANG + sg * (E.ESC_HA + E.ESC_HB) / 2
+            c, s = math.cos(a_), math.sin(a_)
+            _h(H, f"ER{i}{nm}", "escalera retranqueo", "ventana", (T[0] + RR * c, T[1] + RR * s), (-s, c), (c, s),
+               0.7 * RR * (E.ESC_HA - E.ESC_HB), z + 1.0, z + 2.6)
     # 7. tambor: 19 ojos circulares [F01, F09]
     zt = (E.Z_B1 + E.Z_T1) / 2
     for k in range(V["N_AL"]):

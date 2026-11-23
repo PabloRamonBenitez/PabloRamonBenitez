@@ -90,7 +90,7 @@ def _inter(p, d, q, e):
     return (p[0] + s * d[0], p[1] + s * d[1])
 L_LADR = _v["L_LAD"]                # bloque de ladrillo del extremo, sobre pilares       [F01]
 # escalera trasera: en linea con el ala larga, dentro de la L [usuario]
-ESC_W, ESC_Y0, ESC_Y1 = _v["ESC_W"], T[1] + 10.0, T[1] + R_AL + 1.0
+ESC_W, ESC_Y0, ESC_Y1 = _v["ESC_W"], T[1] + 9.0, T[1] + R_B + _v["ESC_L"]   # planta alargada radial [F73, F13, F75]
 
 
 def P(X, Y):
@@ -149,8 +149,10 @@ def base():
     s.append(ROT(Manifold.batch_boolean(sc, OpType.Add)))
     # ala larga: bar en la mitad interior hasta el tramo final; terraza con peto en la mitad exterior [F47, Bing]
     yb0 = pl["Q"][1]
-    s += [caja(0, W_BAR, yb0, L_L - L_FIN, Z_P1 - 0.01, Z_BAR),
-          caja(0, W_BAR + 1.2, yb0, L_L - L_FIN, Z_BAR, Z_BAR_C),
+    yb1 = L_L - L_FIN                                                   # 1984: el bar acaba sobre la 1a ventana [F01, F47]
+    s += [caja(0, W_BAR, yb0, yb1, Z_P1 - 0.01, Z_BAR),
+          caja(0, W_BAR + _v["V_BAR"], yb0, yb1 + _v["V_BAR"], Z_BAR, Z_BAR_C),     # cubierta volada en frente y extremo
+          caja(0, 0.1, yb1, L_L, Z_P1 - 0.01, Z_P1 + 1.1),                         # barandilla borde patio de la terraza abierta [F47]
           caja(W_P - 0.3, W_P, yb0, L_L, Z_P1 - 0.01, Z_P1 + _v["H_PET"]),             # peto exterior terraza [F73 +8,5]
           caja(0, W_P - 0.3, L_L - 0.25, L_L - 0.15, _v["Z_FIN"] - 0.01, _v["Z_FIN"] + 1.1)]   # testero a cota terraza + barandilla [F73]
     # concha: franja exterior que se estrecha de W_EXT a W_P hasta Y_CUNA; alta junto al hotel (+7,3) y baja en
@@ -159,40 +161,52 @@ def base():
     # RAMPA (F71): plano inclinado de ancho constante pegado a la fachada exterior del ala; sube desde el suelo
     # (lejos de la torre) hasta la terraza de la planta primera junto a la banda del hotel; peto en el borde exterior.
     WR = W_EXT - W_P
+    LR = Y_CUNA - y0
+    def zr(u):          # rasante de la rampa: meseta arriba y pendiente constante hasta el suelo [F71, F76]
+        um = _v["R_MES"] / LR
+        return _v["Z_CON"] if u <= um else max(0.15, _v["Z_CON"] * (1 - (u - um) / (1 - um)))
+    def zs(u):          # intradós del arco bajo la rampa: curva desde Z_ARC hasta el suelo en U_ARC [F47, F71, F76]
+        ua = _v["U_ARC"]
+        return 0.0 if u >= ua else min(_v["Z_ARC"] * math.sqrt(max(0.0, 1 - (u / ua) ** 2)), zr(u) - 0.6)
     def f(v):
         x, y, z = v
-        y = min(max(y, 0.0), 1.0)
-        zt = max(0.15, _v["Z_CON"] * math.sqrt(max(0.0, 1 - y ** 2)))   # perfil curvo (convexo) en alzado [F47, F71]
-        return (W_P - 0.02 + x * WR, y0 + y * (Y_CUNA - y0), z * zt)
-    rampa = Manifold.cube((1, 1, 1)).refine(30).warp(f)
+        u = min(max(y, 0.0), 1.0)
+        lo, hi = zs(u), zr(u)
+        return (W_P - 0.02 + x * WR, y0 + u * LR, lo + z * (hi - lo))
+    rampa = Manifold.cube((1, 1, 1)).refine(40).warp(f)
     def fp(v):
         x, y, z = v
-        y = min(max(y, 0.0), 1.0)
-        zt = max(0.15, _v["Z_CON"] * math.sqrt(max(0.0, 1 - y ** 2)))
-        return (W_EXT - 0.25 + x * 0.25, y0 + y * (Y_CUNA - y0), zt - 0.01 + z * 1.0)   # peto de 1 m
-    peto = Manifold.cube((1, 1, 1)).refine(30).warp(fp)
+        u = min(max(y, 0.0), 1.0)
+        return (W_EXT - 0.25 + x * 0.25, y0 + u * LR, zr(u) - 0.01 + z * 1.0)   # peto de 1 m
+    peto = Manifold.cube((1, 1, 1)).refine(40).warp(fp)
     s += [rampa, peto]
     m = Manifold.batch_boolean(s, OpType.Add)
     # huecos de ventanas (franjas continuas casi a paño) [F09, F14]
     hue = [ROT(caja(-L_C + L_LADR + 0.4, xA, -1, 0.3, 4.6, 6.6))]
     # ventanas del ala larga [F47, F73]: fila alta en toda la longitud (por encima de la rampa);
     # fila baja solo donde la rampa ya no la tapa (tramo final)
-    # [F73] dos filas superpuestas (alta 3,8-5,5 / baja 1,5-2,4); cada fila empieza donde el peto de la rampa
-    # ya ha bajado por debajo de su alfeizar
-    def z_peto_rampa(yy):
-        if yy <= y0 or yy >= Y_CUNA:
-            return 0.0 if yy >= Y_CUNA else 99.0
-        u = (yy - y0) / (Y_CUNA - y0)
-        return max(0.15, _v["Z_CON"] * math.sqrt(max(0.0, 1 - u ** 2))) + 1.0
-    y = C[1] + _v["D_HOTF"] + 1.5
-    while y < L_L - 1.5:
-        zp = max(z_peto_rampa(y), z_peto_rampa(y + 1.5))
-        if zp < _v["VA_0"] - 0.2:
-            hue.append(caja(W_P - 0.3, W_P + 1, y, y + 1.5, _v["VA_0"], _v["VA_1"]))
-        if zp < _v["VB_0"] - 0.2:
-            hue.append(caja(W_P - 0.3, W_P + 1, y, y + 1.5, _v["VB_0"], _v["VB_1"]))
-        y += 3.0
+    # [F73, F47, F01] 11 huecos por fila, dos filas superpuestas, solo en el tramo final (tras la rampa);
+    # la fila alta lleva marco saliente profundo; un hueco de la fila baja es puerta
+    n, w = int(_v["N_VEN"]), _v["VEN_W"]
+    ya, yz = Y_CUNA + 0.5, L_L - _v["VEN_FIN"] - w
+    for i in range(n):
+        y = ya + i * (yz - ya) / (n - 1)
+        hue.append(caja(W_P - 0.3, W_P + 1, y, y + w, _v["VA_0"], _v["VA_1"]))
+        if i + 1 == int(_v["VEN_PTA"]):
+            hue.append(caja(W_P - 0.3, W_P + 1, y - 0.1, y + w + 0.1, 0.0, _v["VB_1"]))   # puerta [F47, F01]
+        else:
+            hue.append(caja(W_P - 0.3, W_P + 1, y, y + w, _v["VB_0"], _v["VB_1"]))
+    marcos = []
+    for i in range(n):
+        y = ya + i * (yz - ya) / (n - 1)
+        marcos.append(caja(W_P - 0.01, W_P + 0.3, y - 0.25, y + w + 0.25, _v["VA_0"] - 0.25, _v["VA_1"] + 0.25)
+                      - caja(W_P - 0.1, W_P + 0.5, y, y + w, _v["VA_0"], _v["VA_1"]))
+    # testero: puerta de servicio con marquesina saliente y ventana encima [F73: a 0,49-0,63 del ancho desde la esquina exterior]
+    hue.append(caja(W_P - 0.63 * W_P, W_P - 0.49 * W_P, L_L - 0.3, L_L + 1, 0.0, 2.6))
+    hue.append(caja(W_P - 0.55 * W_P, W_P - 0.43 * W_P, L_L - 0.3, L_L + 1, 4.6, 5.3))
+    marcos.append(caja(W_P - 0.71 * W_P, W_P - 0.36 * W_P, L_L - 0.01, L_L + 1.2, 3.1, 4.4))
     m = m - Manifold.batch_boolean(hue, OpType.Add)
+    m = m + Manifold.batch_boolean(marcos, OpType.Add)
     # chaflan (coordenadas de torre): franjas de ventanas restaurante / hotel
     rot = math.degrees(math.atan2(U[1], U[0]))
     def en_torre(mm):
@@ -259,6 +273,13 @@ def torre():
     xe = _v["ESC_X"]                             # eje de la escalera (cuadro de cotas)
     s.append(caja(xe - ESC_W / 2, xe + ESC_W / 2, ESC_Y0, ESC_Y1, 0.0, Z_T1 + 1.0))   # la escalera baja hasta el suelo [coherencia]
     m = Manifold.batch_boolean(s, OpType.Add)
+    # entrante (hueco hacia dentro) en la cara hacia el patio, entre dos hojas macizas: se ven los rellanos [F75, F13]
+    ym = (T[1] + R_B + ESC_Y1) / 2
+    xi = xe - ESC_W / 2
+    m = m - caja(xi - 0.5, xi + _v["ESC_REC"], ym - _v["ESC_RL"] / 2, ym + _v["ESC_RL"] / 2, Z_P1 + 0.5, Z_T1 + 0.2)
+    for k in range(int((Z_T1 - Z_P1) / (F / 2))):                                     # rellanos vistos en el entrante
+        zr = Z_P1 + 0.5 + k * F / 2
+        m = m + caja(xi + _v["ESC_REC"] - 1.4, xi + _v["ESC_REC"], ym - _v["ESC_RL"] / 2, ym + _v["ESC_RL"] / 2, zr, zr + 0.25)
     # ventanas de las habitaciones: un hueco por modulo entre aletas, sobre el poyete [F04, F06, F09]
     hue = []
     for i in range(N_PL):
@@ -274,9 +295,15 @@ def torre():
     # lamas verticales de la escalera trasera [F11-F13]
     lam = []
     x = xe - ESC_W / 2 + 0.4
-    while x < xe + ESC_W / 2 - 0.3:
+    while x < xe + ESC_W / 2 - 0.3:                                     # testa
         lam.append(caja(x - 0.12, x + 0.12, ESC_Y1, ESC_Y1 + 0.5, Z_P1 + 0.5, Z_T1 + 0.5))
         x += 0.8
+    y = T[1] + R_B + 0.3
+    while y < ESC_Y1 - 0.2:                                             # lados largos
+        if abs(y - ym) > _v["ESC_RL"] / 2:
+            for xx in (xe - ESC_W / 2 - 0.5, xe + ESC_W / 2):
+                lam.append(caja(xx, xx + 0.5, y - 0.12, y + 0.12, Z_P1 + 0.5, Z_T1 + 0.5))
+        y += 0.8
     return m + Manifold.batch_boolean(lam, OpType.Add)
 
 

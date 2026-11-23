@@ -12,11 +12,21 @@ COTAS = {
  "Z_ALTO": (11.5, "bloque alto del ala corta", "F01, sección AA del usuario"),
  "Z_LAD0": (0.0,  "el ladrillo arranca del suelo", "F72"),
  "Z_FIN":  (7.2,  "testero del ala larga: corona a la cota de la terraza (NO hay bloque alto); barandilla encima", "F73: testero +7,1 ± 0,9; lo alto que se ve detrás es el extremo del bar · F76"),
+ "N_VEN":  (11,   "ventanas por fila en la fachada exterior del ala larga (dos filas superpuestas)", "contadas: F73 11 · F47 11 (fila alta) · F01 11"),
+ "VEN_W":  (1.2,  "ancho de hueco de ventana del ala larga (con marco profundo alrededor)", "F73 hueco/intereje ≈ 0,4"),
+ "VEN_FIN":(4.5,  "macizo entre la última ventana y el testero", "F47 1,3 interejes · F01 1,5 · F73 ~2"),
+ "VEN_PTA":(7,    "nº de hueco (desde la torre) donde la fila baja es puerta", "F47 y F01: puerta clara al pie de la fachada"),
+ "ESC_L":  (7.5,  "salida de la caja de escalera más allá del barril (planta alargada, radial)", "F73 asoma ~7-8 m a la derecha de la torre · F13 · F75"),
+ "ESC_REC":(2.0,  "profundidad del entrante (hueco hacia dentro) en la cara de la escalera hacia el patio", "F75, F13: rellanos vistos entre dos hojas macizas"),
+ "ESC_RL": (4.5,  "largo del entrante de la escalera", "F75 (≈ 1/3 de la cara)"),
+ "R_MES":  (3.0,  "meseta de llegada de la rampa junto a la banda del hotel", "F71: tramo alto casi horizontal"),
+ "Z_ARC":  (3.2,  "arranque del arco bajo la rampa (hueco de la planta baja hundida)", "F47 vacío oscuro bajo la concha · F71 curva · F76 arco"),
+ "U_ARC":  (0.72, "fracción de la rampa donde el arco llega al suelo", "F71 / F47 (estimado ± 0,1)"),
  "H_PET":  (1.3,  "peto exterior de la terraza del ala larga (corona ≈ +8,5)", "F73 esquina del testero +8,5 ± 0,6"),
  "VA_0":   (3.8,  "ventanas ala larga, fila alta: alféizar", "F73 3,7 ± 0,5"),
  "VA_1":   (5.5,  "ventanas ala larga, fila alta: dintel", "F73 5,4 ± 0,6"),
- "VB_0":   (1.5,  "ventanas ala larga, fila baja: alféizar", "F73 1,5 ± 0,3"),
- "VB_1":   (2.4,  "ventanas ala larga, fila baja: dintel", "F73 2,4 ± 0,4"),
+ "VB_0":   (0.8,  "ventanas ala larga, fila baja: alféizar (misma altura de hueco que la alta)", "F73 parte baja tapada por la verja; F47 huecos iguales a los de arriba"),
+ "VB_1":   (2.5,  "ventanas ala larga, fila baja: dintel", "F73 2,4 ± 0,4"),
  "L_HOR":  (6.0,  "cuerpo de hormigón sobre pilares en el extremo del ala corta", "F72 (estimado ± 2)"),
  "Z_LAD1": (10.0, "coronación de la caja de ladrillo", "F01, F19"),
  "Z_CON":  (7.8,  "llegada de la rampa arriba (superficie; el peto de 1 m llega a ≈ +8,8)", "rangos: peto arriba F09 +8,3 ± 0,8 / F71 +9,6 ± 1,2 → +8,8"),
@@ -44,14 +54,14 @@ COTAS = {
  "OV_Y":   (-4.2, "desplazamiento de la visera hacia la plaza (−)", "ajuste C02 + C04"),
  "OR_X":   (0.6,  "desplazamiento del remate", "F09"),
  "N_AL":   (19,   "aletas / muros radiales", "fuentes + F09"),
- "ESC_W":  (10.0, "ancho de la caja de escalera", "F08"),
+ "ESC_W":  (7.0,  "ancho de la caja de escalera (lado corto, visto desde el testero)", "F73 ≥ 5-8 · F08"),
  "ESC_X":  (5.0, "eje de la escalera (dentro de la L, lo más cerca posible del eje de la torre)", "usuario: en línea con el ala; comprobación entre planos"),
  # --- planta
  "W_P":    (12.74,"ancho del ala larga", "Bing"),
  "W_BAR":  (6.21, "ancho del bar (mitad interior)", "Bing"),
  "V_BAR":  (1.2,  "vuelo de la cubierta del bar sobre la terraza", "F47"),
  "L_L":    (94.8, "largo total del ala larga desde la calle", "Google 94,82"),
- "L_FIN":  (7.81, "tramo final sin bar", "Bing"),
+ "L_FIN":  (35.13, "tramo final sin bar (1984: el bar acaba donde acaba la rampa y empiezan las ventanas)", "F01 y F47 (1984): el bar termina sobre la 1ª ventana · Bing actual 7,81 = ampliación posterior"),
  "D_CUNA": (35.13,"distancia del fin de la concha al fondo", "Bing"),
  "W_EXT":  (15.7, "ancho máximo con la concha", "Google"),
  "THL":  (95.0, "ángulo interior de la L (ala larga – calle)", "estimación por rangos: 95,0 ± 2,3° (ESTIMACIONES.md)"),
@@ -132,7 +142,7 @@ def elementos():
     cil("banda acristalada", T, V_["R_G"], V_["Z_T1"], V_["Z_G1"], "Z03")
     cil("visera", P(V_["OV_X"], V_["OV_Y"]), V_["R_V"], V_["Z_G1"], V_["Z_V1"], "Z02")
     cil("remate", P(V_["OR_X"], 0), V_["R_R"], V_["Z_V1"], V_["Z_R1"], "Z01")
-    xe = V_["ESC_X"]; y0 = T[1] + 10.0; y1 = T[1] + V_["R_AL"] + 1.0
+    xe = V_["ESC_X"]; y0 = T[1] + 9.0; y1 = T[1] + V_["R_B"] + V_["ESC_L"]
     pri("escalera", [(xe - V_["ESC_W"] / 2, y0), (xe + V_["ESC_W"] / 2, y0), (xe + V_["ESC_W"] / 2, y1), (xe - V_["ESC_W"] / 2, y1)], 0, V_["Z_T1"] + 1.0, "Z29")
     return E, g
 
@@ -149,7 +159,7 @@ RANGOS = {
  "Z_LAD1": 1.0, "Z_CON": 0.8, "Z_CU0": 0.6, "Z_CU1": 0.6, "Z_ALE": 0.6, "Z_B0": 0.4, "F": 0.05, "N_PL": 0,
  "Z_T1": 0.5, "Z_G1": 0.5, "Z_V1": 0.5, "Z_R1": 0.6, "R_COL": 0.3, "R_CONO": 0.3, "R_CU": 0.5, "R_B": 0.3,
  "R_AL": 0.3, "R_T": 0.5, "R_G": 0.5, "R_V": 0.6, "R_R": 0.25, "OV_X": 1.0, "OV_Y": 1.5, "OR_X": 0.5, "N_AL": 0,
- "ESC_W": 1.0, "ESC_X": 2.0, "W_P": 0.5, "W_BAR": 0.5, "V_BAR": 0.5, "L_L": 1.0, "L_FIN": 0.5, "D_CUNA": 1.0,
+ "ESC_W": 1.0, "ESC_X": 2.0, "W_P": 0.5, "W_BAR": 0.5, "V_BAR": 0.5, "L_L": 1.0, "L_FIN": 5.0, "N_VEN": 0, "VEN_W": 0.2, "VEN_FIN": 1.5, "ESC_L": 1.5, "ESC_REC": 0.5, "ESC_RL": 1.0, "R_MES": 1.0, "Z_ARC": 0.5, "U_ARC": 0.1, "D_CUNA": 1.0,
  "W_EXT": 1.0, "THL": 2.3, "ACH": 8.0, "REST": 1.0, "COL": 0.3, "HOT": 1.0, "L_CHF": 3.0, "T_POS": 0.1,
  "D_HOTF": 2.0, "RET": 0.5, "RETR": 0.5, "L_C": 3.0, "W_C": 1.0, "L_LAD": 1.5,
 }

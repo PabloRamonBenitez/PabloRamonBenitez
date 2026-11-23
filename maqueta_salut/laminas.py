@@ -201,16 +201,18 @@ def alzados():
              f"rampa: peto arriba +{V['Z_CON'] + 1:.1f}: F09 8,3±0,8 · F71 9,6±1,2"]),
            ((-1, 0), "ALZADO 2 – FACHADA EXTERIOR DEL ALA LARGA (con la rampa)",
             [("73.webp", "F73 (desde el testero)"), ("71.webp", "F71"), ("76.webp", "F76 maqueta (orient.)"), ("47.webp", "F47")],
-            [f"peto terraza +{V['Z_P1'] + V['H_PET']:.1f}: F73 8,5±0,6",
-             f"testero +{V['Z_FIN']}: F73 7,1±0,9 (no hay bloque alto: lo que asoma detrás es el bar)",
-             f"bar: vidrio hasta +{V['Z_BAR']}, cubierta +{V['Z_BARC']}: F73 10,5 / 11,3±1,1 · F76 ~10,4",
-             f"ventanas: alta {V['VA_0']}–{V['VA_1']}, baja {V['VB_0']}–{V['VB_1']}: F73; ambas filas nacen donde acaba la rampa (F73, F71)",
-             "rampa: perfil convexo que cae al final: F73, F71, F76"]),
+            [f"ventanas: {V['N_VEN']} por fila (contadas en F73, F47, F01), dos filas {V['VA_0']}–{V['VA_1']} y {V['VB_0']}–{V['VB_1']}, solo tras la rampa; macizo de {V['VEN_FIN']} m al testero; puerta en el hueco {V['VEN_PTA']} (F47, F01)",
+             f"rampa al bar: meseta de {V['R_MES']} m a +{V['Z_CON']} junto al hotel y pendiente constante hasta el suelo; peto +1 (F71, F76)",
+             f"arco bajo la rampa: arranca a +{V['Z_ARC']} junto al hotel y llega al suelo al {V['U_ARC']:.0%} de la rampa (F47 vacío oscuro, F71 curva, F76 arco) – forma ESTIMADA",
+             f"bar 1984: termina sobre la 1ª ventana (F01, F47); cubierta +{V['Z_BARC']} volada {V['V_BAR']} m al frente y al extremo; después terraza abierta con barandilla",
+             f"peto terraza +{V['Z_P1'] + V['H_PET']:.1f} y testero +{V['Z_FIN']} con barandilla (F73)"]),
            ((0, 1), "ALZADO 3 – CALLE (ala corta)", [("1.webp", "F01"), ("19.webp", "F19"), ("72.webp", "F72")], []),
            ((1, 0), "ALZADO 4 – PATIO INTERIOR DE LA L", [("75.png", "F75 (escalera desde el patio)")], []),
            ((0, -1), "ALZADO 5 – TESTERO DEL ALA LARGA (hacia la torre)",
             [("73.webp", "F73"), ("13.webp", "F13"), ("12.png", "F12")],
-            [f"testero +{V['Z_FIN']} con barandilla; detrás, extremo del bar +{V['Z_BARC']} retranqueado {V['L_FIN']} m (F73)"])]
+            [f"testero +{V['Z_FIN']} con barandilla, puerta de servicio con marquesina y ventana encima (F73)",
+             f"F73 es ACTUAL: lo que asoma tras el testero a ≈ +11 es el bar ampliado después; en 1984 (F01, F47) el bar acaba a {V['L_FIN']} m del testero",
+             f"caja de escalera: lado corto {V['ESC_W']} m visto desde aquí (F73), sale {V['ESC_L']} m del barril, entrante hacia el patio (F75, F13)"])]
     for d, t, fotos, notas in lst:
         fig = hoja(t)
         ax = fig.add_axes([0.04, 0.16, 0.58, 0.78])

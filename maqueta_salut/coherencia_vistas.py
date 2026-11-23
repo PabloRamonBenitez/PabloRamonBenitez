@@ -15,12 +15,14 @@ y0 = E.plantas_base()["Q"][1] + V["D_HOTF"]
 chk = [
  ("terraza ala larga (planta / secc. S3 / alzado 2)", ztop(V["W_BAR"] + 2, 70), V["Z_P1"]),
  ("peto exterior terraza", ztop(V["W_P"] - 0.15, 70), V["Z_P1"] + V["H_PET"]),
- ("cubierta del bar", ztop(2, 70), V["Z_BARC"]),
+ ("cubierta del bar (a mitad del bar)", ztop(2, (E.plantas_base()["Q"][1] + V["L_L"] - V["L_FIN"]) / 2), V["Z_BARC"]),
+ ("terraza abierta tras el bar (1984)", ztop(3, V["L_L"] - V["L_FIN"] + 5), V["Z_P1"]),
  ("tramo final sin bar (testero)", ztop(3, V["L_L"] - 3), V["Z_FIN"]),
  ("barandilla del testero", ztop(3, V["L_L"] - 0.2), V["Z_FIN"] + 1.1),
  ("rampa arriba (superficie)", ztop(V["W_P"] + 1.5, y0 + 0.3), V["Z_CON"]),
- ("rampa a mitad", ztop(V["W_P"] + 1.5, (y0 + E.Y_CUNA) / 2), V["Z_CON"] * (1 - 0.25) ** 0.5),
- ("largo ala larga L_L", float(np.asarray(me.vert_properties)[:, 1].max()), V["L_L"]),
+ ("rampa a mitad (pendiente constante)", ztop(V["W_P"] + 1.5, (y0 + E.Y_CUNA) / 2),
+   V["Z_CON"] * (1 - (0.5 - V["R_MES"] / (E.Y_CUNA - y0)) / (1 - V["R_MES"] / (E.Y_CUNA - y0)))),
+ ("largo ala larga L_L (muro, sin la marquesina)", float((m ^ E.caja(0.5, 2, 30, 200, 6, 6.5)).bounding_box()[4]), V["L_L"]),
 ]
 yv = E.Y_CUNA + 1.0
 for z, nm, ref in ((V["VA_0"] + 0.5, "ventana fila alta (fondo del hueco)", V["W_P"] - 0.3), (V["VB_0"] + 0.4, "ventana fila baja", V["W_P"] - 0.3)):
@@ -28,6 +30,18 @@ for z, nm, ref in ((V["VA_0"] + 0.5, "ventana fila alta (fondo del hueco)", V["W
     chk.append((nm + " tras la rampa", min(x for x in xs if x is not None), ref))
 xs = [hueco(0, y0 + 3 + k * 0.25, V["VA_0"] + 0.5) for k in range(16)]
 chk.append(("sin ventanas donde la rampa es alta", min(x for x in xs if x is not None), V["W_P"] + 0.0))
+# recuento de huecos en la fila alta y la baja a lo largo de toda la fachada exterior
+def contar(z):
+    ys = np.arange(E.Y_CUNA - 5, V["L_L"], 0.1); dentro = [ (hueco(0, y, z) or 99) < V["W_P"] - 0.2 for y in ys ]
+    return sum(1 for a, b in zip(dentro, dentro[1:]) if b and not a)
+chk.append(("nº ventanas fila alta (tramo tras la rampa)", contar((V["VA_0"] + V["VA_1"]) / 2), V["N_VEN"]))
+chk.append(("nº huecos fila baja (10 ventanas + puerta)", contar((V["VB_0"] + V["VB_1"]) / 2), V["N_VEN"]))
+r = m ^ E.caja(V["W_P"] + 1.4, V["W_P"] + 1.6, y0 + 1, y0 + 1.2, 0.5, 1.0)
+chk.append(("hueco bajo el arco junto al hotel (vacío = 0)", 0.0 if r.is_empty() else 1.0, 0.0))
+t = E.torre()
+bb = (t ^ E.caja(-50, 50, E.T[1] + E._v["R_AL"] + 0.3, 200, 20, 21)).bounding_box()
+chk.append(("escalera: ancho (lado corto)", bb[3] - bb[0] - 1.0, V["ESC_W"]))
+chk.append(("escalera: salida más allá del barril", bb[4] - (E.T[1] + E._v["R_B"]) + 0.5 - 0.5, V["ESC_L"] + 0.5))
 out = ["| comprobación | medido en la geometría | cuadro | estado |", "|---|---|---|---|"]
 for n, a, b in chk:
     ok = abs(a - b) < 0.12 or (n.startswith("sin ventanas") and a > V["W_P"] - 0.05)

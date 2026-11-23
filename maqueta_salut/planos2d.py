@@ -158,7 +158,7 @@ def comprobacion():
       math.hypot(V["OV_X"], V["OV_Y"]) < V["R_V"] - V["R_G"] + 2.5, f"desplaz. {math.hypot(V['OV_X'], V['OV_Y']):.2f} m"),
      ("Concha arranca por encima de la banda del hotel (sin escalón hacia abajo)", V["Z_CON"] >= V["Z_P1"], f"{V['Z_CON']} ≥ {V['Z_P1']}"),
      ("Chaflán: restaurante + columna + hotel = longitud del chaflán", True, f"{V['REST']} + {V['COL']} + {V['HOT']} = {V['REST'] + V['COL'] + V['HOT']:.1f}"),
-     ("Escalera radial insertada en el cilindro (entra en el barril y sale dentro del ala larga)", V["ESC_R0"] < V["R_B"] - 2 and V["ESC_R1"] > V["R_AL"] + 1 and 0 < V["ESC_X"] - V["ESC_WY"] / 2 and V["ESC_X"] + V["ESC_WY"] / 2 < V["R2_X"], f"r {V['ESC_R0']} … {V['ESC_R1']} (barril {V['R_B']})"),
+     ("Escalera = sector del cilindro (no sobresale de las aletas)", V["ESC_R1"] <= V["R_AL"] + 0.6 and V["ESC_R0"] < V["ESC_RC"] < V["ESC_R1"], f"sector {V['ESC_SEC']}°, r {V['ESC_R0']}…{V['ESC_R1']}"),
      ("Muros de la escalera paralelos y dirigidos al centro de la torre", True, "por construcción: caja en coordenadas radiales"),
      ("Ala larga recta de ancho constante", True, f"W_P = {V['W_P']}"),
     ]

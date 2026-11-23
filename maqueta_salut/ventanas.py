@@ -59,7 +59,7 @@ def catalogo():
     # 6. torre: un hueco por módulo entre aletas y por planta, en la línea de vidrio rf [F04, F06, F09]
     T = E.T; rf = E.R_B - 1.8
     def en_escalera(a_, r_):          # módulo ocupado por la caja de la escalera insertada en el cilindro
-        return abs((a_ - E.ESC_ANG + math.pi) % (2 * math.pi) - math.pi) < math.atan2(E.ESC_WY / 2 + 1.2, r_)
+        return abs((a_ - E.ESC_ANG + math.pi) % (2 * math.pi) - math.pi) < E.ESC_HA
     for i in range(V["N_PL"]):
         z = E.Z_B0 + i * E.F
         for k in range(V["N_AL"]):

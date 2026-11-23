@@ -39,20 +39,17 @@ chk.append(("nº huecos fila baja", contar((V["VB_0"] + V["VB_1"]) / 2), V["N_VE
 r = m ^ E.caja(V["W_P"] + 1.4, V["W_P"] + 1.6, y0 + 1, y0 + 1.2, 0.5, 1.0)
 chk.append(("hueco bajo el arco junto al hotel (vacío = 0)", 0.0 if r.is_empty() else 1.0, 0.0))
 t = E.torre()
-import math as _m
-def _r_ext(v, z):
-    best = None
-    for r in [x / 10 for x in range(80, 230)]:
-        px, py = E.esc_pt(r, v)
-        if not (t ^ E.caja(px - 0.04, px + 0.04, py - 0.04, py + 0.04, z - 0.04, z + 0.04)).is_empty(): best = r
-    return best
-chk.append(("escalera: frente exterior (radial, bajo el entrante)", _r_ext(1.0, 2.0), V["ESC_R1"]))
-_px, _py = E.esc_pt(E.R_B + 1.2, V["ESC_WY"] / 2 - 0.3)
-chk.append(("escalera: entrante hacia el patio junto al barril (vacío = 1)", float((t ^ E.caja(_px - .05, _px + .05, _py - .05, _py + .05, 20, 20.1)).is_empty()), 1.0))
-px, py = E.esc_pt((V["ESC_R0"] + V["ESC_R1"]) / 2, 0)
-bb3 = (t ^ E.caja(px - 0.5, px + 0.5, py - 0.5, py + 0.5, -1, 80)).bounding_box()
-chk.append(("escalera: coronación", bb3[5], V["ESC_Z1"]))
-chk.append(("escalera: baja al suelo", bb3[2], 0.0))
+def _hay(r, da, z):
+    px, py = E.esc_ang_pt(r, da)
+    return not (t ^ E.caja(px - 0.04, px + 0.04, py - 0.04, py + 0.04, z - 0.04, z + 0.04)).is_empty()
+chk.append(("escalera: balcón del barril quitado en el eje del sector (vacío = 1)", float(not _hay(E.R_B - 0.3, 0.0, E.Z_B0 + 1.2)), 1.0))
+chk.append(("escalera: muro radial de carga presente", float(_hay((V["ESC_R0"] + V["ESC_RC"]) / 2, E.ESC_HA - 0.01, 20.0)), 1.0))
+chk.append(("escalera: tramos al aire (vacío entre fachada y lamas a media altura de tramo)", float(not _hay((V["ESC_RC"] + V["ESC_R1"]) / 2, 0.0, E.Z_P1 + 0.5 + 0.8)), 1.0))
+chk.append(("escalera: no sobresale de R_AL + lamas", float(not _hay(V["ESC_R1"] + 0.2, 0.0, 20.0)), 1.0))
+px, py = E.esc_ang_pt(V["ESC_R1"] - 0.3, 0)
+bb3 = (t ^ E.caja(px - 0.1, px + 0.1, py - 0.1, py + 0.1, -1, 80)).bounding_box()
+chk.append(("escalera: coronación (cubierta en cuña, borde exterior)", bb3[5], V["ESC_Z1"]))
+chk.append(("escalera: baja al suelo (muro radial)", (t ^ E.caja(*(lambda q: (q[0]-.05, q[0]+.05, q[1]-.05, q[1]+.05))(E.esc_ang_pt((V["ESC_R0"] + V["ESC_RC"]) / 2, E.ESC_HA - 0.01)), -1, 1)).bounding_box()[2], 0.0))
 yb0_ = E.plantas_base()["Q"][1]
 chk.append(("rampa 2 a mitad", ztop(V["W_BAR"] + V["V_BAR"] + 1.2, yb0_ + V["R2_Y0"] + V["R2_L"] / 2), E.Z_P1 + 0.5 * (E.Z_BARC - E.Z_P1) if hasattr(E, "Z_BARC") else (E.Z_P1 + E.Z_BAR_C) / 2))
 chk.append(("relieve del marco (frente)", float((m ^ E.caja(V["W_P"], V["W_P"] + 1, V["L_L"] - V["VEN_FIN"] + 0.1, V["L_L"] - V["VEN_FIN"] + 0.2, V["VA_1"] + 0.1, V["VA_1"] + 0.2)).bounding_box()[3]), V["W_P"] + V["MAR_P"]))

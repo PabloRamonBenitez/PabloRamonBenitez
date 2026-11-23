@@ -19,9 +19,9 @@
 | nº huecos fila baja | 7.00 | 7.00 | OK |
 | hueco bajo el arco junto al hotel (vacío = 0) | 0.00 | 0.00 | OK |
 | escalera: frente exterior (radial, bajo el entrante) | 18.90 | 18.90 | OK |
-| escalera: entrante en la testa | 16.90 | 16.90 | OK |
+| escalera: entrante hacia el patio junto al barril (vacío = 1) | 1.00 | 1.00 | OK |
 | escalera: coronación | 39.00 | 39.00 | OK |
 | escalera: baja al suelo | 0.00 | 0.00 | OK |
 | rampa 2 a mitad | 9.36 | 9.35 | OK |
 | relieve del marco (frente) | 12.82 | 12.82 | OK |
-| huecos del catálogo abiertos en el 3D (ala + torre) | 126.00 | 126.00 | OK |
+| huecos del catálogo abiertos en el 3D (ala + torre) | 120.00 | 120.00 | OK |

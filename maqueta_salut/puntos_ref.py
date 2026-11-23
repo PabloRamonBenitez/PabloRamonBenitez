@@ -80,7 +80,7 @@ def generar():
     for yy in np.arange(yb0, yb1, 5.0):
         add(f"BAR-BOR-{yy:05.1f}", "BAR", f"borde cubierta volada y={yy:.1f}", (V["W_BAR"] + V["V_BAR"], yy, E.Z_BAR_C))
     # ---------------- RAMPA 2 (terraza → azotea del bar)
-    xr2 = V["W_BAR"] + V["V_BAR"] + V["R2_W"]; ya2 = yb0 + V["R2_Y0"]
+    xr2 = V["R2_X"] + V["R2_W"]; ya2 = yb0 + V["R2_Y0"]
     for j in range(11):
         u = j / 10
         add(f"RA2-PET-{j:02d}", "RAMPA 2", f"peto rampa 2 u={u:.1f}", (xr2, ya2 + u * V["R2_L"], E.Z_P1 + u * (E.Z_BAR_C - E.Z_P1) + 1.0))

@@ -212,7 +212,7 @@ def base():
     s += [rampa, peto]
     # RAMPA 2 (F71, F76): de la terraza (+Z_P1) a la azotea del bar (+Z_BARC), por fuera del bar, junto a la torre;
     # bajo su llegada, arco de paso; barandilla en el borde de la azotea (la roja de F73/F71)
-    xr2 = W_BAR + _v["V_BAR"]
+    xr2 = _v["R2_X"]
     ya2 = yb0 + _v["R2_Y0"]; yz2 = ya2 + _v["R2_L"]
     def f2(v):
         x, y, z = v
@@ -321,12 +321,14 @@ def torre():
         return caja(r0, r1, v0, v1, z0, z1).rotate((0, 0, math.degrees(ESC_ANG))).translate((T[0], T[1], 0))
     s.append(ecaja(ESC_R0, ESC_R1, -ESC_WY / 2, ESC_WY / 2, 0.0, _v["ESC_Z1"]))   # baja al suelo [F07]
     m = Manifold.batch_boolean(s, OpType.Add)
-    # entrante en la testa exterior (mitad hacia el chaflán, +v): se ven los rellanos [F11, F08, F75]
-    vr0, vr1 = ESC_WY / 2 - _v["ESC_RW"], ESC_WY / 2 + 0.01
-    m = m - ecaja(ESC_R1 - _v["ESC_REC"], ESC_R1 + 0.5, vr0, vr1, 3.2, _v["ESC_Z1"] - 0.8)
-    for k in range(int((_v["ESC_Z1"] - 4.0) / (F / 2))):
-        zr = 3.4 + k * F / 2
-        m = m + ecaja(ESC_R1 - _v["ESC_REC"], ESC_R1 - _v["ESC_REC"] + 1.4, vr0, vr1, zr, zr + 0.25)
+    # por encima de la cubierta del bar la caja asoma: entrante en la cara que mira al patio (+v), junto al barril,
+    # con los rellanos vistos [F11, F08, F75]
+    zr0 = Z_BAR_C
+    vr0, vr1 = ESC_WY / 2 - _v["ESC_REC"], ESC_WY / 2 + 0.5
+    m = m - ecaja(R_B, R_B + _v["ESC_RW"], vr0, vr1, zr0, _v["ESC_Z1"] - 0.8)
+    for k in range(int((_v["ESC_Z1"] - zr0 - 1.0) / (F / 2))):
+        zr = zr0 + 0.3 + k * F / 2
+        m = m + ecaja(R_B, R_B + _v["ESC_RW"], vr0, vr0 + 1.4, zr, zr + 0.25)
     # ventanas de las habitaciones: un hueco por modulo entre aletas, sobre el poyete [F04, F06, F09]
     import ventanas as VT                                # catálogo único de huecos (mismo que planos)
     hue = []
@@ -336,15 +338,15 @@ def torre():
         h = Manifold.cube((0.5, hh["w"], hh["z1"] - hh["z0"])).translate((rf - 0.25, -hh["w"] / 2, hh["z0"]))
         hue.append(h.rotate((0, 0, a)).translate((T[0], T[1], 0)))
     m = m - Manifold.batch_boolean(hue, OpType.Add)
-    # lamas: paño de la testa (mitad hacia el testero, −v) [F11 paño A, F75] y cara lateral hacia el testero fuera del barril [F73, F11 paño B]
+    # lamas por encima de la cubierta del bar: testa hacia el testero (+r) [F73, F11 paño B] y cara al patio tras el entrante [F11 paño A, F75]
     lam = []
     v = -ESC_WY / 2 + 0.3
-    while v < vr0 - 0.2:
-        lam.append(ecaja(ESC_R1, ESC_R1 + 0.5, v - 0.12, v + 0.12, 1.0, _v["ESC_Z1"] - 0.5))
+    while v < ESC_WY / 2 - 0.2:
+        lam.append(ecaja(ESC_R1, ESC_R1 + 0.5, v - 0.12, v + 0.12, Z_BAR_C, _v["ESC_Z1"] - 0.5))
         v += 0.8
-    r = R_AL + 0.3
+    r = R_B + _v["ESC_RW"] + 0.3
     while r < ESC_R1 - 0.2:
-        lam.append(ecaja(r - 0.12, r + 0.12, -ESC_WY / 2 - 0.5, -ESC_WY / 2, 1.0, _v["ESC_Z1"] - 0.5))
+        lam.append(ecaja(r - 0.12, r + 0.12, ESC_WY / 2, ESC_WY / 2 + 0.5, Z_BAR_C, _v["ESC_Z1"] - 0.5))
         r += 0.8
     return m + Manifold.batch_boolean(lam, OpType.Add)
 

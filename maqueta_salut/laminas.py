@@ -54,10 +54,11 @@ def estructura_torre(ax, zc):
     # muros de carga de la escalera dentro del edificio: dos muros paralelos hacia el centro + testero interior
     if zc < E._v["ESC_Z1"]:
         m_ = VT.MURO; hw = E.ESC_WY / 2; rr = E.ESC_R0
-        rin = E.R_B if zc > E.Z_CU0 else E.R_B
+        rin = E.ESC_R1
         for v0, v1 in ((-hw, -hw + m_), (hw - m_, hw)):
             ax.add_patch(Polygon([E.esc_pt(rr, v0), E.esc_pt(rin, v0), E.esc_pt(rin, v1), E.esc_pt(rr, v1)], closed=True, fc="#9a9a9a", ec="k", lw=1.0, zorder=7.3))
-        ax.add_patch(Polygon([E.esc_pt(rr, -hw), E.esc_pt(rr + m_, -hw), E.esc_pt(rr + m_, hw), E.esc_pt(rr, hw)], closed=True, fc="#9a9a9a", ec="k", lw=1.0, zorder=7.3))
+        for r_a in (rr, E.ESC_R1 - m_):
+            ax.add_patch(Polygon([E.esc_pt(r_a, -hw), E.esc_pt(r_a + m_, -hw), E.esc_pt(r_a + m_, hw), E.esc_pt(r_a, hw)], closed=True, fc="#9a9a9a", ec="k", lw=1.0, zorder=7.3))
     if zc < E.Z_CU0:
         return
     ax.add_patch(Circle(T, E.R_COL, fc="none", ec="k", lw=1.3, zorder=7))
@@ -132,7 +133,7 @@ def plantas():
         fig.text(0.66, 0.25, f"Datos de planta: ala larga 12,74 / bar 6,21 (Bing) / tramo final sin bar {E.L_FIN:.2f} (Bing, F73) / concha hasta {E.L_L - E._v['Y_CA']:.2f} del fondo (F73; Bing 35,13).\n"
                  f"Largo total 94,82 (Google). Esquina original a 90° con chaflán de {E.L_CH:.1f} m a {math.degrees(E.A_CH):.0f}°.\n"
                  f"Torre sobre el chaflán al {E._v['T_POS']*100:.0f} % desde la calle (algo a la derecha); la columna asoma 1,5 m.\n"
-                 f"Detrás de la torre: vestíbulo y circulaciones. Escalera: caja radial insertada en el cilindro, {E.ESC_W:.1f} × {E.ESC_WY:.1f} m, muros hacia el centro (usuario, F36, F73, F08).", fontsize=7, va="top")
+                 f"Detrás de la torre: vestíbulo y circulaciones. Escalera: caja radial insertada en el cilindro y dentro del ala larga, {E.ESC_W:.1f} × {E.ESC_WY:.1f} m, muros hacia el centro (F58, usuario).", fontsize=7, va="top")
         OUT.append(fig)
 
 
@@ -306,7 +307,7 @@ def alzados():
             [("73.webp", "F73"), ("13.webp", "F13"), ("12.png", "F12")],
             [f"testero +{V['Z_FIN']} con barandilla, puerta de servicio con marquesina y ventana encima (F73)",
              f"lo que asoma tras el testero a ≈ +11,3 es el extremo del bar, a {V['L_FIN']} m",
-             f"caja de escalera radial (muros hacia el centro de la torre): entra en el cilindro hasta r={V['ESC_R0']} y sale hasta r={V['ESC_R1']}, ancho {V['ESC_WY']} (usuario, F36, F73)"])]
+             f"caja de escalera radial (muros hacia el centro de la torre): entra en el cilindro hasta r={V['ESC_R0']} y sigue dentro del ala hasta r={V['ESC_R1']}, ancho {V['ESC_WY']} (F58, usuario)"])]
     for d, t, fotos, notas in lst:
         fig = hoja(t)
         ax = fig.add_axes([0.04, 0.16, 0.58, 0.78])

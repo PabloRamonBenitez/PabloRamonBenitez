@@ -33,12 +33,13 @@ COTAS = {
  "ARC2_W": (3.0, "arco bajo la llegada de la rampa 2 (paso)", "F71 arco junto al fin de la rampa · F76 arco en el extremo del bar hacia la torre"),
  "Y_CA":   (59.05, "fin alto de la concha/rampa exterior sobre la fachada (arranque de la curva final)", "F73: curva en s = 9,65 S (entre huecos 10 y 11) → 59,05 · Bing 59,67"),
  "R_FIN":  (3.0,  "desarrollo de la curva final de la concha (cae casi vertical arriba y se abre abajo)", "F73 (tramo alto casi vertical), F71, F47 (estimado ± 2)"),
- "ESC_Y": (20.3, "centro y de la caja de escalera", "F36, F62 (± 2)"),
+ "ESC_Y": (22.71, "centro de la caja a lo largo del eje radial", "F58 · ESC_R0/ESC_R1"),
  "ESC_WY": (5.0, "ancho de la caja (testa que mira al patio)", "F11/F08: hueco 2,3 + paño de lamas 2,5"),
  "ESC_RW": (2.3, "ancho del entrante en la testa (lado del barril)", "F11/F08: rellanos vistos junto al barril"),
  "ESC_Z1": (39.0, "coronación de la caja de escalera", "F08: a ras del tambor / base de la banda acristalada · F73"),
  "ESC_R0": (10.1, "escalera: arranque dentro del cilindro (radio desde el eje de la torre)", "usuario: caja insertada en el edificio · F36 cubierta 8,8 m centrada a ~14,6 m del eje"),
  "ESC_R1": (18.9, "escalera: frente exterior (radio desde el eje); sale ~4,5 m del barril", "F36/F62 · F73 asoma hacia el patio"),
+ "R2_X": (8.05, "rampa 2: borde interior (por fuera de la caja de escalera)", "coherencia con la escalera dentro del ala"),
  "H_PET":  (1.3,  "peto exterior de la terraza del ala larga (corona ≈ +8,5)", "F73 esquina del testero +8,5 ± 0,6"),
  "VA_0": (4.63, "alféizar fila alta (0,545 H)", "F73 vertical exacta, 3 huecos ±0,006 H"),
  "VA_1": (6.32, "dintel fila alta (0,743 H)", "F73 vertical exacta, 3 huecos ±0,002 H"),
@@ -72,7 +73,7 @@ COTAS = {
  "OR_X":   (0.6,  "desplazamiento del remate", "F09"),
  "N_AL":   (19,   "aletas / muros radiales", "fuentes + F09"),
  "ESC_W": (8.8, "largo radial de la caja (ESC_R1 − ESC_R0)", "F36 cubierta 8,3–8,8 m"),
- "ESC_X": (-2.7, "centro x de la caja de escalera: en el PATIO de la L, pegada al barril y al ala larga", "F36 y F62 cenital: 13,6 m del eje a 35° del ala hacia el patio → (−2,4; 19,3) / (−3,1; 21,3) · F73 asoma hacia el patio"),
+ "ESC_X": (5.43, "eje de la escalera: radial desde el centro de la torre a lo largo del ala larga (dentro del ala)", "F58 (cenital casi vertical): la caja está en el encuentro barril–ala, dentro de la franja del ala · usuario"),
  # --- planta
  "W_P":    (12.74,"ancho del ala larga", "Bing"),
  "W_BAR":  (6.21, "ancho del bar (mitad interior)", "Bing"),
@@ -148,7 +149,7 @@ def elementos():
     pri("cubierta del bar", [(0, yb0), (V_["W_BAR"] + V_["V_BAR"], yb0), (V_["W_BAR"] + V_["V_BAR"], V_["L_L"] - V_["L_FIN"]), (0, V_["L_L"] - V_["L_FIN"])], V_["Z_BAR"], V_["Z_BARC"], "Z25")
     pri("peto terraza", [(V_["W_P"] - 0.3, yb0), (V_["W_P"], yb0), (V_["W_P"], V_["L_L"]), (V_["W_P"] - 0.3, V_["L_L"])], V_["Z_P1"], V_["Z_P1"] + V_["H_PET"], "Z26")
     pri("concha", [(V_["W_P"], g["Q"][1]), (V_["W_EXT"], g["Q"][1]), (V_["W_P"], g["YC"])], 0, V_["Z_CON"], "Z21")
-    _x2 = V_["W_BAR"] + V_["V_BAR"]; _y2 = yb0 + V_["R2_Y0"]
+    _x2 = V_["R2_X"]; _y2 = yb0 + V_["R2_Y0"]
     pri("rampa 2 (a la azotea del bar)", [(_x2, _y2), (_x2 + V_["R2_W"], _y2), (_x2 + V_["R2_W"], _y2 + V_["R2_L"]), (_x2, _y2 + V_["R2_L"])], V_["Z_P1"], V_["Z_BARC"], "Z25")
     # torre
     cil("pie cónico", T, V_["R_COL"], 0, 4.0, "Z10", r0=V_["R_CONO"])
@@ -178,7 +179,7 @@ RANGOS = {
  "Z_LAD1": 1.0, "Z_CON": 0.8, "Z_CU0": 0.6, "Z_CU1": 0.6, "Z_ALE": 0.6, "Z_B0": 0.4, "F": 0.05, "N_PL": 0,
  "Z_T1": 0.5, "Z_G1": 0.5, "Z_V1": 0.5, "Z_R1": 0.6, "R_COL": 0.3, "R_CONO": 0.3, "R_CU": 0.5, "R_B": 0.3,
  "R_AL": 0.3, "R_T": 0.5, "R_G": 0.5, "R_V": 0.6, "R_R": 0.25, "OV_X": 1.0, "OV_Y": 1.5, "OR_X": 0.5, "N_AL": 0,
- "ESC_W": 1.5, "ESC_X": 2.0, "ESC_Y": 2.0, "ESC_WY": 0.8, "ESC_RW": 0.5, "ESC_Z1": 0.8, "W_P": 0.5, "W_BAR": 0.5, "V_BAR": 0.5, "L_L": 1.0, "L_FIN": 0.5, "Y_CA": 0.6, "R_FIN": 2.0, "S_VEN": 0.3, "N_VEN_B": 0, "MAR_P": 0.02, "MAR_B": 0.05, "MAR_R": 0.04, "R2_L": 3.0, "R2_W": 0.5, "R2_Y0": 2.0, "ARC2_W": 1.0, "N_VEN": 0, "VEN_W": 0.2, "VEN_FIN": 1.5, "ESC_L": 1.5, "ESC_REC": 0.5, "ESC_RL": 1.0, "R_MES": 1.0, "Z_ARC": 0.5, "U_ARC": 0.1, "D_CUNA": 1.0,
+ "ESC_W": 1.5, "ESC_X": 1.0, "R2_X": 0.5, "ESC_Y": 2.0, "ESC_WY": 0.8, "ESC_RW": 0.5, "ESC_Z1": 0.8, "W_P": 0.5, "W_BAR": 0.5, "V_BAR": 0.5, "L_L": 1.0, "L_FIN": 0.5, "Y_CA": 0.6, "R_FIN": 2.0, "S_VEN": 0.3, "N_VEN_B": 0, "MAR_P": 0.02, "MAR_B": 0.05, "MAR_R": 0.04, "R2_L": 3.0, "R2_W": 0.5, "R2_Y0": 2.0, "ARC2_W": 1.0, "N_VEN": 0, "VEN_W": 0.2, "VEN_FIN": 1.5, "ESC_L": 1.5, "ESC_REC": 0.5, "ESC_RL": 1.0, "R_MES": 1.0, "Z_ARC": 0.5, "U_ARC": 0.1, "D_CUNA": 1.0,
  "W_EXT": 1.0, "THL": 2.3, "ACH": 8.0, "REST": 1.0, "COL": 0.3, "HOT": 1.0, "L_CHF": 3.0, "T_POS": 0.1,
  "D_HOTF": 2.0, "RET": 0.5, "RETR": 0.5, "L_C": 3.0, "W_C": 1.0, "L_LAD": 1.5,
 }

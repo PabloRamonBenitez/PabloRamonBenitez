@@ -13,7 +13,7 @@ def hueco(x, y, z):    # sonda horizontal: cara mas exterior del solido a esa al
     return None if r.is_empty() else float(r.bounding_box()[3])
 y0 = E.plantas_base()["Q"][1] + V["D_HOTF"]
 chk = [
- ("terraza ala larga junto al bar (planta / secc. S3 / alzado 2)", ztop(V["W_BAR"] + V["V_BAR"] + 3.0, 50), V["Z_P1"]),
+ ("terraza ala larga junto al bar (planta / secc. S3 / alzado 2)", ztop(11.6, 50), V["Z_P1"]),
  ("peto exterior terraza", ztop(V["W_P"] - 0.15, 70), V["Z_P1"] + V["H_PET"]),
  ("cubierta del bar (a mitad del bar)", ztop(2, (E.plantas_base()["Q"][1] + V["L_L"] - V["L_FIN"]) / 2), V["Z_BARC"]),
  ("terraza tras el fin del bar", ztop(3, V["L_L"] - V["L_FIN"] + 5), V["Z_P1"]),
@@ -47,7 +47,8 @@ def _r_ext(v, z):
         if not (t ^ E.caja(px - 0.04, px + 0.04, py - 0.04, py + 0.04, z - 0.04, z + 0.04)).is_empty(): best = r
     return best
 chk.append(("escalera: frente exterior (radial, bajo el entrante)", _r_ext(1.0, 2.0), V["ESC_R1"]))
-chk.append(("escalera: entrante en la testa", _r_ext(1.0, 20.0), V["ESC_R1"] - V["ESC_REC"]))
+_px, _py = E.esc_pt(E.R_B + 1.2, V["ESC_WY"] / 2 - 0.3)
+chk.append(("escalera: entrante hacia el patio junto al barril (vacío = 1)", float((t ^ E.caja(_px - .05, _px + .05, _py - .05, _py + .05, 20, 20.1)).is_empty()), 1.0))
 px, py = E.esc_pt((V["ESC_R0"] + V["ESC_R1"]) / 2, 0)
 bb3 = (t ^ E.caja(px - 0.5, px + 0.5, py - 0.5, py + 0.5, -1, 80)).bounding_box()
 chk.append(("escalera: coronación", bb3[5], V["ESC_Z1"]))

@@ -250,7 +250,7 @@ def foto(ax, f, titulo):
 
 def _secc():
     T = np.array(E.T); U = np.array(E.U); N = np.array(E.N); pl = E.plantas_base()
-    xe = E._v["ESC_X"]; yc = (E.ESC_Y0 + E.ESC_Y1) / 2
+    xe = E.esc_ang_pt(10.0, 0.0)[0]; yc = (E.ESC_Y0 + E.ESC_Y1) / 2       # eje de la escalera (= eje radial de la torre)
     return [
      ("L1", (xe, -10), (xe, 100), "LONGITUDINAL por el eje de la escalera: escalera, barril, cuello, bar y ala larga entera"),
      ("L2", ((E.W_P + E.W_EXT) / 2, pl["Q"][1] - 6), ((E.W_P + E.W_EXT) / 2, 100), "LONGITUDINAL por la concha: su perfil curvo y la terraza detrás"),

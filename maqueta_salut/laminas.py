@@ -89,10 +89,10 @@ def plantas():
         ax2 = fig.add_axes([0.66, 0.30, 0.33, 0.62])
         planta(ax2, zc, "detalle torre / chaflán", aerea=zc is None)
         ejes(ax2, (E.T[0] - 20, E.T[0] + 20), (E.T[1] - 18, E.T[1] + 22))
-        fig.text(0.66, 0.25, "Datos de planta: ala larga 12,74 / bar 6,21 / tramo final 7,81 / concha hasta 35,13 del fondo (Bing).\n"
+        fig.text(0.66, 0.25, f"Datos de planta: ala larga 12,74 / bar 6,21 (Bing) / bar 1984 hasta el hueco 11: tramo final {E.L_FIN:.2f} (F01, F47; Bing actual 7,81) / concha hasta {E.L_L - E._v['Y_CA']:.2f} del fondo (F73; Bing 35,13).\n"
                  f"Largo total 94,82 (Google). Esquina original a 90° con chaflán de {E.L_CH:.1f} m a {math.degrees(E.A_CH):.0f}°.\n"
                  f"Torre sobre el chaflán al {E._v['T_POS']*100:.0f} % desde la calle (algo a la derecha); la columna asoma 1,5 m.\n"
-                 "Detrás de la torre: vestíbulo y circulaciones.", fontsize=7, va="top")
+                 f"Detrás de la torre: vestíbulo y circulaciones. Escalera en el patio: {E.ESC_W:.1f} × {E._v['ESC_WY']:.1f} m (F36, F62, F73, F08, F11).", fontsize=7, va="top")
         OUT.append(fig)
 
 
@@ -315,7 +315,7 @@ def coherencia():
     txt += ["", "Planta                    fuente (m)  planos (m)", "-" * 70,
             f"{'ala larga ancho':<25} {12.74:>7.2f}   {E.W_P:>9.2f}   Bing",
             f"{'bar ancho':<25} {6.21:>7.2f}   {E.W_BAR:>9.2f}   Bing",
-            f"{'tramo final':<25} {7.81:>7.2f}   {E.L_FIN:>9.2f}   Bing",
+            f"{'tramo final (1984)':<25} {37.74:>7.2f}   {E.L_FIN:>9.2f}   F01/F47 (Bing actual 7,81)",
             f"{'concha hasta el fondo':<25} {35.13:>7.2f}   {E.L_L - E.Y_CUNA:>9.2f}   Bing",
             f"{'chaflán (P1)':<25} {28.9:>7.2f}   {math.dist(E.A1, E.C):>9.2f}   F09 (12,8+6,5+9,6)",
             f"{'largo total':<25} {94.82:>7.2f}   {E.L_L:>9.2f}   Google",

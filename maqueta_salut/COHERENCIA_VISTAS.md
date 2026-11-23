@@ -18,7 +18,9 @@
 | nº ventanas fila alta (tramo tras la rampa) | 11.00 | 11.00 | OK |
 | nº huecos fila baja | 7.00 | 7.00 | OK |
 | hueco bajo el arco junto al hotel (vacío = 0) | 0.00 | 0.00 | OK |
-| escalera: ancho (lado corto) | 7.00 | 7.00 | OK |
-| escalera: salida más allá del barril | 8.00 | 8.00 | OK |
+| escalera: extremo hacia el patio (x, con lamas) | -7.10 | -7.10 | OK |
+| escalera: cara hacia el testero (y, con lamas) | 22.80 | 22.80 | OK |
+| escalera: coronación | 39.00 | 39.00 | OK |
+| escalera: baja al suelo | 0.00 | 0.00 | OK |
 | rampa 2 a mitad | 9.36 | 9.35 | OK |
 | relieve del marco (frente) | 12.82 | 12.82 | OK |

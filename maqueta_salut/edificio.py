@@ -89,8 +89,8 @@ def _inter(p, d, q, e):
     s = ((q[0] - p[0]) * e[1] - (q[1] - p[1]) * e[0]) / den
     return (p[0] + s * d[0], p[1] + s * d[1])
 L_LADR = _v["L_LAD"]                # bloque de ladrillo del extremo, sobre pilares       [F01]
-# escalera trasera: en linea con el ala larga, dentro de la L [usuario]
-ESC_W, ESC_Y0, ESC_Y1 = _v["ESC_W"], T[1] + 9.0, T[1] + R_B + _v["ESC_L"]   # planta alargada radial [F73, F13, F75]
+# escalera: en el patio de la L, pegada al barril y al ala larga, larga perpendicular al ala [F36, F62, F73, F07, F08, F11, F75]
+ESC_W, ESC_Y0, ESC_Y1 = _v["ESC_W"], _v["ESC_Y"] - _v["ESC_WY"] / 2, _v["ESC_Y"] + _v["ESC_WY"] / 2   # en el patio, perpendicular al ala [F36, F62, F73, F08, F11]
 
 
 def P(X, Y):
@@ -303,17 +303,16 @@ def torre():
         s.append(mt.rotate((0, 0, 360 * k / nm)).translate((T[0], T[1], 0)))
     s.append(cil(pv, R_V, Z_G1, Z_V1))
     s.append(cil(pr, R_R, Z_V1, Z_R1))
-    # escalera trasera, en linea con el ala larga [usuario, F11-F13]
-    xe = _v["ESC_X"]                             # eje de la escalera (cuadro de cotas)
-    s.append(caja(xe - ESC_W / 2, xe + ESC_W / 2, ESC_Y0, ESC_Y1, 0.0, Z_T1 + 1.0))   # la escalera baja hasta el suelo [coherencia]
+    # escalera (bloque medido aparte en las fotos reales; NO en la maqueta)
+    xe = _v["ESC_X"]
+    s.append(caja(xe - ESC_W / 2, xe + ESC_W / 2, ESC_Y0, ESC_Y1, 0.0, _v["ESC_Z1"]))   # baja al suelo del patio [F07]
     m = Manifold.batch_boolean(s, OpType.Add)
-    # entrante (hueco hacia dentro) en la cara hacia el patio, entre dos hojas macizas: se ven los rellanos [F75, F13]
-    ym = (T[1] + R_B + ESC_Y1) / 2
+    # entrante en la testa que mira al patio, del lado del barril: se ven los rellanos [F11, F08, F75]
     xi = xe - ESC_W / 2
-    m = m - caja(xi - 0.5, xi + _v["ESC_REC"], ym - _v["ESC_RL"] / 2, ym + _v["ESC_RL"] / 2, Z_P1 + 0.5, Z_T1 + 0.2)
-    for k in range(int((Z_T1 - Z_P1) / (F / 2))):                                     # rellanos vistos en el entrante
-        zr = Z_P1 + 0.5 + k * F / 2
-        m = m + caja(xi + _v["ESC_REC"] - 1.4, xi + _v["ESC_REC"], ym - _v["ESC_RL"] / 2, ym + _v["ESC_RL"] / 2, zr, zr + 0.25)
+    m = m - caja(xi - 0.5, xi + _v["ESC_REC"], ESC_Y0 - 0.01, ESC_Y0 + _v["ESC_RW"], 3.2, _v["ESC_Z1"] - 0.8)
+    for k in range(int((_v["ESC_Z1"] - 4.0) / (F / 2))):
+        zr = 3.4 + k * F / 2
+        m = m + caja(xi + _v["ESC_REC"] - 1.4, xi + _v["ESC_REC"], ESC_Y0, ESC_Y0 + _v["ESC_RW"], zr, zr + 0.25)
     # ventanas de las habitaciones: un hueco por modulo entre aletas, sobre el poyete [F04, F06, F09]
     hue = []
     for i in range(N_PL):
@@ -326,17 +325,15 @@ def torre():
                 h = Manifold.cube((0.5, 2.4, 1.4)).translate((rf - 0.25, -1.2, z + 1.7))   # ventana hasta el forjado superior [F09]
             hue.append(h.rotate((0, 0, a)).translate((T[0], T[1], 0)))
     m = m - Manifold.batch_boolean(hue, OpType.Add)
-    # lamas verticales de la escalera trasera [F11-F13]
+    # lamas: cara larga hacia el testero (+y) [F73, F11 paño B] y paño de la testa al patio [F11 paño A, F75]
     lam = []
     x = xe - ESC_W / 2 + 0.4
-    while x < xe + ESC_W / 2 - 0.3:                                     # testa
-        lam.append(caja(x - 0.12, x + 0.12, ESC_Y1, ESC_Y1 + 0.5, Z_P1 + 0.5, Z_T1 + 0.5))
+    while x < xe + ESC_W / 2 - 0.3:
+        lam.append(caja(x - 0.12, x + 0.12, ESC_Y1, ESC_Y1 + 0.5, 1.0, _v["ESC_Z1"] - 0.5))
         x += 0.8
-    y = T[1] + R_B + 0.3
-    while y < ESC_Y1 - 0.2:                                             # lados largos
-        if abs(y - ym) > _v["ESC_RL"] / 2:
-            for xx in (xe - ESC_W / 2 - 0.5, xe + ESC_W / 2):
-                lam.append(caja(xx, xx + 0.5, y - 0.12, y + 0.12, Z_P1 + 0.5, Z_T1 + 0.5))
+    y = ESC_Y0 + _v["ESC_RW"] + 0.3
+    while y < ESC_Y1 - 0.2:
+        lam.append(caja(xi - 0.5, xi, y - 0.12, y + 0.12, 1.0, _v["ESC_Z1"] - 0.5))
         y += 0.8
     return m + Manifold.batch_boolean(lam, OpType.Add)
 

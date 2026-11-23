@@ -7,11 +7,16 @@ COTAS = {
  # --- alturas de la base
  "Z_PB":   (3.2,  "techo de planta baja, única en toda la base", "F15 (época, autobús como escala)"),
  "Z_P1":   (7.2,  "coronación de planta primera = terraza (7,1 ± 0,3)", "rangos: F09 7,3 · F14 7,2 · F15 7,2 · F70 6,5"),
- "Z_BAR":  (11.0, "techo del bar sobre la terraza", "coherencia: = bloque alto ala corta"),
- "Z_BARC": (11.5, "cubierta volada del bar", "= bloque alto (sección AA/BB)"),
+ "Z_BAR":  (10.5, "techo del acristalamiento del bar (vidrio +9,6…+10,5 visto tras el testero)", "F73 (escala puerta testero) 10,5 ± 0,8 · F76 maqueta ~10"),
+ "Z_BARC": (11.5, "cubierta volada del bar (= bloque alto ala corta)", "F73 11,3 ± 1,1 · sección AA usuario · F76 ~10,4 (orientativa)"),
  "Z_ALTO": (11.5, "bloque alto del ala corta", "F01, sección AA del usuario"),
  "Z_LAD0": (0.0,  "el ladrillo arranca del suelo", "F72"),
- "Z_FIN":  (10.3, "cubierta del bloque final del ala larga (más alto que la terraza, con barandilla)", "F73 + maqueta F76 (estimado ± 1,5)"),
+ "Z_FIN":  (7.2,  "testero del ala larga: corona a la cota de la terraza (NO hay bloque alto); barandilla encima", "F73: testero +7,1 ± 0,9; lo alto que se ve detrás es el extremo del bar · F76"),
+ "H_PET":  (1.3,  "peto exterior de la terraza del ala larga (corona ≈ +8,5)", "F73 esquina del testero +8,5 ± 0,6"),
+ "VA_0":   (3.8,  "ventanas ala larga, fila alta: alféizar", "F73 3,7 ± 0,5"),
+ "VA_1":   (5.5,  "ventanas ala larga, fila alta: dintel", "F73 5,4 ± 0,6"),
+ "VB_0":   (1.5,  "ventanas ala larga, fila baja: alféizar", "F73 1,5 ± 0,3"),
+ "VB_1":   (2.4,  "ventanas ala larga, fila baja: dintel", "F73 2,4 ± 0,4"),
  "L_HOR":  (6.0,  "cuerpo de hormigón sobre pilares en el extremo del ala corta", "F72 (estimado ± 2)"),
  "Z_LAD1": (10.0, "coronación de la caja de ladrillo", "F01, F19"),
  "Z_CON":  (7.8,  "llegada de la rampa arriba (superficie; el peto de 1 m llega a ≈ +8,8)", "rangos: peto arriba F09 +8,3 ± 0,8 / F71 +9,6 ± 1,2 → +8,8"),
@@ -114,7 +119,7 @@ def elementos():
     yb0 = g["Q"][1]
     pri("bar", [(0, yb0), (V_["W_BAR"], yb0), (V_["W_BAR"], V_["L_L"] - V_["L_FIN"]), (0, V_["L_L"] - V_["L_FIN"])], V_["Z_P1"], V_["Z_BAR"], "Z25")
     pri("cubierta del bar", [(0, yb0), (V_["W_BAR"] + V_["V_BAR"], yb0), (V_["W_BAR"] + V_["V_BAR"], V_["L_L"] - V_["L_FIN"]), (0, V_["L_L"] - V_["L_FIN"])], V_["Z_BAR"], V_["Z_BARC"], "Z25")
-    pri("peto terraza", [(V_["W_P"] - 0.3, yb0), (V_["W_P"], yb0), (V_["W_P"], V_["L_L"]), (V_["W_P"] - 0.3, V_["L_L"])], V_["Z_P1"], V_["Z_P1"] + 1.0, "Z26")
+    pri("peto terraza", [(V_["W_P"] - 0.3, yb0), (V_["W_P"], yb0), (V_["W_P"], V_["L_L"]), (V_["W_P"] - 0.3, V_["L_L"])], V_["Z_P1"], V_["Z_P1"] + V_["H_PET"], "Z26")
     pri("concha", [(V_["W_P"], g["Q"][1]), (V_["W_EXT"], g["Q"][1]), (V_["W_P"], g["YC"])], 0, V_["Z_CON"], "Z21")
     # torre
     cil("pie cónico", T, V_["R_COL"], 0, 4.0, "Z10", r0=V_["R_CONO"])
@@ -140,7 +145,7 @@ def niveles():
 
 # Margen (±) de cada cota: medido en varias fotos ≈ 0,3-0,6 · una foto ≈ 1 · estimado ≈ 1,5-2 · satélite ≈ 1
 RANGOS = {
- "Z_PB": 0.3, "Z_P1": 0.3, "Z_BAR": 0.8, "Z_BARC": 0.8, "Z_ALTO": 1.0, "Z_LAD0": 0.5, "Z_FIN": 1.5, "L_HOR": 2.0,
+ "Z_PB": 0.3, "Z_P1": 0.3, "Z_BAR": 0.8, "Z_BARC": 0.8, "Z_ALTO": 1.0, "Z_LAD0": 0.5, "Z_FIN": 0.9, "H_PET": 0.6, "VA_0": 0.5, "VA_1": 0.6, "VB_0": 0.3, "VB_1": 0.4, "L_HOR": 2.0,
  "Z_LAD1": 1.0, "Z_CON": 0.8, "Z_CU0": 0.6, "Z_CU1": 0.6, "Z_ALE": 0.6, "Z_B0": 0.4, "F": 0.05, "N_PL": 0,
  "Z_T1": 0.5, "Z_G1": 0.5, "Z_V1": 0.5, "Z_R1": 0.6, "R_COL": 0.3, "R_CONO": 0.3, "R_CU": 0.5, "R_B": 0.3,
  "R_AL": 0.3, "R_T": 0.5, "R_G": 0.5, "R_V": 0.6, "R_R": 0.25, "OV_X": 1.0, "OV_Y": 1.5, "OR_X": 0.5, "N_AL": 0,

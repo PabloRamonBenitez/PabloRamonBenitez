@@ -76,13 +76,33 @@ def dibujar_vista(ax, m, res=RES, z=0):
         ax.imshow(img, extent=ext, interpolation="antialiased", zorder=z)
 
 
-def corte(ax, cs, z=5):
-    """poligonos de corte con trama y contorno grueso"""
+def corte(ax, cs, z=5, muro=0.4):
+    """corte arquitectonico: solo el espesor de muros/forjados (anillo de 'muro' m) va con trama y contorno grueso;
+    el interior queda hueco."""
     from matplotlib.patches import Polygon
+    from shapely.geometry import Polygon as SP
     for P in cs.to_polygons():
         P = np.array(P)
-        ax.add_patch(Polygon(P, closed=True, fc="#d9d9d9", ec="none", hatch="////", lw=0, zorder=z))
-        ax.add_patch(Polygon(P, closed=True, fc="none", ec="k", lw=1.8, zorder=z + 1))
+        if len(P) < 3:
+            continue
+        sp = SP(P).buffer(0)
+        if sp.is_empty:
+            continue
+        hueco = sp.buffer(-muro)
+        anillo = sp.difference(hueco) if not hueco.is_empty else sp
+        geoms = getattr(anillo, "geoms", [anillo])
+        for gm in geoms:
+            if gm.is_empty or gm.geom_type != "Polygon":
+                continue
+            ext = np.array(gm.exterior.coords)
+            ax.add_patch(Polygon(ext, closed=True, fc="#9a9a9a", ec="none", zorder=z))
+            for it in gm.interiors:
+                ax.add_patch(Polygon(np.array(it.coords), closed=True, fc="white", ec="none", zorder=z + 0.5))
+        ax.add_patch(Polygon(P, closed=True, fc="none", ec="k", lw=1.6, zorder=z + 1))
+        if not hueco.is_empty:
+            for gm in getattr(hueco, "geoms", [hueco]):
+                if gm.geom_type == "Polygon":
+                    ax.add_patch(Polygon(np.array(gm.exterior.coords), closed=True, fc="none", ec="k", lw=0.6, zorder=z + 1))
 
 
 def encima(ax, m, z=4):

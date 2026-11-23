@@ -194,19 +194,32 @@ def secciones():
 
 
 def alzados():
-    lst = [((E.N[0], E.N[1]), "ALZADO 1 – CHAFLÁN (frontal)", [("9.webp", "F09"), ("14.webp", "F14")]),
-           ((-1, 0), "ALZADO 2 – FACHADA EXTERIOR DEL ALA LARGA (con la concha)", [("47.webp", "F47"), ("24.webp", "F24")]),
-           ((0, 1), "ALZADO 3 – CALLE (ala corta)", [("1.webp", "F01"), ("19.webp", "F19")]),
-           ((1, 0), "ALZADO 4 – PATIO INTERIOR DE LA L", []),
-           ((0, -1), "ALZADO 5 – TESTERO DEL ALA LARGA (hacia la torre)", [("13.webp", "F13"), ("12.png", "F12")])]
-    for d, t, fotos in lst:
+    V = E._v
+    lst = [((E.N[0], E.N[1]), "ALZADO 1 – CHAFLÁN (frontal)",
+            [("9.webp", "F09"), ("14.webp", "F14"), ("70.webp", "F70"), ("71.webp", "F71")],
+            [f"PB {V['Z_PB']} / base {V['Z_P1']}: F09 7,3 · F14 7,2 · F70 6,5 (rango 7,1±0,3)",
+             f"rampa: peto arriba +{V['Z_CON'] + 1:.1f}: F09 8,3±0,8 · F71 9,6±1,2"]),
+           ((-1, 0), "ALZADO 2 – FACHADA EXTERIOR DEL ALA LARGA (con la rampa)",
+            [("73.webp", "F73 (desde el testero)"), ("71.webp", "F71"), ("76.webp", "F76 maqueta (orient.)"), ("47.webp", "F47")],
+            [f"peto terraza +{V['Z_P1'] + V['H_PET']:.1f}: F73 8,5±0,6",
+             f"testero +{V['Z_FIN']}: F73 7,1±0,9 (no hay bloque alto: lo que asoma detrás es el bar)",
+             f"bar: vidrio hasta +{V['Z_BAR']}, cubierta +{V['Z_BARC']}: F73 10,5 / 11,3±1,1 · F76 ~10,4",
+             f"ventanas: alta {V['VA_0']}–{V['VA_1']}, baja {V['VB_0']}–{V['VB_1']}: F73; ambas filas nacen donde acaba la rampa (F73, F71)",
+             "rampa: perfil convexo que cae al final: F73, F71, F76"]),
+           ((0, 1), "ALZADO 3 – CALLE (ala corta)", [("1.webp", "F01"), ("19.webp", "F19"), ("72.webp", "F72")], []),
+           ((1, 0), "ALZADO 4 – PATIO INTERIOR DE LA L", [("75.png", "F75 (escalera desde el patio)")], []),
+           ((0, -1), "ALZADO 5 – TESTERO DEL ALA LARGA (hacia la torre)",
+            [("73.webp", "F73"), ("13.webp", "F13"), ("12.png", "F12")],
+            [f"testero +{V['Z_FIN']} con barandilla; detrás, extremo del bar +{V['Z_BARC']} retranqueado {V['L_FIN']} m (F73)"])]
+    for d, t, fotos, notas in lst:
         fig = hoja(t)
-        ax = fig.add_axes([0.04, 0.05, 0.62 if fotos else 0.92, 0.88])
+        ax = fig.add_axes([0.04, 0.16, 0.58, 0.78])
         alzado(ax, d, t)
         for i, (f, nm) in enumerate(fotos):
-            foto(fig.add_axes([0.68, 0.52 - i * 0.46, 0.31, 0.42]), f, f"comprobación: {nm}")
-        if not fotos:
-            fig.text(0.05, 0.02, "Sin foto del patio interior: alzado deducido de plantas y secciones.", fontsize=8)
+            c, r = i % 2, i // 2
+            foto(fig.add_axes([0.63 + c * 0.185, 0.50 - r * 0.46, 0.18, 0.42]), f, f"comprobación: {nm}")
+        for j, n in enumerate(notas):
+            fig.text(0.05, 0.12 - j * 0.022, "• " + n.replace(".", ","), fontsize=7.5)
         OUT.append(fig)
 
 

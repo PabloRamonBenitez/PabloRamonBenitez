@@ -151,10 +151,8 @@ def base():
     yb0 = pl["Q"][1]
     s += [caja(0, W_BAR, yb0, L_L - L_FIN, Z_P1 - 0.01, Z_BAR),
           caja(0, W_BAR + 1.2, yb0, L_L - L_FIN, Z_BAR, Z_BAR_C),
-          caja(W_P - 0.3, W_P, yb0, L_L, Z_P1 - 0.01, Z_P1 + 1.0),
-          caja(W_BAR, W_P, L_L - 0.3, L_L, Z_P1 - 0.01, Z_P1 + 1.0),
-          caja(0, W_P, L_L - L_FIN, L_L, Z_P1 - 0.01, _v["Z_FIN"]),                          # bloque final, mas alto que la terraza [F73, F76]
-          caja(0, W_P, L_L - L_FIN - 0.15, L_L - L_FIN, _v["Z_FIN"] - 0.01, _v["Z_FIN"] + 1.0)]   # barandilla/peto en su cubierta
+          caja(W_P - 0.3, W_P, yb0, L_L, Z_P1 - 0.01, Z_P1 + _v["H_PET"]),             # peto exterior terraza [F73 +8,5]
+          caja(0, W_P - 0.3, L_L - 0.25, L_L - 0.15, _v["Z_FIN"] - 0.01, _v["Z_FIN"] + 1.1)]   # testero a cota terraza + barandilla [F73]
     # concha: franja exterior que se estrecha de W_EXT a W_P hasta Y_CUNA; alta junto al hotel (+7,3) y baja en
     # curva al suelo; debajo, planta baja hundida [F47, F09, Bing]
     y0 = pl["Q"][1] + _v["D_HOTF"]          # la concha empieza tras la banda del hotel sobre la fachada del ala [C04]
@@ -164,23 +162,36 @@ def base():
     def f(v):
         x, y, z = v
         y = min(max(y, 0.0), 1.0)
-        zt = max(0.15, _v["Z_CON"] * (1 - y))              # cota de la rampa: Z_CON arriba, 0 abajo (lineal) [F71]
+        zt = max(0.15, _v["Z_CON"] * math.sqrt(max(0.0, 1 - y ** 2)))   # perfil curvo (convexo) en alzado [F47, F71]
         return (W_P - 0.02 + x * WR, y0 + y * (Y_CUNA - y0), z * zt)
     rampa = Manifold.cube((1, 1, 1)).refine(30).warp(f)
     def fp(v):
         x, y, z = v
         y = min(max(y, 0.0), 1.0)
-        zt = max(0.15, _v["Z_CON"] * (1 - y))
+        zt = max(0.15, _v["Z_CON"] * math.sqrt(max(0.0, 1 - y ** 2)))
         return (W_EXT - 0.25 + x * 0.25, y0 + y * (Y_CUNA - y0), zt - 0.01 + z * 1.0)   # peto de 1 m
     peto = Manifold.cube((1, 1, 1)).refine(30).warp(fp)
     s += [rampa, peto]
     m = Manifold.batch_boolean(s, OpType.Add)
     # huecos de ventanas (franjas continuas casi a paño) [F09, F14]
     hue = [ROT(caja(-L_C + L_LADR + 0.4, xA, -1, 0.3, 4.6, 6.6))]
-    for k in range(10):                                     # ala larga: 2 filas de 10 en la mitad del fondo [F47]
-        y = 52.0 + 1.2 + 4.0 * k
-        for z0 in (1.2, 4.6):
-            hue.append(caja(W_P - 0.3, W_P + 1, y, y + 1.6, z0, z0 + 1.6))
+    # ventanas del ala larga [F47, F73]: fila alta en toda la longitud (por encima de la rampa);
+    # fila baja solo donde la rampa ya no la tapa (tramo final)
+    # [F73] dos filas superpuestas (alta 3,8-5,5 / baja 1,5-2,4); cada fila empieza donde el peto de la rampa
+    # ya ha bajado por debajo de su alfeizar
+    def z_peto_rampa(yy):
+        if yy <= y0 or yy >= Y_CUNA:
+            return 0.0 if yy >= Y_CUNA else 99.0
+        u = (yy - y0) / (Y_CUNA - y0)
+        return max(0.15, _v["Z_CON"] * math.sqrt(max(0.0, 1 - u ** 2))) + 1.0
+    y = C[1] + _v["D_HOTF"] + 1.5
+    while y < L_L - 1.5:
+        zp = max(z_peto_rampa(y), z_peto_rampa(y + 1.5))
+        if zp < _v["VA_0"] - 0.2:
+            hue.append(caja(W_P - 0.3, W_P + 1, y, y + 1.5, _v["VA_0"], _v["VA_1"]))
+        if zp < _v["VB_0"] - 0.2:
+            hue.append(caja(W_P - 0.3, W_P + 1, y, y + 1.5, _v["VB_0"], _v["VB_1"]))
+        y += 3.0
     m = m - Manifold.batch_boolean(hue, OpType.Add)
     # chaflan (coordenadas de torre): franjas de ventanas restaurante / hotel
     rot = math.degrees(math.atan2(U[1], U[0]))

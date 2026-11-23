@@ -309,10 +309,24 @@ def coherencia():
     OUT.append(fig)
 
 
+def cuadro_cotas():
+    import cotas as K
+    fig = hoja("CUADRO DE COTAS (fuente única) con márgenes")
+    ax = fig.add_axes([0.01, 0.02, 0.98, 0.93]); ax.axis("off")
+    filas = []
+    for k, (v, d, src) in K.COTAS.items():
+        r = K.RANGOS.get(k, None); rr = "—" if r in (None, 0) else f"± {r}"
+        filas.append(f"{k:<7} {v:>8} {rr:>7}   {d[:60]:<60} {src[:70]}")
+    h = (len(filas) + 1) // 2
+    ax.text(0, 1, "\n".join(filas[:h]), family="monospace", fontsize=5.6, va="top")
+    ax.text(0.5, 1, "\n".join(filas[h:]), family="monospace", fontsize=5.6, va="top")
+    OUT.insert(0, fig)
+
+
 if __name__ == "__main__":
-    plantas(); secciones(); alzados(); detalles(); coherencia()
+    plantas(); secciones(); alzados(); detalles(); coherencia(); cuadro_cotas()
     plt.rcParams['figure.max_open_warning'] = 0
-    with PdfPages("SALUT_planos_desde_fotos.pdf") as pdf:
+    with PdfPages("SALUT_planos_definitivos.pdf") as pdf:
         for i, f in enumerate(OUT):
             pdf.savefig(f)
             f.savefig(f"lam_{i + 1:02d}.png", dpi=80)

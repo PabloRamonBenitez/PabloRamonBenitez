@@ -137,3 +137,14 @@ def niveles():
     return [(0, "±0"), (V["Z_PB"], "techo PB"), (V["Z_P1"], "planta 1 / terraza"), (V["Z_BARC"], "bar / bloque alto"),
             (V["Z_CU0"], "cuello"), (V["Z_ALE"], "aletas"), (zb1, "cubierta barril"), (V["Z_T1"], "tambor"),
             (V["Z_G1"], "banda"), (V["Z_V1"], "visera"), (V["Z_R1"], "remate")]
+
+# Margen (±) de cada cota: medido en varias fotos ≈ 0,3-0,6 · una foto ≈ 1 · estimado ≈ 1,5-2 · satélite ≈ 1
+RANGOS = {
+ "Z_PB": 0.3, "Z_P1": 0.3, "Z_BAR": 0.8, "Z_BARC": 0.8, "Z_ALTO": 1.0, "Z_LAD0": 0.5, "Z_FIN": 1.5, "L_HOR": 2.0,
+ "Z_LAD1": 1.0, "Z_CON": 0.8, "Z_CU0": 0.6, "Z_CU1": 0.6, "Z_ALE": 0.6, "Z_B0": 0.4, "F": 0.05, "N_PL": 0,
+ "Z_T1": 0.5, "Z_G1": 0.5, "Z_V1": 0.5, "Z_R1": 0.6, "R_COL": 0.3, "R_CONO": 0.3, "R_CU": 0.5, "R_B": 0.3,
+ "R_AL": 0.3, "R_T": 0.5, "R_G": 0.5, "R_V": 0.6, "R_R": 0.25, "OV_X": 1.0, "OV_Y": 1.5, "OR_X": 0.5, "N_AL": 0,
+ "ESC_W": 1.0, "ESC_X": 2.0, "W_P": 0.5, "W_BAR": 0.5, "V_BAR": 0.5, "L_L": 1.0, "L_FIN": 0.5, "D_CUNA": 1.0,
+ "W_EXT": 1.0, "THL": 2.3, "ACH": 8.0, "REST": 1.0, "COL": 0.3, "HOT": 1.0, "L_CHF": 3.0, "T_POS": 0.1,
+ "D_HOTF": 2.0, "RET": 0.5, "RETR": 0.5, "L_C": 3.0, "W_C": 1.0, "L_LAD": 1.5,
+}

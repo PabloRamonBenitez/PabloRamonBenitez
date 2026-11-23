@@ -187,40 +187,28 @@ def base():
     # RAMPA (F71): plano inclinado de ancho constante pegado a la fachada exterior del ala; sube desde el suelo
     # (lejos de la torre) hasta la terraza de la planta primera junto a la banda del hotel; peto en el borde exterior.
     WR = W_EXT - W_P
-    YA, YB = _v["Y_CA"], _v["Y_CA"] + _v["R_FIN"]
-    LR = YB - y0
+    # RAMPA DE ACCESO PÚBLICO A LA TERRAZA-RESTAURANTE (+Z_P1): nace en la plaza junto a los huecos del ala (pie en
+    # Y_CUNA ≈ Bing 59,67) y sube HACIA LA TORRE hasta la terraza, con perfil curvo convexo [F76, F47, F71, F01];
+    # vista desde el testero (F73) su pendiente de ~40 m se ve en escorzo como una "curva" corta.
+    YB = Y_CUNA; LR = YB - y0; C_ = _v["RAMPA_C"]
     Y_ARC = y0 + _v["U_ARC"] * (Y_CUNA - y0)
-    def zr(yy):         # coronación: alta (Z_CON) hasta YA; curva final cóncava: casi vertical arriba, abierta abajo [F73, F71, F47]
-        if yy <= YA: return _v["Z_CON"]
-        t = min((yy - YA) / (YB - YA), 1.0)
-        return max(0.05, _v["Z_CON"] * (1 - math.sqrt(max(0.0, 1 - (1 - t) ** 2))))
-    def zs(yy):         # intradós del arco bajo la concha junto al hotel [F47 vacío oscuro, F71, F76]
+    def zr(yy):
+        u = min(max((yy - y0) / LR, 0.0), 1.0)
+        return max(0.05, _v["Z_CON"] * (1 - u) * (1 + C_ * u))
+    def zs(yy):         # intradós del arco bajo la rampa junto al hotel (paso en planta baja) [F47, F71, F76]
         if yy >= Y_ARC: return 0.0
         u = (yy - y0) / (Y_ARC - y0)
-        return min(_v["Z_ARC"] * math.sqrt(max(0.0, 1 - u ** 2)), zr(yy) - 0.6)
-    def wr(yy):         # ancho en planta: WR hasta YA, se cierra hasta el espesor de un muro en YB
-        return WR if yy <= YA else max(0.3, WR * (1 - (yy - YA) / (YB - YA)))
+        return max(0.0, min(_v["Z_ARC"] * math.sqrt(max(0.0, 1 - u ** 2)), zr(yy) - 0.6))
     def f(v):
         x, y, z = v
-        yy = y0 + min(max(y, 0.0), 1.0) * (YA - y0)
+        yy = y0 + min(max(y, 0.0), 1.0) * LR
         lo, hi = zs(yy), zr(yy)
         return (W_P - 0.02 + x * WR, yy, lo + z * (hi - lo))
     rampa = Manifold.cube((1, 1, 1)).refine(60).warp(f)
-    # curva final: perfil (y, z) exacto extruido en el ancho, que se cierra hacia la fachada
-    prof = [(YA - 0.05, 0.0), (YA - 0.05, _v["Z_CON"])] + [(YA + (YB - YA) * k / 40, zr(YA + (YB - YA) * k / 40)) for k in range(1, 41)] + [(YB, 0.0)]
-    cs = CrossSection([prof])
-    if cs.area() <= 0: cs = CrossSection([prof[::-1]])
-    fin = Manifold.extrude(cs, 1.0).rotate((90, 0, 0)).rotate((0, 0, 90))      # (y,z) -> plano y-z, espesor en x
-    bb = fin.bounding_box()
-    fin = fin.translate((-bb[0], 0, 0)).scale((WR, 1, 1)).translate((W_P - 0.02, 0, 0))
-    def taper(v):
-        x, y, z = v
-        return (W_P - 0.02 + (x - W_P + 0.02) * max(0.3, WR * (1 - (y - YA) / (YB - YA))) / WR if y > YA else x, y, z)
-    rampa = rampa + fin.warp(taper)
     def fp(v):
         x, y, z = v
-        yy = y0 + min(max(y, 0.0), 1.0) * min(LR, YA - y0)
-        return (W_P + wr(yy) - 0.25 + x * 0.25, yy, zr(yy) - 0.01 + z * 1.0)   # peto de 1 m sobre el tramo alto
+        yy = y0 + min(max(y, 0.0), 1.0) * LR
+        return (W_P + WR - 0.25 + x * 0.25, yy, zr(yy) - 0.01 + z * 1.0)          # peto de 1 m en el borde exterior
     peto = Manifold.cube((1, 1, 1)).refine(40).warp(fp)
     s += [rampa, peto]
     # RAMPA 2 (F71, F76) con lógica de recorrido: nace en la terraza (+Z_P1) lejos de la torre y SUBE HACIA LA TORRE

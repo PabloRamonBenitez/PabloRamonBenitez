@@ -20,8 +20,7 @@ chk = [
  ("tramo final sin bar (testero)", ztop(3, V["L_L"] - 3), V["Z_FIN"]),
  ("barandilla del testero", ztop(3, V["L_L"] - 0.2), V["Z_FIN"] + 1.1),
  ("rampa arriba (superficie)", ztop(V["W_P"] + 1.5, y0 + 0.3), V["Z_CON"]),
- ("concha a mitad (coronación alta)", ztop(V["W_P"] + 1.5, (y0 + V["Y_CA"]) / 2), V["Z_CON"]),
- ("concha: curva final a media altura", ztop(V["W_P"] + 0.5, V["Y_CA"] + V["R_FIN"] * (1 - 0.866)), V["Z_CON"] * 0.5),
+ ("rampa de acceso a mitad (perfil curvo)", ztop(V["W_P"] + 1.5, (y0 + E.Y_CUNA) / 2), V["Z_CON"] * 0.5 * (1 + V["RAMPA_C"] * 0.5)),
  ("largo ala larga L_L (muro, sin la marquesina)", float((m ^ E.caja(0.5, 2, 30, 200, 6, 6.5)).bounding_box()[4]), V["L_L"]),
 ]
 yv = V["L_L"] - V["VEN_FIN"] - V["VEN_W"] + 0.2

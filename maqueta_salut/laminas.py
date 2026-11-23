@@ -42,7 +42,27 @@ def planta(ax, zc, titulo, aerea=False):
         L.encima(ax, arriba)
         L.corte(ax, M.slice(zc), huecos=VT.cortados(zc))
         estructura_torre(ax, zc)
+    recorridos(ax)
     ax.set_title(titulo, fontsize=10, loc="left")
+
+
+def recorridos(ax):
+    """recorrido público: plaza → rampa de acceso → terraza-restaurante (+7,20) → rampa 2 → azotea del bar"""
+    V = E._v; xr = (E.W_P + E.W_EXT) / 2; y0 = E.plantas_base()["Q"][1] + V["D_HOTF"]
+    ax.annotate("", xy=(xr, y0 + 1.0), xytext=(xr, E.Y_CUNA - 1.0),
+                arrowprops=dict(arrowstyle="-|>", lw=1.0, color="#1a5fb4"), zorder=80)
+    ax.text(xr + 1.0, (y0 + E.Y_CUNA) / 2, f"RAMPA DE ACCESO desde la plaza\nsube ±0,00 → +{V['Z_CON']:.2f} a la terraza-restaurante".replace(".", ","),
+            fontsize=5.5, color="#1a5fb4", rotation=90, va="center", ha="left", zorder=80)
+    ax.annotate("", xy=(E.W_P - 1.0, y0 + V["R_ENT"] / 2), xytext=(xr, y0 + V["R_ENT"] / 2),
+                arrowprops=dict(arrowstyle="-|>", lw=1.0, color="#1a5fb4"), zorder=80)
+    yt = (E.L_L - V["L_FIN"] + y0) / 2
+    ax.text(9.6, yt + 12, "TERRAZA-RESTAURANTE\n+7,20 (sombrillas F01, F47)", fontsize=5.5, color="#1a5fb4", rotation=90,
+            va="center", ha="center", zorder=80)
+    y_top = E.T[1] + V["ESC_R1"] + V["R2_PLAT"]
+    ax.annotate("", xy=(V["R2_X"] + V["R2_W"] / 2, y_top + 0.5), xytext=(V["R2_X"] + V["R2_W"] / 2, y_top + V["R2_L"] - 0.5),
+                arrowprops=dict(arrowstyle="-|>", lw=0.8, color="#1a5fb4"), zorder=80)
+    ax.text(V["R2_X"] + V["R2_W"] / 2 + 0.6, y_top + V["R2_L"] / 2, "rampa 2 → azotea del bar +11,50", fontsize=4.8,
+            color="#1a5fb4", rotation=90, va="center", zorder=80)
 
 
 def estructura_torre(ax, zc):
@@ -311,7 +331,7 @@ def alzados():
             [("73.webp", "F73 (desde el testero)"), ("71.webp", "F71"), ("76.webp", "F76 maqueta (orient.)"), ("47.webp", "F47")],
             [f"huecos: {V['N_VEN']} arriba y {V['N_VEN_B']} abajo (bajo los {V['N_VEN_B']} junto al testero), intereje {V['S_VEN']}, hueco {V['VEN_W']} (F73, F01, F47 + tu recuento)",
              f"alturas: fila alta {V['VA_0']}–{V['VA_1']}, baja {V['VB_0']}–{V['VB_1']} (verticales exactas en F73); marco que sale {V['MAR_P']}, vidrio {V['MAR_R']} adentro",
-             f"rampa 1: llega a +{V['Z_CON']} = cota de la terraza, sin escalón; arco debajo (F71, F73, F47, F76)",
+             f"rampa de acceso público: sube desde la plaza (pie a {E.Y_CUNA:.1f}) hasta la terraza-restaurante +{V['Z_CON']}, perfil curvo; arco de paso debajo junto al hotel (F76, F47, F71, F73)",
              f"rampa 2: sube de la terraza (+{V['Z_P1']}) HACIA la torre hasta una meseta a +{V['Z_BARC']} delante de la escalera (puerta) y de la azotea del bar; arco de paso bajo la meseta (F71, F76)",
              f"bar hasta {V['L_FIN']} m del testero (Bing, F73, F47); peto +{V['Z_P1'] + V['H_PET']:.1f}; testero +{V['Z_FIN']}"]),
            ((0, 1), "ALZADO 3 – CALLE (ala corta)", [("1.webp", "F01"), ("19.webp", "F19"), ("72.webp", "F72")], []),

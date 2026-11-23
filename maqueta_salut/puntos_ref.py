@@ -64,14 +64,14 @@ def generar():
     for nm, p in (("EXT-SUP", (W_P, L_L, E.Z_P1 + V["H_PET"])), ("EXT-0", (W_P, L_L, 0)), ("INT-SUP", (0, L_L, V["Z_FIN"])),
                   ("INT-0", (0, L_L, 0)), ("BAR-SUP", (0, L_L - 0.2, V["Z_FIN"] + 1.1))):
         add(f"TES-{nm}", "TESTERO", f"testero {nm}", p)
-    # ---------------- VENTANAS (4 esquinas de cada hueco)
-    n, wv = int(V["N_VEN"]), V["VEN_W"]
-    ya, yz = E.Y_CUNA + 0.5, L_L - V["VEN_FIN"] - wv
+    # ---------------- VENTANAS (4 esquinas de cada hueco): 11 arriba, 7 abajo desde el testero
+    n, nb, wv, S_ = int(V["N_VEN"]), int(V["N_VEN_B"]), V["VEN_W"], V["S_VEN"]
     for i in range(n):
-        y = ya + i * (yz - ya) / (n - 1)
+        y1_ = L_L - V["VEN_FIN"] - i * S_; y = y1_ - wv
         for fila, z0, z1 in (("A", V["VA_0"], V["VA_1"]), ("B", V["VB_0"], V["VB_1"])):
+            if fila == "B" and i >= nb: continue
             for c_, (yy, zz) in zip("abcd", ((y, z0), (y + wv, z0), (y + wv, z1), (y, z1))):
-                add(f"VEN-{fila}{i + 1:02d}-{c_}", f"VENTANAS fila {fila}", f"hueco {i + 1} fila {fila} esquina {c_}", (W_P, yy, zz))
+                add(f"VEN-{fila}{i + 1:02d}-{c_}", f"VENTANAS fila {fila}", f"hueco {i + 1} (desde testero) fila {fila} esquina {c_}", (W_P + V["MAR_P"], yy, zz))
     # ---------------- BAR
     yb0, yb1 = Q[1], L_L - V["L_FIN"]
     for nm, (x, y, z) in {"CUB-EI": (0, yb0, E.Z_BAR_C), "CUB-EF": (V["W_BAR"] + V["V_BAR"], yb0, E.Z_BAR_C),
@@ -81,17 +81,22 @@ def generar():
         add(f"BAR-{nm}", "BAR", f"bar {nm}", (x, y, z))
     for yy in np.arange(yb0, yb1, 5.0):
         add(f"BAR-BOR-{yy:05.1f}", "BAR", f"borde cubierta volada y={yy:.1f}", (V["W_BAR"] + V["V_BAR"], yy, E.Z_BAR_C))
+    # ---------------- RAMPA 2 (terraza → azotea del bar)
+    xr2 = V["W_BAR"] + V["V_BAR"] + V["R2_W"]; ya2 = yb0 + V["R2_Y0"]
+    for j in range(11):
+        u = j / 10
+        add(f"RA2-PET-{j:02d}", "RAMPA 2", f"peto rampa 2 u={u:.1f}", (xr2, ya2 + u * V["R2_L"], E.Z_P1 + u * (E.Z_BAR_C - E.Z_P1) + 1.0))
     # ---------------- RAMPA (perfil del peto y del arco)
-    y0r = Q[1] + V["D_HOTF"]; LR = E.Y_CUNA - y0r
-    um = V["R_MES"] / LR
+    y0r = Q[1] + V["D_HOTF"]; YA, YB = V["Y_CA"], V["Y_CA"] + V["R_FIN"]
+    Y_ARC = y0r + V["U_ARC"] * (E.Y_CUNA - y0r)
     for j in range(21):
-        u = j / 20
-        zr = V["Z_CON"] if u <= um else max(0.15, V["Z_CON"] * (1 - (u - um) / (1 - um)))
-        ua = V["U_ARC"]
-        zs = 0.0 if u >= ua else min(V["Z_ARC"] * math.sqrt(max(0.0, 1 - (u / ua) ** 2)), zr - 0.6)
-        yy = y0r + u * LR
-        add(f"RAM-PET-{j:02d}", "RAMPA peto", f"peto rampa u={u:.2f}", (V["W_EXT"], yy, zr + 1.0))
-        add(f"RAM-ARC-{j:02d}", "RAMPA arco", f"intradós arco u={u:.2f}", (V["W_EXT"], yy, zs))
+        yy = y0r + j / 20 * (YB - y0r)
+        if yy <= YA: zr = V["Z_CON"]
+        else:
+            t = min((yy - YA) / (YB - YA), 1.0); zr = max(0.05, V["Z_CON"] * (1 - math.sqrt(max(0.0, 1 - (1 - t) ** 2))))
+        zs = 0.0 if yy >= Y_ARC else min(V["Z_ARC"] * math.sqrt(max(0.0, 1 - ((yy - y0r) / (Y_ARC - y0r)) ** 2)), zr - 0.6)
+        add(f"RAM-PET-{j:02d}", "RAMPA peto", f"coronación concha y={yy:.1f}", (V["W_EXT"], yy, zr + (1.0 if yy <= YA else 0.0)))
+        add(f"RAM-ARC-{j:02d}", "RAMPA arco", f"intradós arco y={yy:.1f}", (V["W_EXT"], yy, zs))
     # ---------------- BASE: chaflán y ala corta (vértices de P1 y PB a sus cotas)
     for i, p in enumerate(pl["P1"]):
         add(f"BAS-P1-{i}", "BASE planta 1", f"vértice P1 {i} coronación", (p[0], p[1], E.Z_P1))

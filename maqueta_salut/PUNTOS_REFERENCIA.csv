@@ -435,101 +435,85 @@ TES-EXT-0,TESTERO,testero EXT-0,12.74,94.8,0.0
 TES-INT-SUP,TESTERO,testero INT-SUP,0.0,94.8,7.2
 TES-INT-0,TESTERO,testero INT-0,0.0,94.8,0.0
 TES-BAR-SUP,TESTERO,testero BAR-SUP,0.0,94.6,8.3
-VEN-A01-a,VENTANAS fila A,hueco 1 fila A esquina a,12.74,60.169999999999995,3.8
-VEN-A01-b,VENTANAS fila A,hueco 1 fila A esquina b,12.74,61.37,3.8
-VEN-A01-c,VENTANAS fila A,hueco 1 fila A esquina c,12.74,61.37,5.5
-VEN-A01-d,VENTANAS fila A,hueco 1 fila A esquina d,12.74,60.169999999999995,5.5
-VEN-B01-a,VENTANAS fila B,hueco 1 fila B esquina a,12.74,60.169999999999995,0.8
-VEN-B01-b,VENTANAS fila B,hueco 1 fila B esquina b,12.74,61.37,0.8
-VEN-B01-c,VENTANAS fila B,hueco 1 fila B esquina c,12.74,61.37,2.5
-VEN-B01-d,VENTANAS fila B,hueco 1 fila B esquina d,12.74,60.169999999999995,2.5
-VEN-A02-a,VENTANAS fila A,hueco 2 fila A esquina a,12.74,63.062999999999995,3.8
-VEN-A02-b,VENTANAS fila A,hueco 2 fila A esquina b,12.74,64.26299999999999,3.8
-VEN-A02-c,VENTANAS fila A,hueco 2 fila A esquina c,12.74,64.26299999999999,5.5
-VEN-A02-d,VENTANAS fila A,hueco 2 fila A esquina d,12.74,63.062999999999995,5.5
-VEN-B02-a,VENTANAS fila B,hueco 2 fila B esquina a,12.74,63.062999999999995,0.8
-VEN-B02-b,VENTANAS fila B,hueco 2 fila B esquina b,12.74,64.26299999999999,0.8
-VEN-B02-c,VENTANAS fila B,hueco 2 fila B esquina c,12.74,64.26299999999999,2.5
-VEN-B02-d,VENTANAS fila B,hueco 2 fila B esquina d,12.74,63.062999999999995,2.5
-VEN-A03-a,VENTANAS fila A,hueco 3 fila A esquina a,12.74,65.95599999999999,3.8
-VEN-A03-b,VENTANAS fila A,hueco 3 fila A esquina b,12.74,67.15599999999999,3.8
-VEN-A03-c,VENTANAS fila A,hueco 3 fila A esquina c,12.74,67.15599999999999,5.5
-VEN-A03-d,VENTANAS fila A,hueco 3 fila A esquina d,12.74,65.95599999999999,5.5
-VEN-B03-a,VENTANAS fila B,hueco 3 fila B esquina a,12.74,65.95599999999999,0.8
-VEN-B03-b,VENTANAS fila B,hueco 3 fila B esquina b,12.74,67.15599999999999,0.8
-VEN-B03-c,VENTANAS fila B,hueco 3 fila B esquina c,12.74,67.15599999999999,2.5
-VEN-B03-d,VENTANAS fila B,hueco 3 fila B esquina d,12.74,65.95599999999999,2.5
-VEN-A04-a,VENTANAS fila A,hueco 4 fila A esquina a,12.74,68.84899999999999,3.8
-VEN-A04-b,VENTANAS fila A,hueco 4 fila A esquina b,12.74,70.04899999999999,3.8
-VEN-A04-c,VENTANAS fila A,hueco 4 fila A esquina c,12.74,70.04899999999999,5.5
-VEN-A04-d,VENTANAS fila A,hueco 4 fila A esquina d,12.74,68.84899999999999,5.5
-VEN-B04-a,VENTANAS fila B,hueco 4 fila B esquina a,12.74,68.84899999999999,0.8
-VEN-B04-b,VENTANAS fila B,hueco 4 fila B esquina b,12.74,70.04899999999999,0.8
-VEN-B04-c,VENTANAS fila B,hueco 4 fila B esquina c,12.74,70.04899999999999,2.5
-VEN-B04-d,VENTANAS fila B,hueco 4 fila B esquina d,12.74,68.84899999999999,2.5
-VEN-A05-a,VENTANAS fila A,hueco 5 fila A esquina a,12.74,71.74199999999999,3.8
-VEN-A05-b,VENTANAS fila A,hueco 5 fila A esquina b,12.74,72.942,3.8
-VEN-A05-c,VENTANAS fila A,hueco 5 fila A esquina c,12.74,72.942,5.5
-VEN-A05-d,VENTANAS fila A,hueco 5 fila A esquina d,12.74,71.74199999999999,5.5
-VEN-B05-a,VENTANAS fila B,hueco 5 fila B esquina a,12.74,71.74199999999999,0.8
-VEN-B05-b,VENTANAS fila B,hueco 5 fila B esquina b,12.74,72.942,0.8
-VEN-B05-c,VENTANAS fila B,hueco 5 fila B esquina c,12.74,72.942,2.5
-VEN-B05-d,VENTANAS fila B,hueco 5 fila B esquina d,12.74,71.74199999999999,2.5
-VEN-A06-a,VENTANAS fila A,hueco 6 fila A esquina a,12.74,74.63499999999999,3.8
-VEN-A06-b,VENTANAS fila A,hueco 6 fila A esquina b,12.74,75.835,3.8
-VEN-A06-c,VENTANAS fila A,hueco 6 fila A esquina c,12.74,75.835,5.5
-VEN-A06-d,VENTANAS fila A,hueco 6 fila A esquina d,12.74,74.63499999999999,5.5
-VEN-B06-a,VENTANAS fila B,hueco 6 fila B esquina a,12.74,74.63499999999999,0.8
-VEN-B06-b,VENTANAS fila B,hueco 6 fila B esquina b,12.74,75.835,0.8
-VEN-B06-c,VENTANAS fila B,hueco 6 fila B esquina c,12.74,75.835,2.5
-VEN-B06-d,VENTANAS fila B,hueco 6 fila B esquina d,12.74,74.63499999999999,2.5
-VEN-A07-a,VENTANAS fila A,hueco 7 fila A esquina a,12.74,77.52799999999999,3.8
-VEN-A07-b,VENTANAS fila A,hueco 7 fila A esquina b,12.74,78.728,3.8
-VEN-A07-c,VENTANAS fila A,hueco 7 fila A esquina c,12.74,78.728,5.5
-VEN-A07-d,VENTANAS fila A,hueco 7 fila A esquina d,12.74,77.52799999999999,5.5
-VEN-B07-a,VENTANAS fila B,hueco 7 fila B esquina a,12.74,77.52799999999999,0.8
-VEN-B07-b,VENTANAS fila B,hueco 7 fila B esquina b,12.74,78.728,0.8
-VEN-B07-c,VENTANAS fila B,hueco 7 fila B esquina c,12.74,78.728,2.5
-VEN-B07-d,VENTANAS fila B,hueco 7 fila B esquina d,12.74,77.52799999999999,2.5
-VEN-A08-a,VENTANAS fila A,hueco 8 fila A esquina a,12.74,80.42099999999999,3.8
-VEN-A08-b,VENTANAS fila A,hueco 8 fila A esquina b,12.74,81.621,3.8
-VEN-A08-c,VENTANAS fila A,hueco 8 fila A esquina c,12.74,81.621,5.5
-VEN-A08-d,VENTANAS fila A,hueco 8 fila A esquina d,12.74,80.42099999999999,5.5
-VEN-B08-a,VENTANAS fila B,hueco 8 fila B esquina a,12.74,80.42099999999999,0.8
-VEN-B08-b,VENTANAS fila B,hueco 8 fila B esquina b,12.74,81.621,0.8
-VEN-B08-c,VENTANAS fila B,hueco 8 fila B esquina c,12.74,81.621,2.5
-VEN-B08-d,VENTANAS fila B,hueco 8 fila B esquina d,12.74,80.42099999999999,2.5
-VEN-A09-a,VENTANAS fila A,hueco 9 fila A esquina a,12.74,83.314,3.8
-VEN-A09-b,VENTANAS fila A,hueco 9 fila A esquina b,12.74,84.514,3.8
-VEN-A09-c,VENTANAS fila A,hueco 9 fila A esquina c,12.74,84.514,5.5
-VEN-A09-d,VENTANAS fila A,hueco 9 fila A esquina d,12.74,83.314,5.5
-VEN-B09-a,VENTANAS fila B,hueco 9 fila B esquina a,12.74,83.314,0.8
-VEN-B09-b,VENTANAS fila B,hueco 9 fila B esquina b,12.74,84.514,0.8
-VEN-B09-c,VENTANAS fila B,hueco 9 fila B esquina c,12.74,84.514,2.5
-VEN-B09-d,VENTANAS fila B,hueco 9 fila B esquina d,12.74,83.314,2.5
-VEN-A10-a,VENTANAS fila A,hueco 10 fila A esquina a,12.74,86.207,3.8
-VEN-A10-b,VENTANAS fila A,hueco 10 fila A esquina b,12.74,87.407,3.8
-VEN-A10-c,VENTANAS fila A,hueco 10 fila A esquina c,12.74,87.407,5.5
-VEN-A10-d,VENTANAS fila A,hueco 10 fila A esquina d,12.74,86.207,5.5
-VEN-B10-a,VENTANAS fila B,hueco 10 fila B esquina a,12.74,86.207,0.8
-VEN-B10-b,VENTANAS fila B,hueco 10 fila B esquina b,12.74,87.407,0.8
-VEN-B10-c,VENTANAS fila B,hueco 10 fila B esquina c,12.74,87.407,2.5
-VEN-B10-d,VENTANAS fila B,hueco 10 fila B esquina d,12.74,86.207,2.5
-VEN-A11-a,VENTANAS fila A,hueco 11 fila A esquina a,12.74,89.1,3.8
-VEN-A11-b,VENTANAS fila A,hueco 11 fila A esquina b,12.74,90.3,3.8
-VEN-A11-c,VENTANAS fila A,hueco 11 fila A esquina c,12.74,90.3,5.5
-VEN-A11-d,VENTANAS fila A,hueco 11 fila A esquina d,12.74,89.1,5.5
-VEN-B11-a,VENTANAS fila B,hueco 11 fila B esquina a,12.74,89.1,0.8
-VEN-B11-b,VENTANAS fila B,hueco 11 fila B esquina b,12.74,90.3,0.8
-VEN-B11-c,VENTANAS fila B,hueco 11 fila B esquina c,12.74,90.3,2.5
-VEN-B11-d,VENTANAS fila B,hueco 11 fila B esquina d,12.74,89.1,2.5
+VEN-A01-a,VENTANAS fila A,hueco 1 (desde testero) fila A esquina a,12.82,90.26,4.63
+VEN-A01-b,VENTANAS fila A,hueco 1 (desde testero) fila A esquina b,12.82,91.86,4.63
+VEN-A01-c,VENTANAS fila A,hueco 1 (desde testero) fila A esquina c,12.82,91.86,6.32
+VEN-A01-d,VENTANAS fila A,hueco 1 (desde testero) fila A esquina d,12.82,90.26,6.32
+VEN-B01-a,VENTANAS fila B,hueco 1 (desde testero) fila B esquina a,12.82,90.26,1.19
+VEN-B01-b,VENTANAS fila B,hueco 1 (desde testero) fila B esquina b,12.82,91.86,1.19
+VEN-B01-c,VENTANAS fila B,hueco 1 (desde testero) fila B esquina c,12.82,91.86,2.87
+VEN-B01-d,VENTANAS fila B,hueco 1 (desde testero) fila B esquina d,12.82,90.26,2.87
+VEN-A02-a,VENTANAS fila A,hueco 2 (desde testero) fila A esquina a,12.82,86.86,4.63
+VEN-A02-b,VENTANAS fila A,hueco 2 (desde testero) fila A esquina b,12.82,88.46,4.63
+VEN-A02-c,VENTANAS fila A,hueco 2 (desde testero) fila A esquina c,12.82,88.46,6.32
+VEN-A02-d,VENTANAS fila A,hueco 2 (desde testero) fila A esquina d,12.82,86.86,6.32
+VEN-B02-a,VENTANAS fila B,hueco 2 (desde testero) fila B esquina a,12.82,86.86,1.19
+VEN-B02-b,VENTANAS fila B,hueco 2 (desde testero) fila B esquina b,12.82,88.46,1.19
+VEN-B02-c,VENTANAS fila B,hueco 2 (desde testero) fila B esquina c,12.82,88.46,2.87
+VEN-B02-d,VENTANAS fila B,hueco 2 (desde testero) fila B esquina d,12.82,86.86,2.87
+VEN-A03-a,VENTANAS fila A,hueco 3 (desde testero) fila A esquina a,12.82,83.46000000000001,4.63
+VEN-A03-b,VENTANAS fila A,hueco 3 (desde testero) fila A esquina b,12.82,85.06,4.63
+VEN-A03-c,VENTANAS fila A,hueco 3 (desde testero) fila A esquina c,12.82,85.06,6.32
+VEN-A03-d,VENTANAS fila A,hueco 3 (desde testero) fila A esquina d,12.82,83.46000000000001,6.32
+VEN-B03-a,VENTANAS fila B,hueco 3 (desde testero) fila B esquina a,12.82,83.46000000000001,1.19
+VEN-B03-b,VENTANAS fila B,hueco 3 (desde testero) fila B esquina b,12.82,85.06,1.19
+VEN-B03-c,VENTANAS fila B,hueco 3 (desde testero) fila B esquina c,12.82,85.06,2.87
+VEN-B03-d,VENTANAS fila B,hueco 3 (desde testero) fila B esquina d,12.82,83.46000000000001,2.87
+VEN-A04-a,VENTANAS fila A,hueco 4 (desde testero) fila A esquina a,12.82,80.06,4.63
+VEN-A04-b,VENTANAS fila A,hueco 4 (desde testero) fila A esquina b,12.82,81.66,4.63
+VEN-A04-c,VENTANAS fila A,hueco 4 (desde testero) fila A esquina c,12.82,81.66,6.32
+VEN-A04-d,VENTANAS fila A,hueco 4 (desde testero) fila A esquina d,12.82,80.06,6.32
+VEN-B04-a,VENTANAS fila B,hueco 4 (desde testero) fila B esquina a,12.82,80.06,1.19
+VEN-B04-b,VENTANAS fila B,hueco 4 (desde testero) fila B esquina b,12.82,81.66,1.19
+VEN-B04-c,VENTANAS fila B,hueco 4 (desde testero) fila B esquina c,12.82,81.66,2.87
+VEN-B04-d,VENTANAS fila B,hueco 4 (desde testero) fila B esquina d,12.82,80.06,2.87
+VEN-A05-a,VENTANAS fila A,hueco 5 (desde testero) fila A esquina a,12.82,76.66000000000001,4.63
+VEN-A05-b,VENTANAS fila A,hueco 5 (desde testero) fila A esquina b,12.82,78.26,4.63
+VEN-A05-c,VENTANAS fila A,hueco 5 (desde testero) fila A esquina c,12.82,78.26,6.32
+VEN-A05-d,VENTANAS fila A,hueco 5 (desde testero) fila A esquina d,12.82,76.66000000000001,6.32
+VEN-B05-a,VENTANAS fila B,hueco 5 (desde testero) fila B esquina a,12.82,76.66000000000001,1.19
+VEN-B05-b,VENTANAS fila B,hueco 5 (desde testero) fila B esquina b,12.82,78.26,1.19
+VEN-B05-c,VENTANAS fila B,hueco 5 (desde testero) fila B esquina c,12.82,78.26,2.87
+VEN-B05-d,VENTANAS fila B,hueco 5 (desde testero) fila B esquina d,12.82,76.66000000000001,2.87
+VEN-A06-a,VENTANAS fila A,hueco 6 (desde testero) fila A esquina a,12.82,73.26,4.63
+VEN-A06-b,VENTANAS fila A,hueco 6 (desde testero) fila A esquina b,12.82,74.86,4.63
+VEN-A06-c,VENTANAS fila A,hueco 6 (desde testero) fila A esquina c,12.82,74.86,6.32
+VEN-A06-d,VENTANAS fila A,hueco 6 (desde testero) fila A esquina d,12.82,73.26,6.32
+VEN-B06-a,VENTANAS fila B,hueco 6 (desde testero) fila B esquina a,12.82,73.26,1.19
+VEN-B06-b,VENTANAS fila B,hueco 6 (desde testero) fila B esquina b,12.82,74.86,1.19
+VEN-B06-c,VENTANAS fila B,hueco 6 (desde testero) fila B esquina c,12.82,74.86,2.87
+VEN-B06-d,VENTANAS fila B,hueco 6 (desde testero) fila B esquina d,12.82,73.26,2.87
+VEN-A07-a,VENTANAS fila A,hueco 7 (desde testero) fila A esquina a,12.82,69.86000000000001,4.63
+VEN-A07-b,VENTANAS fila A,hueco 7 (desde testero) fila A esquina b,12.82,71.46000000000001,4.63
+VEN-A07-c,VENTANAS fila A,hueco 7 (desde testero) fila A esquina c,12.82,71.46000000000001,6.32
+VEN-A07-d,VENTANAS fila A,hueco 7 (desde testero) fila A esquina d,12.82,69.86000000000001,6.32
+VEN-B07-a,VENTANAS fila B,hueco 7 (desde testero) fila B esquina a,12.82,69.86000000000001,1.19
+VEN-B07-b,VENTANAS fila B,hueco 7 (desde testero) fila B esquina b,12.82,71.46000000000001,1.19
+VEN-B07-c,VENTANAS fila B,hueco 7 (desde testero) fila B esquina c,12.82,71.46000000000001,2.87
+VEN-B07-d,VENTANAS fila B,hueco 7 (desde testero) fila B esquina d,12.82,69.86000000000001,2.87
+VEN-A08-a,VENTANAS fila A,hueco 8 (desde testero) fila A esquina a,12.82,66.46000000000001,4.63
+VEN-A08-b,VENTANAS fila A,hueco 8 (desde testero) fila A esquina b,12.82,68.06,4.63
+VEN-A08-c,VENTANAS fila A,hueco 8 (desde testero) fila A esquina c,12.82,68.06,6.32
+VEN-A08-d,VENTANAS fila A,hueco 8 (desde testero) fila A esquina d,12.82,66.46000000000001,6.32
+VEN-A09-a,VENTANAS fila A,hueco 9 (desde testero) fila A esquina a,12.82,63.059999999999995,4.63
+VEN-A09-b,VENTANAS fila A,hueco 9 (desde testero) fila A esquina b,12.82,64.66,4.63
+VEN-A09-c,VENTANAS fila A,hueco 9 (desde testero) fila A esquina c,12.82,64.66,6.32
+VEN-A09-d,VENTANAS fila A,hueco 9 (desde testero) fila A esquina d,12.82,63.059999999999995,6.32
+VEN-A10-a,VENTANAS fila A,hueco 10 (desde testero) fila A esquina a,12.82,59.660000000000004,4.63
+VEN-A10-b,VENTANAS fila A,hueco 10 (desde testero) fila A esquina b,12.82,61.260000000000005,4.63
+VEN-A10-c,VENTANAS fila A,hueco 10 (desde testero) fila A esquina c,12.82,61.260000000000005,6.32
+VEN-A10-d,VENTANAS fila A,hueco 10 (desde testero) fila A esquina d,12.82,59.660000000000004,6.32
+VEN-A11-a,VENTANAS fila A,hueco 11 (desde testero) fila A esquina a,12.82,56.26,4.63
+VEN-A11-b,VENTANAS fila A,hueco 11 (desde testero) fila A esquina b,12.82,57.86,4.63
+VEN-A11-c,VENTANAS fila A,hueco 11 (desde testero) fila A esquina c,12.82,57.86,6.32
+VEN-A11-d,VENTANAS fila A,hueco 11 (desde testero) fila A esquina d,12.82,56.26,6.32
 BAR-CUB-EI,BAR,bar CUB-EI,0.0,14.196156284329588,11.5
 BAR-CUB-EF,BAR,bar CUB-EF,7.41,14.196156284329588,11.5
-BAR-CUB-FF,BAR,bar CUB-FF,7.41,60.87,11.5
-BAR-CUB-FI,BAR,bar CUB-FI,0.0,60.87,11.5
-BAR-CUB-FF-INF,BAR,bar CUB-FF-INF,7.41,60.87,10.5
-BAR-VID-FF-SUP,BAR,bar VID-FF-SUP,6.21,59.669999999999995,10.5
-BAR-VID-FF-INF,BAR,bar VID-FF-INF,6.21,59.669999999999995,7.2
+BAR-CUB-FF,BAR,bar CUB-FF,7.41,58.26,11.5
+BAR-CUB-FI,BAR,bar CUB-FI,0.0,58.26,11.5
+BAR-CUB-FF-INF,BAR,bar CUB-FF-INF,7.41,58.26,10.5
+BAR-VID-FF-SUP,BAR,bar VID-FF-SUP,6.21,57.059999999999995,10.5
+BAR-VID-FF-INF,BAR,bar VID-FF-INF,6.21,57.059999999999995,7.2
 BAR-BOR-014.2,BAR,borde cubierta volada y=14.2,7.41,14.196156284329588,11.5
 BAR-BOR-019.2,BAR,borde cubierta volada y=19.2,7.41,19.19615628432959,11.5
 BAR-BOR-024.2,BAR,borde cubierta volada y=24.2,7.41,24.19615628432959,11.5
@@ -539,49 +523,59 @@ BAR-BOR-039.2,BAR,borde cubierta volada y=39.2,7.41,39.1961562843296,11.5
 BAR-BOR-044.2,BAR,borde cubierta volada y=44.2,7.41,44.1961562843296,11.5
 BAR-BOR-049.2,BAR,borde cubierta volada y=49.2,7.41,49.196156284329604,11.5
 BAR-BOR-054.2,BAR,borde cubierta volada y=54.2,7.41,54.196156284329604,11.5
-BAR-BOR-059.2,BAR,borde cubierta volada y=59.2,7.41,59.196156284329604,11.5
-RAM-PET-00,RAMPA peto,peto rampa u=0.00,15.7,19.296156284329587,8.8
-RAM-ARC-00,RAMPA arco,intradós arco u=0.00,15.7,19.296156284329587,3.2
-RAM-PET-01,RAMPA peto,peto rampa u=0.05,15.7,21.31484847011311,8.8
-RAM-ARC-01,RAMPA arco,intradós arco u=0.05,15.7,21.31484847011311,3.1922746253965397
-RAM-PET-02,RAMPA peto,peto rampa u=0.10,15.7,23.333540655896627,8.58349569394624
-RAM-ARC-02,RAMPA arco,intradós arco u=0.10,15.7,23.333540655896627,3.1689855057734913
-RAM-PET-03,RAMPA peto,peto rampa u=0.15,15.7,25.35223284168015,8.162190377615893
-RAM-ARC-03,RAMPA arco,intradós arco u=0.15,15.7,25.35223284168015,3.129785225148134
-RAM-PET-04,RAMPA peto,peto rampa u=0.20,15.7,27.37092502746367,7.740885061285547
-RAM-ARC-04,RAMPA arco,intradós arco u=0.20,15.7,27.37092502746367,3.0740651494738813
-RAM-PET-05,RAMPA peto,peto rampa u=0.25,15.7,29.38961721324719,7.3195797449552
-RAM-ARC-05,RAMPA arco,intradós arco u=0.25,15.7,29.38961721324719,3.0009052132257414
-RAM-PET-06,RAMPA peto,peto rampa u=0.30,15.7,31.408309399030706,6.898274428624853
-RAM-ARC-06,RAMPA arco,intradós arco u=0.30,15.7,31.408309399030706,2.9089898972361907
-RAM-PET-07,RAMPA peto,peto rampa u=0.35,15.7,33.42700158481423,6.476969112294507
-RAM-ARC-07,RAMPA arco,intradós arco u=0.35,15.7,33.42700158481423,2.7964704385314443
-RAM-PET-08,RAMPA peto,peto rampa u=0.40,15.7,35.44569377059775,6.0556637959641595
-RAM-ARC-08,RAMPA arco,intradós arco u=0.40,15.7,35.44569377059775,2.6607341417059143
-RAM-PET-09,RAMPA peto,peto rampa u=0.45,15.7,37.46438595638127,5.634358479633813
-RAM-ARC-09,RAMPA arco,intradós arco u=0.45,15.7,37.46438595638127,2.4979991993593593
-RAM-PET-10,RAMPA peto,peto rampa u=0.50,15.7,39.483078142164786,5.213053163303466
-RAM-ARC-10,RAMPA arco,intradós arco u=0.50,15.7,39.483078142164786,2.3025482394646435
-RAM-PET-11,RAMPA peto,peto rampa u=0.55,15.7,41.50177032794831,4.791747846973119
-RAM-ARC-11,RAMPA arco,intradós arco u=0.55,15.7,41.50177032794831,2.0651129165313673
-RAM-PET-12,RAMPA peto,peto rampa u=0.60,15.7,43.52046251373183,4.370442530642773
-RAM-ARC-12,RAMPA arco,intradós arco u=0.60,15.7,43.52046251373183,1.7688665548562132
-RAM-PET-13,RAMPA peto,peto rampa u=0.65,15.7,45.53915469951535,3.9491372143124264
-RAM-ARC-13,RAMPA arco,intradós arco u=0.65,15.7,45.53915469951535,1.3763433393068465
-RAM-PET-14,RAMPA peto,peto rampa u=0.70,15.7,47.55784688529887,3.5278318979820797
-RAM-ARC-14,RAMPA arco,intradós arco u=0.70,15.7,47.55784688529887,0.7489910909490103
-RAM-PET-15,RAMPA peto,peto rampa u=0.75,15.7,49.576539071082394,3.106526581651733
-RAM-ARC-15,RAMPA arco,intradós arco u=0.75,15.7,49.576539071082394,0.0
-RAM-PET-16,RAMPA peto,peto rampa u=0.80,15.7,51.595231256865915,2.6852212653213865
-RAM-ARC-16,RAMPA arco,intradós arco u=0.80,15.7,51.595231256865915,0.0
-RAM-PET-17,RAMPA peto,peto rampa u=0.85,15.7,53.61392344264942,2.2639159489910403
-RAM-ARC-17,RAMPA arco,intradós arco u=0.85,15.7,53.61392344264942,0.0
-RAM-PET-18,RAMPA peto,peto rampa u=0.90,15.7,55.63261562843296,1.8426106326606928
-RAM-ARC-18,RAMPA arco,intradós arco u=0.90,15.7,55.63261562843296,0.0
-RAM-PET-19,RAMPA peto,peto rampa u=0.95,15.7,57.651307814216466,1.4213053163303468
-RAM-ARC-19,RAMPA arco,intradós arco u=0.95,15.7,57.651307814216466,0.0
-RAM-PET-20,RAMPA peto,peto rampa u=1.00,15.7,59.66999999999999,1.15
-RAM-ARC-20,RAMPA arco,intradós arco u=1.00,15.7,59.66999999999999,0.0
+RA2-PET-00,RAMPA 2,peto rampa 2 u=0.0,9.81,16.19615628432959,8.2
+RA2-PET-01,RAMPA 2,peto rampa 2 u=0.1,9.81,18.096156284329588,8.629999999999999
+RA2-PET-02,RAMPA 2,peto rampa 2 u=0.2,9.81,19.99615628432959,9.06
+RA2-PET-03,RAMPA 2,peto rampa 2 u=0.3,9.81,21.89615628432959,9.49
+RA2-PET-04,RAMPA 2,peto rampa 2 u=0.4,9.81,23.79615628432959,9.92
+RA2-PET-05,RAMPA 2,peto rampa 2 u=0.5,9.81,25.69615628432959,10.35
+RA2-PET-06,RAMPA 2,peto rampa 2 u=0.6,9.81,27.596156284329588,10.78
+RA2-PET-07,RAMPA 2,peto rampa 2 u=0.7,9.81,29.496156284329587,11.21
+RA2-PET-08,RAMPA 2,peto rampa 2 u=0.8,9.81,31.396156284329592,11.64
+RA2-PET-09,RAMPA 2,peto rampa 2 u=0.9,9.81,33.29615628432959,12.07
+RA2-PET-10,RAMPA 2,peto rampa 2 u=1.0,9.81,35.19615628432959,12.5
+RAM-PET-00,RAMPA peto,coronación concha y=19.3,15.7,19.296156284329587,8.8
+RAM-ARC-00,RAMPA arco,intradós arco y=19.3,15.7,19.296156284329587,3.2
+RAM-PET-01,RAMPA peto,coronación concha y=21.4,15.7,21.43384847011311,8.8
+RAM-ARC-01,RAMPA arco,intradós arco y=21.4,15.7,21.43384847011311,3.191335700046625
+RAM-PET-02,RAMPA peto,coronación concha y=23.6,15.7,23.57154065589663,8.8
+RAM-ARC-02,RAMPA arco,intradós arco y=23.6,15.7,23.57154065589663,3.1652004994262732
+RAM-PET-03,RAMPA peto,coronación concha y=25.7,15.7,25.709232841680148,8.8
+RAM-ARC-03,RAMPA arco,intradós arco y=25.7,15.7,25.709232841680148,3.1211555477945563
+RAM-PET-04,RAMPA peto,coronación concha y=27.8,15.7,27.84692502746367,8.8
+RAM-ARC-04,RAMPA arco,intradós arco y=27.8,15.7,27.84692502746367,3.0584271785140333
+RAM-PET-05,RAMPA peto,coronación concha y=30.0,15.7,29.98461721324719,8.8
+RAM-ARC-05,RAMPA arco,intradós arco y=30.0,15.7,29.98461721324719,2.9758341284087133
+RAM-PET-06,RAMPA peto,coronación concha y=32.1,15.7,32.12230939903071,8.8
+RAM-ARC-06,RAMPA arco,intradós arco y=32.1,15.7,32.12230939903071,2.871662900501197
+RAM-PET-07,RAMPA peto,coronación concha y=34.3,15.7,34.26000158481423,8.8
+RAM-ARC-07,RAMPA arco,intradós arco y=34.3,15.7,34.26000158481423,2.74345657323239
+RAM-PET-08,RAMPA peto,coronación concha y=36.4,15.7,36.397693770597755,8.8
+RAM-ARC-08,RAMPA arco,intradós arco y=36.4,15.7,36.397693770597755,2.5876451118909714
+RAM-PET-09,RAMPA peto,coronación concha y=38.5,15.7,38.535385956381276,8.8
+RAM-ARC-09,RAMPA arco,intradós arco y=38.5,15.7,38.535385956381276,2.39885547329526
+RAM-PET-10,RAMPA peto,coronación concha y=40.7,15.7,40.6730781421648,8.8
+RAM-ARC-10,RAMPA arco,intradós arco y=40.7,15.7,40.6730781421648,2.168491420137092
+RAM-PET-11,RAMPA peto,coronación concha y=42.8,15.7,42.81077032794832,8.8
+RAM-ARC-11,RAMPA arco,intradós arco y=42.8,15.7,42.81077032794832,1.8813424987072134
+RAM-PET-12,RAMPA peto,coronación concha y=44.9,15.7,44.94846251373183,8.8
+RAM-ARC-12,RAMPA arco,intradós arco y=44.9,15.7,44.94846251373183,1.5052545487258244
+RAM-PET-13,RAMPA peto,coronación concha y=47.1,15.7,47.08615469951536,8.8
+RAM-ARC-13,RAMPA arco,intradós arco y=47.1,15.7,47.08615469951536,0.9388184149567081
+RAM-PET-14,RAMPA peto,coronación concha y=49.2,15.7,49.223846885298876,8.8
+RAM-ARC-14,RAMPA arco,intradós arco y=49.2,15.7,49.223846885298876,0.0
+RAM-PET-15,RAMPA peto,coronación concha y=51.4,15.7,51.36153907108239,8.8
+RAM-ARC-15,RAMPA arco,intradós arco y=51.4,15.7,51.36153907108239,0.0
+RAM-PET-16,RAMPA peto,coronación concha y=53.5,15.7,53.499231256865926,8.8
+RAM-ARC-16,RAMPA arco,intradós arco y=53.5,15.7,53.499231256865926,0.0
+RAM-PET-17,RAMPA peto,coronación concha y=55.6,15.7,55.63692344264943,8.8
+RAM-ARC-17,RAMPA arco,intradós arco y=55.6,15.7,55.63692344264943,0.0
+RAM-PET-18,RAMPA peto,coronación concha y=57.8,15.7,57.774615628432954,8.8
+RAM-ARC-18,RAMPA arco,intradós arco y=57.8,15.7,57.774615628432954,0.0
+RAM-PET-19,RAMPA peto,coronación concha y=59.9,15.7,59.912307814216476,2.3274649819887965
+RAM-ARC-19,RAMPA arco,intradós arco y=59.9,15.7,59.912307814216476,0.0
+RAM-PET-20,RAMPA peto,coronación concha y=62.0,15.7,62.05,0.05
+RAM-ARC-20,RAMPA arco,intradós arco y=62.0,15.7,62.05,0.0
 BAS-P1-0,BASE planta 1,vértice P1 0 coronación,-23.86019320789073,-3.2021019885489532,7.2
 BAS-P1-1,BASE planta 1,vértice P1 1 coronación,-0.11575219373078482,-1.124732578049969,7.2
 BAS-P1-2,BASE planta 1,vértice P1 2 coronación,12.74,14.196156284329588,7.2

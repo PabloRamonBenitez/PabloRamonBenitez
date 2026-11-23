@@ -8,7 +8,7 @@
 | terraza tras el fin del bar | 7.20 | 7.20 | OK |
 | tramo final sin bar (testero) | 7.20 | 7.20 | OK |
 | barandilla del testero | 8.30 | 8.30 | OK |
-| rampa arriba (superficie) | 7.20 | 7.20 | OK |
+| rampa arriba (superficie) | 7.15 | 7.20 | OK |
 | rampa de acceso a mitad (perfil curvo) | 3.97 | 3.96 | OK |
 | largo ala larga L_L (muro, sin la marquesina) | 94.80 | 94.80 | OK |
 | vidrio fila alta (MAR_R tras el frente del marco) | 12.66 | 12.66 | OK |
@@ -33,7 +33,7 @@
 | la rampa del techo pasa bajo la escalera con ≥ 2,5 m libres | 1.00 | 1.00 | OK |
 | relieve del marco (frente) | 12.82 | 12.82 | OK |
 | huecos del catálogo abiertos en el 3D (ala + torre) | 120.00 | 120.00 | OK |
-| hueco 11 por encima de la concha (concha bajo su alféizar) | 0.40 | 0.40 | OK |
+| hueco 11 por encima de la concha (concha bajo su alféizar) | 0.49 | 0.49 | OK |
 | barandilla en la cubierta de la visera | 1.00 | 1.00 | OK |
 | pasillo entre tambor y banda (vacío a +Z_T1−0,5) | 1.00 | 1.00 | OK |
 | peto del tambor hasta +Z_T1 | 1.00 | 1.00 | OK |
@@ -43,3 +43,8 @@
 | plataforma de giro a +7,2 (curva exterior) | 7.20 | 7.20 | OK |
 | peto curvo de la plataforma de giro | 8.20 | 8.20 | OK |
 | fachada del chaflán libre: entrada del hotel sin losa delante | 1.00 | 1.00 | OK |
+| la curva de la rampa llega al chaflán a 90° (|cos|) | 0.04 | 0.00 | OK |
+| la curva sale hacia fuera (x de E90 > borde recto de la rampa) | 1.00 | 1.00 | OK |
+| paños de la planta 1 del chaflán: restaurante (5 y pico) | 6.00 | 6.00 | OK |
+| paños enteros del hotel (4) + resto macizo junto a E90 (m) | 4.03 | 4.03 | OK |
+| hotel: de la columna a E90 = HOT_L | 10.10 | 10.10 | OK |

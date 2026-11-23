@@ -91,11 +91,19 @@ _pc, _bc = E.curva_poligono()
 _mid = _bc[len(_bc) // 2]
 chk.append(("plataforma de giro a +7,2 (curva exterior)", ztop(_mid[0] + 0.15 * (_pc[0][0] - _mid[0]), _mid[1] + 0.15 * (_pc[0][1] - _mid[1])), V["Z_P1"]))
 chk.append(("peto curvo de la plataforma de giro", ztop(_mid[0] + 0.04 * (_pc[0][0] - _mid[0]), _mid[1] + 0.04 * (_pc[0][1] - _mid[1])), V["Z_P1"] + 1.0))
-_r = m ^ E.caja(6.0, 6.2, 3.0, 3.2, 1.0, 5.0)
+_fe = E.P(E.R_COL + 3.0, -(E.R_COL - E.RET) - 1.5); _r = m ^ E.caja(_fe[0] - .1, _fe[0] + .1, _fe[1] - .1, _fe[1] + .1, 1.0, 5.0)
 chk.append(("fachada del chaflán libre: entrada del hotel sin losa delante", float(_r.is_empty()), 1.0))
+import cotas as _KK
+_g = _KK.planta(); _a0, _a1 = np.array(_g["ARC"][0]), np.array(_g["ARC"][1]); _tan = (_a1 - _a0) / np.linalg.norm(_a1 - _a0)
+chk.append(("la curva de la rampa llega al chaflán a 90° (|cos|)", abs(float(_tan @ np.array(E.U))), 0.0))
+chk.append(("la curva sale hacia fuera (x de E90 > borde recto de la rampa)", float(_g["E90"][0] > V["W_EXT"]), 1.0))
+import ventanas as _VT
+chk.append(("paños de la planta 1 del chaflán: restaurante (5 y pico)", sum(1 for h in _VT.catalogo() if h["grupo"] == "chaflán restaurante"), 6))
+chk.append(("paños enteros del hotel (4) + resto macizo junto a E90 (m)", sum(1 for h in _VT.catalogo() if h["grupo"] == "chaflán hotel") + round(V["HOT_L"] - 4 * V["M_CH"], 2) / 10, 4 + round(V["HOT_L"] - 4 * V["M_CH"], 2) / 10))
+chk.append(("hotel: de la columna a E90 = HOT_L", float(np.linalg.norm(np.array(_g["E90"]) - (np.array(E.T) - (E.R_COL - E.RET) * np.array(E.N))) - E.R_COL), V["HOT_L"]))
 out = ["| comprobación | medido en la geometría | cuadro | estado |", "|---|---|---|---|"]
 for n, a, b in chk:
-    ok = abs(a - b) < (0.25 if "curva" in n else 0.12) or (n.startswith("sin ventanas") and a > V["W_P"] - 0.05)
+    ok = abs(a - b) < (0.25 if "curva" in n else 0.12) or ("|cos|" in n and a < 0.02) or (n.startswith("sin ventanas") and a > V["W_P"] - 0.05)
     out.append(f"| {n} | {a:.2f} | {b:.2f} | {'OK' if ok else 'NO'} |")
 open("COHERENCIA_VISTAS.md", "w").write("# Coherencia entre vistas y cuadro de cotas\n\n" + "\n".join(out) + "\n")
 print("\n".join(out))

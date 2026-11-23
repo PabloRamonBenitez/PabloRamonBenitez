@@ -55,13 +55,14 @@ def rampas(ax, zc):
     pmin = V["Z_CON"] * (1 - V["RAMPA_C"]) / (E.Y_CUNA - y0) * 100
     eje_rampa(ax, [(xr, E.Y_CUNA - 0.3), (xr, y0)], 0.0, V["Z_CON"],
               f"RAMPA DE ACCESO · sube · P = {pmin:.0f}–{pmax:.0f} %", discont=arriba)
-    # recorrido del coche en lo alto: gira a la izquierda (hacia fuera, plataforma de giro) y luego a la derecha
-    # hasta el arranque de la rampa del techo del restaurante, que pasa bajo la escalera
-    Qy = pl["Q"][1]; xg = V["GIRO_X"]
-    yb0 = Qy + 0.5; xb = (E.W_BAR + V["V_BAR"]) / 2
-    ctrl = [np.array([xr, y0 + 0.5]), np.array([xg - 1.2, y0 - 0.5]), np.array([xg - 2.0, Qy + 1.2]),
-            np.array([E.W_P - 1.0, Qy + 1.5]), np.array([xb + 2.5, Qy + 0.8]), np.array([xb, yb0 + 2.5])]
-    def bez(P, n=60):                                             # B-spline uniforme cuadrática por los puntos de control
+    # recorrido del coche: sube por la rampa, a la izquierda siguiendo la curva hacia fuera, y a la derecha por la
+    # meseta (sobre la prolongación del chaflán) hasta el arranque del techo del restaurante, bajo la escalera
+    import cotas as KK
+    g = KK.planta(); C = np.array(g["C"]); E90 = np.array(g["E90"]); yS = g["YS"]
+    yb0 = C[1] + 0.5; xb = (E.W_BAR + V["V_BAR"]) / 2
+    ctrl = [np.array([xr, yS + 4.0]), np.array([xr + 0.3, yS - 1.5]), (E90 + C) / 2 + np.array([1.5, 1.8]),
+            np.array([E.W_P - 1.0, C[1] + 1.2]), np.array([xb + 2.5, C[1] + 0.8]), np.array([xb, yb0 + 2.5])]
+    def bez(P, n=60):
         out = []
         for i in range(len(P) - 2):
             p0, p1, p2 = (P[i] + P[i + 1]) / 2, P[i + 1], (P[i + 1] + P[i + 2]) / 2
@@ -73,8 +74,8 @@ def rampas(ax, zc):
     cam = bez(ctrl)
     ax.plot(cam[:, 0], cam[:, 1], color="#1a5fb4", lw=0.8, ls=(0, (6, 2, 1, 2)), zorder=81)
     ax.add_patch(FancyArrowPatch(tuple(cam[-4]), tuple(cam[-1]), arrowstyle="-|>", mutation_scale=7, color="#1a5fb4", lw=0.8, zorder=81))
-    ax.text(xg - 1.0, (Qy + y0) / 2, "giro\n+7,20".replace(".", ","), fontsize=4.6, color="#1a5fb4", ha="center", zorder=81)
-    ax.text(xg + 0.4, Qy - 1.6, "plataforma de giro +7,20 (entrada del hotel libre)", fontsize=4.4, style="italic", zorder=81)
+    ax.text(E90[0] + 0.6, E90[1] + 1.5, "90°", fontsize=5, zorder=81)
+    ax.text((E90[0] + C[0]) / 2 + 1.2, (E90[1] + C[1]) / 2 + 3.0, "meseta +7,20\n(hotel debajo)".replace(".", ","), fontsize=4.4, style="italic", zorder=81)
     # 2) techo del restaurante en rampa: +7,2 → +11,5
     p2 = (E.Z_BAR_C - V["Z_P1"]) / V["R2_L"] * 100
     eje_rampa(ax, [(xb, yb0 + 0.3), (xb, yb0 + V["R2_L"])], V["Z_P1"], E.Z_BAR_C,
@@ -136,9 +137,9 @@ def proyecciones(ax, zc):
     if zc < E.Z_G1:
         pv = np.array(E.P(*E.OFF_V))
         items.append(("visera desplazada", Circle(pv, E.R_V, **sty), pv + np.array([E.R_V * 0.7, E.R_V * 0.75])))
-    if zc < V["Z_P1"] - V["E_PLAT"]:
+    if zc < E.Z_PB:
         poly, _ = E.curva_poligono()
-        items.append(("meseta en curva (por encima)", Polygon(poly, closed=True, **sty), np.array(poly[2]) + np.array([0.6, -1.0])))
+        items.append(("planta 1 / meseta (por encima)", Polygon(poly, closed=True, **sty), np.array(poly[3]) + np.array([0.6, -1.0])))
     if zc < E.Z_BAR:
         yb0 = T[1] + V["ESC_R1"] + 0.3
         items.append(("vuelo de la cubierta del bar", Rectangle((E.W_BAR, yb0 + V["R2_L"]), V["V_BAR"], E.L_L - V["L_FIN"] - yb0 - V["R2_L"], **sty),

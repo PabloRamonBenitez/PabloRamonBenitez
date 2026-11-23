@@ -36,10 +36,11 @@ COTAS = {
  "H_PT": (1.0, "peto del tambor sobre el pasillo de servicio entre tambor y banda", "F08: pasillo y peto entre el tambor y la banda acristalada"),
  "R_ENT": (3.0, "abertura del peto de la terraza donde llega la rampa 1", "lógica de recorrido"),
  "RAMPA_C": (0.2, "convexidad del perfil de la rampa de acceso: z = Z_CON·(1−u)·(1+c·u); pendiente 14 % arriba, 22 % abajo", "F76 (maqueta: rampa curva desde la plaza), F47, F71"),
- "R_GIRO": (3.0, "radio de la esquina curva (convexa hacia fuera) de la plataforma de giro en lo alto de la rampa de acceso", "usuario: el coche gira a la izquierda y luego a la derecha · F76 · foto S. Glover"),
- "GIRO_X": (19.0, "borde exterior de la plataforma de giro (x)", "espacio de giro de un coche (Ø ≈ 11 m entre fachada del ala y borde)"),
  "ESC_Z0": (12.5, "arranque inferior del cuerpo de escalera: la rampa del techo del restaurante pasa por debajo", "usuario: la rampa sube por debajo de la caja de escaleras"),
- "E_PLAT": (1.0, "canto de la losa de la curva / plataforma sobre la entrada del hotel", "estimado"),
+ "REST_L": (12.8, "planta 1 del chaflán: restaurante, de la esquina de la calle a la columna (5 y pico ventanas)", "F09 frontal 165 px / 12,9 px/m · F18 5+ huecos · usuario"),
+ "HOT_L":  (10.1, "planta 1 del chaflán: hotel, de la columna a la esquina a 90° con la rampa (4 y pico ventanas)", "F09 130 px / 12,9 px/m (lectura antigua 9,6) · F18 4+ huecos · usuario"),
+ "M_CH":   (2.45, "módulo de los paños de vidrio de la planta primera del chaflán", "F09: 33 px / 12,9 px/m"),
+ "R_RAMPA": (6.0, "radio de la curva hacia fuera con la que el borde exterior de la rampa llega a 90° al chaflán", "usuario (croquis) · F76 · ESTIMADO ± 2"),
  "H_PET":  (1.3,  "peto exterior de la terraza del ala larga (corona ≈ +8,5)", "F73 esquina del testero +8,5 ± 0,6"),
  "VA_0": (4.63, "alféizar fila alta (0,545 H)", "F73 vertical exacta, 3 huecos ±0,006 H"),
  "VA_1": (6.32, "dintel fila alta (0,743 H)", "F73 vertical exacta, 3 huecos ±0,002 H"),
@@ -83,12 +84,10 @@ COTAS = {
  "W_EXT":  (15.7, "ancho máximo con la concha", "Google"),
  "THL":  (95.0, "ángulo interior de la L (ala larga – calle)", "estimación por rangos: 95,0 ± 2,3° (ESTIMACIONES.md)"),
  "ACH":    (45.0, "chaflán simétrico que corta la esquina de 90°", "usuario + mapa Bing (chaflán ~ bisectriz)"),
- "REST":   (14.3, "frente del restaurante en el chaflán", "C04 calibrada"),
  "COL":    (6.5,  "columna en el chaflán", "F09"),
- "HOT":    (11.4, "frente del hotel en el chaflán", "C04 calibrada"),
- "L_CHF":  (20.0, "longitud del chaflán (reducido: la torre baja hacia la calle y deja sitio al vestíbulo)", "usuario"),
- "T_POS":  (0.536, "posición del eje de la torre sobre el chaflán (0 = calle, 1 = ala larga)", "estimación por rangos: eje a 7,3 ± 2,0 m de la fachada exterior del ala (ESTIMACIONES.md)"),
- "D_HOTF": (5.1, "la banda del hotel sigue por la fachada exterior del ala antes de la rampa", "C04: la banda acaba en x=455 (recalculado con la torre al 54 %)"),
+ "L_CHF": (0.0, "longitud del chaflán A1→C (DERIVADA de REST_L, COL, HOT_L y la curva de la rampa)", "F09 + croquis del usuario"),
+ "T_POS": (0.0, "posición del eje de la torre sobre A1→C (DERIVADA)", "F09: restaurante 12,8 + columna"),
+ "D_HOTF": (0.0, "de C al arranque recto de la rampa (DERIVADA: la esquina curva ocupa este tramo)", "geometría de la curva"),
  "RET":    (1.5,  "lo que asoma la columna delante de la planta primera", "F09/F18"),
  "RETR":   (2.5,  "retranqueo de la planta baja bajo la planta primera", "F09, F14, F47"),
  "L_C":    (24.0, "largo del ala corta desde la esquina exterior", "F01 (estimado)"),
@@ -100,6 +99,28 @@ import os as _os
 for _k in ("ACH", "THL"):
     if _os.environ.get(_k):
         V[_k] = float(_os.environ[_k])
+
+
+def _derivar():
+    """el chaflán sigue más allá de la fachada del ala hasta la esquina a 90° (E90) con el borde curvo de la rampa:
+    A1 →(REST_L)→ columna (COL) →(HOT_L)→ E90. De ahí salen L_CHF (A1→C), T_POS y D_HOTF (C → arranque de la rampa)."""
+    th, a = math.radians(V["THL"]), math.radians(V["ACH"])
+    angC = math.pi - th - a
+    US = np.array([math.cos(math.pi / 2 + th), math.sin(math.pi / 2 + th)])
+    u = (np.array([0, math.sin(a)]) - math.sin(angC) * US) / math.sin(th)       # U sin normalizar (por unidad de L_CHF)
+    U = u / np.linalg.norm(u)
+    giro = math.atan2(U[1], U[0])                                                # giro hacia fuera del borde de la rampa
+    R = V["R_RAMPA"]
+    xE = V["W_EXT"] + R * (1 - math.cos(giro))
+    sE = V["REST_L"] + 2 * V["R_COL"] + V["HOT_L"]                               # A1 → E90 a lo largo del chaflán
+    V["L_CHF"] = round(sE - (xE - V["W_P"]) / U[0], 3)
+    V["T_POS"] = round((V["REST_L"] + V["R_COL"]) / V["L_CHF"], 4)
+    V["X_E90"] = xE
+    V["D_HOTF"] = round(U[1] / U[0] * (xE - V["W_P"]) + R * math.sin(giro), 3)   # de C al arranque recto de la rampa
+    V["GIRO_R"] = giro
+
+
+_derivar()
 
 
 # ======================================================================== geometria de planta (2D)
@@ -119,8 +140,11 @@ def planta():
         den = d[0] * e[1] - d[1] * e[0]; s = ((q[0] - p[0]) * e[1] - (q[1] - p[1]) * e[0]) / den
         return p + s * d
     Q = C.copy()
+    # esquina: el chaflán sigue hasta E90 y el borde de la rampa vuelve en curva hasta (W_EXT, C.y + D_HOTF)
+    R = V["R_RAMPA"]; gr = V["GIRO_R"]; yS = C[1] + V["D_HOTF"]; cen = np.array([V["W_EXT"] + R, yS])
+    ARC = [cen + R * np.array([math.cos(math.pi + gr * (1 - t)), math.sin(math.pi + gr * (1 - t))]) for t in np.linspace(0, 1, 13)]
     IC = inter(SWP(0, V["W_C"]), US, np.array([0.0, 0.0]), np.array([0.0, 1.0]))
-    P1 = [SWP(-V["L_C"], 0), A1, C, Q, np.array([V["W_P"], Q[1]]), np.array([V["W_P"], V["L_L"]]),
+    P1 = [SWP(-V["L_C"], 0), A1, C] + ARC + [np.array([V["W_P"], yS]), np.array([V["W_P"], V["L_L"]]),
           np.array([0, V["L_L"]]), IC, SWP(-V["L_C"], V["W_C"])]
     o_s = KC + V["RETR"] * NS; o_c = A1 + V["RETR"] * N
     a1 = inter(o_s, US, o_c, U); b1 = inter(o_c, U, np.array([V["W_P"] - V["RETR"], 0]), np.array([0.0, 1.0]))
@@ -129,7 +153,7 @@ def planta():
           np.array([V["W_P"], YC]), np.array([V["W_P"], V["L_L"]]), np.array([0, V["L_L"]]), IC,
           SWP(-V["L_C"] + V["L_LAD"], V["W_C"])]
     P = lambda X, Y: T + X * U + Y * N
-    return dict(T=T, U=U, N=N, A1=A1, C=C, Q=Q, KC=KC, US=US, NS=NS, SWP=SWP, P=P, P1=P1, PB=PB, IC=IC, YC=YC, xA=V["W_P"] - _a)
+    return dict(T=T, U=U, N=N, A1=A1, C=C, Q=Q, ARC=ARC, E90=ARC[0], YS=yS, KC=KC, US=US, NS=NS, SWP=SWP, P=P, P1=P1, PB=PB, IC=IC, YC=YC, xA=V["W_P"] - _a)
 
 
 # ======================================================================== elementos (tipo, nombre, huella, z0, z1)
@@ -180,7 +204,7 @@ RANGOS = {
  "Z_LAD1": 1.0, "Z_CON": 0.8, "Z_CU0": 0.6, "Z_CU1": 0.6, "Z_ALE": 0.6, "Z_B0": 0.4, "F": 0.05, "N_PL": 0,
  "Z_T1": 0.5, "Z_G1": 0.5, "Z_V1": 0.5, "Z_R1": 0.6, "R_COL": 0.3, "R_CONO": 0.3, "R_CU": 0.5, "R_B": 0.3,
  "R_AL": 0.3, "R_T": 0.5, "R_G": 0.5, "R_V": 0.6, "R_R": 0.25, "OV_X": 1.0, "OV_Y": 1.5, "OR_X": 0.5, "N_AL": 0,
- "ESC_W": 1.5, "ESC_X": 1.0, "H_PT": 0.3, "R_ENT": 1.0, "R_GIRO": 1.0, "GIRO_X": 2.0, "ESC_Z0": 1.0, "E_PLAT": 0.3, "RAMPA_C": 0.1, "ESC_SEC": 4.0, "ESC_SECB": 4.0, "ESC_RR": 0.8, "ESC_RC": 1.0, "ESC_Y": 2.0, "ESC_Z1": 0.8, "W_P": 0.5, "W_BAR": 0.5, "V_BAR": 0.5, "L_L": 1.0, "L_FIN": 0.5, "Y_CA": 0.6, "R_FIN": 2.0, "S_VEN": 0.3, "N_VEN_B": 0, "MAR_P": 0.02, "MAR_B": 0.05, "MAR_R": 0.04, "R2_L": 3.0, "N_VEN": 0, "VEN_W": 0.2, "VEN_FIN": 1.5, "Z_ARC": 0.5, "U_ARC": 0.1, "D_CUNA": 1.0,
- "W_EXT": 1.0, "THL": 2.3, "ACH": 8.0, "REST": 1.0, "COL": 0.3, "HOT": 1.0, "L_CHF": 3.0, "T_POS": 0.1,
+ "ESC_W": 1.5, "ESC_X": 1.0, "H_PT": 0.3, "R_ENT": 1.0, "REST_L": 0.8, "HOT_L": 0.6, "R_RAMPA": 2.0, "M_CH": 0.2, "ESC_Z0": 1.0, "RAMPA_C": 0.1, "ESC_SEC": 4.0, "ESC_SECB": 4.0, "ESC_RR": 0.8, "ESC_RC": 1.0, "ESC_Y": 2.0, "ESC_Z1": 0.8, "W_P": 0.5, "W_BAR": 0.5, "V_BAR": 0.5, "L_L": 1.0, "L_FIN": 0.5, "Y_CA": 0.6, "R_FIN": 2.0, "S_VEN": 0.3, "N_VEN_B": 0, "MAR_P": 0.02, "MAR_B": 0.05, "MAR_R": 0.04, "R2_L": 3.0, "N_VEN": 0, "VEN_W": 0.2, "VEN_FIN": 1.5, "Z_ARC": 0.5, "U_ARC": 0.1, "D_CUNA": 1.0,
+ "W_EXT": 1.0, "THL": 2.3, "ACH": 8.0, "COL": 0.3, "L_CHF": 3.0, "T_POS": 0.1,
  "D_HOTF": 2.0, "RET": 0.5, "RETR": 0.5, "L_C": 3.0, "W_C": 1.0, "L_LAD": 1.5,
 }

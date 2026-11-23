@@ -32,20 +32,18 @@ def catalogo():
     _h(H, "TP1", "testero", "puerta", ((xa + xb) / 2, L_L), (-1, 0), (0, 1), xb - xa, 0.0, 2.6)
     xa, xb = W_P - 0.55 * W_P, W_P - 0.43 * W_P
     _h(H, "TV1", "testero", "ventana", ((xa + xb) / 2, L_L), (-1, 0), (0, 1), xb - xa, 4.6, 5.3)
-    # 3. banda del hotel sobre la fachada exterior del ala (vidrio) [C04]
-    C = E.C
-    y0, y1 = C[1] + 0.3, C[1] + V["D_HOTF"] - 0.3
-    _h(H, "HB1", "banda hotel (ala)", "banda", (W_P, (y0 + y1) / 2), (0, 1), (1, 0), y1 - y0, 4.35, 6.0)
-    # 4. chaflán: vidrio restaurante y hotel (coordenadas de torre) [F09, F50]
+    # 3-4. chaflán, planta primera: paños de vidrio de módulo M_CH desde la columna hacia fuera; restaurante 5 y pico,
+    #      hotel 4 y pico (hasta la esquina a 90° con la rampa) [F09 frontal, F18, usuario]
     yf = -(E.R_COL - E.RET)
     U, N = E.U, E.N
-    def Pt(X, Y): return E.P(X, Y)
     out = (-N[0], -N[1])                                        # N apunta al interior
-    xr0, xr1 = -E._k + 0.4, -E.R_COL - 0.3
-    _h(H, "CR1", "chaflán restaurante", "banda", Pt((xr0 + xr1) / 2, yf), U, out, xr1 - xr0, 4.6, 6.4)
-    if E.L_CH - E._k - E.R_COL > 1.0:
-        xh0, xh1 = E.R_COL + 0.3, E.L_CH - E._k - 0.4
-        _h(H, "CH1", "chaflán hotel", "banda", Pt((xh0 + xh1) / 2, yf), U, out, xh1 - xh0, 4.35, 6.0)
+    M = V["M_CH"]
+    for nm, sg, L_, z0, z1, grupo in (("CR", -1, V["REST_L"], 4.6, 6.4, "chaflán restaurante"), ("CH", 1, V["HOT_L"], 4.35, 6.0, "chaflán hotel")):
+        x = E.R_COL; i = 0
+        while x < E.R_COL + L_ - 0.3:
+            w = min(M, E.R_COL + L_ - 0.2 - x)
+            _h(H, f"{nm}{i + 1}", grupo, "ventana", E.P(sg * (x + w / 2), yf), U, out, w - 0.15, z0, z1)
+            x += M; i += 1
     # 5. ala corta: banda continua a la calle (+4,6/+6,6) [F09, F14]
     PHI, KC = E.PHI, E.KC
     def R(x, y):

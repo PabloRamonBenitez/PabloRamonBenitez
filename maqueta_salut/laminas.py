@@ -115,8 +115,10 @@ def cotas_planta(ax):
     L.cota(ax, (E.W_P, E.C[1]), E.C, 2, "")
     U = np.array(E.U); A1 = np.array(E.A1)
     k = E._k
-    L.cota(ax, A1, A1 + (k - E.R_COL) * U, 5, "rest."); L.cota(ax, A1 + (k - E.R_COL) * U, A1 + (k + E.R_COL) * U, 5, "col.")
-    L.cota(ax, A1 + (k + E.R_COL) * U, np.array(E.C), 5, "hotel")
+    import cotas as KK
+    E90 = np.array(KK.planta()["E90"])
+    L.cota(ax, A1, A1 + (k - E.R_COL) * U, 5, "X rest."); L.cota(ax, A1 + (k - E.R_COL) * U, A1 + (k + E.R_COL) * U, 5, "col.")
+    L.cota(ax, A1 + (k + E.R_COL) * U, E90, 5, "Y hotel")
     pv = np.array(E.P(0, 9.0)); ax.text(*pv, "vestíbulo /\ncirculaciones", fontsize=7, ha="center", va="center", style="italic", zorder=70,
                                         bbox=dict(fc="white", ec="0.5", lw=0.4, pad=1))
     xe = E._v["ESC_X"]

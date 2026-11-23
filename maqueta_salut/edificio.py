@@ -43,7 +43,6 @@ W_EXT = 15.7        # ancho maximo con la concha                    [Google 15,7
 import os
 A_CH = math.radians(float(os.environ.get("ACH", "57")))   # angulo del chaflan con la calle [provisional]
 TH_L = math.radians(float(os.environ.get("THL", "112")))   # angulo interior de la L (calle - ala larga) [FASE 2: F35/F58 ~102]
-REST, COL, HOT = 14.3, 6.5, 11.4            # tramos del chaflan    [C04 calibrada: 14,3 + 6,5 + 11,4]
 # ====== FUENTE UNICA: todas las cotas se leen del CUADRO DE COTAS (cotas.py); lo de arriba queda como historial
 import cotas as _K
 _v = _K.V
@@ -56,7 +55,7 @@ OFF_V, OFF_R, N_AL = (_v["OV_X"], _v["OV_Y"]), (_v["OR_X"], 0.0), int(_v["N_AL"]
 W_P, W_BAR, L_L, L_FIN, W_EXT = _v["W_P"], _v["W_BAR"], _v["L_L"], _v["L_FIN"], _v["W_EXT"]
 Y_CUNA = _v["Y_CA"] + _v["R_FIN"]           # pie de la concha sobre la fachada (≈ Bing 59,67)
 A_CH, TH_L = math.radians(_v["ACH"]), math.radians(_v["THL"])
-REST, COL, HOT = _v["REST"], _v["COL"], _v["HOT"]
+REST, COL, HOT = _v["REST_L"], _v["COL"], _v["HOT_L"]
 L_CH = _v["L_CHF"]                          # chaflan reducido [usuario]
 KC = (W_P, 0.0)                             # esquina exterior de la L: un solo chaflan que muere en la fachada del ala larga [usuario: sin doble chaflán]
 PHI = TH_L - math.pi / 2                    # giro de la calle respecto a la posicion perpendicular
@@ -90,7 +89,7 @@ def _inter(p, d, q, e):
 L_LADR = _v["L_LAD"]                # bloque de ladrillo del extremo, sobre pilares       [F01]
 # escalera: SECTOR del cilindro (≈ 2 módulos): muros radiales hacia el centro, cerrada hasta la fachada del
 # barril y tramos al aire tras una pantalla de lamas en el arco exterior; cubierta en cuña [usuario; F08, F11, F58, F36]
-ESC_ANG = math.atan2(_v["ESC_Y"] - T[1], _v["ESC_X"] - T[0])        # eje del sector
+ESC_ANG = math.pi / 2                                                 # eje del sector: paralelo al ala, desde el eje de la torre [F58]
 ESC_R0, ESC_R1, ESC_RC = _v["ESC_R0"], _v["ESC_R1"], _v["ESC_RC"]
 ESC_HA = math.radians(_v["ESC_SEC"]) / 2                             # semiángulo
 ESC_W = ESC_R1 - ESC_R0
@@ -141,7 +140,9 @@ def plantas_base():
     Q = (C[0] + t * N[0], C[1] + t * N[1])
     F0 = SWP(-L_C, 0.0); F1 = SWP(-L_C, W_C)
     IC = _inter(SWP(0, W_C), US, (0.0, 0.0), (0.0, 1.0))           # rincon interior de la L
-    P1 = [F0, A1, C, Q, (W_P, Q[1]), (W_P, L_L), (0.0, L_L), IC, F1]
+    g = _K.planta()
+    ARC = [tuple(p) for p in g["ARC"]]
+    P1 = [F0, A1, C] + ARC + [(W_P, g["YS"]), (W_P, L_L), (0.0, L_L), IC, F1]     # el chaflán sigue hasta E90 [F09, usuario]
     o_s = (KC[0] + RETR * NS[0], KC[1] + RETR * NS[1])            # paralela retranqueada a la calle
     o_c = (A1[0] + RETR * N[0], A1[1] + RETR * N[1])              # paralela retranqueada al chaflan
     a1 = _inter(o_s, US, o_c, U)
@@ -151,25 +152,22 @@ def plantas_base():
     return dict(P1=P1, PB=PB, Q=Q, IC=IC)
 
 
-def curva_poligono(n=16):
-    """plataforma de giro a +7,2 en lo alto de la rampa de acceso, por delante de la banda del hotel del ala larga:
-    de la fachada del ala (x = W_P) hacia fuera hasta GIRO_X, entre el arranque de la banda (Q) y la llegada de la rampa;
-    esquinas exteriores redondeadas (curva convexa hacia fuera). No toca la fachada del chaflán (entrada del hotel)."""
-    Qy = plantas_base()["Q"][1]; y1 = Qy + _v["D_HOTF"] + _v["R_ENT"]
-    xg = _v["GIRO_X"]; r = _v["R_GIRO"]
-    arco1 = [(xg - r + r * math.cos(-math.pi / 2 + (math.pi / 2) * k / n), Qy + r + r * math.sin(-math.pi / 2 + (math.pi / 2) * k / n)) for k in range(n + 1)]
-    arco2 = [(xg - r + r * math.cos((math.pi / 2) * k / n), y1 - r + r * math.sin((math.pi / 2) * k / n)) for k in range(n + 1)]
-    poly = [(W_P, Qy)] + arco1 + arco2 + [(W_EXT, y1), (W_P, y1)]
-    borde = [(W_P + 0.3, Qy)] + arco1 + arco2 + [(W_EXT, y1)]
+def curva_poligono():
+    """meseta de la esquina a +Z_P1 (cubierta de la prolongación del chaflán): C → E90 → curva → (W_EXT, yS) → (W_P, yS);
+    borde con peto: sobre la banda del hotel (C→E90) y a lo largo de la curva"""
+    g = _K.planta()
+    ARC = [tuple(p) for p in g["ARC"]]
+    poly = [tuple(g["C"])] + ARC + [(W_P, g["YS"])]
+    borde = [tuple(g["C"])] + ARC
     return poly, borde
 
 
 def plataforma_curva():
-    from shapely.geometry import Polygon as SP, LineString
+    from shapely.geometry import LineString, Polygon as SP
     from shapely.geometry.polygon import orient
     poly, borde = curva_poligono()
     P = orient(SP(poly).buffer(0), 1.0)
-    out = [prisma(list(P.exterior.coords)[:-1], Z_P1 - _v["E_PLAT"], Z_P1)]
+    out = []
     for side in (True, False):
         g = LineString(borde).buffer(0.25 if side else -0.25, single_sided=True).intersection(P)
         if g.area > 1.0:
@@ -209,7 +207,7 @@ def base():
     s += [caja(0, W_BAR, yr1 - 0.01, yb1, Z_P1 - 0.01, Z_BAR),
           caja(0, W_BAR + _v["V_BAR"], yr1 - 0.01, yb1 + _v["V_BAR"], Z_BAR, Z_BAR_C),     # cubierta plana volada en frente y extremo
           caja(0, 0.1, yb1, L_L, Z_P1 - 0.01, Z_P1 + 1.1),                         # barandilla borde patio de la terraza abierta [F47]
-          caja(W_P - 0.3, W_P, pl["Q"][1] + _v["D_HOTF"] + _v["R_ENT"], L_L, Z_P1 - 0.01, Z_P1 + _v["H_PET"]),  # peto exterior [F73 +8,5]; abertura R_ENT a la rampa 1
+          caja(W_P - 0.3, W_P, pl["Q"][1] + _v["D_HOTF"], L_L, Z_P1 - 0.01, Z_P1 + _v["H_PET"]),  # peto exterior [F73 +8,5] (la meseta de la esquina abre a la terraza)
           caja(0, W_P - 0.3, L_L - 0.25, L_L - 0.15, _v["Z_FIN"] - 0.01, _v["Z_FIN"] + 1.1)]   # testero a cota terraza + barandilla [F73]
     # concha: franja exterior que se estrecha de W_EXT a W_P hasta Y_CUNA; alta junto al hotel (+7,3) y baja en
     # curva al suelo; debajo, planta baja hundida [F47, F09, Bing]
@@ -235,16 +233,15 @@ def base():
         lo, hi = zs(yy), zr(yy)
         return (W_P - 0.02 + x * WR, yy, lo + z * (hi - lo))
     rampa = Manifold.cube((1, 1, 1)).refine(60).warp(f)
-    yp = y0 + _v["R_ENT"]                                                         # el peto empieza al salir de la plataforma de giro
+    yp = y0                                                                       # el peto de la rampa sigue al de la curva
     def fp(v):
         x, y, z = v
         yy = yp + min(max(y, 0.0), 1.0) * (YB - yp)
         return (W_P + WR - 0.25 + x * 0.25, yy, zr(yy) - 0.01 + z * 1.0)          # peto de 1 m en el borde exterior
     peto = Manifold.cube((1, 1, 1)).refine(40).warp(fp)
     s += [rampa, peto]
-    # LA RAMPA DA LA VUELTA A LA ESQUINA EN CURVA [usuario; F76, foto S. Glover, foto del hotel]: a +7,2 la rampa sigue
-    # por delante de la banda del hotel, gira con radio R_CURVA alrededor de la esquina y llega delante del chaflán
-    # hasta la columna, donde enlaza con la cubierta de la base; debajo queda la entrada del hotel.
+    # ESQUINA [usuario, F09, F18]: la rampa abre hacia fuera en curva y llega a 90° al chaflán prolongado (E90);
+    # la meseta a +Z_P1 es la cubierta de esa prolongación (hotel debajo); peto en la curva y sobre la banda del hotel
     s += plataforma_curva()
     # EL TECHO DEL RESTAURANTE EMPIEZA EN RAMPA [usuario, F76, F71]: junto a la torre la cubierta del bar nace a la
     # cota de la terraza (+Z_P1) y sube en rampa, en todo el ancho de la cubierta, hasta la cubierta plana (+Z_BARC);
@@ -299,14 +296,10 @@ def base():
     xh0, xh1 = R_COL, R_COL + HOT + 3.0
     m = m - en_torre(caja(xr0 - 0.5, xr1, yf - 1, yf + RETR + 0.01, Z_PB - 0.01, 4.5))          # sofito del restaurante a +4,5
     hue_t = [caja(xr0 + 0.4, xr1 - 0.3, yf - 1, yf + 0.3, 4.6, 6.4)]                            # vidrio restaurante
-    if L_CH - _k - R_COL > 1.0:                                                                    # tramo de hotel en el chaflan (si queda)
-        m = m + en_torre(caja(xh0, L_CH - _k, yf - 0.3, yf + 2.0, 3.1, 4.3))
-        hue_t.append(caja(xh0 + 0.3, L_CH - _k - 0.4, yf - 1, yf + 0.3, 4.35, 6.0))
-    # banda del hotel sobre la fachada exterior del ala larga, desde el fin del chaflan hasta la concha [C04]
-    yc0, yc1 = C[1] + 0.3, C[1] + _v["D_HOTF"] - 0.3
-    m = m + caja(W_P - 2.0, W_P + 0.3, C[1], C[1] + _v["D_HOTF"], 3.1, 4.3)                      # canto volado
-    m = m - caja(W_P - 0.3, W_P + 1.0, yc0, yc1, 4.35, 6.0)                                       # vidrio
-    m = m - caja(W_P - RETR, W_P + 1.0, C[1], C[1] + _v["D_HOTF"], -1, 3.1)                       # entrada del hotel en hueco                    # vidrio hotel
+    xh1 = R_COL + _v["HOT_L"]                                                                      # hotel: de la columna a E90 [F09, F18]
+    m = m + en_torre(caja(xh0, xh1, yf - 0.3, yf + 2.0, 3.1, 4.3))
+    hue_t.append(caja(xh0 + 0.3, xh1 - 0.4, yf - 1, yf + 0.3, 4.35, 6.0))
+    m = m - en_torre(caja(xh0 + 0.5, xh1 - 0.3, yf - 1, yf + RETR, -1, 3.1))                       # entrada del hotel bajo la banda
     return m - en_torre(Manifold.batch_boolean(hue_t, OpType.Add))
 
 

@@ -29,7 +29,7 @@ COTAS = {
  "MAR_R": (0.16, "del frente del marco al vidrio (2 × relieve)", "F73 escalón interior ≈ 2× exterior · usuario"),
  "R2_L": (19.0, "rampa 2 (terraza → azotea del bar): desarrollo en planta", "F71: tramo inclinado junto a la torre hasta la coronación del bar (≈ 18–20 m con la escala de los huecos)"),
  "R2_W": (2.4, "rampa 2: ancho", "F71 / F76 (estimado ± 0,5)"),
- "R2_Y0": (6.5, "rampa 2: arranque desde el inicio del bar", "F71 · sin chocar con el sector de la escalera"),
+ "R2_PLAT": (2.5, "meseta de llegada de la rampa 2 a +11,5 delante de la escalera: une rampa, puerta de la escalera y azotea del bar", "lógica de recorrido · F71 (arco bajo la llegada)"),
  "ARC2_W": (3.0, "arco bajo la llegada de la rampa 2 (paso)", "F71 arco junto al fin de la rampa · F76 arco en el extremo del bar hacia la torre"),
  "Y_CA":   (59.05, "fin alto de la concha/rampa exterior sobre la fachada (arranque de la curva final)", "F73: curva en s = 9,65 S (entre huecos 10 y 11) → 59,05 · Bing 59,67"),
  "R_FIN":  (3.0,  "desarrollo de la curva final de la concha (cae casi vertical arriba y se abre abajo)", "F73 (tramo alto casi vertical), F71, F47 (estimado ± 2)"),
@@ -51,7 +51,7 @@ COTAS = {
  "VB_1": (2.87, "dintel fila baja (0,338 H)", "F73 vertical exacta, 3 huecos ±0,002 H"),
  "L_HOR":  (6.0,  "cuerpo de hormigón sobre pilares en el extremo del ala corta", "F72 (estimado ± 2)"),
  "Z_LAD1": (10.0, "coronación de la caja de ladrillo", "F01, F19"),
- "Z_CON":  (7.8,  "llegada de la rampa arriba (superficie; el peto de 1 m llega a ≈ +8,8)", "rangos: peto arriba F09 +8,3 ± 0,8 / F71 +9,6 ± 1,2 → +8,8"),
+ "Z_CON":  (7.2,  "llegada de la rampa 1 arriba = cota de la terraza (sin escalón); peto de 1 m a +8,2", "lógica de recorrido (rampa sin peldaños) · peto F09 +8,3 ± 0,8"),
  # --- torre
  "Z_CU0":  (10.4, "base del cuello", "F09"),
  "Z_CU1":  (13.9, "cara superior del cuello = cara inferior del barril (primer forjado)", "F09 14,4 ± 0,6 ajustado por coherencia con Z_B0 (pasada 7)"),
@@ -148,12 +148,12 @@ def elementos():
     xA = g["xA"]
     pri("bloque alto ala corta", [SWP(-V_["L_C"] + V_["L_LAD"], 5.5), SWP(xA - 1, 5.5), SWP(xA - 1, V_["W_C"]), SWP(-V_["L_C"] + V_["L_LAD"], V_["W_C"])], V_["Z_P1"], V_["Z_ALTO"], "Z18")
     pri("caja de ladrillo", [SWP(-V_["L_C"], 0), SWP(-V_["L_C"] + V_["L_LAD"], 0), SWP(-V_["L_C"] + V_["L_LAD"], V_["W_C"]), SWP(-V_["L_C"], V_["W_C"])], V_["Z_LAD0"], V_["Z_LAD1"], "Z19")
-    yb0 = g["Q"][1]
+    yb0 = max(g["Q"][1], T[1] + V_["ESC_R1"] + 0.3)          # el bar empieza detrás de la escalera
     pri("bar", [(0, yb0), (V_["W_BAR"], yb0), (V_["W_BAR"], V_["L_L"] - V_["L_FIN"]), (0, V_["L_L"] - V_["L_FIN"])], V_["Z_P1"], V_["Z_BAR"], "Z25")
     pri("cubierta del bar", [(0, yb0), (V_["W_BAR"] + V_["V_BAR"], yb0), (V_["W_BAR"] + V_["V_BAR"], V_["L_L"] - V_["L_FIN"]), (0, V_["L_L"] - V_["L_FIN"])], V_["Z_BAR"], V_["Z_BARC"], "Z25")
     pri("peto terraza", [(V_["W_P"] - 0.3, yb0), (V_["W_P"], yb0), (V_["W_P"], V_["L_L"]), (V_["W_P"] - 0.3, V_["L_L"])], V_["Z_P1"], V_["Z_P1"] + V_["H_PET"], "Z26")
     pri("concha", [(V_["W_P"], g["Q"][1]), (V_["W_EXT"], g["Q"][1]), (V_["W_P"], g["YC"])], 0, V_["Z_CON"], "Z21")
-    _x2 = V_["R2_X"]; _y2 = yb0 + V_["R2_Y0"]
+    _x2 = V_["R2_X"]; _y2 = T[1] + V_["ESC_R1"] + V_["R2_PLAT"]
     pri("rampa 2 (a la azotea del bar)", [(_x2, _y2), (_x2 + V_["R2_W"], _y2), (_x2 + V_["R2_W"], _y2 + V_["R2_L"]), (_x2, _y2 + V_["R2_L"])], V_["Z_P1"], V_["Z_BARC"], "Z25")
     # torre
     cil("pie cónico", T, V_["R_COL"], 0, 4.0, "Z10", r0=V_["R_CONO"])
@@ -183,7 +183,7 @@ RANGOS = {
  "Z_LAD1": 1.0, "Z_CON": 0.8, "Z_CU0": 0.6, "Z_CU1": 0.6, "Z_ALE": 0.6, "Z_B0": 0.4, "F": 0.05, "N_PL": 0,
  "Z_T1": 0.5, "Z_G1": 0.5, "Z_V1": 0.5, "Z_R1": 0.6, "R_COL": 0.3, "R_CONO": 0.3, "R_CU": 0.5, "R_B": 0.3,
  "R_AL": 0.3, "R_T": 0.5, "R_G": 0.5, "R_V": 0.6, "R_R": 0.25, "OV_X": 1.0, "OV_Y": 1.5, "OR_X": 0.5, "N_AL": 0,
- "ESC_W": 1.5, "ESC_X": 1.0, "ESC_SEC": 4.0, "ESC_SECB": 4.0, "ESC_RR": 0.8, "ESC_RC": 1.0, "R2_X": 0.5, "ESC_Y": 2.0, "ESC_WY": 0.8, "ESC_RW": 0.5, "ESC_Z1": 0.8, "W_P": 0.5, "W_BAR": 0.5, "V_BAR": 0.5, "L_L": 1.0, "L_FIN": 0.5, "Y_CA": 0.6, "R_FIN": 2.0, "S_VEN": 0.3, "N_VEN_B": 0, "MAR_P": 0.02, "MAR_B": 0.05, "MAR_R": 0.04, "R2_L": 3.0, "R2_W": 0.5, "R2_Y0": 2.0, "ARC2_W": 1.0, "N_VEN": 0, "VEN_W": 0.2, "VEN_FIN": 1.5, "ESC_L": 1.5, "ESC_REC": 0.5, "ESC_RL": 1.0, "R_MES": 1.0, "Z_ARC": 0.5, "U_ARC": 0.1, "D_CUNA": 1.0,
+ "ESC_W": 1.5, "ESC_X": 1.0, "ESC_SEC": 4.0, "ESC_SECB": 4.0, "ESC_RR": 0.8, "ESC_RC": 1.0, "R2_X": 0.5, "ESC_Y": 2.0, "ESC_WY": 0.8, "ESC_RW": 0.5, "ESC_Z1": 0.8, "W_P": 0.5, "W_BAR": 0.5, "V_BAR": 0.5, "L_L": 1.0, "L_FIN": 0.5, "Y_CA": 0.6, "R_FIN": 2.0, "S_VEN": 0.3, "N_VEN_B": 0, "MAR_P": 0.02, "MAR_B": 0.05, "MAR_R": 0.04, "R2_L": 3.0, "R2_W": 0.5, "R2_PLAT": 0.5, "ARC2_W": 1.0, "N_VEN": 0, "VEN_W": 0.2, "VEN_FIN": 1.5, "ESC_L": 1.5, "ESC_REC": 0.5, "ESC_RL": 1.0, "R_MES": 1.0, "Z_ARC": 0.5, "U_ARC": 0.1, "D_CUNA": 1.0,
  "W_EXT": 1.0, "THL": 2.3, "ACH": 8.0, "REST": 1.0, "COL": 0.3, "HOT": 1.0, "L_CHF": 3.0, "T_POS": 0.1,
  "D_HOTF": 2.0, "RET": 0.5, "RETR": 0.5, "L_C": 3.0, "W_C": 1.0, "L_LAD": 1.5,
 }

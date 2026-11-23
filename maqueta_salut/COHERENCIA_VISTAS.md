@@ -8,9 +8,9 @@
 | terraza tras el fin del bar | 7.20 | 7.20 | OK |
 | tramo final sin bar (testero) | 7.20 | 7.20 | OK |
 | barandilla del testero | 8.30 | 8.30 | OK |
-| rampa arriba (superficie) | 7.80 | 7.80 | OK |
-| concha a mitad (coronación alta) | 7.80 | 7.80 | OK |
-| concha: curva final a media altura | 4.04 | 3.90 | OK |
+| rampa arriba (superficie) | 7.20 | 7.20 | OK |
+| concha a mitad (coronación alta) | 7.20 | 7.20 | OK |
+| concha: curva final a media altura | 3.73 | 3.60 | OK |
 | largo ala larga L_L (muro, sin la marquesina) | 94.80 | 94.80 | OK |
 | vidrio fila alta (MAR_R tras el frente del marco) | 12.66 | 12.66 | OK |
 | vidrio fila baja | 12.66 | 12.66 | OK |
@@ -27,6 +27,14 @@
 | escalera: no sobresale más allá de las lamas | 1.00 | 1.00 | OK |
 | escalera: coronación (cubierta en cuña, borde exterior) | 39.00 | 39.00 | OK |
 | escalera: baja al suelo | 0.00 | 0.00 | OK |
+| rampa 1 llega a la cota de la terraza (sin escalón) | 7.20 | 7.20 | OK |
+| rampa 2 abajo = terraza | 7.27 | 7.27 | OK |
 | rampa 2 a mitad | 9.36 | 9.35 | OK |
+| rampa 2 arriba = meseta = azotea del bar | 11.50 | 11.50 | OK |
+| rampa 2 no pisa la escalera (sin sólido de escalera en su huella) | 1.00 | 1.00 | OK |
+| puerta escalera a la terraza abierta (vacío = 1) | 1.00 | 1.00 | OK |
+| puerta escalera a la meseta abierta (vacío = 1) | 1.00 | 1.00 | OK |
+| puerta inferior (+7,2) da al bar contiguo (hueco escalera-bar ≤ 0,5) | 1.00 | 1.00 | OK |
+| paso bajo la meseta por el arco, a cota de terraza (vacío = 1) | 1.00 | 1.00 | OK |
 | relieve del marco (frente) | 12.82 | 12.82 | OK |
 | huecos del catálogo abiertos en el 3D (ala + torre) | 120.00 | 120.00 | OK |

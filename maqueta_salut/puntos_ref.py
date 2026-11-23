@@ -71,7 +71,7 @@ def generar():
             for c_, (yy, zz) in zip("abcd", ((y, z0), (y + wv, z0), (y + wv, z1), (y, z1))):
                 add(f"VEN-{fila}{i + 1:02d}-{c_}", f"VENTANAS fila {fila}", f"hueco {i + 1} (desde testero) fila {fila} esquina {c_}", (W_P + V["MAR_P"], yy, zz))
     # ---------------- BAR
-    yb0, yb1 = Q[1], L_L - V["L_FIN"]
+    yb0, yb1 = max(Q[1], E.T[1] + V["ESC_R1"] + 0.3), L_L - V["L_FIN"]
     for nm, (x, y, z) in {"CUB-EI": (0, yb0, E.Z_BAR_C), "CUB-EF": (V["W_BAR"] + V["V_BAR"], yb0, E.Z_BAR_C),
                           "CUB-FF": (V["W_BAR"] + V["V_BAR"], yb1 + V["V_BAR"], E.Z_BAR_C), "CUB-FI": (0, yb1 + V["V_BAR"], E.Z_BAR_C),
                           "CUB-FF-INF": (V["W_BAR"] + V["V_BAR"], yb1 + V["V_BAR"], E.Z_BAR),
@@ -80,10 +80,10 @@ def generar():
     for yy in np.arange(yb0, yb1, 5.0):
         add(f"BAR-BOR-{yy:05.1f}", "BAR", f"borde cubierta volada y={yy:.1f}", (V["W_BAR"] + V["V_BAR"], yy, E.Z_BAR_C))
     # ---------------- RAMPA 2 (terraza → azotea del bar)
-    xr2 = V["R2_X"] + V["R2_W"]; ya2 = yb0 + V["R2_Y0"]
+    xr2 = V["R2_X"] + V["R2_W"]; ya2 = E.T[1] + V["ESC_R1"] + V["R2_PLAT"] + V["R2_L"]
     for j in range(11):
         u = j / 10
-        add(f"RA2-PET-{j:02d}", "RAMPA 2", f"peto rampa 2 u={u:.1f}", (xr2, ya2 + u * V["R2_L"], E.Z_P1 + u * (E.Z_BAR_C - E.Z_P1) + 1.0))
+        add(f"RA2-PET-{j:02d}", "RAMPA 2", f"peto rampa 2 u={u:.1f}", (xr2, ya2 - u * V["R2_L"], E.Z_P1 + u * (E.Z_BAR_C - E.Z_P1) + 1.0))
     # ---------------- RAMPA (perfil del peto y del arco)
     y0r = Q[1] + V["D_HOTF"]; YA, YB = V["Y_CA"], V["Y_CA"] + V["R_FIN"]
     Y_ARC = y0r + V["U_ARC"] * (E.Y_CUNA - y0r)

@@ -55,8 +55,19 @@ px, py = E.esc_ang_pt(V["ESC_RC"] - 0.3, 0)
 bb3 = (t ^ E.caja(px - 0.1, px + 0.1, py - 0.1, py + 0.1, -1, 80)).bounding_box()
 chk.append(("escalera: coronación (cubierta en cuña, borde exterior)", bb3[5], V["ESC_Z1"]))
 chk.append(("escalera: baja al suelo", (t ^ E.caja(*(lambda q: (q[0]-.05, q[0]+.05, q[1]-.05, q[1]+.05))(E.esc_ang_pt(9.0, 0.0)), -1, 1)).bounding_box()[2], 0.0))
-yb0_ = E.plantas_base()["Q"][1]
-chk.append(("rampa 2 a mitad", ztop(V["W_BAR"] + V["V_BAR"] + 1.2, yb0_ + V["R2_Y0"] + V["R2_L"] / 2), E.Z_P1 + 0.5 * (E.Z_BARC - E.Z_P1) if hasattr(E, "Z_BARC") else (E.Z_P1 + E.Z_BAR_C) / 2))
+y_esc_ = E.T[1] + V["ESC_R1"]; y_top_ = y_esc_ + V["R2_PLAT"]; y_low_ = y_top_ + V["R2_L"]
+chk.append(("rampa 1 llega a la cota de la terraza (sin escalón)", V["Z_CON"], V["Z_P1"]))
+chk.append(("rampa 2 abajo = terraza", ztop(V["R2_X"] + 1.2, y_low_ - 0.3), E.Z_P1 + (E.Z_BAR_C - E.Z_P1) * 0.3 / V["R2_L"]))
+chk.append(("rampa 2 a mitad", ztop(V["R2_X"] + 1.2, (y_top_ + y_low_) / 2), (E.Z_P1 + E.Z_BAR_C) / 2))
+chk.append(("rampa 2 arriba = meseta = azotea del bar", ztop(V["R2_X"] + 1.2, y_top_ - 1.0), E.Z_BAR_C))
+_tt = E.torre(); _m2 = E.base()
+chk.append(("rampa 2 no pisa la escalera (sin sólido de escalera en su huella)", float((_tt ^ E.caja(V["R2_X"], V["R2_X"] + V["R2_W"], y_top_, y_low_, 0, 40)).is_empty()), 1.0))
+for _nm, _z in (("puerta escalera a la terraza", E.Z_P1 + 1.0), ("puerta escalera a la meseta", E.Z_BAR_C + 1.0)):
+    _px, _py = E.esc_ang_pt(V["ESC_RC"] - 0.15, 0.0)
+    chk.append((_nm + " abierta (vacío = 1)", float((_tt ^ E.caja(_px - .05, _px + .05, _py - .05, _py + .05, _z, _z + .1)).is_empty()), 1.0))
+chk.append(("puerta inferior (+7,2) da al bar contiguo (hueco escalera-bar ≤ 0,5)", float(max(E.plantas_base()["Q"][1], E.T[1] + V["ESC_R1"] + 0.3) - (E.T[1] + V["ESC_R1"]) <= 0.5), 1.0))
+_px, _py = 9.25, E.T[1] + V["ESC_R1"] + V["R2_PLAT"] - 0.5
+chk.append(("paso bajo la meseta por el arco, a cota de terraza (vacío = 1)", float((_m2 ^ E.caja(_px - .05, _px + .05, _py - .05, _py + .05, E.Z_P1 + 1.0, E.Z_P1 + 1.1)).is_empty()), 1.0))
 chk.append(("relieve del marco (frente)", float((m ^ E.caja(V["W_P"], V["W_P"] + 1, V["L_L"] - V["VEN_FIN"] + 0.1, V["L_L"] - V["VEN_FIN"] + 0.2, V["VA_1"] + 0.1, V["VA_1"] + 0.2)).bounding_box()[3]), V["W_P"] + V["MAR_P"]))
 import ventanas as VT
 tm_ = E.edificio(); okh = 0; tot = 0

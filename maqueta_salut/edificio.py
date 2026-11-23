@@ -174,7 +174,7 @@ def base():
     sc.append(mq.translate((xA - 7.0, 0.3, 0)))                       # marquesina curva [PASADA 1: F15]
     s.append(ROT(Manifold.batch_boolean(sc, OpType.Add)))
     # ala larga: bar en la mitad interior hasta el tramo final; terraza con peto en la mitad exterior [F47, Bing]
-    yb0 = pl["Q"][1]
+    yb0 = max(pl["Q"][1], T[1] + _v["ESC_R1"] + 0.3)          # el bar empieza detrás de la caja de escalera
     yb1 = L_L - L_FIN                                                   # 1984: el bar acaba sobre la 1a ventana [F01, F47]
     s += [caja(0, W_BAR, yb0, yb1, Z_P1 - 0.01, Z_BAR),
           caja(0, W_BAR + _v["V_BAR"], yb0, yb1 + _v["V_BAR"], Z_BAR, Z_BAR_C),     # cubierta volada en frente y extremo
@@ -223,29 +223,32 @@ def base():
         return (W_P + wr(yy) - 0.25 + x * 0.25, yy, zr(yy) - 0.01 + z * 1.0)   # peto de 1 m sobre el tramo alto
     peto = Manifold.cube((1, 1, 1)).refine(40).warp(fp)
     s += [rampa, peto]
-    # RAMPA 2 (F71, F76): de la terraza (+Z_P1) a la azotea del bar (+Z_BARC), por fuera del bar, junto a la torre;
-    # bajo su llegada, arco de paso; barandilla en el borde de la azotea (la roja de F73/F71)
-    xr2 = _v["R2_X"]
-    ya2 = yb0 + _v["R2_Y0"]; yz2 = ya2 + _v["R2_L"]
+    # RAMPA 2 (F71, F76) con lógica de recorrido: nace en la terraza (+Z_P1) lejos de la torre y SUBE HACIA LA TORRE
+    # hasta una meseta a la cota de la azotea del bar (+Z_BARC) delante de la escalera; la escalera tiene puerta a la
+    # terraza (bajo la meseta, por el arco) y a la meseta. Nunca se pasa de rampa a peldaños.
+    xr2, W2 = _v["R2_X"], _v["R2_W"]
+    y_esc = T[1] + _v["ESC_R1"]                       # frente de lamas de la escalera
+    y_top = y_esc + _v["R2_PLAT"]; y_low = y_top + _v["R2_L"]
     def f2(v):
         x, y, z = v
-        u = min(max(y, 0.0), 1.0)
-        zt = Z_P1 + u * (Z_BAR_C - Z_P1)
-        return (xr2 - 0.01 + x * _v["R2_W"], ya2 + u * (yz2 - ya2), Z_P1 - 0.01 + z * (zt - Z_P1 + 0.01))
+        u = min(max(y, 0.0), 1.0)                     # u=0 arriba (junto a la torre), u=1 abajo
+        zt = Z_BAR_C - u * (Z_BAR_C - Z_P1)
+        return (xr2 + x * W2, y_top + u * (y_low - y_top), Z_P1 - 0.01 + z * (zt - Z_P1 + 0.01))
     rampa2 = Manifold.cube((1, 1, 1)).refine(30).warp(f2)
     def f2p(v):
         x, y, z = v
         u = min(max(y, 0.0), 1.0)
-        zt = Z_P1 + u * (Z_BAR_C - Z_P1)
-        return (xr2 + _v["R2_W"] - 0.2 + x * 0.2, ya2 + u * (yz2 - ya2), zt - 0.01 + z * 1.0)
+        zt = Z_BAR_C - u * (Z_BAR_C - Z_P1)
+        return (xr2 + W2 - 0.2 + x * 0.2, y_top + u * (y_low - y_top), zt - 0.01 + z * 1.0)
     s += [rampa2, Manifold.cube((1, 1, 1)).refine(30).warp(f2p),
-          caja(xr2, xr2 + _v["R2_W"], yz2, yb1 + _v["V_BAR"], Z_BAR, Z_BAR_C),                       # paso a la azotea
-          caja(xr2 + _v["R2_W"] - 0.1, xr2 + _v["R2_W"], yz2, yb1 + _v["V_BAR"], Z_BAR_C - 0.01, Z_BAR_C + 1.0),
-          caja(0, xr2, yb1 + _v["V_BAR"] - 0.1, yb1 + _v["V_BAR"], Z_BAR_C - 0.01, Z_BAR_C + 1.0)]   # barandilla azotea
+          caja(0, xr2 + W2, y_esc - 0.3, y_top, Z_BAR, Z_BAR_C),                                   # meseta (losa) a +Z_BARC
+          caja(xr2 + W2 - 0.1, xr2 + W2, y_esc - 0.3, y_top, Z_BAR_C - 0.01, Z_BAR_C + 1.0),       # barandilla meseta
+          caja(xr2 - 0.1, xr2 + W2, y_top - 0.3, y_top, Z_P1 - 0.01, Z_BAR),                      # muro bajo la llegada (con arco)
+          caja(0, W_BAR + _v["V_BAR"], yb1 + _v["V_BAR"] - 0.1, yb1 + _v["V_BAR"], Z_BAR_C - 0.01, Z_BAR_C + 1.0)]   # barandilla azotea
     m = Manifold.batch_boolean(s, OpType.Add)
-    # arco de paso bajo la llegada de la rampa 2 [F71, F76]
-    arc = Manifold.cylinder(_v["R2_W"] + 2, _v["ARC2_W"] / 2, _v["ARC2_W"] / 2, 48).rotate((0, 90, 0))
-    arc = (arc.translate((xr2 - 1, yz2 - _v["ARC2_W"] / 2 - 0.5, Z_P1 + 1.2)) + caja(xr2 - 1, xr2 + _v["R2_W"] + 1, yz2 - _v["ARC2_W"] - 0.5, yz2 - 0.5, Z_P1, Z_P1 + 1.2))
+    arc = Manifold.cylinder(1.0, _v["ARC2_W"] / 2, _v["ARC2_W"] / 2, 48).rotate((90, 0, 0))     # arco de paso bajo la llegada [F71, F76]
+    xa = xr2 + W2 / 2
+    arc = arc.translate((xa, y_top + 0.35, Z_P1 + 1.6)) + caja(xa - _v["ARC2_W"] / 2, xa + _v["ARC2_W"] / 2, y_top - 0.65, y_top + 0.35, Z_P1, Z_P1 + 1.6)
     m = m - arc
     # huecos de ventanas (franjas continuas casi a paño) [F09, F14]
     hue = [ROT(caja(-L_C + L_LADR + 0.4, xA, -1, 0.3, 4.6, 6.6))]
@@ -358,6 +361,11 @@ def torre():
         h = Manifold.cube((0.5, hh["w"], hh["z1"] - hh["z0"])).translate((rf - 0.25, -hh["w"] / 2, hh["z0"]))
         hue.append(h.rotate((0, 0, a)).translate((T[0], T[1], 0)))
     for hh in VT.catalogo():
+        if hh["grupo"] == "escalera puertas":
+            a = math.degrees(math.atan2(hh["n"][1], hh["n"][0]))
+            h = Manifold.cube((1.2, hh["w"], hh["z1"] - hh["z0"])).translate((_v["ESC_RC"] - 0.6, -hh["w"] / 2, hh["z0"]))
+            hue.append(h.rotate((0, 0, a)).translate((T[0], T[1], 0)))
+            continue
         if hh["grupo"] != "escalera retranqueo": continue
         a = math.degrees(math.atan2(hh["n"][1], hh["n"][0]))
         h = Manifold.cube((0.8, hh["w"], hh["z1"] - hh["z0"])).translate((_v["ESC_RR"] - 0.5, -hh["w"] / 2, hh["z0"]))
@@ -371,6 +379,11 @@ def torre():
     nl = int(2 * ESC_HB * ESC_R1 / 0.8)
     for k in range(nl + 1):
         lam.append(lama(ESC_R1 - 0.25, -ESC_HB + 2 * ESC_HB * k / nl))
+    for hh in VT.catalogo():                                   # las lamas se abren delante de las puertas
+        if hh["grupo"] == "escalera puertas":
+            a = math.degrees(math.atan2(hh["n"][1], hh["n"][0]))
+            corte = Manifold.cube((1.5, hh["w"] + 0.4, hh["z1"] - hh["z0"])).translate((ESC_RC - 0.1, -hh["w"] / 2 - 0.2, hh["z0"]))
+            lam = [l_ - corte.rotate((0, 0, a)).translate((T[0], T[1], 0)) for l_ in lam]
     for sg in (-1, 1):
         r = rf + 0.2
         while r < ESC_R1 - 0.3:

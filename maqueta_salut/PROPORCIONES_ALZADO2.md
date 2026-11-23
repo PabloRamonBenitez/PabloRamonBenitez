@@ -30,3 +30,15 @@ Lo que el plano actual tiene MAL según esta tabla (anotado, aún NO corregido):
 - huecos 1,2 × 1,7 → proporción a fijar con S (cuadrados si S = 3,55);
 - macizo final 4,5 m → 1,1 S (≈ 3,2–3,9 m menos medio hueco);
 - alturas: dintel alto 5,5 / alféizar 3,8 / dintel bajo 2,5 → con H = 8,5: 6,32 / 4,63 / 2,87.
+
+## Detalle del hueco (F73, perfiles de intensidad en 3 huecos → PERFIL_HUECOS_F73.png, DETALLE_HUECO_ALA.png)
+En F73 la cámara mira casi a lo largo de la fachada: la profundidad del muro queda casi paralela a la foto.
+| medida | hueco 1 | hueco 2 | hueco 3 | estado |
+|---|---|---|---|---|
+| relieve del marco (cara lateral, casi de frente) | 0,08 m | 0,07 m | 0,07 m | ✔ |
+| banda del marco (cara frontal, en interejes) | 0,09 S | 0,08 S | 0,09 S | ✔ (0,22–0,34 m según S) |
+| alféizar: escalón interior / exterior | 10 px / 4 px | 8 px / 5 px | – | ✔ ≈ 2 : 1 (lo que dices) |
+| dintel: sombra interior / banda exterior | ≥ 8 px / 3 px | ≥ 8 px / 4 px | – | ✔ |
+| sombra bajo el alféizar (sale del muro) | 5 px | 7 px | – | ✔ |
+Conclusión: marco que sale poco (≈ 0,08 m) y hueco que entra hacia dentro el doble (≈ 0,16 m) hasta el vidrio;
+alféizar saliente con sombra. El plano actual tiene marco de 0,3 m de vuelo y hueco pasante: anotado, sin corregir.

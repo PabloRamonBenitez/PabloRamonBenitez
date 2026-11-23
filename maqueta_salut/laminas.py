@@ -10,6 +10,7 @@ from PIL import Image
 from manifold3d import Manifold
 import edificio as E
 import lineas as L
+import ventanas as VT
 
 IMG = '/tmp/claude-0/-home-user-PabloRamonBenitez/6aecfee3-0e37-5370-9a32-0a87a530abec/images/'
 M = E.edificio()
@@ -39,8 +40,31 @@ def planta(ax, zc, titulo, aerea=False):
         arriba = M ^ Manifold.cube((BIG, BIG, 100)).translate((-BIG / 2, -BIG / 2, zc))
         L.dibujar_vista(ax, abajo)
         L.encima(ax, arriba)
-        L.corte(ax, M.slice(zc))
+        L.corte(ax, M.slice(zc), huecos=VT.cortados(zc))
+        estructura_torre(ax, zc)
     ax.set_title(titulo, fontsize=10, loc="left")
+
+
+def estructura_torre(ax, zc):
+    """núcleo estructural (columna-núcleo de comunicaciones, muro 0,30) y particiones radiales entre habitaciones
+    (0,20) en la dirección de cada aleta; solo en las plantas de habitaciones."""
+    from matplotlib.patches import Circle, Polygon
+    T = np.array(E.T)
+    if zc < E.Z_CU0:
+        return
+    ax.add_patch(Circle(T, E.R_COL, fc="none", ec="k", lw=1.3, zorder=7))
+    ax.add_patch(Circle(T, E.R_COL - VT.MURO, fc="white", ec="k", lw=1.0, zorder=7.5))
+    from matplotlib.patches import Wedge
+    ax.add_patch(Wedge(T, E.R_COL, 0, 360, width=VT.MURO, fc="#9a9a9a", ec="none", zorder=7.2))
+    if not (E.Z_B0 < zc < E.Z_B1):
+        return
+    rf = E.R_B - 1.8; rc = E.R_COL + 2.2                         # pasillo anular de 2,2 m alrededor del núcleo
+    ax.add_patch(Wedge(T, rc + VT.PART, 0, 360, width=VT.PART, fc="#bdbdbd", ec="k", lw=0.6, zorder=7.2))
+    for k in range(E._v["N_AL"]):
+        a = 2 * math.pi * k / E._v["N_AL"]; c, s_ = math.cos(a), math.sin(a); n_ = np.array([-s_, c]) * VT.PART / 2
+        p0, p1 = T + rc * np.array([c, s_]), T + (rf - VT.MURO) * np.array([c, s_])
+        ax.add_patch(Polygon([p0 - n_, p1 - n_, p1 + n_, p0 + n_], closed=True, fc="#bdbdbd", ec="k", lw=0.6, zorder=7.2))
+    ax.text(*T, "núcleo", fontsize=6, ha="center", va="center", zorder=8)
 
 
 def cotas_planta(ax):
@@ -63,6 +87,12 @@ def cotas_planta(ax):
     xe = E._v["ESC_X"]; L.cota(ax, (xe - E.ESC_W / 2, E.ESC_Y1 + 1), (xe + E.ESC_W / 2, E.ESC_Y1 + 1), 1.2, "escalera")
     L.cota(ax, (0, E.ESC_Y0), (0, E.ESC_Y1), -1.2, "")
     ax.text(E.KC[0] + 1, 2, f"L {math.degrees(E.TH_L):.0f}°", fontsize=8, color="k")
+    V_ = E._v; yA = E.L_L - V_["VEN_FIN"]
+    L.cota(ax, (E.W_P, E.L_L), (E.W_P, yA), 7.0, "macizo", fs=5.5)
+    L.cota(ax, (E.W_P, yA), (E.W_P, yA - V_["VEN_W"]), 7.0, "h", fs=5.5)
+    L.cota(ax, (E.W_P, yA), (E.W_P, yA - V_["S_VEN"]), 8.5, "intereje", fs=5.5)
+    ax.text(E.W_P + 10.5, yA - 6 * V_["S_VEN"], f"{int(V_['N_VEN'])} huecos a {V_['S_VEN']:.2f}\n(PB: los {int(V_['N_VEN_B'])} junto al testero)".replace(".", ","),
+            fontsize=6, rotation=90, va="center")
     # cota de cubierta de cada volumen
     for (x, y), z in (((3, 70), E.Z_BAR_C), ((10, 70), E.Z_P1 + 1.0), ((tuple(E.SWP(-12, 9))), E.Z_ALTO), ((tuple(E.SWP(-21.5, 6))), E._v["Z_LAD1"]),
                       ((xe, (E.ESC_Y0 + E.ESC_Y1) / 2), E.Z_T1 + 1.0), ((14.2, 30), E._v["Z_CON"])):
@@ -111,7 +141,10 @@ def seccion(ax, p0, p1, titulo):
     m = orientar(M, p0, a)
     mas_alla = m ^ Manifold.cube((BIG, 100, BIG)).translate((-BIG / 2, -50, -BIG))      # z' < 0  (y > 0)
     L.dibujar_vista(ax, mas_alla)
-    L.corte(ax, m.slice(0.0))
+    cs = m.slice(0.0)
+    L.corte(ax, cs, huecos=huecos_seccion(p0, p1))
+    forjados_seccion(ax, cs)
+    nucleo_seccion(ax, p0, p1)
     ax.axhline(0, color="k", lw=1.6)
     for z, t in ((E.Z_PB, "techo PB"), (E.Z_P1, "terraza / planta 1"), (E.Z_BAR, "bar"), (E.Z_ALTO, "bloque alto"),
                  (E.Z_B0, "1ª planta hab."), (E.Z_B1, "cubierta hab."), (E.Z_T1, "tambor"), (E.Z_V1, "visera"), (E.Z_R1, "remate")):
@@ -119,6 +152,57 @@ def seccion(ax, p0, p1, titulo):
     cruces(ax, p0, p1, titulo.split(':')[0].replace('SECCIÓN ', '').strip())
     ejes(ax, (-2, Lg + 12), (-2, 53))
     ax.set_title(titulo, fontsize=9, loc="left")
+
+
+def forjados_seccion(ax, cs):
+    """forjados de 0,30 dentro de cada recinto cortado: techo de PB en la base y cada planta del barril"""
+    from matplotlib.patches import Polygon
+    from shapely.geometry import Polygon as SP, box
+    niveles = [E.Z_PB] + [E.Z_B0 + i * E.F for i in range(1, E._v["N_PL"])]
+    for P in cs.to_polygons():
+        sp = SP(np.array(P)).buffer(0)
+        if sp.is_empty: continue
+        inn = sp.buffer(-VT.MURO)
+        if inn.is_empty: continue
+        x0, z0, x1, z1 = inn.bounds
+        for zl in niveles:
+            if not (z0 + 0.5 < zl < z1 - 0.5): continue
+            g = inn.intersection(box(x0 - 1, zl - VT.MURO, x1 + 1, zl))
+            for gm in getattr(g, "geoms", [g]):
+                if gm.geom_type == "Polygon" and not gm.is_empty and gm.area > 0.3:
+                    ax.add_patch(Polygon(np.array(gm.exterior.coords), closed=True, fc="#9a9a9a", ec="k", lw=0.9, zorder=6))
+
+
+def nucleo_seccion(ax, p0, p1):
+    """muros del núcleo estructural de la torre (R_COL, 0,30) donde la sección lo corta: suelo → cubierta de habitaciones"""
+    from matplotlib.patches import Rectangle
+    p0, p1 = np.array(p0, float), np.array(p1, float); d = p1 - p0; Lg = np.linalg.norm(d); tl = d / Lg
+    T = np.array(E.T); q = T - p0; sc = q @ tl; dist = abs(q[0] * tl[1] - q[1] * tl[0])
+    for R in (E.R_COL, E.R_COL - VT.MURO):
+        pass
+    if dist >= E.R_COL - 0.05: return
+    h = math.sqrt(E.R_COL ** 2 - dist ** 2)
+    for sg in (-1, 1):
+        x = sc + sg * h
+        ax.add_patch(Rectangle((x - (VT.MURO if sg > 0 else 0), 0), VT.MURO, E.Z_B1, fc="#9a9a9a", ec="k", lw=0.9, zorder=6.5))
+    ax.text(sc, E.Z_B0 + 1.5 * E.F, "núcleo", fontsize=6, ha="center", rotation=90, zorder=7)
+
+
+def huecos_seccion(p0, p1):
+    """huecos del catálogo que corta el plano vertical p0→p1, en coordenadas de la sección (s, z)"""
+    p0, p1 = np.array(p0, float), np.array(p1, float); d = p1 - p0; Lg = np.linalg.norm(d); tl = d / Lg
+    out = []
+    for h in VT.catalogo():
+        p, t, n = np.array(h["p"]), np.array(h["t"]), np.array(h["n"])
+        den = tl[0] * t[1] - tl[1] * t[0]
+        if abs(den) < 1e-6: continue
+        s = ((p[0] - p0[0]) * t[1] - (p[1] - p0[1]) * t[0]) / den
+        u = ((p[0] - p0[0]) * tl[1] - (p[1] - p0[1]) * tl[0]) / den
+        if 0 <= s <= Lg and abs(u) <= h["w"] / 2:
+            sg = 1.0 if np.dot(n, tl) > 0 else -1.0
+            out.append(dict(p=(s, (h["z0"] + h["z1"]) / 2), t=(0.0, 1.0), n=(sg, 0.0), w=h["z1"] - h["z0"], e=h["e"],
+                            tipo="ventana" if h["tipo"] != "puerta" else "puerta_sec"))
+    return out
 
 
 def alzado(ax, d, titulo):
@@ -150,7 +234,7 @@ def _secc():
      ("S1", tuple(T - 18 * N), tuple(T + 32 * N), "por el eje de la torre perpendicular al chaflán: columna, cuello, ménsulas, barril, visera desplazada y escalera"),
      ("S2", (-8, yc), (24, yc), "transversal del ala larga por la escalera (encuentro escalera – barril – ala)"),
      ("S3", (-8, (pl["Q"][1] + E.Y_CUNA) / 2), (24, (pl["Q"][1] + E.Y_CUNA) / 2), "transversal del ala larga por el bar, la terraza y la concha"),
-     ("S4", (-8, E.L_L - 4), (24, E.L_L - 4), "transversal del ala larga por el tramo final (sin bar)"),
+     ("S4", (-8, E.L_L - E._v["VEN_FIN"] - E._v["S_VEN"] - E._v["VEN_W"] / 2), (24, E.L_L - E._v["VEN_FIN"] - E._v["S_VEN"] - E._v["VEN_W"] / 2), "transversal del ala larga por el eje del hueco 2 (tramo final sin bar): huecos alto y bajo cortados"),
      ("S5", tuple(E.SWP(-14, -6)), tuple(E.SWP(-14, 18)), "transversal del ala corta: banda del restaurante, bloque alto y patio"),
     ]
 

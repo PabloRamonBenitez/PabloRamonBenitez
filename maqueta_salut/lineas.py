@@ -76,39 +76,65 @@ def dibujar_vista(ax, m, res=RES, z=0):
         ax.imshow(img, extent=ext, interpolation="antialiased", zorder=z)
 
 
-def corte(ax, cs, z=5, muro=0.4):
-    """corte arquitectonico: solo el espesor de muros/forjados (anillo de 'muro' m) va con trama y contorno grueso;
-    el interior queda hueco."""
+def corte(ax, cs, z=5, muro=0.30, huecos=(), polys=None):
+    """corte arquitectónico: muro de 'muro' m (trama + contorno grueso), interior hueco; los huecos del catálogo
+    (en coordenadas del dibujo: dict p, t, n, w, e, tipo) abren el muro y llevan su símbolo."""
+    from matplotlib.patches import Polygon, Arc
+    from shapely.geometry import Polygon as SP
+    from shapely.ops import unary_union
+    anillos = []
+    src = polys if polys is not None else [np.array(P) for P in cs.to_polygons()]
+    for P in src:
+        P = np.array(P)
+        if len(P) < 3: continue
+        sp = SP(P).buffer(0)
+        if sp.is_empty: continue
+        hueco = sp.buffer(-muro)
+        anillos.append(sp.difference(hueco) if not hueco.is_empty else sp)
+    if not anillos: return
+    muros = unary_union(anillos)
+    aberturas = []
+    for h in huecos:
+        p, t, n, w, e = np.array(h["p"]), np.array(h["t"]), np.array(h["n"]), h["w"], h.get("e", muro)
+        a0, a1 = p - t * w / 2, p + t * w / 2
+        aberturas.append(SP([a0 + n * 0.4, a1 + n * 0.4, a1 - n * (e + 0.4), a0 - n * (e + 0.4)]))
+    if aberturas:
+        muros = muros.difference(unary_union(aberturas))
+    for gm in getattr(muros, "geoms", [muros]):
+        if gm.is_empty or gm.geom_type != "Polygon": continue
+        ax.add_patch(Polygon(np.array(gm.exterior.coords), closed=True, fc="#9a9a9a", ec="k", lw=1.3, zorder=z))
+        for it in gm.interiors:
+            ax.add_patch(Polygon(np.array(it.coords), closed=True, fc="white", ec="k", lw=1.3, zorder=z + 0.5))
+    for h in huecos:                                     # símbolo
+        p, t, n, w, e = np.array(h["p"]), np.array(h["t"]), np.array(h["n"]), h["w"], h.get("e", muro)
+        a0, a1 = p - t * w / 2, p + t * w / 2
+        if h["tipo"] == "puerta":
+            ax.plot(*zip(a0, a1), color="k", lw=0.5, zorder=z + 2)
+            q = a0 - n * e; ax.plot(*zip(q, q - n * w), color="k", lw=0.9, zorder=z + 2)
+            ang0 = math.degrees(math.atan2(-n[1], -n[0])); ang1 = math.degrees(math.atan2(t[1], t[0]))
+            d = (ang1 - ang0) % 360
+            lo, hi = (ang0, ang0 + d) if d <= 180 else (ang1, ang1 + 360 - d)
+            ax.add_patch(Arc(q, 2 * w, 2 * w, theta1=lo, theta2=hi, lw=0.5, color="k", zorder=z + 2))
+            continue
+        for off in (0.0, e):                                                             # caras del muro
+            ax.plot(*zip(a0 - n * off, a1 - n * off), color="k", lw=0.5, zorder=z + 2)
+        for off in (0.42 * e, 0.58 * e):                                                 # carpintería y vidrio: doble línea
+            ax.plot(*zip(a0 - n * off, a1 - n * off), color="k", lw=0.9, zorder=z + 2)
+
+
+def encima(ax, m, z=4, muro=0.30):
+    """lo que queda por encima del corte, proyectado: muro con dos líneas discontinuas"""
     from matplotlib.patches import Polygon
     from shapely.geometry import Polygon as SP
-    for P in cs.to_polygons():
-        P = np.array(P)
-        if len(P) < 3:
-            continue
-        sp = SP(P).buffer(0)
-        if sp.is_empty:
-            continue
-        hueco = sp.buffer(-muro)
-        anillo = sp.difference(hueco) if not hueco.is_empty else sp
-        geoms = getattr(anillo, "geoms", [anillo])
-        for gm in geoms:
-            if gm.is_empty or gm.geom_type != "Polygon":
-                continue
-            ext = np.array(gm.exterior.coords)
-            ax.add_patch(Polygon(ext, closed=True, fc="#9a9a9a", ec="none", zorder=z))
-            for it in gm.interiors:
-                ax.add_patch(Polygon(np.array(it.coords), closed=True, fc="white", ec="none", zorder=z + 0.5))
-        ax.add_patch(Polygon(P, closed=True, fc="none", ec="k", lw=1.6, zorder=z + 1))
-        if not hueco.is_empty:
-            for gm in getattr(hueco, "geoms", [hueco]):
-                if gm.geom_type == "Polygon":
-                    ax.add_patch(Polygon(np.array(gm.exterior.coords), closed=True, fc="none", ec="k", lw=0.6, zorder=z + 1))
-
-
-def encima(ax, m, z=4):
-    from matplotlib.patches import Polygon
     for P in m.project().to_polygons():
-        ax.add_patch(Polygon(np.array(P), closed=True, fc="none", ec="0.35", lw=0.6, ls=(0, (4, 3)), zorder=z))
+        P = np.array(P)
+        ax.add_patch(Polygon(P, closed=True, fc="none", ec="0.35", lw=0.6, ls=(0, (4, 3)), zorder=z))
+        sp = SP(P).buffer(0)
+        if sp.is_empty or sp.area < 4: continue
+        inn = sp.buffer(-muro)
+        for gm in getattr(inn, "geoms", [inn]):
+            if gm.geom_type == "Polygon" and not gm.is_empty:
+                ax.add_patch(Polygon(np.array(gm.exterior.coords), closed=True, fc="none", ec="0.5", lw=0.4, ls=(0, (4, 3)), zorder=z))
 
 
 def nivel(ax, x, z, txt):

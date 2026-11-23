@@ -225,16 +225,15 @@ def base():
     hue = [ROT(caja(-L_C + L_LADR + 0.4, xA, -1, 0.3, 4.6, 6.6))]
     # HUECOS DEL ALA LARGA (pasada 11, proporciones F73/F01/F47): 11 arriba, 7 abajo bajo los 7 más cercanos al
     # testero, intereje S_VEN, hueco 0,47 S; marco que sale MAR_P y vidrio MAR_R por detrás del frente del marco
-    n, nb, w, S_ = int(_v["N_VEN"]), int(_v["N_VEN_B"]), _v["VEN_W"], _v["S_VEN"]
+    import ventanas as VT                                # catálogo único de huecos (mismo que planos)
     p_, rr_, bd = _v["MAR_P"], _v["MAR_R"], _v["MAR_B"]
     marcos = []
-    for i in range(n):                                   # i = 0 junto al testero
-        y1_ = L_L - _v["VEN_FIN"] - i * S_; y0_ = y1_ - w
-        filas = [(_v["VA_0"], _v["VA_1"])] + ([(_v["VB_0"], _v["VB_1"])] if i < nb else [])
-        for z0, z1 in filas:
-            marcos.append(caja(W_P - 0.01, W_P + p_, y0_ - bd, y1_ + bd, z0 - bd, z1 + bd))
-            marcos.append(caja(W_P - 0.01, W_P + p_ + 0.06, y0_ - bd - 0.05, y1_ + bd + 0.05, z0 - bd - 0.1, z0 - bd))  # alféizar con goterón
-            hue.append(caja(W_P + p_ - rr_, W_P + 1, y0_, y1_, z0, z1))           # hueco hasta el vidrio
+    for h in VT.catalogo():
+        if not h["grupo"].startswith("ala larga"): continue
+        y0_, y1_ = h["p"][1] - h["w"] / 2, h["p"][1] + h["w"] / 2; z0, z1 = h["z0"], h["z1"]
+        marcos.append(caja(W_P - 0.01, W_P + p_, y0_ - bd, y1_ + bd, z0 - bd, z1 + bd))
+        marcos.append(caja(W_P - 0.01, W_P + p_ + 0.06, y0_ - bd - 0.05, y1_ + bd + 0.05, z0 - bd - 0.1, z0 - bd))  # alféizar con goterón
+        hue.append(caja(W_P + p_ - rr_, W_P + 1, y0_, y1_, z0, z1))                 # hueco hasta el vidrio
     # testero: puerta de servicio con marquesina saliente y ventana encima [F73: a 0,49-0,63 del ancho desde la esquina exterior]
     hue.append(caja(W_P - 0.63 * W_P, W_P - 0.49 * W_P, L_L - 0.3, L_L + 1, 0.0, 2.6))
     hue.append(caja(W_P - 0.55 * W_P, W_P - 0.43 * W_P, L_L - 0.3, L_L + 1, 4.6, 5.3))
@@ -314,16 +313,13 @@ def torre():
         zr = 3.4 + k * F / 2
         m = m + caja(xi + _v["ESC_REC"] - 1.4, xi + _v["ESC_REC"], ESC_Y0, ESC_Y0 + _v["ESC_RW"], zr, zr + 0.25)
     # ventanas de las habitaciones: un hueco por modulo entre aletas, sobre el poyete [F04, F06, F09]
+    import ventanas as VT                                # catálogo único de huecos (mismo que planos)
     hue = []
-    for i in range(N_PL):
-        z = Z_B0 + i * F
-        for k in range(N_AL):
-            a = math.degrees(2 * math.pi * (k + 0.5) / N_AL)
-            if i == 0:
-                h = Manifold.cube((0.5, 2.6, 1.4)).translate((rf - 0.25, -1.3, z + 1.7))   # pavés [F09]
-            else:
-                h = Manifold.cube((0.5, 2.4, 1.4)).translate((rf - 0.25, -1.2, z + 1.7))   # ventana hasta el forjado superior [F09]
-            hue.append(h.rotate((0, 0, a)).translate((T[0], T[1], 0)))
+    for hh in VT.catalogo():
+        if not hh["grupo"].startswith("torre planta"): continue
+        a = math.degrees(math.atan2(hh["n"][1], hh["n"][0]))
+        h = Manifold.cube((0.5, hh["w"], hh["z1"] - hh["z0"])).translate((rf - 0.25, -hh["w"] / 2, hh["z0"]))
+        hue.append(h.rotate((0, 0, a)).translate((T[0], T[1], 0)))
     m = m - Manifold.batch_boolean(hue, OpType.Add)
     # lamas: cara larga hacia el testero (+y) [F73, F11 paño B] y paño de la testa al patio [F11 paño A, F75]
     lam = []

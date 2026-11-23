@@ -24,3 +24,4 @@
 | escalera: baja al suelo | 0.00 | 0.00 | OK |
 | rampa 2 a mitad | 9.36 | 9.35 | OK |
 | relieve del marco (frente) | 12.82 | 12.82 | OK |
+| huecos del catálogo abiertos en el 3D (ala + torre) | 132.00 | 132.00 | OK |

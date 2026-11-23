@@ -49,6 +49,15 @@ chk.append(("escalera: baja al suelo", bb3[2], 0.0))
 yb0_ = E.plantas_base()["Q"][1]
 chk.append(("rampa 2 a mitad", ztop(V["W_BAR"] + V["V_BAR"] + 1.2, yb0_ + V["R2_Y0"] + V["R2_L"] / 2), E.Z_P1 + 0.5 * (E.Z_BARC - E.Z_P1) if hasattr(E, "Z_BARC") else (E.Z_P1 + E.Z_BAR_C) / 2))
 chk.append(("relieve del marco (frente)", float((m ^ E.caja(V["W_P"], V["W_P"] + 1, V["L_L"] - V["VEN_FIN"] + 0.1, V["L_L"] - V["VEN_FIN"] + 0.2, V["VA_1"] + 0.1, V["VA_1"] + 0.2)).bounding_box()[3]), V["W_P"] + V["MAR_P"]))
+import ventanas as VT
+tm_ = E.edificio(); okh = 0; tot = 0
+for h in VT.catalogo():
+    if h["tipo"] not in ("ventana",) or not (h["grupo"].startswith("ala larga") or h["grupo"].startswith("torre planta")): continue
+    tot += 1
+    px, py = h["p"][0] - h["n"][0] * 0.05, h["p"][1] - h["n"][1] * 0.05; zc_ = (h["z0"] + h["z1"]) / 2
+    r = tm_ ^ E.caja(px - 0.03, px + 0.03, py - 0.03, py + 0.03, zc_ - 0.03, zc_ + 0.03)
+    okh += r.is_empty()
+chk.append(("huecos del catálogo abiertos en el 3D (ala + torre)", okh, tot))
 out = ["| comprobación | medido en la geometría | cuadro | estado |", "|---|---|---|---|"]
 for n, a, b in chk:
     ok = abs(a - b) < (0.25 if "curva" in n else 0.12) or (n.startswith("sin ventanas") and a > V["W_P"] - 0.05)

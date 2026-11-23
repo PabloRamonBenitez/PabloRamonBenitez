@@ -42,31 +42,19 @@ def planta(ax, zc, titulo, aerea=False):
         L.encima(ax, arriba)
         L.corte(ax, M.slice(zc), huecos=VT.cortados(zc))
         estructura_torre(ax, zc)
-    recorridos(ax)
+    recorridos(ax, None if aerea else zc)
     ax.set_title(titulo, fontsize=10, loc="left")
 
 
-def recorridos(ax):
-    """recorrido público: plaza → rampa de acceso → terraza-restaurante (+7,20) → rampa 2 → azotea del bar"""
-    V = E._v; xr = (E.W_P + E.W_EXT) / 2; y0 = E.plantas_base()["Q"][1] + V["D_HOTF"]
-    ax.annotate("", xy=(xr, y0 + 1.0), xytext=(xr, E.Y_CUNA - 1.0),
-                arrowprops=dict(arrowstyle="-|>", lw=1.0, color="#1a5fb4"), zorder=80)
-    ax.text(xr + 1.0, (y0 + E.Y_CUNA) / 2, f"RAMPA DE ACCESO desde la plaza\nsube ±0,00 → +{V['Z_CON']:.2f} a la terraza-restaurante".replace(".", ","),
-            fontsize=5.5, color="#1a5fb4", rotation=90, va="center", ha="left", zorder=80)
-    ax.annotate("", xy=(E.W_P - 1.0, y0 + V["R_ENT"] / 2), xytext=(xr, y0 + V["R_ENT"] / 2),
-                arrowprops=dict(arrowstyle="-|>", lw=1.0, color="#1a5fb4"), zorder=80)
-    yt = (E.L_L - V["L_FIN"] + y0) / 2
-    ax.text(9.6, yt + 12, "TERRAZA-RESTAURANTE\n+7,20 (sombrillas F01, F47)", fontsize=5.5, color="#1a5fb4", rotation=90,
-            va="center", ha="center", zorder=80)
-    _p, _b = E.curva_poligono(); _m = _b[len(_b) // 2]
-    ax.annotate("", xy=_b[-1], xytext=(xr, y0 + 0.5), arrowprops=dict(arrowstyle="-|>", lw=1.0, color="#1a5fb4",
-                connectionstyle="arc3,rad=-0.35"), zorder=80)
-    ax.text(_m[0] + 1.0, _m[1] - 1.0, "la rampa da la vuelta\nen curva a +7,20\n(entrada del hotel debajo)", fontsize=4.8, color="#1a5fb4", zorder=80)
-    yb0 = E.T[1] + V["ESC_R1"] + 0.3; xb = (E.W_BAR + V["V_BAR"]) / 2
-    ax.annotate("", xy=(xb, yb0 + V["R2_L"] - 0.5), xytext=(xb, yb0 + 0.5),
-                arrowprops=dict(arrowstyle="-|>", lw=0.9, color="#1a5fb4"), zorder=80)
-    ax.text(xb + 0.6, yb0 + V["R2_L"] / 2, "techo del restaurante en rampa\nsube +7,20 → +11,50 (azotea)", fontsize=4.8,
-            color="#1a5fb4", rotation=90, va="center", zorder=80)
+def recorridos(ax, zc=None):
+    """grafismo de arquitectura: rampas, escalera, proyecciones y cotas de nivel (grafismo.py)"""
+    import grafismo as G
+    G.dibujar(ax, zc)
+    V = E._v
+    G.cota_nivel(ax, (9.6, (E.L_L - V["L_FIN"] + E.T[1] + V["ESC_R1"] + V["R2_L"]) / 2), V["Z_P1"])
+    ax.text(9.6, (E.L_L - V["L_FIN"] + E.T[1] + V["ESC_R1"] + V["R2_L"]) / 2 - 8, "terraza-restaurante", fontsize=4.8, rotation=90,
+            ha="center", va="center", style="italic", zorder=80)
+    G.cota_nivel(ax, (E.W_EXT + 3.5, E.Y_CUNA + 4), 0.0)
 
 
 def estructura_torre(ax, zc):
@@ -143,7 +131,7 @@ def cotas_planta(ax):
             fontsize=6, rotation=90, va="center")
     # cota de cubierta de cada volumen
     for (x, y), z in (((3, 70), E.Z_BAR_C), ((10, 70), E.Z_P1 + E._v["H_PET"]), ((tuple(E.SWP(-12, 9))), E.Z_ALTO), ((tuple(E.SWP(-21.5, 6))), E._v["Z_LAD1"]),
-                      (E.esc_pt((E.ESC_R0 + E.ESC_R1) / 2, 0), E._v["ESC_Z1"]), ((14.2, 30), E._v["Z_CON"])):
+                      (E.esc_ang_pt(E.ESC_R0 - 1.2, 0), E._v["ESC_Z1"])):
         ax.text(x, y, f"+{z:.2f}".replace(".", ","), fontsize=6.5, color="navy", ha="center", bbox=dict(fc="white", ec="navy", lw=0.4, pad=0.6), zorder=70)
     # trazas de las secciones
     for k, p0, p1, _ in SECC:

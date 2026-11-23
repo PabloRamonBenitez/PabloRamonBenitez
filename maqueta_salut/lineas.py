@@ -128,7 +128,7 @@ def encima(ax, m, z=4, muro=0.30):
     from shapely.geometry import Polygon as SP
     for P in m.project().to_polygons():
         P = np.array(P)
-        ax.add_patch(Polygon(P, closed=True, fc="none", ec="0.35", lw=0.6, ls=(0, (4, 3)), zorder=z))
+        ax.add_patch(Polygon(P, closed=True, fc="none", ec="0.3", lw=0.7, ls=(0, (5, 3)), zorder=z))
         sp = SP(P).buffer(0)
         if sp.is_empty or sp.area < 4: continue
         inn = sp.buffer(-muro)

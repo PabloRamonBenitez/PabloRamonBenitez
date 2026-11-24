@@ -102,9 +102,9 @@ def corte(ax, cs, z=5, muro=0.30, huecos=(), polys=None):
         muros = muros.difference(unary_union(aberturas))
     for gm in getattr(muros, "geoms", [muros]):
         if gm.is_empty or gm.geom_type != "Polygon": continue
-        ax.add_patch(Polygon(np.array(gm.exterior.coords), closed=True, fc="#9a9a9a", ec="k", lw=1.3, zorder=z))
+        ax.add_patch(Polygon(np.array(gm.exterior.coords), closed=True, fc="0.35", ec="k", lw=0.9, zorder=z))
         for it in gm.interiors:
-            ax.add_patch(Polygon(np.array(it.coords), closed=True, fc="white", ec="k", lw=1.3, zorder=z + 0.5))
+            ax.add_patch(Polygon(np.array(it.coords), closed=True, fc="white", ec="k", lw=0.9, zorder=z + 0.5))
     for h in huecos:                                     # símbolo
         p, t, n, w, e = np.array(h["p"]), np.array(h["t"]), np.array(h["n"]), h["w"], h.get("e", muro)
         a0, a1 = p - t * w / 2, p + t * w / 2
@@ -150,10 +150,11 @@ def cota(ax, p0, p1, off, txt="", fs=6.5, color="k"):
         return
     t = d / L; n = np.array([-t[1], t[0]])
     a, b = p0 + n * off, p1 + n * off
-    ax.plot(*zip(a, b), color=color, lw=0.5)
+    ax.plot(*zip(a, b), color=color, lw=0.3)
     for p, q in ((p0, a), (p1, b)):
-        ax.plot(*zip(p + n * 0.3 * np.sign(off), q + n * 0.4 * np.sign(off)), color=color, lw=0.35)
-        ax.plot(*zip(q - (t + n) * 0.35, q + (t + n) * 0.35), color=color, lw=0.8)
+        if abs(off) > 0.05:
+            ax.plot(*zip(p + n * 0.3 * np.sign(off), q + n * 0.4 * np.sign(off)), color=color, lw=0.2)
+        ax.plot(*zip(q - (t + n) * 0.3, q + (t + n) * 0.3), color=color, lw=0.6)
     ang = math.degrees(math.atan2(t[1], t[0]))
     if ang > 90: ang -= 180
     if ang <= -90: ang += 180

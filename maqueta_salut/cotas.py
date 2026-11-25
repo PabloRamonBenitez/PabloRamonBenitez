@@ -31,7 +31,7 @@ COTAS = {
  "ESC_R1": (15.9, "cara exterior de la pantalla de lamas (separada 0,3 del cuerpo)", "F08, F11: lamas separadas del muro"),
  "ESC_SEC": (37.9, 'hueco de la escalera en el cilindro = 2 módulos entre muros radiales', 'coherencia aletas–escalera (Alamy) · antes 41 estimado'),
  "ESC_RC": (15.3, "cara exterior del cuerpo cerrado de la escalera", "F08: lamas al nivel de las puntas de las aletas"),
- "ESC_SECB": (25.0, "cuerpo de escalera en cuña (grados), centrado en el hueco, forrado de lamas", "F08: lamas de 18,5° hasta ~43° (su cara lateral se ve en escorzo) · usuario"),
+ "ESC_SECB": (20.2, 'cuerpo de escalera en cuña (grados)', 'usuario + fotos 25/11: ~2 m (una puerta) entre el corte del barril y el cuerpo → (37,9 − 2·asin(2/13)) ; frente 5,6 m (foto lateral 5,8–6,0) · antes 25'),
  "ESC_RR": (11.0, "fachada retranqueada con ventanas a cada lado de la cuña (radio)", "F08 franja oscura 9,5°–18,5° con barandillas y huecos, ~1,6 m detrás de la línea de vidrio · F11 · usuario"),
  "H_PT": (1.0, "peto del tambor sobre el pasillo de servicio entre tambor y banda", "F08: pasillo y peto entre el tambor y la banda acristalada"),
  "R_ENT": (3.0, "abertura del peto de la terraza donde llega la rampa 1", "lógica de recorrido"),
@@ -107,6 +107,7 @@ COTAS = {
  "BAR_B": (0.85, "barandilla de la cubierta del barril sobre el canto", "MGF Alamy (vertical de medida del usuario; ref. cara inferior de la losa de cubierta del barril y=1337 = +32,50; 56,53 px/m por 5 forjados, paso 175,25 px): 50 px"),
  "ESC_ZI": (40.8, 'coronación de la caja de escalera en su extremo interior', 'Alamy (de perfil)'),
  "ESC_ZL": (38.2, "coronación de las lamas: por encima, remate de hormigón visto de ~3 m", "foto lateral: remate de 2,97 m (132 px a 44,5 px/m, escala de las juntas de las lamas a 3,10 m)"),
+ "LAMA_N": (16, "lamas en el frente del cuerpo de escalera", "usuario: cuenta 16"),
  "LAMA_E": (0.08, "espesor de las lamas de la escalera", "dron y foto lateral: lamas finas y muy juntas · usuario"),
  "LAMA_P": (0.35, "separación entre lamas (a ejes)", "dron: ~0,3–0,4 m con los ojos (Ø 1,70) como escala"),
  "ESC_RS": (10.2, "radio donde termina la caja de escalera por encima del tambor (hueco de cielo hasta la banda)", "Alamy (collage): s = −10,2 con la caja a 90° de la vista"),
@@ -245,7 +246,7 @@ def niveles():
 # Margen (±) de cada cota: medido en varias fotos ≈ 0,3-0,6 · una foto ≈ 1 · estimado ≈ 1,5-2 · satélite ≈ 1
 RANGOS = {
  "Z_PB": 0.3, "Z_P1": 0.3, "Z_BAR": 0.8, "Z_BARC": 0.8, "Z_ALTO": 1.0, "Z_LAD0": 0.5, "Z_FIN": 0.9, "H_PET": 0.6, "VA_0": 0.5, "VA_1": 0.6, "VB_0": 0.3, "VB_1": 0.4, "L_HOR": 2.0, "VOL_L": 0.3, "AC_TRI": 0.3, "VOL_V": 0.3, "Z_VOL0": 0.4, "R_AC": 1.5, "LOG_D": 0.5, "LOG_PX": 0.8, "LOG_X0": 0.5, "LOG_X1": 0.8, "LUC_X": 1.5, "LUC_Y": 1.5, "LUC_R": 0.5, "LUC_H": 0.5,
- "FASE_AL": 1.0, "ESC_ZI": 0.4, "ESC_ZL": 0.5, "LAMA_E": 0.04, "LAMA_P": 0.1, "ESC_RS": 0.8, "SIG_S0": 0.5, "SIG_S1": 0.5, "SIG_Z0": 0.2, "SIG_Z1": 0.2, "REM_ZR": 0.3, "REM_ZH": 0.15, "VISTA_ALAMY": 2.0, "FOR_C": 0.05, "FOR_R": 0.05, "FOR_P": 0.05, "BAR_B": 0.15, "OJO_D": 0.1, "OJO_V": 0.3, "OJO_Z": 0.2, "OJO_C0": 10.0, "OJO_C1": 6.0, "OJO_DP": 2.0, "Z_LAD1": 1.0, "Z_CON": 0.8, "Z_CU0": 0.6, "Z_CU1": 0.6, "Z_ALE": 0.6, "Z_B0": 0.4, "F": 0.05, "N_PL": 0,
+ "FASE_AL": 1.0, "ESC_ZI": 0.4, "ESC_ZL": 0.5, "LAMA_E": 0.04, "LAMA_N": 0, "LAMA_P": 0.1, "ESC_RS": 0.8, "SIG_S0": 0.5, "SIG_S1": 0.5, "SIG_Z0": 0.2, "SIG_Z1": 0.2, "REM_ZR": 0.3, "REM_ZH": 0.15, "VISTA_ALAMY": 2.0, "FOR_C": 0.05, "FOR_R": 0.05, "FOR_P": 0.05, "BAR_B": 0.15, "OJO_D": 0.1, "OJO_V": 0.3, "OJO_Z": 0.2, "OJO_C0": 10.0, "OJO_C1": 6.0, "OJO_DP": 2.0, "Z_LAD1": 1.0, "Z_CON": 0.8, "Z_CU0": 0.6, "Z_CU1": 0.6, "Z_ALE": 0.6, "Z_B0": 0.4, "F": 0.05, "N_PL": 0,
  "Z_T1": 0.5, "Z_G1": 0.5, "Z_V1": 0.5, "Z_R1": 0.6, "R_COL": 0.3, "R_CONO": 0.3, "R_CU": 0.5, "R_B": 0.3,
  "R_AL": 0.3, "R_T": 0.5, "R_G": 0.5, "R_V": 0.6, "R_R": 0.25, "OV_X": 1.0, "OV_Y": 1.5, "OR_X": 0.5, "OR_Y": 0.5, "OB_X": 0.5, "OB_Y": 0.8, "N_AL": 0,
  "ESC_W": 1.5, "ESC_X": 1.0, "H_PT": 0.3, "R_ENT": 1.0, "POR_X0": 0.3, "POR_X1": 0.3, "POR_D": 0.3, "ESQ_D": 0.3, "REST_L": 0.8, "HOT_L": 0.6, "R_RAMPA": 2.0, "M_CH": 0.2, "ESC_Z0": 1.0, "RAMPA_C": 0.1, "ESC_SEC": 4.0, "ESC_SECB": 4.0, "ESC_RR": 0.8, "ESC_RC": 1.0, "ESC_Y": 2.0, "ESC_Z1": 0.8, "W_P": 0.5, "W_BAR": 0.5, "V_BAR": 0.5, "L_L": 1.0, "L_FIN": 0.5, "Y_CA": 0.6, "R_FIN": 2.0, "S_VEN": 0.3, "N_VEN_B": 0, "MAR_P": 0.02, "MAR_B": 0.05, "MAR_R": 0.04, "R2_L": 3.0, "N_VEN": 0, "VEN_W": 0.2, "VEN_FIN": 1.5, "Z_ARC": 0.5, "U_ARC": 0.1, "D_CUNA": 1.0,

@@ -25,3 +25,4 @@ Todos se regeneran desde los scripts de `maqueta_salut/` (p. ej. `generatrices_e
 | 29 | PLANTA_ORIENTACION_ALAMY | torre en planta: 19 muros con su ángulo, escalera entre M3 y M5, 14 ojos, lado ciego, desplazamientos y dirección de la cámara de Alamy (179,7°) |
 | 30 | COLLAGE_ALAMY | **collage**: foto de Alamy al 50 % sobre el alzado del modelo, conjunto y 4 zonas ampliadas (remate y letras, visera y caja de escalera, tambor, barril) |
 | 31 | ESCALERA_FOTOS | caja de escalera: foto lateral (escala por las juntas de las lamas), dron y Alamy frente al modelo |
+| 32 | ESCALERA_FRENTE | escalera de frente: fotos del usuario (16 lamas, bordes del corte con lamas, puerta de ~2 m, remate) junto al alzado del modelo |

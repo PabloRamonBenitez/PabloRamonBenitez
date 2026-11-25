@@ -115,3 +115,12 @@ Regla del método: **en el alzado del modelo se mira el silueteado de cada pieza
   **Regla:** una foto solo mide lo que tiene de perfil.
 - Lamas finas: espesor 0,08 cada 0,35 m (antes 0,24 cada 0,8), hasta +38,20.
 - **Lucernarios bajo el cuello:** no forman un anillo completo, porque la caja de escalera ocupa ese sector (usuario).
+
+## Escalera de frente (25/11, fotos del usuario) – `escalera_frente.py` → ESCALERA_FRENTE.png
+Esto es ahora la verdad sobre la escalera:
+- **16 lamas** en el frente del cuerpo.
+- **Bordes del corte del barril cerrados con lamas**, de +13,90 a la coronación del tambor (+38,73), en los dos lados.
+  Detrás puede haber muro o vidrio; el lado derecho es seguro y el izquierdo se supone igual.
+- **~2 m (una puerta)** entre el corte del barril y el cuerpo de la escalera: la cuña pasa de 25° a **20,2°**.
+  Su frente queda en 5,6 m, que coincide con los 5,8–6,0 m de la foto lateral (antes daba 6,9).
+- Las lamas del cuerpo terminan bajo el remate (+38,20). El remate es inclinado; su punto más alto es la esquina exterior (+41,6).

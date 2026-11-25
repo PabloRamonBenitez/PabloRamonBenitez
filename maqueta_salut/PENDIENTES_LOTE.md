@@ -17,6 +17,15 @@ Ya aplicado: porche del testero (muros + marquesina) y muro de esquina [croquis 
 8. Más puertas de entrada del hotel en PB alrededor del círculo de la base de la torre.
 9. «?»: escalón entre chaflán y fachada del patio del ala larga junto a la escalera → comprobar con fotos antes de cambiar.
 
+## Hueco de planta primera bajo el cuerpo volado (croquis 25/11 + fotos de la calle)
+10. Planta primera, tramo de fachada junto a la medianera (bajo el cuerpo volado del punto 2): hueco retranqueado tipo logia.
+   - Muro estructural grueso en la medianera, perpendicular a la fachada, que sube y sostiene el voladizo.
+   - Pilar/muro intermedio grueso en medio del hueco (foto: pilar blanco).
+   - Muro delgado al final del hueco hacia la torre; después sigue la fachada normal hacia el chaflán.
+   - Entre muros: ventana cortada (doble línea de carpintería) retranqueada respecto a la fachada, y delante la proyección del poyete/antepecho (línea de puntos).
+   - Por fuera, en discontinua, la proyección del cuerpo volado de arriba (6 m, 1,2 m de vuelo, lado inclinado paralelo al chaflán).
+   - Proporciones aproximadas (a medir en las fotos de la calle con la persona como escala).
+
 ## Respuestas del usuario (25/11)
 - La diagonal de la línea A es la proyección del cuerpo del bloque alto (planta 2) que vuela 1,2 m; su lado inclinado es PARALELO a la fachada de la planta primera del chaflán (amarillo en el croquis).
 - El vuelo de 1,2 m se mide desde la línea exterior de la fachada (alineación con el edificio colindante).

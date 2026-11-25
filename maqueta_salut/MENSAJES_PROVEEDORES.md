@@ -46,25 +46,88 @@ Sustituye [Nombre] y [Teléfono / correo] antes de enviar.
 
 ---
 
-## Etsy (mensaje privado al vendedor; Etsy no deja adjuntar STL en el primer mensaje: pide un correo o enlace para mandarlo)
+## Etsy: un mensaje por tienda
+Se envía con «Contactar con el vendedor» desde la tienda o el anuncio. En el primer mensaje no se puede adjuntar el STL: pídeles un correo o enlace.
 
-### 4. Anuncio 4564160897 – “Custom Silicone Mold Making Service 3D”
-### 5. 3DDeluxeStore – “Custom Silicone Mold Full-Service”
-### 6. Anuncio “One-Stop Service from Sketch to Silicone Mold”
-### 7. StudioRollins – “Custom Food Grade Silicone Mold Making Service”
-### 8. HOUSEOFMOLDS (Italia) · 9. PreMold (Alemania)
-### 10. Anuncio 4617960102 – “Molde personalizado 1 cavidad figuras 3D” (la ficha no cargaba: comprobar que sigue activo)
-
-**Mensaje común (inglés), mismo texto para los siete:**
-> Hello! Do you make a PHYSICAL silicone mould from a customer's own STL file, including printing the master? I have an architectural model (a hotel): 145 × 299 × 150 mm, about 783 cm³, a closed 3D shape with overhangs and details of about 1 mm. I will cast fine concrete / micro-mortar in it.
-> Please quote a total price delivered to Badajoz, Spain (06001), and tell me:
+### 4. Etsy – anuncio 4564160897 «Custom Silicone Mold Making Service 3D»
+> Hello! Your listing says “Send me your 3D model, STL/OBJ file” – great.
+> I have an architectural model (a hotel), STL ready: 145 × 299 × 150 mm, about 783 cm³, a closed 3D shape with overhangs and details of about 1 mm. I will cast fine concrete / micro-mortar in it.
+> Could you quote a TOTAL price delivered to Badajoz, Spain (06001), and tell me:
 > 1. which country you ship from and whether customs/VAT apply;
 > 2. silicone type and Shore hardness;
 > 3. whether it is a one-piece or multi-part mould, with or without a rigid mother mould;
 > 4. whether the master is resin or FDM, and how layer lines are handled;
 > 5. lead time and roughly how many casts it lasts.
->
-> Where can I send the STL (email or link)? Thanks!
+> Where can I send the STL (email or link)? Thank you!
+
+### 5. Etsy – 3DDeluxeStore («Custom Silicone Mold Full-Service», ~150 $)
+> Hello! I saw your Custom Silicone Mold Full-Service. Can you work from my own STL file (you print the master and make the physical silicone mould)?
+> I have an architectural model (a hotel), STL ready: 145 × 299 × 150 mm, about 783 cm³, a closed 3D shape with overhangs and details of about 1 mm. I will cast fine concrete / micro-mortar in it.
+> Could you quote a TOTAL price delivered to Badajoz, Spain (06001), and tell me:
+> 1. which country you ship from and whether customs/VAT apply;
+> 2. silicone type and Shore hardness;
+> 3. whether it is a one-piece or multi-part mould, with or without a rigid mother mould;
+> 4. whether the master is resin or FDM, and how layer lines are handled;
+> 5. lead time and roughly how many casts it lasts.
+> Where can I send the STL (email or link)? Thank you!
+
+### 6. Etsy – anuncio «One-Stop Service from Sketch to Silicone Mold»
+> Hello! I saw your One-Stop Service from sketch to silicone mould. I already have the 3D model: can you start from my STL and make the physical mould?
+> I have an architectural model (a hotel), STL ready: 145 × 299 × 150 mm, about 783 cm³, a closed 3D shape with overhangs and details of about 1 mm. I will cast fine concrete / micro-mortar in it.
+> Could you quote a TOTAL price delivered to Badajoz, Spain (06001), and tell me:
+> 1. which country you ship from and whether customs/VAT apply;
+> 2. silicone type and Shore hardness;
+> 3. whether it is a one-piece or multi-part mould, with or without a rigid mother mould;
+> 4. whether the master is resin or FDM, and how layer lines are handled;
+> 5. lead time and roughly how many casts it lasts.
+> Where can I send the STL (email or link)? Thank you!
+
+### 7. Etsy – StudioRollins («Custom Food Grade Silicone Mold Making Service», 50–75 $)
+> Hello! I saw your Custom Silicone Mold Making Service. It's not for food: can you work from my own STL file and make the physical mould?
+> I have an architectural model (a hotel), STL ready: 145 × 299 × 150 mm, about 783 cm³, a closed 3D shape with overhangs and details of about 1 mm. I will cast fine concrete / micro-mortar in it.
+> Could you quote a TOTAL price delivered to Badajoz, Spain (06001), and tell me:
+> 1. which country you ship from and whether customs/VAT apply;
+> 2. silicone type and Shore hardness;
+> 3. whether it is a one-piece or multi-part mould, with or without a rigid mother mould;
+> 4. whether the master is resin or FDM, and how layer lines are handled;
+> 5. lead time and roughly how many casts it lasts.
+> Where can I send the STL (email or link)? Thank you!
+
+### 8. Etsy – HOUSEOFMOLDS (Italia)
+> Ciao / Hello! Do you make custom silicone moulds from a customer's STL file (printing the master included)? Since you are in the EU, shipping to Spain should be simple.
+> I have an architectural model (a hotel), STL ready: 145 × 299 × 150 mm, about 783 cm³, a closed 3D shape with overhangs and details of about 1 mm. I will cast fine concrete / micro-mortar in it.
+> Could you quote a TOTAL price delivered to Badajoz, Spain (06001), and tell me:
+> 1. which country you ship from and whether customs/VAT apply;
+> 2. silicone type and Shore hardness;
+> 3. whether it is a one-piece or multi-part mould, with or without a rigid mother mould;
+> 4. whether the master is resin or FDM, and how layer lines are handled;
+> 5. lead time and roughly how many casts it lasts.
+> Where can I send the STL (email or link)? Thank you!
+
+### 9. Etsy – PreMold (Alemania)
+> Hallo / Hello! Do you make custom silicone moulds from a customer's STL file (printing the master included)? Since you are in the EU, shipping to Spain should be simple.
+> I have an architectural model (a hotel), STL ready: 145 × 299 × 150 mm, about 783 cm³, a closed 3D shape with overhangs and details of about 1 mm. I will cast fine concrete / micro-mortar in it.
+> Could you quote a TOTAL price delivered to Badajoz, Spain (06001), and tell me:
+> 1. which country you ship from and whether customs/VAT apply;
+> 2. silicone type and Shore hardness;
+> 3. whether it is a one-piece or multi-part mould, with or without a rigid mother mould;
+> 4. whether the master is resin or FDM, and how layer lines are handled;
+> 5. lead time and roughly how many casts it lasts.
+> Where can I send the STL (email or link)? Thank you!
+
+### 10. Etsy – anuncio 4617960102 «Molde personalizado de 1 cavidad para figuras 3D» (la ficha no cargaba: comprobar que sigue activo)
+> ¡Hola! / Hello! I saw your custom 1-cavity mould for 3D figures. Can you make it from my own STL file?
+> I have an architectural model (a hotel), STL ready: 145 × 299 × 150 mm, about 783 cm³, a closed 3D shape with overhangs and details of about 1 mm. I will cast fine concrete / micro-mortar in it.
+> Could you quote a TOTAL price delivered to Badajoz, Spain (06001), and tell me:
+> 1. which country you ship from and whether customs/VAT apply;
+> 2. silicone type and Shore hardness;
+> 3. whether it is a one-piece or multi-part mould, with or without a rigid mother mould;
+> 4. whether the master is resin or FDM, and how layer lines are handled;
+> 5. lead time and roughly how many casts it lasts.
+> Where can I send the STL (email or link)? Thank you!
+
+### 11. Etsy – MoldeSilicona (además de su web)
+> ¡Hola! Os he escrito también por la web con el STL; os lo dejo aquí por si os resulta más cómodo gestionar el pedido por Etsy (ver mensaje 1).
 
 Descartar si responden que solo venden el archivo digital, el máster en PLA o la caja, o si el precio que muestran es solo un "quote" simbólico.
 
@@ -83,3 +146,4 @@ Descartar si responden que solo venden el archivo digital, el máster en PLA o l
 | 8 | HOUSEOFMOLDS | Etsy | | | | | | | | no (UE) | |
 | 9 | PreMold | Etsy | | | | | | | | no (UE) | |
 | 10 | Etsy 4617960102 | Etsy | | | | | | | | ? | comprobar si sigue activo |
+| 11 | MoldeSilicona (Etsy) | Etsy | | | | | | | | no (ES) | duplicado del 1 por Etsy |

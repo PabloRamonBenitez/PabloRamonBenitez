@@ -89,8 +89,11 @@ def catalogo():
     for k in range(V["N_AL"]):
         a_ = 2 * math.pi * (k + 0.5) / V["N_AL"] + E.FASE_AL
         if en_escalera(a_, E.R_T): continue
-        c, s = math.cos(a_), math.sin(a_)
-        _h(H, f"OJ{k:02d}", "tambor ojos", "ojo", (T[0] + E.R_T * c, T[1] + E.R_T * s), (-s, c), (c, s), 1.6, zt - 0.8, zt + 0.8)
+        if V["OJO_C0"] < math.degrees(a_) % 360 < V["OJO_C1"]: continue      # lado ciego (Alamy, MGF)
+        if V["OJO_C1"] < math.degrees(a_) % 360 < V["OJO_C1"] + 18:          # primer ojo tras el lado ciego: fuera de módulo [Alamy]
+            a_ += math.radians(V["OJO_DP"])
+        c, s = math.cos(a_), math.sin(a_); zo, ro = V["OJO_Z"], V["OJO_D"] / 2
+        _h(H, f"OJ{k:02d}", "tambor ojos", "ojo", (T[0] + E.R_T * c, T[1] + E.R_T * s), (-s, c), (c, s), V["OJO_D"], zo - ro, zo + ro)
     return H
 
 

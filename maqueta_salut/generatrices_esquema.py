@@ -7,7 +7,7 @@ desplazados), hay un «origen» por cilindro: cada altura se mide sobre la verti
 Escalas (foto alamy.jpg, recorte desde y0 = 0,22·H):
   vertical   56,5 px/m  (paso de forjados del barril: 175 px = 3,10 m; bordes de losa 1306 → 1482)
   horizontal 64,4 px/m  (foto de pantalla deformada; diámetros: visera 23,4 · banda 18,9 · remate 9,5 m)
-  referencia: canto superior de la losa de balcones (y = 1306) = cubierta del barril Z_B1 = +32,50;
+  referencia: cara superior del canto de la losa de cubierta del barril (y = 1306) = Z_B1 + 0,65 = +33,15 (la cara inferior, y = 1337, es +32,50);
               comprobación independiente: coronación del tambor 5,68 m más arriba = +38,18 (F09: +38,20).
 """
 import sys
@@ -22,7 +22,7 @@ import edificio as E
 V = E._v
 FOTO = sys.argv[1] if len(sys.argv) > 1 else "/tmp/claude-0/-home-user-PabloRamonBenitez/6aecfee3-0e37-5370-9a32-0a87a530abec/scratchpad/alamy.jpg"
 PV, PH = 175 / 3.10, 64.4
-Y_REF, Z_REF = 1306, E.Z_B1          # losa superior del barril
+Y_REF, Z_REF = 1306, E.Z_B1 + 0.65   # cara SUPERIOR del canto de la losa de cubierta del barril (canto 0,65; cara inferior y = 1337)
 X_T = 1078                            # centro del tambor (borde derecho 1950 − R_T·PH; borde izquierdo visible ≈ 210)
 
 z = lambda y: Z_REF + (Y_REF - y) / PV
@@ -37,7 +37,7 @@ CIL = {
 }
 LUC = dict(c=1615, base=728, top=625)
 mod = {  # modelo: (desplazamiento lateral en la vista = −N, z0, z1, radio)
-    "tambor": (0.0, E.Z_B1, E.Z_T1, V["R_T"]),
+    "tambor": (0.0, E.Z_B1 + 0.65, E.Z_T1, V["R_T"]),
     "banda":  (-V["OB_Y"], E.Z_T1 - V["H_PT"], E.Z_G1, V["R_G"]),
     "visera": (-V["OV_Y"], E.Z_G1, E.Z_V1, V["R_V"]),
     "remate": (-V["OR_Y"], E.Z_V1, E.Z_R1, V["R_R"]),
@@ -84,6 +84,6 @@ for k, xf, xm, hf, hm, zf, zm in rows:
 txt.append(f"lucernario  altura {zl1 - zl0:.2f} / {V['LUC_H']:.2f} m · punta +{zl1:.2f}")
 fig.text(0.06, 0.015, "\n".join(txt).replace(".", ","), family="monospace", fontsize=8.5, va="bottom")
 fig.suptitle("Parte alta: un origen por cilindro (generatriz frontal = centro de la silueta). Escala vertical 56,5 px/m por el paso de forjados; "
-             "referencia losa superior del barril +32,50", fontsize=11, x=0.06, ha="left")
+             "referencia: cara superior del canto de la losa de cubierta del barril +33,15", fontsize=11, x=0.06, ha="left")
 fig.subplots_adjust(bottom=0.2, top=0.92, left=0.05, right=0.99)
 fig.savefig("GENERATRICES_ESQUEMA.png", dpi=80)

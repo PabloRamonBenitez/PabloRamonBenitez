@@ -383,7 +383,7 @@ def torre():
     import ventanas as VT0
     for oj in [h for h in VT0.catalogo() if h["tipo"] == "ojo"]:
         a = math.degrees(math.atan2(oj["n"][1], oj["n"][0]))
-        ojo = Manifold.cylinder(0.5, 0.8, 0.8, 24).rotate((0, 90, 0)).translate((R_T - 0.1, 0, (Z_B1 + Z_T1) / 2))
+        ojo = Manifold.cylinder(_v["OJO_V"] + 0.1, _v["OJO_D"] / 2, _v["OJO_D"] / 2, 24).rotate((0, 90, 0)).translate((R_T - 0.1, 0, _v["OJO_Z"]))
         s.append(ojo.rotate((0, 0, a)).translate((T[0], T[1], 0)))
     pv = P(*OFF_V); pr = P(*OFF_R)
     pb_ = P(*OFF_B)                                       # banda descentrada hacia la plaza [Alamy]

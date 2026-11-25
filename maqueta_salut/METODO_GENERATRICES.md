@@ -51,3 +51,17 @@ Un elemento a radio R y ángulo φ del eje de la vista cae en x = R·sen φ. As�
 | paso de forjados | 3,12 | 3,10 | – | OK |
 | borde de balcones (silueta con aletas) | R ≈ 15,1 | R_AL 15,3 | – | OK |
 | **sector sin ojos** | a la izquierda del eje (≈ 140°–215° absolutos) no hay ojos | el modelo pone 3–4 | **PENDIENTE**: hace falta otra foto de ese lado | – |
+
+## Corrección de la referencia (25/11, tarde) y comprobación de la torre completa en F09 (`mgf_f09.py`)
+- **Error:** en Alamy tomé la banda blanca de y = 1306 como +32,50. Es la **cara superior** del canto de 0,65 de la losa de cubierta del barril: +33,15 (la cara inferior está en y = 1337).
+  Se nota porque la barandilla queda 0,9 m por encima de esa banda.
+- **Contraste independiente en F09:** ajuste proyectivo con las caras inferiores de los 7 forjados del barril (rms 0,02 m).
+  Las piezas que no están en el plano del frente de balcones se corrigen por profundidad (cámara a 1,6 m de altura, D ≈ 239 m).
+  | pieza | Alamy (MGF) | F09 real | modelo nuevo |
+  |---|---|---|---|
+  | tambor | +38,84 | +38,73 | +38,85 |
+  | visera, cara inferior | +41,40 | +41,37 | +41,40 |
+  | visera, cara superior | +43,30 | +43,60 | +43,30 |
+  | remate | +50,94 | +50,95 | +50,95 |
+- **Partes bajas:** la base del cuello sale a **+9,03** en F09 (modelo +10,40). Es un conflicto con la lectura anterior: **no se cambia sin confirmación**.
+- **Ojos:** 13 (lado ciego entre 140° y 215°, primer ojo girado −4,3°), Ø 1,70, tubo de 0,8, centro a +35,95. Residuos en Alamy ≤ 0,4 m.

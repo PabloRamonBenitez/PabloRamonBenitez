@@ -25,12 +25,12 @@
 | escalera: lamas a los lados de la cuña | 1.00 | 1.00 | OK |
 | escalera: no sobresale más allá de las lamas | 1.00 | 1.00 | OK |
 | escalera: coronación del muro inclinado en r = ESC_RC − 0,3 (ESC_ZI → ESC_Z1, Alamy/dron) | 41.43 | 41.44 | OK |
-| escalera: arranca sobre la rampa (ESC_Z0) | 12.50 | 12.50 | OK |
+| escalera: la losa blanca arranca a ESC_Z0 junto al núcleo (F78) | 11.90 | 11.90 | OK |
 | rampa 1 llega a la cota de la terraza (sin escalón) | 7.20 | 7.20 | OK |
 | techo del restaurante: arranca a cota de terraza junto a la torre | 7.25 | 7.25 | OK |
 | techo del restaurante: a mitad de la rampa | 9.36 | 9.35 | OK |
 | techo del restaurante: llega a la azotea | 11.50 | 11.50 | OK |
-| la rampa del techo pasa bajo la escalera con ≥ 2,5 m libres | 1.00 | 1.00 | OK |
+| la rampa del techo pasa bajo la escalera, junto al núcleo, con ≥ 2,5 m libres | 1.00 | 1.00 | OK |
 | relieve del marco (frente) | 12.82 | 12.82 | OK |
 | huecos del catálogo abiertos en el 3D (ala + torre) | 120.00 | 120.00 | OK |
 | hueco 11 por encima de la concha (concha bajo su alféizar) | 0.49 | 0.49 | OK |

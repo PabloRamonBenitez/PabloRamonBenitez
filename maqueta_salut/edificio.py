@@ -363,6 +363,24 @@ def base():
 
 
 
+
+def lucernarios_cuello():
+    """lucernarios piramidales de vidrio en anillo sobre la terraza, bajo el vuelo del cuello: uno por módulo donde la
+    cubierta está a +Z_P1 (fuera de la escalera y de la rampa) [F78]. Devuelve [dict(c, a (rad), l, h, z)] – 3D y planos."""
+    out = []
+    try:
+        b = base()
+    except Exception:
+        return out
+    for k in range(N_AL):
+        a = 2 * math.pi * (k + 0.5) / N_AL + FASE_AL
+        if abs((a - ESC_ANG + math.pi) % (2 * math.pi) - math.pi) < ESC_HA + math.pi / N_AL: continue
+        c = (T[0] + _v["LUC_CR"] * math.cos(a), T[1] + _v["LUC_CR"] * math.sin(a))
+        bb = (b ^ caja(c[0] - 0.05, c[0] + 0.05, c[1] - 0.05, c[1] + 0.05, -1, 30)).bounding_box()
+        if abs(bb[5] - Z_P1) < 0.05:
+            out.append(dict(c=c, a=a, l=_v["LUC_CL"], h=_v["LUC_CH"], z=Z_P1))
+    return out
+
 def letrero():
     """letrero САЛЮТ: 5 letras en un plano frente a la cámara de Alamy, delante del remate; la de la izquierda vuela sobre la celosía.
     Devuelve [dict(c=(x,y) centro en planta, rot=grados de la normal, w, z0, z1)] – lo usan el 3D y todos los planos [Alamy, collage]"""
@@ -460,6 +478,10 @@ def torre():
             esc.append(sector(RR, rf, z, z + 0.3, d0, d1))
             esc.append(sector(rf - 0.08, rf, z + 0.3, z + 1.3, d0, d1))
     m = m + (Manifold.batch_boolean(esc, OpType.Add) - CORTE_ESC)
+    # pie de la escalera: núcleo de hormigón bajo la losa blanca y celosía baja de lamas sobre la terraza [F78, foto de frente]
+    _hn = ESC_HB * _v["ESC_NU"]
+    m = m + sector(ESC_R0 + 1.0, ESC_RC - 0.6, Z_P1 - 0.01, _v["ESC_Z0"] + 0.01, -_hn, _hn)
+    m = m + sector(ESC_R0, ESC_RC + 0.3, _v["ESC_Z0"] - 0.3, _v["ESC_Z0"], -ESC_HB, ESC_HB)          # losa blanca
     # cristalera suelo-techo con dintel entre tambor y escalera (lado izquierdo) y puerta del tambor [foto de frente, usuario]
     _zb = Z_B1 + FC; _d0, _d1 = -ESC_HA, -ESC_HB
     m = m + sector(_v["ESC_RR"] - 0.05, _v["ESC_RR"], _zb, _v["CR_Z1"], _d0, _d1) + sector(_v["ESC_RR"] - 0.3, _v["ESC_RR"] + 0.2, _v["CR_Z1"], Z_T1, _d0, _d1)
@@ -513,7 +535,14 @@ def torre():
         while r < R_B:
             lam.append(lama(r, sg * (ESC_HA - math.atan2(0.2, r)), rot_r=False, z0=Z_B0, z1=Z_T1))
             r += _v["LAMA_P"]
-    return m + (Manifold.batch_boolean(lam, OpType.Add) - CORTE_ESC)
+    nlc = int(2 * ESC_HB * ESC_RC / _v["LAMA_P"])
+    for k in range(nlc + 1):                                    # celosía baja al pie de la escalera
+        lam.append(lama(ESC_RC + 0.1, -ESC_HB + 2 * ESC_HB * k / nlc, z0=Z_P1, z1=Z_P1 + _v["ESC_CB"]))
+    m = m + (Manifold.batch_boolean(lam, OpType.Add) - CORTE_ESC)
+    for L_ in lucernarios_cuello():                             # lucernarios piramidales bajo el cuello [F78]
+        pir = Manifold.cylinder(L_["h"], L_["l"] / math.sqrt(2), 0.0, 4).rotate((0, 0, 45 + math.degrees(L_["a"])))
+        m = m + pir.translate((L_["c"][0], L_["c"][1], L_["z"]))
+    return m
 
 
 def edificio():

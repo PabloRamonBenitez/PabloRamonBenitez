@@ -90,6 +90,12 @@ def catalogo():
     # 6g. cristalera suelo-techo con dintel en el hueco de 2 m entre tambor y escalera, a la altura del tambor [foto de frente]
     am = E.ESC_ANG - (E.ESC_HA + E.ESC_HB) / 2; c, s = math.cos(am), math.sin(am); rr = V["ESC_RR"]
     _h(H, "CR1", "escalera cristalera", "ventana", (T[0] + rr * c, T[1] + rr * s), (-s, c), (c, s), 0.95 * rr * (E.ESC_HA - E.ESC_HB), zb, V["CR_Z1"])
+    # 6h. logia de planta 1 bajo el cuerpo volado: vidrio retranqueado LOG_D en dos paños a los lados del pilar [foto frontal]
+    x0l = -E.L_C; ld, lx = V["LOG_D"], V["LOG_PX"]
+    for nm, xa, xb in (("LG1", x0l + V["LOG_X0"] + 0.1, x0l + lx - 0.35), ("LG2", x0l + lx + 0.35, x0l + V["LOG_X1"] - 0.1)):
+        a, b = R(xa, ld), R(xb, ld)
+        tt = ((b[0] - a[0]) / math.dist(a, b), (b[1] - a[1]) / math.dist(a, b))
+        _h(H, nm, "logia", "ventana", ((a[0] + b[0]) / 2, (a[1] + b[1]) / 2), tt, (-tt[1], tt[0]), math.dist(a, b), E.Z_PB + 0.3, E.Z_P1 - 0.3)
     # 7. tambor: 19 ojos circulares [F01, F09]
     zt = (E.Z_B1 + E.Z_T1) / 2
     for k in range(V["N_AL"]):

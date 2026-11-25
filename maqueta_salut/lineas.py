@@ -89,10 +89,27 @@ def corte(ax, cs, z=5, muro=0.30, huecos=(), polys=None):
         if len(P) < 3: continue
         sp = SP(P).buffer(0)
         if sp.is_empty: continue
-        hueco = sp.buffer(-muro)
-        anillos.append(sp.difference(hueco) if not hueco.is_empty else sp)
+        hueco = sp.buffer(-muro, join_style=2)
+        if not hueco.is_empty: hueco = hueco.buffer(-0.25, join_style=2).buffer(0.25, join_style=2)   # sin rendijas en pilares
+        if hueco.is_empty or hueco.area < 1.5:                                                       # pilares y muros cortos: macizos
+            anillos.append(sp); continue
+        anillos.append(sp.difference(hueco))
     if not anillos: return
     muros = unary_union(anillos)
+    # orientación de cada hueco decidida AQUÍ, contra el muro dibujado: el símbolo siempre dentro del espesor [estándar de planos]
+    from shapely.geometry import Point
+    hs = []
+    for h in huecos:
+        h = dict(h); p, n, e = np.array(h["p"]), np.array(h["n"]), h.get("e", muro)
+        den = lambda q: muros.distance(Point(*q)) < 0.02
+        if not den(p - n * e / 2) and den(p + n * e / 2):
+            h["n"] = tuple(-n)
+        elif not den(p - n * e / 2) and not den(p + n * e / 2):
+            for k in (0.5, 1.0, 1.5):                       # el muro real está algo desplazado: busca la cara más cercana
+                if den(p - n * (e / 2 + k)): h["p"] = tuple(p - n * k); break
+                if den(p + n * (e / 2 + k)): h["p"] = tuple(p + n * k); h["n"] = tuple(-n); break
+        hs.append(h)
+    huecos = hs
     aberturas = []
     for h in huecos:
         p, t, n, w, e = np.array(h["p"]), np.array(h["t"]), np.array(h["n"]), h["w"], h.get("e", muro)
@@ -102,7 +119,7 @@ def corte(ax, cs, z=5, muro=0.30, huecos=(), polys=None):
         muros = muros.difference(unary_union(aberturas))
     for gm in getattr(muros, "geoms", [muros]):
         if gm.is_empty or gm.geom_type != "Polygon": continue
-        ax.add_patch(Polygon(np.array(gm.exterior.coords), closed=True, fc="0.35", ec="k", lw=0.9, zorder=z))
+        ax.add_patch(Polygon(np.array(gm.exterior.coords), closed=True, fc="0.72", ec="k", lw=0.9, hatch="......", zorder=z))
         for it in gm.interiors:
             ax.add_patch(Polygon(np.array(it.coords), closed=True, fc="white", ec="k", lw=0.9, zorder=z + 0.5))
     for h in huecos:                                     # símbolo
@@ -116,10 +133,13 @@ def corte(ax, cs, z=5, muro=0.30, huecos=(), polys=None):
             lo, hi = (ang0, ang0 + d) if d <= 180 else (ang1, ang1 + 360 - d)
             ax.add_patch(Arc(q, 2 * w, 2 * w, theta1=lo, theta2=hi, lw=0.5, color="k", zorder=z + 2))
             continue
-        for off in (0.0, e):                                                             # caras del muro
-            ax.plot(*zip(a0 - n * off, a1 - n * off), color="k", lw=0.5, zorder=z + 2)
-        for off in (0.42 * e, 0.58 * e):                                                 # carpintería y vidrio: doble línea
-            ax.plot(*zip(a0 - n * off, a1 - n * off), color="k", lw=0.9, zorder=z + 2)
+        # ventana (estándar de planos): jambas cerradas, cara exterior e interior finas, marco en doble línea fina,
+        # vidrio en línea media y vierteaguas exterior
+        for q in (a0, a1):
+            ax.plot(*zip(q, q - n * e), color="k", lw=0.9, zorder=z + 2)
+        for off, lw in ((0.0, 0.35), (e, 0.35), (0.40 * e, 0.3), (0.60 * e, 0.3), (0.5 * e, 0.6)):
+            ax.plot(*zip(a0 - n * off, a1 - n * off), color="k", lw=lw, zorder=z + 2)
+        ax.plot(*zip(a0 + n * 0.06 - t * 0.05, a1 + n * 0.06 + t * 0.05), color="k", lw=0.3, zorder=z + 2)
 
 
 def encima(ax, m, z=4, muro=0.30):
@@ -161,3 +181,27 @@ def cota(ax, p0, p1, off, txt="", fs=6.5, color="k"):
     mid = (a + b) / 2 + n * 0.25 * np.sign(off if off else 1)
     ax.text(*mid, (txt + " " if txt else "") + f"{L:.2f}".replace(".", ","), fontsize=fs, ha="center",
             va="bottom" if off >= 0 else "top", rotation=ang, rotation_mode="anchor", color=color)
+
+
+def vista_vectorial(ax, m, ztop=None, z=1, lw_alto=0.7, lw_bajo=0.3):
+    """planta vista desde arriba en VECTORES con líneas ocultas: se recorren los niveles de la malla de arriba abajo y en
+    cada uno se dibuja solo el contorno que no tapa lo que hay encima (calidad de plano, sin raster)."""
+    from shapely.geometry import Polygon as SP
+    from shapely.ops import unary_union
+    vz = np.asarray(m.to_mesh().vert_properties)[:, 2]
+    if ztop is not None: vz = vz[vz < ztop - 0.01]
+    if len(vz) == 0: return
+    lev = np.unique(np.round(vz, 2))[::-1]
+    if len(lev) > 160: lev = lev[np.linspace(0, len(lev) - 1, 160).astype(int)]
+    cub = None; zmax = lev[0]
+    for zz in lev:
+        polys = [SP(np.array(P)).buffer(0) for P in m.slice(float(zz) - 0.015).to_polygons() if len(P) > 2]
+        if not polys: continue
+        g = unary_union(polys)
+        vis = g.boundary if cub is None else g.boundary.difference(cub)
+        lw = lw_bajo + (lw_alto - lw_bajo) * (zz - lev[-1]) / max(zmax - lev[-1], 1e-6)
+        for ln in getattr(vis, "geoms", [vis]):
+            if ln.is_empty or ln.length < 0.05: continue
+            if ln.geom_type in ("LineString", "LinearRing"):
+                ax.plot(*np.array(ln.coords).T, color="k", lw=lw, zorder=z, solid_capstyle="butt")
+        cub = g if cub is None else unary_union([cub, g])

@@ -34,11 +34,11 @@ def ejes(ax, xl, yl):
 # ======================================================================================= PLANTAS
 def planta(ax, zc, titulo, aerea=False):
     if aerea:
-        L.dibujar_vista(ax, M)
+        L.vista_vectorial(ax, M)
     else:
         abajo = M ^ Manifold.cube((BIG, BIG, zc)).translate((-BIG / 2, -BIG / 2, -1))
         arriba = M ^ Manifold.cube((BIG, BIG, 100)).translate((-BIG / 2, -BIG / 2, zc))
-        L.dibujar_vista(ax, abajo)
+        L.vista_vectorial(ax, abajo, ztop=zc)
         L.encima(ax, arriba)
         for zn in (E._v["Z_VOL0"] + 0.3, E.Z_P1 + 0.5, E.Z_ALTO - 0.5):        # contornos interiores de lo que hay encima
             if zn > zc + 0.3:
@@ -48,7 +48,22 @@ def planta(ax, zc, titulo, aerea=False):
                         ax.plot(*np.vstack([P, P[:1]]).T, color="0.3", lw=0.6, ls=(0, (5, 3)), zorder=4)
         L.corte(ax, M.slice(zc), huecos=VT.cortados(zc))
         estructura_torre(ax, zc)
+        import interiores as INTR                          # interiores y estructura: solo en planos [usuario]
+        INTR.dibujar(ax, zc, M.slice(zc))
+    if aerea or zc > E.Z_P1:                               # lucernarios piramidales bajo el cuello: base + aristas [F78]
+        from matplotlib.patches import Polygon as _Pg
+        LS = E.lucernarios_cuello()
+        for L_ in LS:
+            u = np.array([math.cos(L_["a"]), math.sin(L_["a"])]); v = np.array([-u[1], u[0]]); c = np.array(L_["c"]); h = L_["l"] / 2
+            q = [c + u * h + v * h, c - u * h + v * h, c - u * h - v * h, c + u * h - v * h]
+            ax.add_patch(_Pg(q, closed=True, fc="#e6eef3", ec="k", lw=0.5, zorder=6.4))
+            for qq in q: ax.plot(*zip(c, qq), color="k", lw=0.3, zorder=6.45)
+        if LS:
+            c = np.array(LS[len(LS) // 2]["c"]); d = c - np.array(E.T); d /= np.linalg.norm(d)
+            ax.annotate("lucernarios piramidales\n(vidrio, +7,20 → +8,70)", c, c + d * 6, fontsize=4.5, ha="center", zorder=9,
+                        arrowprops=dict(arrowstyle="-", lw=0.3, color="0.3"))
     recorridos(ax, None if aerea else zc)
+    for tx in ax.texts: tx.set_clip_on(True)           # ningún rótulo fuera de su planta
     ax.set_title(titulo, fontsize=10, loc="left")
 
 

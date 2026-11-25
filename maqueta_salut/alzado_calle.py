@@ -47,6 +47,17 @@ def torre(ax, zo=10):
     rect(ax, ue - ch / 2, ue + ch / 2, V["ESC_ZL"], E.Z_T1, dict(fc="white", ec="k", lw=0.6), zo)                   # remate sin lamas
     uw = u_of(np.array(E.esc_ang_pt(V["ESC_R1"], -E.ESC_HB)))
     rect(ax, uw - 0.3, uw + 0.3, E.Z_T1, V["ESC_Z1"], dict(fc="white", ec="k", lw=0.6), zo)                         # muro de coronación inclinada
+    # pie de la escalera: losa blanca, núcleo y celosía baja [F78, foto de frente]
+    rect(ax, ue - ch / 2, ue + ch / 2, V["ESC_Z0"] - 0.3, V["ESC_Z0"], HORM, zo + 0.5)
+    cn = ch * V["ESC_NU"]
+    rect(ax, ue - cn / 2, ue + cn / 2, E.Z_P1, V["ESC_Z0"] - 0.3, HORM, zo + 0.4)
+    rect(ax, ue - ch / 2, ue + ch / 2, E.Z_P1, E.Z_P1 + V["ESC_CB"], dict(fc="white", ec="k", lw=0.5, hatch="||||"), zo + 0.6)
+    # lucernarios piramidales bajo el cuello
+    for L_ in E.lucernarios_cuello():
+        o = np.array([math.cos(L_["a"]), math.sin(L_["a"])])
+        if o @ ED > 0.3: continue
+        uu = u_of(L_["c"]); w = L_["l"] / 2 * (abs(o @ EU) + abs(o @ ED))
+        ax.add_patch(Polygon([(uu - w, L_["z"]), (uu + w, L_["z"]), (uu, L_["z"] + L_["h"])], closed=True, fc="#dfe8ee", ec="k", lw=0.5, zorder=zo + 2))
     # columna, cuello y losa
     rect(ax, uT - E.R_COL, uT + E.R_COL, 0, E.Z_CU0, HORM, zo + 3)
     rect(ax, uT - E.R_CU, uT + E.R_CU, E.Z_CU0, E.Z_CU1, HORM, zo + 1)

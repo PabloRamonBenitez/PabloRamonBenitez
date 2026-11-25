@@ -23,3 +23,4 @@
 
 Todos se regeneran desde los scripts de `maqueta_salut/` (p. ej. `generatrices_esquema.py`, `generatrices_alamy.py`, `opciones_AB.py`, `hipotesis_giro.py`).
 | 29 | PLANTA_ORIENTACION_ALAMY | torre en planta: 19 muros con su ángulo, escalera entre M3 y M5, 14 ojos, lado ciego, desplazamientos y dirección de la cámara de Alamy (179,7°) |
+| 30 | COLLAGE_ALAMY | **collage**: foto de Alamy al 50 % sobre el alzado del modelo, conjunto y 4 zonas ampliadas (remate y letras, visera y caja de escalera, tambor, barril) |

@@ -92,3 +92,16 @@ La barandilla de la visera y la del barril estaban modeladas como muros macizos 
 la visera parecía medir 2,9 m en lugar de 1,89 m, y el modelo no se parecía a la foto aunque la medida fuera correcta.
 Ahora son barandillas abiertas (pasamanos, travesaño y postes cada 2 m), como se ven en las fotos (transparentes).
 Regla del método: **en el alzado del modelo se mira el silueteado de cada pieza, no solo su cota**; un elemento transparente en la foto no puede ser macizo en el modelo.
+
+## Collage y perspectiva oculta (25/11) – `collage_alamy.py` → COLLAGE_ALAMY.png
+**Paso fijo del método:** la foto, al 50 %, se superpone al alzado del modelo con la misma escala, el mismo eje y la misma cota. Se resuelve todo lo que no coincide.
+- **Altura de la cámara.** Los forjados del barril se curvan con los extremos hacia arriba, porque están por debajo del ojo. La visera se curva con los extremos hacia abajo, porque está por encima.
+  La cámara está a ≈ +38 m y lejos (vista de teleobjetivo). Consecuencias:
+  - el remate y la visera se ven desde abajo, así que su coronación aparente es el borde frontal: la lectura en la generatriz es correcta;
+  - el efecto de la perspectiva sobre las cotas es de ≤ 0,1 m.
+- **Diferencias resueltas con el collage:**
+  1. Caja de escalera: por encima del tambor termina en r = 10,2 (entre ella y la banda se ve cielo). Su cubierta está inclinada, de +41,6 fuera a +40,8 dentro. Antes llegaba a la banda y era plana a +41,29.
+  2. Letrero САЛЮТ: 5 letras en un plano frente a la cámara, de s −7,2 a +4,0 y de +46,3 a +48,5. La de la izquierda vuela sobre la celosía.
+  3. Zócalo (poyete) del remate: R 5,7, de +43,18 a +43,58.
+  4. Barandillas abiertas (ver arriba).
+- **Comprobado sin cambios:** remate, visera, banda, tambor, forjados, aletas, lucernario; los ojos quedan a ≤ 0,4 m.

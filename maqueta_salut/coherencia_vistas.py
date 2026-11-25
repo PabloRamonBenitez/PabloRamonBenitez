@@ -52,7 +52,7 @@ chk.append(("escalera: lamas a los lados de la cuña", float(_hay(14.0, E.ESC_HB
 chk.append(("escalera: no sobresale más allá de las lamas", float(not _hay(V["ESC_R1"] + 0.3, 0.0, 20.0)), 1.0))
 px, py = E.esc_ang_pt(V["ESC_RC"] - 0.3, 0)
 bb3 = (t ^ E.caja(px - 0.1, px + 0.1, py - 0.1, py + 0.1, -1, 80)).bounding_box()
-chk.append(("escalera: coronación (cubierta en cuña, borde exterior)", bb3[5], V["ESC_Z1"]))
+chk.append(("escalera: coronación en r = ESC_RC − 0,3 (cubierta inclinada ESC_ZI → ESC_Z1, Alamy)", bb3[5], V["ESC_ZI"] + (V["ESC_RC"] - 0.3 - V["ESC_RS"]) * (V["ESC_Z1"] - V["ESC_ZI"]) / (V["ESC_R1"] + 0.3 - V["ESC_RS"])))
 chk.append(("escalera: arranca sobre la rampa (ESC_Z0)", (t ^ E.caja(*(lambda q: (q[0]-.05, q[0]+.05, q[1]-.05, q[1]+.05))(E.esc_ang_pt(12.0, 0.0)), 0, 30)).bounding_box()[2], V["ESC_Z0"]))
 yb0_ = E.plantas_base()["Q"][1] + 0.5; yr1_ = yb0_ + V["R2_L"]
 chk.append(("rampa 1 llega a la cota de la terraza (sin escalón)", V["Z_CON"], V["Z_P1"]))

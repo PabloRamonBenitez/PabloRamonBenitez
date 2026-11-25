@@ -406,6 +406,16 @@ def torre():
     s.append(cil(pv, R_V, Z_G1, Z_V1))
     s.append(baranda(pv, R_V, Z_V1, 1.0))                  # barandilla abierta de la cubierta de la visera [F08, Alamy]
     s.append(cil(pr, R_R, Z_V1, Z_R1))
+    s.append(cil(pr, _v["REM_ZR"], Z_V1 - 0.01, Z_V1 + _v["REM_ZH"]))      # zócalo (poyete) del remate [Alamy]
+    # letrero САЛЮТ: 5 letras en un plano frente a la cámara de Alamy, delante del remate, la de la izquierda volada sobre la celosía [Alamy]
+    _ca = math.radians(_v["VISTA_ALAMY"]); _hc = (math.cos(_ca), math.sin(_ca)); _dr = (math.cos(_ca + math.pi / 2), math.sin(_ca + math.pi / 2))
+    _prf = (pr[0] - T[0]) * _hc[0] + (pr[1] - T[1]) * _hc[1]
+    _w = (_v["SIG_S1"] - _v["SIG_S0"]) / 5
+    for _i in range(5):
+        _sc = _v["SIG_S0"] + (_i + 0.5) * _w; _dd = _prf + R_R + 0.5
+        _l = Manifold.cube((0.3, _w - 0.3, _v["SIG_Z1"] - _v["SIG_Z0"])).translate((-0.15, -(_w - 0.3) / 2, _v["SIG_Z0"]))
+        _l = _l.rotate((0, 0, math.degrees(_ca))).translate((T[0] + _dd * _hc[0] + _sc * _dr[0], T[1] + _dd * _hc[1] + _sc * _dr[1], 0))
+        s.append(_l)
     pl_ = P(_v["LUC_X"], _v["LUC_Y"])                        # lucernario piramidal de 12 costillas sobre la visera [fotos 25/11]
     s.append(Manifold.cylinder(0.25, _v["LUC_R"] + 0.15, _v["LUC_R"] + 0.15, 12).translate((pl_[0], pl_[1], Z_V1 - 0.01)))
     s.append(Manifold.cylinder(_v["LUC_H"], _v["LUC_R"], 0.25, 12).translate((pl_[0], pl_[1], Z_V1 + 0.24)))
@@ -419,8 +429,18 @@ def torre():
         return Manifold.extrude(cs, z1 - z0).translate((0, 0, z0))
     m = Manifold.batch_boolean(s, OpType.Add)
     # 1) el cilindro se interrumpe en ESC_SEC grados (balcones, aletas, forjados, fachada)
-    m = m - sector(ESC_R0 + 0.3, R_AL + 1.0, Z_CU1, _v["ESC_Z1"] + 0.5, -ESC_HA + 0.01, ESC_HA - 0.01)
-    esc = [sector(ESC_R0, ESC_RC, _v["ESC_Z0"], _v["ESC_Z1"], -ESC_HB, ESC_HB)]       # 2) cuerpo en cuña; por debajo pasa la rampa
+    RS, ZI, ZO = _v["ESC_RS"], _v["ESC_ZI"], _v["ESC_Z1"]
+    m = m - sector(ESC_R0 + 0.3, R_AL + 1.0, Z_CU1, Z_T1 + 0.01, -ESC_HA + 0.01, ESC_HA - 0.01)
+    m = m - sector(RS, R_AL + 1.0, Z_T1, ZO + 0.5, -ESC_HA + 0.01, ESC_HA - 0.01)
+    # 2) cuerpo en cuña; por debajo pasa la rampa. Por encima del tambor la caja solo llega hasta RS (cielo hasta la banda)
+    #    y su cubierta baja de ZO (fuera) a ZI (dentro) [Alamy, collage]
+    esc = [sector(ESC_R0, ESC_RC, _v["ESC_Z0"], Z_T1, -ESC_HB, ESC_HB), sector(RS, ESC_RC, Z_T1 - 0.01, ZO, -ESC_HB, ESC_HB)]
+    # cubierta inclinada de la caja de escalera: plano de ESC_ZI (en ESC_RS) a ESC_Z1 (en ESC_R1 + 0,3); corta cuerpo y lamas [Alamy]
+    _ri, _ro = _v["ESC_RS"] - 1.0, ESC_R1 + 1.5
+    _sl = (_v["ESC_Z1"] - _v["ESC_ZI"]) / (ESC_R1 + 0.3 - _v["ESC_RS"])
+    _pts = [(_ri, _v["ESC_ZI"] + (_ri - _v["ESC_RS"]) * _sl), (_ro, _v["ESC_ZI"] + (_ro - _v["ESC_RS"]) * _sl), (_ro, 70.0), (_ri, 70.0)]
+    _cs = CrossSection([_pts]); _cs = _cs if _cs.area() > 0 else CrossSection([_pts[::-1]])
+    CORTE_ESC = Manifold.extrude(_cs, 14.0).translate((0, 0, -7.0)).rotate((90, 0, 0)).rotate((0, 0, math.degrees(ESC_ANG))).translate((T[0], T[1], 0))
     RR = _v["ESC_RR"]
     for d0, d1 in ((-ESC_HA, -ESC_HB), (ESC_HB, ESC_HA)):                              # 3) franjas retranqueadas a cada lado
         esc.append(sector(ESC_R0, RR, Z_CU1, Z_B1 + FC, d0, d1))                     #    fachada retranqueada (macizo detrás)
@@ -428,7 +448,7 @@ def torre():
             z = Z_B0 + i * F
             esc.append(sector(RR, rf, z, z + 0.3, d0, d1))
             esc.append(sector(rf - 0.08, rf, z + 0.3, z + 1.3, d0, d1))
-    m = m + Manifold.batch_boolean(esc, OpType.Add)
+    m = m + (Manifold.batch_boolean(esc, OpType.Add) - CORTE_ESC)
     # ventanas de las habitaciones: un hueco por modulo entre aletas, sobre el poyete [F04, F06, F09]
     import ventanas as VT                                # catálogo único de huecos (mismo que planos)
     hue = []
@@ -466,7 +486,7 @@ def torre():
         while r < ESC_R1 - 0.3:
             lam.append(lama(r, sg * (ESC_HB + math.atan2(0.45, r)), rot_r=False))
             r += 0.8
-    return m + Manifold.batch_boolean(lam, OpType.Add)
+    return m + (Manifold.batch_boolean(lam, OpType.Add) - CORTE_ESC)
 
 
 def edificio():

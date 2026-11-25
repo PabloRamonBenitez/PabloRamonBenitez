@@ -17,7 +17,7 @@ Ya aplicado: porche del testero (muros + marquesina) y muro de esquina [croquis 
 8. Más puertas de entrada del hotel en PB alrededor del círculo de la base de la torre.
 9. «?»: escalón entre chaflán y fachada del patio del ala larga junto a la escalera → comprobar con fotos antes de cambiar.
 
-## Dudas abiertas (al usuario)
-- ¿La diagonal del punto 6 es el borde del bloque alto o el borde de la cubierta/terraza de planta 1?
-- ¿El vuelo de 1,2 m se mide desde la fachada de PB o desde la línea F?
-- ¿El bloque alto mantiene +11,50 en la zona curva?
+## Respuestas del usuario (25/11)
+- La diagonal de la línea A es la proyección del cuerpo del bloque alto (planta 2) que vuela 1,2 m; su lado inclinado es PARALELO a la fachada de la planta primera del chaflán (amarillo en el croquis).
+- El vuelo de 1,2 m se mide desde la línea exterior de la fachada (alineación con el edificio colindante).
+- El bloque alto mantiene su altura (+11,50) también en la zona curva.

@@ -329,7 +329,7 @@ def secciones():
 def alzados():
     V = E._v
     lst = [((E.N[0], E.N[1]), "ALZADO 1 – CHAFLÁN (frontal)",
-            [("9.webp", "F09"), ("14.webp", "F14"), ("70.webp", "F70"), ("71.webp", "F71")],
+            [("alamy_torre.png", "ALAMY medida por MGF – torre completa (código de la verdad)"), ("alamy_alto.png", "ALAMY – parte alta: generatrices de cada cilindro"), ("alamy_barril.png", "ALAMY – barril: canto, hueco, poyete, ranura"), ("71.webp", "F71")],
             [f"PB {V['Z_PB']} / base {V['Z_P1']}: F09 7,3 · F14 7,2 · F70 6,5 (rango 7,1±0,3)",
              f"rampa: peto arriba +{V['Z_CON'] + 1:.1f}: F09 8,3±0,8 · F71 9,6±1,2"]),
            ((-1, 0), "ALZADO 2 – FACHADA EXTERIOR DEL ALA LARGA (con la rampa)",
@@ -339,7 +339,7 @@ def alzados():
              f"rampa de acceso público: sube desde la plaza (pie a {E.Y_CUNA:.1f}) hasta la terraza-restaurante +{V['Z_CON']}, perfil curvo; arco de paso debajo junto al hotel (F76, F47, F71, F73)",
              f"el techo del restaurante empieza en rampa: junto a la torre nace a +{V['Z_P1']} (terraza) y sube {V['R2_L']} m hasta la azotea +{V['Z_BARC']} (F76, F71)",
              f"bar hasta {V['L_FIN']} m del testero (Bing, F73, F47); peto +{V['Z_P1'] + V['H_PET']:.1f}; testero +{V['Z_FIN']}"]),
-           ((0, 1), "ALZADO 3 – CALLE (ala corta)", [("1.webp", "F01"), ("19.webp", "F19"), ("72.webp", "F72")], []),
+           ((0, 1), "ALZADO 3 – CALLE (ala corta)", [("alamy_torre.png", "ALAMY medida por MGF – torre completa (código de la verdad)"), ("19.webp", "F19"), ("72.webp", "F72")], []),
            ((1, 0), "ALZADO 4 – PATIO INTERIOR DE LA L", [("75.png", "F75 (escalera desde el patio)")], []),
            ((0, -1), "ALZADO 5 – TESTERO DEL ALA LARGA (hacia la torre)",
             [("73.webp", "F73"), ("13.webp", "F13"), ("12.png", "F12")],
@@ -388,8 +388,8 @@ def detalles():
     L.dibujar_vista(ax2, m, res=0.02)
     ejes(ax2, (tx - 6, tx + 6), (E.Z_B0 - 3, E.Z_B0 + 3 * E.F + 0.5))
     ax2.set_title("alzado frontal de 3 módulos (aletas cada 360/19 = 18,9°)", fontsize=8, loc="left")
-    foto(fig.add_axes([0.74, 0.52, 0.25, 0.40]), "4.webp", "comprobación F04: poyete alto, ranura, aletas")
-    foto(fig.add_axes([0.74, 0.08, 0.25, 0.40]), "6.webp", "comprobación F06")
+    foto(fig.add_axes([0.74, 0.52, 0.25, 0.40]), "alamy_barril.png", "comprobación ALAMY (MGF): canto, hueco, poyete, ranura, aletas")
+    foto(fig.add_axes([0.74, 0.08, 0.25, 0.40]), "alamy_alto.png", "comprobación ALAMY (MGF): tambor, ojos, banda, visera, remate")
     OUT.append(fig)
     fig = hoja("DETALLE 2 – CHAFLÁN: planta baja hundida, banda volada, columna, esquina a 90°")
     pa = E.P(7.0, -12); pb = E.P(7.0, 12)

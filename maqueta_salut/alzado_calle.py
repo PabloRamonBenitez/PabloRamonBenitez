@@ -43,7 +43,7 @@ def torre(ax, zo=10):
     rect(ax, uT - rf, uT + rf, E.Z_B0, E.Z_B1, VIDR, zo + 1)                         # fondo acristalado
     for i in range(V["N_PL"] + 1):
         z = E.Z_B0 + i * E.F
-        rect(ax, uT - E.R_B, uT + E.R_B, z, z + 0.65, HORM, zo + 2)                   # canto del forjado
+        rect(ax, uT - E.R_B, uT + E.R_B, z, z + E._v["FOR_C"], HORM, zo + 2)                   # canto del forjado
         if i < V["N_PL"]:
             rect(ax, uT - E.R_B + 0.25, uT + E.R_B - 0.25, z + 0.75, z + 1.65, HORM, zo + 2)   # poyete
     for k in range(V["N_AL"]):                                                           # aletas visibles
@@ -52,11 +52,11 @@ def torre(ax, zo=10):
         s = o @ EU
         u0, u1 = uT + s * rf, uT + s * E.R_AL
         if abs(u1 - u0) < 0.4: u0, u1 = uT + s * E.R_AL - 0.2, uT + s * E.R_AL + 0.2
-        rect(ax, u0, u1, E.Z_ALETA0, E.Z_B1 + 0.65, HORM, zo + 3)
+        rect(ax, u0, u1, E.Z_ALETA0, E.Z_B1 + E._v["FOR_C"], HORM, zo + 3)
         ax.plot([uT + s * E.R_CU, uT + s * E.R_AL], [E.Z_CU1, E.Z_ALETA0], color="k", lw=0.5, zorder=zo + 3)   # ménsula
-    rect(ax, uT - E.R_B, uT + E.R_B, E.Z_B1 + 0.65, E.Z_B1 + 1.75, dict(fc="none", ec="k", lw=0.4), zo + 3)  # barandilla
+    rect(ax, uT - E.R_B, uT + E.R_B, E.Z_B1 + E._v["FOR_C"], E.Z_B1 + E._v["FOR_C"] + E._v["BAR_B"], dict(fc="none", ec="k", lw=0.4), zo + 3)  # barandilla
     # tambor con ojos
-    rect(ax, uT - E.R_T, uT + E.R_T, E.Z_B1 + 0.65, E.Z_T1, HORM, zo + 2)
+    rect(ax, uT - E.R_T, uT + E.R_T, E.Z_B1 + E._v["FOR_C"], E.Z_T1, HORM, zo + 2)
     zt = (E.Z_B1 + E.Z_T1) / 2
     for k in range(V["N_AL"]):
         a = 2 * math.pi * (k + 0.5) / V["N_AL"] + E.FASE_AL; o = np.array([math.cos(a), math.sin(a)])

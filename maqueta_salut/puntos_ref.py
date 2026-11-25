@@ -29,7 +29,7 @@ def generar():
     Q = pl["Q"]
     # ---------------- TORRE
     for k in range(V["N_AL"]):
-        add(f"TOR-ALS-{k:02d}", "TORRE aletas", f"aleta {k}: punta arriba", circ(T, E.R_AL, E.Z_B1 + 0.65, V["N_AL"], k))
+        add(f"TOR-ALS-{k:02d}", "TORRE aletas", f"aleta {k}: punta arriba", circ(T, E.R_AL, E.Z_B1 + V["FOR_C"], V["N_AL"], k))
         add(f"TOR-ALI-{k:02d}", "TORRE aletas", f"aleta {k}: punta abajo", circ(T, E.R_AL, E.Z_ALETA0, V["N_AL"], k))
         add(f"TOR-OJO-{k:02d}", "TORRE tambor", f"ojo {k}: centro", circ(T, E.R_T, (E.Z_B1 + E.Z_T1) / 2, V["N_AL"], k, 0.5))
         for i in range(V["N_PL"] + 1):

@@ -366,16 +366,17 @@ def torre():
             pl_ = Manifold.extrude(CrossSection([pts[::-1]]), 0.4).translate((0, 0, -0.2)).rotate((90, 0, 0))
         s.append(pl_.rotate((0, 0, a)).translate((T[0], T[1], 0)))
     rf = R_B - 1.8
+    FC, FR, FP = _v["FOR_C"], _v["FOR_R"], _v["FOR_P"]          # sección de planta del barril [MGF Alamy]
     s.append(cil(T, rf, Z_B0, Z_B1 + 0.4))
     for i in range(N_PL):
         z = Z_B0 + i * F
-        s.append(cil(T, R_B, z, z + 0.65) - cil(T, rf - 0.1, z - 0.1, z + 0.7))          # canto del forjado 0,65 [F09]
-        s.append(cil(T, R_B, z + 0.75, z + 1.65) - cil(T, R_B - 0.25, z + 0.7, z + 1.7))  # poyete 0,90 tras ranura 0,10 [F09]
-    s.append(cil(T, R_B, Z_B1, Z_B1 + 0.65))
-    s.append(cil(T, R_B, Z_B1 + 0.65, Z_B1 + 1.75) - cil(T, R_B - 0.2, Z_B1, Z_B1 + 1.9))   # peto + barandilla 1,1 m de la cubierta del barril [F09, F08]
+        s.append(cil(T, R_B, z, z + FC) - cil(T, rf - 0.1, z - 0.1, z + FC + 0.05))          # canto del forjado [MGF Alamy]
+        s.append(cil(T, R_B, z + FC + FR, z + FC + FR + FP) - cil(T, R_B - 0.25, z + FC, z + FC + FR + FP + 0.05))  # poyete tras la ranura [MGF Alamy]
+    s.append(cil(T, R_B, Z_B1, Z_B1 + FC))
+    s.append(cil(T, R_B, Z_B1 + FC, Z_B1 + FC + _v["BAR_B"]) - cil(T, R_B - 0.2, Z_B1, Z_B1 + FC + _v["BAR_B"] + 0.1))   # peto + barandilla 1,1 m de la cubierta del barril [F09, F08]
     for k in range(N_AL):
         a = 2 * math.pi * k / N_AL + FASE_AL
-        al = Manifold.cube((R_AL - rf + 0.2, 0.4, Z_B1 + 0.65 - Z_ALETA0)).translate((rf - 0.1, -0.2, Z_ALETA0))
+        al = Manifold.cube((R_AL - rf + 0.2, 0.4, Z_B1 + FC - Z_ALETA0)).translate((rf - 0.1, -0.2, Z_ALETA0))
         s.append(al.rotate((0, 0, math.degrees(a))).translate((T[0], T[1], 0)))
     # tambor de ojos, banda, visera, remate
     zp = Z_T1 - _v["H_PT"]                                  # pasillo de servicio entre tambor y banda [F08]
@@ -412,7 +413,7 @@ def torre():
     esc = [sector(ESC_R0, ESC_RC, _v["ESC_Z0"], _v["ESC_Z1"], -ESC_HB, ESC_HB)]       # 2) cuerpo en cuña; por debajo pasa la rampa
     RR = _v["ESC_RR"]
     for d0, d1 in ((-ESC_HA, -ESC_HB), (ESC_HB, ESC_HA)):                              # 3) franjas retranqueadas a cada lado
-        esc.append(sector(ESC_R0, RR, Z_CU1, Z_B1 + 0.65, d0, d1))                     #    fachada retranqueada (macizo detrás)
+        esc.append(sector(ESC_R0, RR, Z_CU1, Z_B1 + FC, d0, d1))                     #    fachada retranqueada (macizo detrás)
         for i in range(N_PL + 1):                                                       #    forjados vistos con barandilla [F08, F11]
             z = Z_B0 + i * F
             esc.append(sector(RR, rf, z, z + 0.3, d0, d1))

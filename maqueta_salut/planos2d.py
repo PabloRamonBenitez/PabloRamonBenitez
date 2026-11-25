@@ -68,18 +68,18 @@ def detalles_torre(ax, r_, d_):
     T = G["T"]; s = T @ r_; zb = V["Z_B0"]
     for i in range(V["N_PL"] + 1):
         z = zb + i * V["F"]
-        for zz, lw in ((z, 0.8), (z + 0.65, 0.5), (z + 0.75, 0.3), (z + 1.65, 0.5)):
+        for zz, lw in ((z, 0.8), (z + V["FOR_C"], 0.5), (z + V["FOR_C"] + V["FOR_R"], 0.3), (z + V["FOR_C"] + V["FOR_R"] + V["FOR_P"], 0.5)):
             if zz < zb + V["N_PL"] * V["F"] + 0.7:
                 ax.plot([s - V["R_B"], s + V["R_B"]], [zz, zz], color="k", lw=lw, zorder=20)
     for k in range(V["N_AL"]):
         a = 2 * math.pi * k / V["N_AL"] + math.radians(V.get("FASE_AL", 0.0)); v = np.array([math.cos(a), math.sin(a)])
         if v @ (-d_) > 0:
             x = s + (v @ r_) * V["R_AL"]
-            ax.plot([x, x], [V["Z_ALE"], zb + V["N_PL"] * V["F"] + 0.65], color="k", lw=0.5, zorder=20)
+            ax.plot([x, x], [V["Z_ALE"], zb + V["N_PL"] * V["F"] + V["FOR_C"]], color="k", lw=0.5, zorder=20)
             ax.plot([s + (v @ r_) * V["R_CU"], x], [V["Z_CU1"], V["Z_ALE"]], color="k", lw=0.5, zorder=20)
         a2 = a + math.pi / V["N_AL"]; v2 = np.array([math.cos(a2), math.sin(a2)])
         if v2 @ (-d_) > 0.15:
-            zc = (zb + V["N_PL"] * V["F"] + 0.65 + V["Z_T1"]) / 2
+            zc = (zb + V["N_PL"] * V["F"] + V["FOR_C"] + V["Z_T1"]) / 2
             ax.add_patch(Circle((s + (v2 @ r_) * V["R_T"], zc), 0.8, fc="0.3", ec="k", lw=0.5, zorder=21))
             ax.add_patch(Circle((s + (v2 @ r_) * V["R_T"], zc), 0.4, fc="0.8", ec="k", lw=0.4, zorder=22))
     nm = int(2 * math.pi * V["R_G"] / 2.4)

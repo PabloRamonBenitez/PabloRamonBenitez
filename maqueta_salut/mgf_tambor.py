@@ -15,8 +15,8 @@ import edificio as E, ventanas as VE
 
 V = E._v
 FOTO = sys.argv[1] if len(sys.argv) > 1 else "/tmp/claude-0/-home-user-PabloRamonBenitez/6aecfee3-0e37-5370-9a32-0a87a530abec/scratchpad/alamy.jpg"
-PV, PH, XT, Y_REF = 175 / 3.10, 64.4, 1078, 1306
-z = lambda y: E.Z_B1 + 0.65 + (Y_REF - y) / PV     # y = 1306: cara superior del canto de la losa de cubierta
+PV, PH, XT, Y_REF = 175.25 / 3.10, 64.4, 1078, 1337
+z = lambda y: E.Z_B1 + (Y_REF - y) / PV     # y = 1337: cara inferior de la losa de cubierta del barril
 T, U, N = np.array(E.T), np.array(E.U), np.array(E.N)
 xpx = lambda p: XT - ((np.asarray(p) - T) @ N) * PH          # derecha de la foto = −N
 delante = lambda p: (np.asarray(p) - T) @ U < 0               # cámara del lado −U
@@ -58,7 +58,7 @@ crop = im.crop((0, y0 + 950, W, y0 + 1620))
 ax.imshow(crop, extent=(0, W, 1620, 950))
 for x in alet: ax.axvline(x, ymin=0, ymax=0.48, color="red", lw=1.4)
 for x in postes: ax.plot([x, x], [1440, 1470], color="lime", lw=4)
-for x in ojm: ax.plot(x, Y_REF - (V["OJO_Z"] - (E.Z_B1 + 0.65)) * PV, "o", ms=22, mfc="none", mec="red", mew=1.5)
+for x in ojm: ax.plot(x, Y_REF - (V["OJO_Z"] - E.Z_B1) * PV, "o", ms=22, mfc="none", mec="red", mew=1.5)
 for o in ojos: ax.plot(o[0], (o[1] + o[2]) / 2, "+", color="lime", ms=18, mew=2)
 ax.set_title("MGF tambor y barril: rojo = modelo proyectado; verde = medido en la foto (aletas en los balcones, ojos)", fontsize=10, loc="left")
 ax.axis("off")

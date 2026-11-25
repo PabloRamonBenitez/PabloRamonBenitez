@@ -18,7 +18,7 @@
 | 24 | GENERATRICES_ESQUEMA | un origen por cilindro: alturas en la generatriz frontal, foto y esquema |
 | 25 | GENERATRICES_ALAMY | método MGF sobre el alzado real del modelo, con cotas y diámetros (tras aplicar: diferencias ≤ 0,04 m) |
 | 26 | MGF_TAMBOR | MGF en tambor y barril: 19 aletas (giro 7,6°), 13 ojos (lado ciego 140°–215°), Ø 1,70, tubos de 0,8 |
-| 27 | MGF_F09_TORRE | alzado completo de la torre frente a F09 rectificada (7 forjados + profundidad): comprobación de las partes bajas |
+| 27 | ALZADO_TORRE_ALAMY | **alzado de la torre medido sobre Alamy (código de la verdad)**: 4 generatrices + vertical del barril (canto, hueco, poyete, ranura, forjados) |
 | 28 | F78_LECTURA | lectura de la foto de la base (lucernarios, barandilla, base de la escalera) para resolver dudas |
 
 Todos se regeneran desde los scripts de `maqueta_salut/` (p. ej. `generatrices_esquema.py`, `generatrices_alamy.py`, `opciones_AB.py`, `hipotesis_giro.py`).

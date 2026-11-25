@@ -145,9 +145,9 @@ if __name__ == "__main__":
     plt.rcParams["figure.max_open_warning"] = 0
     p = IA.portada(); IA.PAGS.append(p)
     hoja_planta(1.8, "PLANTA BAJA (suelo ±0,00) – corte a +1,80", [("18.webp", "F18 – planta baja del chaflán y entrada del hotel"), ("71.webp", "F71 – rampa de acceso y esquina"), ("73.webp", "F73 – testero y huecos del ala")])
-    hoja_planta(5.6, "PLANTA PRIMERA (suelo +3,20) – corte a +5,60, por las ventanas", [("9.webp", "F09 – chaflán frontal: X 12,8 · columna 6,4 · Y 10,1"), ("18.webp", "F18 – 5 y pico / 4 y pico paños"), ("47.webp", "F47 – huecos del ala y rampa")])
+    hoja_planta(5.6, "PLANTA PRIMERA (suelo +3,20) – corte a +5,60, por las ventanas", [("alamy_torre.png", "ALAMY – torre medida por MGF"), ("18.webp", "F18 – 5 y pico / 4 y pico paños"), ("47.webp", "F47 – huecos del ala y rampa")])
     hoja_planta(9.2, "PLANTA SEGUNDA (suelo +7,20) – corte a +9,20 (terraza, bar, bloque alto)", [("47.webp", "F47 – terraza-restaurante"), ("76.webp", "F76 – maqueta: curva de la rampa y techo en rampa"), ("1.webp", "F01 – vista aérea 1984")])
-    hoja_planta(E.Z_B0 + 3 * E.F + 2.0, "PLANTA TIPO DE HABITACIONES", [("8.webp", "F08 – barril, aletas y escalera"), ("58.webp", "F58 – cenital: encuentro barril – ala")])
+    hoja_planta(E.Z_B0 + 3 * E.F + 2.0, "PLANTA TIPO DE HABITACIONES", [("alamy_barril.png", "ALAMY – barril medido por MGF"), ("8.webp", "F08 – escalera y aletas"), ("58.webp", "F58 – cenital: encuentro barril – ala")])
     hoja_planta(None, "PLANTA DE CUBIERTAS", [("36.webp", "F36 – cenital"), ("62.webp", "F62 – cenital")])
     S = {k: (k, p0, p1, t) for k, p0, p1, t in LM.SECC}
     hoja_alz_secc("ALA LARGA – fachada exterior: sección L1 y alzado 2", (-1, 0), "ALZADO 2 – fachada exterior del ala larga",
@@ -157,9 +157,9 @@ if __name__ == "__main__":
                   [("75.png", "F75 – escalera desde el patio"), ("8.webp", "F08 – escalera y barril")])
     hoja_alz_secc("CHAFLÁN – sección L3 y alzado 1", tuple(E.N), "ALZADO 1 – chaflán (frontal)",
                   S["L3"], tuple(E.U), (np.array(E.T) @ np.array(E.U) - 40, np.array(E.T) @ np.array(E.U) + 40), 400,
-                  [("9.webp", "F09 – frontal"), ("70.webp", "F70 – postal"), ("18.webp", "F18 – actual")])
+                  [("alamy_torre.png", "ALAMY – torre medida por MGF"), ("alamy_alto.png", "ALAMY – parte alta"), ("18.webp", "F18 – actual")])
     hoja_alz_secc("ALA CORTA – alzado 3 a la calle", (0, 1), "ALZADO 3 – calle (ala corta)", None, (1, 0), (-38, 40), 400,
-                  [("72.webp", "F72 – calle desde el ala corta"), ("1.webp", "F01 – 1984"), ("14.webp", "F14 – época")])
+                  [("72.webp", "F72 – calle desde el ala corta"), ("alamy_torre.png", "ALAMY – torre medida por MGF")])
     hoja_alz_secc("TESTERO – alzado 5 y sección S4", (0, -1), "ALZADO 5 – testero del ala larga", S["S4"], (-1, 0), (-26, 22), 400,
                   [("73.webp", "F73 – testero, puerta y marquesina")])
     hoja_detalle()

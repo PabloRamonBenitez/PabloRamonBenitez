@@ -24,7 +24,7 @@
 | escalera: ventana en la fachada retranqueada (vacío = 1) | 1.00 | 1.00 | OK |
 | escalera: lamas a los lados de la cuña | 1.00 | 1.00 | OK |
 | escalera: no sobresale más allá de las lamas | 1.00 | 1.00 | OK |
-| escalera: coronación (cubierta en cuña, borde exterior) | 41.40 | 41.40 | OK |
+| escalera: coronación (cubierta en cuña, borde exterior) | 41.29 | 41.29 | OK |
 | escalera: arranca sobre la rampa (ESC_Z0) | 12.50 | 12.50 | OK |
 | rampa 1 llega a la cota de la terraza (sin escalón) | 7.20 | 7.20 | OK |
 | techo del restaurante: arranca a cota de terraza junto a la torre | 7.25 | 7.25 | OK |
@@ -37,7 +37,7 @@
 | barandilla en la cubierta de la visera | 1.00 | 1.00 | OK |
 | pasillo entre tambor y banda (vacío a +Z_T1−0,5) | 1.00 | 1.00 | OK |
 | peto del tambor hasta +Z_T1 | 1.00 | 1.00 | OK |
-| remate: coronación | 50.95 | 50.95 | OK |
+| remate: coronación | 50.81 | 50.81 | OK |
 | banda descentrada hacia la plaza (vidrio a R_G del centro de la banda) | 1.00 | 1.00 | OK |
 | entrada a la terraza abierta sobre la banda del hotel | 7.20 | 7.20 | OK |
 | barandilla en el lado largo de la azotea del bar | 12.50 | 12.50 | OK |
@@ -58,8 +58,8 @@
 | logia de planta 1 hueca (vacío a +5,5 = 1) | 1.00 | 1.00 | OK |
 | pilar intermedio de la logia | 1.00 | 1.00 | OK |
 | remate del bloque alto equidistante al tambor (R_AC) | 18.63 | 18.63 | OK |
-| lucernario sobre la visera | 45.34 | 45.34 | OK |
-| canto de la visera 1,90 m (MGF Alamy) | 1.90 | 1.90 | OK |
+| lucernario sobre la visera | 45.22 | 45.22 | OK |
+| canto de la visera 1,90 m (MGF Alamy) | 1.89 | 1.90 | OK |
 | puertas del hotel abiertas en PB | 3.00 | 3.00 | OK |
 | línea posterior del ala corta paralela al chaflán (|sen| con U) | 0.00 | 0.00 | OK |
 | rincón del patio sin 90° (ángulo, grados) | 40.00 | 40.00 | OK |

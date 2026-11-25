@@ -65,3 +65,13 @@ Un elemento a radio R y ángulo φ del eje de la vista cae en x = R·sen φ. As�
   | remate | +50,94 | +50,95 | +50,95 |
 - **Partes bajas:** la base del cuello sale a **+9,03** en F09 (modelo +10,40). Es un conflicto con la lectura anterior: **no se cambia sin confirmación**.
 - **Ojos:** 13 (lado ciego entre 140° y 215°, primer ojo girado −4,3°), Ø 1,70, tubo de 0,8, centro a +35,95. Residuos en Alamy ≤ 0,4 m.
+
+## Alamy como código de la verdad (25/11, noche): torre completa (`alzado_torre_alamy.py` → ALZADO_TORRE_ALAMY.png)
+- Referencia definitiva: **cara inferior de la losa de cubierta del barril (y = 1337) = +32,50**. Es independiente del grueso del canto.
+  La escala sale de la propia foto: 5 forjados con paso de 175,25 px → 56,53 px/m.
+- Barril, leído en la vertical de medida del usuario (x ≈ 1186):
+  forjados +32,50 / 29,35 / 26,29 / 23,17 / 20,09 (modelo 32,5 / 29,4 / 26,3 / 23,2 / 20,1);
+  canto 0,59 · hueco 1,45 · poyete 0,78 · ranura 0,27 (antes 0,65 / – / 0,90 / 0,10) · barandilla de cubierta 0,85.
+- Parte alta: tambor +38,73 · visera +41,29 / +43,18 · remate +50,81 · centro de los ojos +35,84.
+- F09 y las demás fotos antiguas de la torre ya no son referencia. En las láminas se sustituyen por la foto de Alamy medida
+  (alamy_torre / alamy_alto / alamy_barril).

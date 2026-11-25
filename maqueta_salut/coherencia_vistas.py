@@ -137,6 +137,29 @@ chk.append(("triangulación A–C", float(np.linalg.norm(_C - _A)), 16.66))
 chk.append(("triangulación A–D (D = esquina exterior del testero)", float(np.linalg.norm(np.array([V["W_EXT"], V["L_L"]]) - _A)), 106.69))
 chk.append(("triangulación D–C (tolerancia 2 m)", float(np.linalg.norm(np.array([V["W_EXT"], V["L_L"]]) - _C)), 95.17))
 out = ["| comprobación | medido en la geometría | cuadro | estado |", "|---|---|---|---|"]
+# ---- piezas nuevas (fotos 25/11): mismo cuadro de cotas en el 3D y en el catálogo que usan los planos
+import ventanas as _VT
+_cat = _VT.catalogo()
+_hay3 = lambda p, z, h=0.04: not (_t ^ E.caja(p[0] - h, p[0] + h, p[1] - h, p[1] + h, z - h, z + h)).is_empty()
+_tp = [h for h in _cat if h["grupo"] == "tambor puerta"][0]
+_pin = (_tp["p"][0] - 0.15 * _tp["n"][0], _tp["p"][1] - 0.15 * _tp["n"][1])
+chk.append(("puerta del tambor junto a la escalera: hueco en el muro (vacío = 1)", float(not _hay3(_pin, _tp["z0"] + 1.0)), 1.0))
+_a = E.ESC_ANG - E.ESC_HA - math.pi / V["N_AL"]
+_po = (E.T[0] + (E.R_T + 0.4) * math.cos(_a), E.T[1] + (E.R_T + 0.4) * math.sin(_a))
+chk.append(("sin ojo en el módulo junto a la escalera (lado izq.) (vacío = 1)", float(not _hay3(_po, V["OJO_Z"])), 1.0))
+chk.append(("ojos en el catálogo (planos) = ojos del 3D", float(sum(1 for h in _cat if h["grupo"] == "tambor ojos")), 13.0))
+_am = -(E.ESC_HA + E.ESC_HB) / 2
+chk.append(("cristalera suelo-techo en el hueco izq. a la altura del tambor", float(_hay3(E.esc_ang_pt(V["ESC_RR"] - 0.025, _am), E.Z_B1 + 2.0, 0.02)), 1.0))
+chk.append(("dintel de la cristalera", float(_hay3(E.esc_ang_pt(V["ESC_RR"], _am), (V["CR_Z1"] + E.Z_T1) / 2)), 1.0))
+chk.append(("borde izq. del corte sin lamas (vacío = 1)", float(not any(_hay3(E.esc_ang_pt(rr, -(E.ESC_HA - math.atan2(0.2, rr))), 25.0, 0.03) for rr in [V["ESC_RR"] + 0.2 + 0.05 * i for i in range(40)])), 1.0))
+chk.append(("borde dcho. del corte con lamas", float(any(_hay3(E.esc_ang_pt(rr, E.ESC_HA - math.atan2(0.2, rr)), 25.0, 0.03) for rr in [V["ESC_RR"] + 0.2 + 0.05 * i for i in range(40)])), 1.0))
+chk.append(("encima del tambor solo el muro: vacío en el eje de la escalera a +40", float(not _hay3(E.esc_ang_pt(V["ESC_RC"] - 1.0, 0.0), 40.0)), 1.0))
+_L = E.letrero()
+chk.append(("letrero: 5 letras presentes en el 3D", float(sum(_hay3(L_["c"], (L_["z0"] + L_["z1"]) / 2, 0.1) for L_ in _L)), 5.0))
+_pr = E.P(V["OR_X"], V["OR_Y"])
+chk.append(("zócalo (poyete) del remate", float(_hay3((_pr[0] + (V["REM_ZR"] - 0.2), _pr[1]), E.Z_V1 + V["REM_ZH"] / 2)), 1.0))
+_pv = E.P(V["OV_X"], V["OV_Y"])
+chk.append(("barandilla de la visera abierta: vacío entre pasamanos y travesaño", float(not all(_hay3((_pv[0] + (E.R_V - 0.035) * math.cos(q), _pv[1] + (E.R_V - 0.035) * math.sin(q)), E.Z_V1 + 0.75, 0.02) for q in np.linspace(0, 2 * math.pi, 37)[:-1] + math.radians(5))), 1.0))
 for n, a, b in chk:
     ok = abs(a - b) < (2.0 if "tolerancia 2" in n else 0.5 if ("A–D" in n) else 0.25 if ("curva" in n or "X:" in n) else 0.12) or (("|cos|" in n or "|sen|" in n) and a < 0.02) or (n.startswith("sin ventanas") and a > V["W_P"] - 0.05)
     out.append(f"| {n} | {a:.2f} | {b:.2f} | {'OK' if ok else 'NO'} |")

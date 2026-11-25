@@ -77,11 +77,17 @@ def detalles_torre(ax, r_, d_):
             x = s + (v @ r_) * V["R_AL"]
             ax.plot([x, x], [V["Z_ALE"], zb + V["N_PL"] * V["F"] + V["FOR_C"]], color="k", lw=0.5, zorder=20)
             ax.plot([s + (v @ r_) * V["R_CU"], x], [V["Z_CU1"], V["Z_ALE"]], color="k", lw=0.5, zorder=20)
-        a2 = a + math.pi / V["N_AL"]; v2 = np.array([math.cos(a2), math.sin(a2)])
-        if v2 @ (-d_) > 0.15:
-            zc = (zb + V["N_PL"] * V["F"] + V["FOR_C"] + V["Z_T1"]) / 2
-            ax.add_patch(Circle((s + (v2 @ r_) * V["R_T"], zc), 0.8, fc="0.3", ec="k", lw=0.5, zorder=21))
-            ax.add_patch(Circle((s + (v2 @ r_) * V["R_T"], zc), 0.4, fc="0.8", ec="k", lw=0.4, zorder=22))
+    import ventanas as VT                                  # ojos y puerta del tambor: catálogo único (13 ojos, lado ciego, puerta)
+    for h in VT.catalogo():
+        v2 = np.array(h["n"])
+        if v2 @ (-d_) <= 0.15: continue
+        x2 = (np.array(h["p"]) - T) @ r_ + s
+        if h["grupo"] == "tambor ojos":
+            zc = (h["z0"] + h["z1"]) / 2
+            ax.add_patch(Circle((x2, zc), h["w"] / 2, fc="0.3", ec="k", lw=0.5, zorder=21))
+            ax.add_patch(Circle((x2, zc), h["w"] / 4, fc="0.8", ec="k", lw=0.4, zorder=22))
+        elif h["grupo"] == "tambor puerta":
+            ax.add_patch(Rectangle((x2 - h["w"] / 2, h["z0"]), h["w"], h["z1"] - h["z0"], fc="0.3", ec="k", lw=0.5, zorder=21))
     nm = int(2 * math.pi * V["R_G"] / 2.4)
     for k in range(nm):
         a = 2 * math.pi * k / nm; v = np.array([math.cos(a), math.sin(a)])

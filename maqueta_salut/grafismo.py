@@ -85,7 +85,7 @@ def rampas(ax, zc):
 def escalera(ax, zc):
     """escalera de ida y vuelta dentro de la cuña: dos tramos radiales separados por el muro central"""
     V = E._v
-    if zc is None or zc >= V["ESC_Z1"]:
+    if zc is None or zc >= E.Z_T1:                               # por encima del tambor ya no hay tramos: solo el muro [fotos 25/11]
         return
     if zc < V["ESC_Z0"]:                                          # la caja queda por encima: contorno en discontinua
         n = 12

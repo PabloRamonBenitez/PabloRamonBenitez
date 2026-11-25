@@ -362,6 +362,20 @@ def base():
     return m - en_torre(Manifold.batch_boolean(hue_t, OpType.Add))
 
 
+
+def letrero():
+    """letrero САЛЮТ: 5 letras en un plano frente a la cámara de Alamy, delante del remate; la de la izquierda vuela sobre la celosía.
+    Devuelve [dict(c=(x,y) centro en planta, rot=grados de la normal, w, z0, z1)] – lo usan el 3D y todos los planos [Alamy, collage]"""
+    pr = P(_v["OR_X"], _v["OR_Y"])
+    ca = math.radians(_v["VISTA_ALAMY"]); hc = (math.cos(ca), math.sin(ca)); dr = (math.cos(ca + math.pi / 2), math.sin(ca + math.pi / 2))
+    prf = (pr[0] - T[0]) * hc[0] + (pr[1] - T[1]) * hc[1]; dd = prf + R_R + 0.5
+    w = (_v["SIG_S1"] - _v["SIG_S0"]) / 5; out = []
+    for i in range(5):
+        sc = _v["SIG_S0"] + (i + 0.5) * w
+        out.append(dict(c=(T[0] + dd * hc[0] + sc * dr[0], T[1] + dd * hc[1] + sc * dr[1]), rot=math.degrees(ca), w=w - 0.3,
+                        z0=_v["SIG_Z0"], z1=_v["SIG_Z1"]))
+    return out
+
 def torre():
     s = [cil(T, R_COL, 0, Z_CU0 + 0.1),
          Manifold.cylinder(4.0, _v["R_CONO"], R_COL, SEG).translate((T[0], T[1], 0)),   # pie de columna (recto: el 'cono' era un toldo) cil(T, R_CU, Z_CU0, Z_CU1 + 0.05),
@@ -407,15 +421,9 @@ def torre():
     s.append(baranda(pv, R_V, Z_V1, 1.0))                  # barandilla abierta de la cubierta de la visera [F08, Alamy]
     s.append(cil(pr, R_R, Z_V1, Z_R1))
     s.append(cil(pr, _v["REM_ZR"], Z_V1 - 0.01, Z_V1 + _v["REM_ZH"]))      # zócalo (poyete) del remate [Alamy]
-    # letrero САЛЮТ: 5 letras en un plano frente a la cámara de Alamy, delante del remate, la de la izquierda volada sobre la celosía [Alamy]
-    _ca = math.radians(_v["VISTA_ALAMY"]); _hc = (math.cos(_ca), math.sin(_ca)); _dr = (math.cos(_ca + math.pi / 2), math.sin(_ca + math.pi / 2))
-    _prf = (pr[0] - T[0]) * _hc[0] + (pr[1] - T[1]) * _hc[1]
-    _w = (_v["SIG_S1"] - _v["SIG_S0"]) / 5
-    for _i in range(5):
-        _sc = _v["SIG_S0"] + (_i + 0.5) * _w; _dd = _prf + R_R + 0.5
-        _l = Manifold.cube((0.3, _w - 0.3, _v["SIG_Z1"] - _v["SIG_Z0"])).translate((-0.15, -(_w - 0.3) / 2, _v["SIG_Z0"]))
-        _l = _l.rotate((0, 0, math.degrees(_ca))).translate((T[0] + _dd * _hc[0] + _sc * _dr[0], T[1] + _dd * _hc[1] + _sc * _dr[1], 0))
-        s.append(_l)
+    for L_ in letrero():                                     # letrero САЛЮТ (misma función que los planos) [Alamy]
+        _l = Manifold.cube((0.3, L_["w"], L_["z1"] - L_["z0"])).translate((-0.15, -L_["w"] / 2, L_["z0"]))
+        s.append(_l.rotate((0, 0, L_["rot"])).translate((L_["c"][0], L_["c"][1], 0)))
     pl_ = P(_v["LUC_X"], _v["LUC_Y"])                        # lucernario piramidal de 12 costillas sobre la visera [fotos 25/11]
     s.append(Manifold.cylinder(0.25, _v["LUC_R"] + 0.15, _v["LUC_R"] + 0.15, 12).translate((pl_[0], pl_[1], Z_V1 - 0.01)))
     s.append(Manifold.cylinder(_v["LUC_H"], _v["LUC_R"], 0.25, 12).translate((pl_[0], pl_[1], Z_V1 + 0.24)))

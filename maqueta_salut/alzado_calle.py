@@ -27,12 +27,26 @@ def rect(ax, u0, u1, z0, z1, st, zo):
     ax.add_patch(Rectangle((min(u0, u1), z0), abs(u1 - u0), z1 - z0, zorder=zo, **st))
 
 
+def baranda_alz(ax, uc, R, z0, h, zo, paso=2.0):
+    """barandilla abierta en alzado: pasamanos, travesaño y postes"""
+    for zz in (z0 + 0.5, z0 + h):
+        ax.plot([uc - R, uc + R], [zz, zz], color="k", lw=0.4, zorder=zo)
+    n = max(int(2 * math.pi * R / paso), 8)
+    for k in range(n):
+        a = 2 * math.pi * k / n
+        if math.sin(a) > 0: continue
+        uu = uc + R * math.cos(a); ax.plot([uu, uu], [z0, z0 + h], color="k", lw=0.3, zorder=zo)
+
+
 def torre(ax, zo=10):
     T = np.array(E.T); uT = u_of(T)
     # escalera en cuña (detrás): asoma por encima del barril
     pe = np.array(E.esc_ang_pt(V["ESC_RC"], 0.0)); ue = u_of(pe)
     ch = 2 * V["ESC_RC"] * math.sin(E.ESC_HB)
-    rect(ax, ue - ch / 2, ue + ch / 2, V["ESC_Z0"], V["ESC_Z1"], dict(fc="white", ec="k", lw=0.6, hatch="||||"), zo)
+    rect(ax, ue - ch / 2, ue + ch / 2, V["ESC_Z0"], V["ESC_ZL"], dict(fc="white", ec="k", lw=0.6, hatch="||||"), zo)   # lamas
+    rect(ax, ue - ch / 2, ue + ch / 2, V["ESC_ZL"], E.Z_T1, dict(fc="white", ec="k", lw=0.6), zo)                   # remate sin lamas
+    uw = u_of(np.array(E.esc_ang_pt(V["ESC_R1"], -E.ESC_HB)))
+    rect(ax, uw - 0.3, uw + 0.3, E.Z_T1, V["ESC_Z1"], dict(fc="white", ec="k", lw=0.6), zo)                         # muro de coronación inclinada
     # columna, cuello y losa
     rect(ax, uT - E.R_COL, uT + E.R_COL, 0, E.Z_CU0, HORM, zo + 3)
     rect(ax, uT - E.R_CU, uT + E.R_CU, E.Z_CU0, E.Z_CU1, HORM, zo + 1)
@@ -45,7 +59,8 @@ def torre(ax, zo=10):
         z = E.Z_B0 + i * E.F
         rect(ax, uT - E.R_B, uT + E.R_B, z, z + E._v["FOR_C"], HORM, zo + 2)                   # canto del forjado
         if i < V["N_PL"]:
-            rect(ax, uT - E.R_B + 0.25, uT + E.R_B - 0.25, z + 0.75, z + 1.65, HORM, zo + 2)   # poyete
+            zp = z + E._v["FOR_C"] + E._v["FOR_R"]
+            rect(ax, uT - E.R_B + 0.25, uT + E.R_B - 0.25, zp, zp + E._v["FOR_P"], HORM, zo + 2)   # poyete [MGF]
     for k in range(V["N_AL"]):                                                           # aletas visibles
         a = 2 * math.pi * k / V["N_AL"] + E.FASE_AL; o = np.array([math.cos(a), math.sin(a)])
         if o @ ED > 0.05: continue
@@ -54,14 +69,18 @@ def torre(ax, zo=10):
         if abs(u1 - u0) < 0.4: u0, u1 = uT + s * E.R_AL - 0.2, uT + s * E.R_AL + 0.2
         rect(ax, u0, u1, E.Z_ALETA0, E.Z_B1 + E._v["FOR_C"], HORM, zo + 3)
         ax.plot([uT + s * E.R_CU, uT + s * E.R_AL], [E.Z_CU1, E.Z_ALETA0], color="k", lw=0.5, zorder=zo + 3)   # ménsula
-    rect(ax, uT - E.R_B, uT + E.R_B, E.Z_B1 + E._v["FOR_C"], E.Z_B1 + E._v["FOR_C"] + E._v["BAR_B"], dict(fc="none", ec="k", lw=0.4), zo + 3)  # barandilla
+    baranda_alz(ax, uT, E.R_B, E.Z_B1 + E._v["FOR_C"], E._v["BAR_B"], zo + 3)                                # barandilla abierta
     # tambor con ojos
     rect(ax, uT - E.R_T, uT + E.R_T, E.Z_B1 + E._v["FOR_C"], E.Z_T1, HORM, zo + 2)
-    zt = (E.Z_B1 + E.Z_T1) / 2
-    for k in range(V["N_AL"]):
-        a = 2 * math.pi * (k + 0.5) / V["N_AL"] + E.FASE_AL; o = np.array([math.cos(a), math.sin(a)])
+    import ventanas as VT
+    for h in VT.catalogo():                                                              # ojos y puerta del catálogo único
+        o = np.array(h["n"])
         if o @ ED > -0.05: continue
-        ax.add_patch(Ellipse((uT + E.R_T * (o @ EU), zt), 1.6 * abs(o @ ED), 1.6, fc="0.2", ec="k", lw=0.4, zorder=zo + 3))
+        if h["grupo"] == "tambor ojos":
+            ax.add_patch(Ellipse((u_of(h["p"]), (h["z0"] + h["z1"]) / 2), h["w"] * abs(o @ ED), h["w"], fc="0.2", ec="k", lw=0.4, zorder=zo + 3))
+        elif h["grupo"] == "tambor puerta":
+            uu = u_of(h["p"]); ww = h["w"] * abs(o @ ED)
+            rect(ax, uu - ww / 2, uu + ww / 2, h["z0"], h["z1"], OSCU, zo + 3)
     # banda acristalada con montantes
     zb0 = E.Z_T1 - V["H_PT"]
     uB = u_of(E.P(V["OB_X"], V["OB_Y"]))
@@ -74,9 +93,15 @@ def torre(ax, zo=10):
     # visera, remate y lucernario
     pv = np.array(E.P(V["OV_X"], V["OV_Y"])); uv = u_of(pv)
     rect(ax, uv - E.R_V, uv + E.R_V, E.Z_G1, E.Z_V1, HORM, zo + 4)
-    ax.plot([uv - E.R_V, uv + E.R_V], [E.Z_V1 + 1.0, E.Z_V1 + 1.0], color="k", lw=0.4, zorder=zo + 4)
+    baranda_alz(ax, uv, E.R_V, E.Z_V1, 1.0, zo + 4)                                                      # barandilla abierta
     pr = np.array(E.P(V["OR_X"], V["OR_Y"])); ur = u_of(pr)
     rect(ax, ur - E.R_R, ur + E.R_R, E.Z_V1, E.Z_R1, HORM, zo + 4)
+    rect(ax, ur - V["REM_ZR"], ur + V["REM_ZR"], E.Z_V1, E.Z_V1 + V["REM_ZH"], HORM, zo + 4)                      # zócalo (poyete) del remate
+    for L_ in E.letrero():                                                                # letrero САЛЮТ
+        nrm = np.array([math.cos(math.radians(L_["rot"])), math.sin(math.radians(L_["rot"]))])
+        if nrm @ ED > 0.2: continue
+        uu = u_of(L_["c"]); ww = L_["w"] * abs(nrm @ ED) + 0.3 * abs(nrm @ EU)
+        rect(ax, uu - ww / 2, uu + ww / 2, L_["z0"], L_["z1"], dict(fc="#d9c36a", ec="k", lw=0.5), zo + 5)
     pl = np.array(E.P(V["LUC_X"], V["LUC_Y"])); ul = u_of(pl)
     ax.add_patch(Polygon([(ul - V["LUC_R"], E.Z_V1), (ul + V["LUC_R"], E.Z_V1), (ul, E.Z_V1 + V["LUC_H"] + 0.25)],
                          closed=True, fc="0.8", ec="k", lw=0.5, zorder=zo + 5))

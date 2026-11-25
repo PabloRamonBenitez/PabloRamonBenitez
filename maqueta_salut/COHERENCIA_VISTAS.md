@@ -68,3 +68,14 @@
 | triangulación A–C | 16.66 | 16.66 | OK |
 | triangulación A–D (D = esquina exterior del testero) | 106.49 | 106.69 | OK |
 | triangulación D–C (tolerancia 2 m) | 93.65 | 95.17 | OK |
+| puerta del tambor junto a la escalera: hueco en el muro (vacío = 1) | 1.00 | 1.00 | OK |
+| sin ojo en el módulo junto a la escalera (lado izq.) (vacío = 1) | 1.00 | 1.00 | OK |
+| ojos en el catálogo (planos) = ojos del 3D | 13.00 | 13.00 | OK |
+| cristalera suelo-techo en el hueco izq. a la altura del tambor | 1.00 | 1.00 | OK |
+| dintel de la cristalera | 1.00 | 1.00 | OK |
+| borde izq. del corte sin lamas (vacío = 1) | 1.00 | 1.00 | OK |
+| borde dcho. del corte con lamas | 1.00 | 1.00 | OK |
+| encima del tambor solo el muro: vacío en el eje de la escalera a +40 | 1.00 | 1.00 | OK |
+| letrero: 5 letras presentes en el 3D | 5.00 | 5.00 | OK |
+| zócalo (poyete) del remate | 1.00 | 1.00 | OK |
+| barandilla de la visera abierta: vacío entre pasamanos y travesaño | 1.00 | 1.00 | OK |

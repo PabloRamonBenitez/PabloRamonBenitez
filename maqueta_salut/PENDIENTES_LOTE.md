@@ -26,6 +26,12 @@ Ya aplicado: porche del testero (muros + marquesina) y muro de esquina [croquis 
    - Por fuera, en discontinua, la proyección del cuerpo volado de arriba (6 m, 1,2 m de vuelo, lado inclinado paralelo al chaflán).
    - Proporciones aproximadas (a medir en las fotos de la calle con la persona como escala).
 
+## Hipótesis a comprobar (no aplicar sin prueba)
+11. «Línea posterior»: la fachada trasera (patio) del ala corta sería PARALELA al chaflán (amarillo), no perpendicular a la calle; el remate del bloque alto en la medianera (verde) es perpendicular a la fachada del colindante; el ángulo de 90° del rincón del patio no existe.
+    - Consecuencia: el ala corta tendría planta trapecial; su fondo (hoy W_C = 12,74 estimado, sin foto) saldría de cortar la línea posterior con la medianera.
+    - Pruebas a buscar: cenitales F36/F62 (borde trasero del ala corta), aéreas actuales (peto de la cubierta junto a la torre, en diagonal), foto histórica (verde perpendicular al colindante). F58 no sirve (oscura y con rótulos).
+    - Si no aparece prueba: dejar el fondo actual y marcarlo como estimado.
+
 ## Respuestas del usuario (25/11)
 - La diagonal de la línea A es la proyección del cuerpo del bloque alto (planta 2) que vuela 1,2 m; su lado inclinado es PARALELO a la fachada de la planta primera del chaflán (amarillo en el croquis).
 - El vuelo de 1,2 m se mide desde la línea exterior de la fachada (alineación con el edificio colindante).

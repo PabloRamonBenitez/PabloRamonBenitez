@@ -32,6 +32,12 @@ Ya aplicado: porche del testero (muros + marquesina) y muro de esquina [croquis 
     - Pruebas a buscar: cenitales F36/F62 (borde trasero del ala corta), aéreas actuales (peto de la cubierta junto a la torre, en diagonal), foto histórica (verde perpendicular al colindante). F58 no sirve (oscura y con rótulos).
     - Si no aparece prueba: dejar el fondo actual y marcarlo como estimado.
 
+## Parte alta (fotos nuevas 25/11: Alamy casi en alzado, interior Soviet Modernism, claraboya Instagram, postal aérea)
+12. Lucernario piramidal/cónico de vidrio (≈12 costillas, base poligonal con peana) sobre la cubierta de la visera, descentrado, entre el remate y el borde de la visera (lado del chaflán). Debajo, en el techo de la banda acristalada, hueco circular con brocal y viga diagonal (foto interior).
+13. Remonta de proporciones de la parte alta con la foto de Alamy (casi alzado): alturas de tambor, banda, canto de visera y remate; diámetro del remate respecto a la visera; desplazamiento del remate.
+14. Interior de la banda: muro curvo blanco = continuación del núcleo del remate hacia abajo (comprobar diámetro y posición); pilares y carpintería perimetral.
+15. Foto frontal del ala corta (stock, dos personas como escala): medir vuelo y canto del cuerpo volado, logia de planta primera con pilar, retranqueo, altura del ladrillo y escalonado de la coronación junto a la torre.
+
 ## Respuestas del usuario (25/11)
 - La diagonal de la línea A es la proyección del cuerpo del bloque alto (planta 2) que vuela 1,2 m; su lado inclinado es PARALELO a la fachada de la planta primera del chaflán (amarillo en el croquis).
 - El vuelo de 1,2 m se mide desde la línea exterior de la fachada (alineación con el edificio colindante).

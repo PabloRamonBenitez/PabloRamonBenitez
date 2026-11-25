@@ -24,7 +24,7 @@
 | escalera: ventana en la fachada retranqueada (vacío = 1) | 1.00 | 1.00 | OK |
 | escalera: lamas a los lados de la cuña | 1.00 | 1.00 | OK |
 | escalera: no sobresale más allá de las lamas | 1.00 | 1.00 | OK |
-| escalera: coronación en r = ESC_RC − 0,3 (cubierta inclinada ESC_ZI → ESC_Z1, Alamy) | 41.45 | 41.44 | OK |
+| escalera: coronación en r = ESC_RC − 0,3 (cubierta inclinada ESC_ZI → ESC_Z1, Alamy) | 41.20 | 41.20 | OK |
 | escalera: arranca sobre la rampa (ESC_Z0) | 12.50 | 12.50 | OK |
 | rampa 1 llega a la cota de la terraza (sin escalón) | 7.20 | 7.20 | OK |
 | techo del restaurante: arranca a cota de terraza junto a la torre | 7.25 | 7.25 | OK |

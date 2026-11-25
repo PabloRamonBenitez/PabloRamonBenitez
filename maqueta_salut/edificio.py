@@ -471,7 +471,7 @@ def torre():
     # pantalla de lamas que forra el cuerpo en cuña por su cara exterior y sus dos caras laterales, separada 0,3 [F08, F11, F13]
     lam = []
     def lama(r, da, rot_r=True):
-        return (caja(-0.25, 0.25, -0.12, 0.12, _v["ESC_Z0"] + 0.3, _v["ESC_Z1"] - 0.4) if rot_r else caja(-0.12, 0.12, -0.25, 0.25, _v["ESC_Z0"] + 0.3, _v["ESC_Z1"] - 0.4)) \
+        return (caja(-0.25, 0.25, -0.12, 0.12, _v["ESC_Z0"] + 0.3, _v["ESC_ZL"]) if rot_r else caja(-0.12, 0.12, -0.25, 0.25, _v["ESC_Z0"] + 0.3, _v["ESC_ZL"])) \
             .translate((r, 0, 0)).rotate((0, 0, math.degrees(ESC_ANG + da))).translate((T[0], T[1], 0))
     nl = int(2 * ESC_HB * ESC_R1 / 0.8)
     for k in range(nl + 1):

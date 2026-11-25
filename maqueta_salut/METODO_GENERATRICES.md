@@ -105,3 +105,10 @@ Regla del método: **en el alzado del modelo se mira el silueteado de cada pieza
   3. Zócalo (poyete) del remate: R 5,7, de +43,18 a +43,58.
   4. Barandillas abiertas (ver arriba).
 - **Comprobado sin cambios:** remate, visera, banda, tambor, forjados, aletas, lucernario; los ojos quedan a ≤ 0,4 m.
+
+## Caja de escalera con las fotos nuevas (25/11) – `escalera_fotos.py` → ESCALERA_FOTOS.png
+- **Foto lateral.** Su escala sale de la propia caja: las juntas de las lamas van cada 138 px = 3,10 m, a la altura de los forjados.
+  Medidas: remate de hormigón de 2,97 m sin lamas, con la cubierta **horizontal**; frente de lamas de 6,0 m, más una escalera de gato de 0,7 m.
+- **Dron.** La parte alta es una caja apoyada en la terraza del tambor. El peto del tambor se corta en la escalera y las lamas siguen por fuera del barril.
+- **Cambio:** cubierta plana a +41,20 (la pendiente 41,6 → 40,8 de Alamy era aparente) y lamas hasta +38,20.
+- **Lucernarios bajo el cuello:** no forman un anillo completo, porque la caja de escalera ocupa ese sector (usuario).

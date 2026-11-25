@@ -161,7 +161,7 @@ def comprobacion():
      ("Concha arranca por encima de la banda del hotel (sin escalón hacia abajo)", V["Z_CON"] >= V["Z_P1"], f"{V['Z_CON']} ≥ {V['Z_P1']}"),
      ("Chaflán: restaurante + columna + hotel = A1 → E90 (esquina a 90° con la rampa)", abs(V["REST_L"] + 2 * V["R_COL"] + V["HOT_L"] - (V["L_CHF"] + (V["X_E90"] - V["W_P"]) / G["U"][0])) < 0.05, f"{V['REST_L']} + {2 * V['R_COL']} + {V['HOT_L']} = {V['REST_L'] + 2 * V['R_COL'] + V['HOT_L']:.2f}"),
      ("Escalera: cuña dentro del hueco, retranqueo detrás de la línea de vidrio", V["ESC_SECB"] < V["ESC_SEC"] and V["ESC_RR"] < V["R_B"] - 1.8 and V["ESC_R1"] <= V["R_AL"] + 0.7, f"sector {V['ESC_SEC']}°, r {V['ESC_R0']}…{V['ESC_R1']}"),
-     ("Escalera: cuña centrada en el hueco; por encima del tambor la caja se separa de la banda (cielo, Alamy)", V["ESC_ZI"] < V["ESC_Z1"] and V["ESC_SECB"] < V["ESC_SEC"] and V["ESC_RS"] > V["R_G"], f"cuña {V['ESC_SECB']}° en hueco {V['ESC_SEC']}°, caja de r {V['ESC_RS']} a {V['ESC_R1']}, cubierta +{V['ESC_ZI']} → +{V['ESC_Z1']}"),
+     ("Escalera: cuña centrada en el hueco; por encima del tambor la caja se separa de la banda (cielo, Alamy); lamas bajo el remate de hormigón (foto lateral)", V["ESC_ZI"] <= V["ESC_Z1"] and V["ESC_ZL"] < V["ESC_Z1"] and V["ESC_SECB"] < V["ESC_SEC"] and V["ESC_RS"] > V["R_G"], f"cuña {V['ESC_SECB']}° en hueco {V['ESC_SEC']}°, caja de r {V['ESC_RS']} a {V['ESC_R1']}, cubierta +{V['ESC_ZI']} → +{V['ESC_Z1']}"),
      ("Ala larga recta de ancho constante", True, f"W_P = {V['W_P']}"),
     ]
     return R

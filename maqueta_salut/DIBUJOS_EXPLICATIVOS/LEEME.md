@@ -2,20 +2,21 @@
 
 | nº | dibujo | qué explica |
 |---|---|---|
-| 01 | PUNTOS_TRIANGULACION_F01 | puntos A, B, C, D, E sobre F01 y distancias de la triangulación |
-| 02 | BLOQUE_ALTO_ABC | planta 2 del bloque alto del ala corta: A–B 7,3, lado inclinado hasta C, arco hasta la línea posterior |
-| 03 | OPCIONES_AB | tres lecturas posibles de A–B, en planta y sección (las que se usaron para elegir) |
-| 04 | GIRO_HIPOTESIS | tres hipótesis del giro de la rampa en la esquina y la defendida (H1) |
-| 05 | CURVA_ESQUINA | curva de la rampa en la esquina del chaflán, planta y cubierta |
-| 06 | ESQUINA_NUEVA | esquina resuelta: chaflán, rampa, hotel y medidas X/Y |
-| 07 | RAMPA_ESCALERA_ENCUENTRO | encuentro de la rampa con la escalera, planta y sección |
-| 08 | ESCALERA_DETALLE_PLANTAS | escalera insertada en el cilindro: sector, cuña y lamas |
-| 09 | ALZADO_CALLE | alzado a la calle dibujado pieza a pieza con cotas |
-| 10 | PROP_ALZADO2_VENTANAS | ventanas del ala larga sacadas por proporciones |
-| 11 | PERFIL_HUECOS_F73 | perfiles de intensidad para medir los huecos en F73 |
-| 12 | DETALLE_HUECO_ALA | detalle de hueco del ala larga (sección y alzado) |
-| 13 | GENERATRICES_ESQUEMA | un origen por cilindro: alturas en la generatriz frontal, foto y esquema |
-| 14 | GENERATRICES_ALAMY | método MGF sobre el alzado real del modelo, con cotas y diámetros (tras aplicar: diferencias ≤ 0,04 m) |
-| 15–25 | ZONAS_01…11 | zonas de verificación Z01–Z31: axonometrías, plantas por niveles, situación de secciones y secciones SA/SB/SC… (`zonas_laminas.py`) |
+| 01–11 | ZONAS_01…11 | **zonas de verificación Z01–Z31 (los buenos)**: axonometrías, plantas por niveles, situación de secciones y secciones (`zonas_laminas.py`) |
+| 12 | PUNTOS_TRIANGULACION_F01 | puntos A, B, C, D, E sobre F01 y distancias de la triangulación |
+| 13 | BLOQUE_ALTO_ABC | planta 2 del bloque alto del ala corta: A–B 7,3, lado inclinado hasta C, arco hasta la línea posterior |
+| 14 | OPCIONES_AB | tres lecturas posibles de A–B, en planta y sección (las que se usaron para elegir) |
+| 15 | GIRO_HIPOTESIS | tres hipótesis del giro de la rampa en la esquina y la defendida (H1) |
+| 16 | CURVA_ESQUINA | curva de la rampa en la esquina del chaflán, planta y cubierta |
+| 17 | ESQUINA_NUEVA | esquina resuelta: chaflán, rampa, hotel y medidas X/Y |
+| 18 | RAMPA_ESCALERA_ENCUENTRO | encuentro de la rampa con la escalera, planta y sección |
+| 19 | ESCALERA_DETALLE_PLANTAS | escalera insertada en el cilindro: sector, cuña y lamas |
+| 20 | ALZADO_CALLE | alzado a la calle dibujado pieza a pieza con cotas |
+| 21 | PROP_ALZADO2_VENTANAS | ventanas del ala larga sacadas por proporciones |
+| 22 | PERFIL_HUECOS_F73 | perfiles de intensidad para medir los huecos en F73 |
+| 23 | DETALLE_HUECO_ALA | detalle de hueco del ala larga (sección y alzado) |
+| 24 | GENERATRICES_ESQUEMA | un origen por cilindro: alturas en la generatriz frontal, foto y esquema |
+| 25 | GENERATRICES_ALAMY | método MGF sobre el alzado real del modelo, con cotas y diámetros (tras aplicar: diferencias ≤ 0,04 m) |
+| 26 | MGF_TAMBOR | MGF en tambor y barril: aletas (19, giro 7,6°), ojos, paso de forjados; sector sin ojos pendiente |
 
 Todos se regeneran desde los scripts de `maqueta_salut/` (p. ej. `generatrices_esquema.py`, `generatrices_alamy.py`, `opciones_AB.py`, `hipotesis_giro.py`).

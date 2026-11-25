@@ -72,7 +72,7 @@ def detalles_torre(ax, r_, d_):
             if zz < zb + V["N_PL"] * V["F"] + 0.7:
                 ax.plot([s - V["R_B"], s + V["R_B"]], [zz, zz], color="k", lw=lw, zorder=20)
     for k in range(V["N_AL"]):
-        a = 2 * math.pi * k / V["N_AL"]; v = np.array([math.cos(a), math.sin(a)])
+        a = 2 * math.pi * k / V["N_AL"] + math.radians(V.get("FASE_AL", 0.0)); v = np.array([math.cos(a), math.sin(a)])
         if v @ (-d_) > 0:
             x = s + (v @ r_) * V["R_AL"]
             ax.plot([x, x], [V["Z_ALE"], zb + V["N_PL"] * V["F"] + 0.65], color="k", lw=0.5, zorder=20)

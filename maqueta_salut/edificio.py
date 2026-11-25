@@ -53,6 +53,7 @@ Z_B1 = Z_B0 + N_PL * F
 Z_T1, Z_G1, Z_V1, Z_R1 = _v["Z_T1"], _v["Z_G1"], _v["Z_V1"], _v["Z_R1"]
 R_COL, R_CU, R_B, R_AL, R_T, R_G, R_V, R_R = _v["R_COL"], _v["R_CU"], _v["R_B"], _v["R_AL"], _v["R_T"], _v["R_G"], _v["R_V"], _v["R_R"]
 OFF_V, OFF_R, N_AL = (_v["OV_X"], _v["OV_Y"]), (_v["OR_X"], _v["OR_Y"]), int(_v["N_AL"])
+FASE_AL = math.radians(_v.get("FASE_AL", 0.0))   # giro del módulo radial [MGF Alamy]
 OFF_B = (_v["OB_X"], _v["OB_Y"])
 W_P, W_BAR, L_L, L_FIN, W_EXT = _v["W_P"], _v["W_BAR"], _v["L_L"], _v["L_FIN"], _v["W_EXT"]
 Y_CUNA = _v["Y_CA"] + _v["R_FIN"]           # pie de la concha sobre la fachada (≈ Bing 59,67)
@@ -358,7 +359,7 @@ def torre():
     # vigas radiales bajo el barril y barril con forjados/poyetes + aletas
     s.append(cil(T, R_B - 0.1, Z_CU1 - 0.01, Z_ALETA0 + 0.05))   # fondo del barril (sofito plano a la cota de las aletas)
     for k in range(N_AL):                                   # 19 ménsulas triangulares: de la punta de la aleta al borde del cuello
-        a = math.degrees(2 * math.pi * k / N_AL)
+        a = math.degrees(2 * math.pi * k / N_AL + FASE_AL)
         pts = [(R_CU - 0.3, Z_CU1), (R_CU - 0.3, Z_ALETA0 + 0.05), (R_AL, Z_ALETA0 + 0.05)]
         pl_ = Manifold.extrude(CrossSection([pts]), 0.4).translate((0, 0, -0.2)).rotate((90, 0, 0))
         if pl_.volume() <= 0:
@@ -373,7 +374,7 @@ def torre():
     s.append(cil(T, R_B, Z_B1, Z_B1 + 0.65))
     s.append(cil(T, R_B, Z_B1 + 0.65, Z_B1 + 1.75) - cil(T, R_B - 0.2, Z_B1, Z_B1 + 1.9))   # peto + barandilla 1,1 m de la cubierta del barril [F09, F08]
     for k in range(N_AL):
-        a = 2 * math.pi * k / N_AL
+        a = 2 * math.pi * k / N_AL + FASE_AL
         al = Manifold.cube((R_AL - rf + 0.2, 0.4, Z_B1 + 0.65 - Z_ALETA0)).translate((rf - 0.1, -0.2, Z_ALETA0))
         s.append(al.rotate((0, 0, math.degrees(a))).translate((T[0], T[1], 0)))
     # tambor de ojos, banda, visera, remate

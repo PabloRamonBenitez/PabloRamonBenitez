@@ -56,7 +56,7 @@ def catalogo():
     for i in range(V["N_PL"]):
         z = E.Z_B0 + i * E.F
         for k in range(V["N_AL"]):
-            a_ = 2 * math.pi * (k + 0.5) / V["N_AL"]
+            a_ = 2 * math.pi * (k + 0.5) / V["N_AL"] + E.FASE_AL
             if en_escalera(a_, rf): continue
             c, s = math.cos(a_), math.sin(a_)
             _h(H, f"T{i}{k:02d}", f"torre planta {i + 1}", "ventana", (T[0] + rf * c, T[1] + rf * s), (-s, c), (c, s),
@@ -87,7 +87,7 @@ def catalogo():
     # 7. tambor: 19 ojos circulares [F01, F09]
     zt = (E.Z_B1 + E.Z_T1) / 2
     for k in range(V["N_AL"]):
-        a_ = 2 * math.pi * (k + 0.5) / V["N_AL"]
+        a_ = 2 * math.pi * (k + 0.5) / V["N_AL"] + E.FASE_AL
         if en_escalera(a_, E.R_T): continue
         c, s = math.cos(a_), math.sin(a_)
         _h(H, f"OJ{k:02d}", "tambor ojos", "ojo", (T[0] + E.R_T * c, T[1] + E.R_T * s), (-s, c), (c, s), 1.6, zt - 0.8, zt + 0.8)

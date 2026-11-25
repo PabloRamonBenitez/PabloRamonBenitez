@@ -39,3 +39,15 @@ Resultado: MGF OK, 66/66 comprobaciones de coherencia, 18/18 reglas de planos.
 - La base de la banda queda oculta tras el peto del tambor, así que no se puede medir.
 - La foto es una captura de pantalla: las escalas vertical y horizontal se sacan por separado.
 - La escala tiene un error de ±1 % (paso de forjados ±2 px), unos ±0,2 m en lo alto del remate.
+
+## Aplicación 2 (25/11): tambor, aletas, ojos y balcones (`mgf_tambor.py` → MGF_TAMBOR.png)
+Un elemento a radio R y ángulo φ del eje de la vista cae en x = R·sen φ. Así se leen los ángulos en la foto.
+| elemento | foto | modelo antes | acción | resultado |
+|---|---|---|---|---|
+| aletas (postes de los balcones) | 6 medidas, paso 18,9° → **19** | 19, módulo sin giro | **FASE_AL = 7,6°** (desfase medido 7,2–8,1°) | residuo medio 0,04 m, máx 0,24 m en el borde |
+| ojos: cota del centro | +35,31 | +35,35 | – | OK |
+| ojos: diámetro | 1,67 | 1,60 | – | dentro de ±0,1 |
+| ojos: posición | en el centro de módulo (13,5°, 35°, 54,6°); hacia el borde salen más por los tubos (~1 m de vuelo) | centro de módulo | – | OK salvo el primero (−1,1 m) |
+| paso de forjados | 3,12 | 3,10 | – | OK |
+| borde de balcones (silueta con aletas) | R ≈ 15,1 | R_AL 15,3 | – | OK |
+| **sector sin ojos** | a la izquierda del eje (≈ 140°–215° absolutos) no hay ojos | el modelo pone 3–4 | **PENDIENTE**: hace falta otra foto de ese lado | – |

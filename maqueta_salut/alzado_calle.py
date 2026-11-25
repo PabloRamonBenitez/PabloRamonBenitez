@@ -47,7 +47,7 @@ def torre(ax, zo=10):
         if i < V["N_PL"]:
             rect(ax, uT - E.R_B + 0.25, uT + E.R_B - 0.25, z + 0.75, z + 1.65, HORM, zo + 2)   # poyete
     for k in range(V["N_AL"]):                                                           # aletas visibles
-        a = 2 * math.pi * k / V["N_AL"]; o = np.array([math.cos(a), math.sin(a)])
+        a = 2 * math.pi * k / V["N_AL"] + E.FASE_AL; o = np.array([math.cos(a), math.sin(a)])
         if o @ ED > 0.05: continue
         s = o @ EU
         u0, u1 = uT + s * rf, uT + s * E.R_AL
@@ -59,7 +59,7 @@ def torre(ax, zo=10):
     rect(ax, uT - E.R_T, uT + E.R_T, E.Z_B1 + 0.65, E.Z_T1, HORM, zo + 2)
     zt = (E.Z_B1 + E.Z_T1) / 2
     for k in range(V["N_AL"]):
-        a = 2 * math.pi * (k + 0.5) / V["N_AL"]; o = np.array([math.cos(a), math.sin(a)])
+        a = 2 * math.pi * (k + 0.5) / V["N_AL"] + E.FASE_AL; o = np.array([math.cos(a), math.sin(a)])
         if o @ ED > -0.05: continue
         ax.add_patch(Ellipse((uT + E.R_T * (o @ EU), zt), 1.6 * abs(o @ ED), 1.6, fc="0.2", ec="k", lw=0.4, zorder=zo + 3))
     # banda acristalada con montantes

@@ -101,7 +101,7 @@ def estructura_torre(ax, zc):
     rf = E.R_B - 1.8; rc = E.R_COL + 2.2                         # pasillo anular de 2,2 m alrededor del núcleo
     ax.add_patch(Wedge(T, rc + VT.PART, 0, 360, width=VT.PART, fc="#bdbdbd", ec="k", lw=0.6, zorder=7.2))
     for k in range(E._v["N_AL"]):
-        a = 2 * math.pi * k / E._v["N_AL"]; c, s_ = math.cos(a), math.sin(a); n_ = np.array([-s_, c]) * VT.PART / 2
+        a = 2 * math.pi * k / E._v["N_AL"] + E.FASE_AL; c, s_ = math.cos(a), math.sin(a); n_ = np.array([-s_, c]) * VT.PART / 2
         if abs((a - E.ESC_ANG + math.pi) % (2 * math.pi) - math.pi) < da_esc: continue          # dentro de la escalera
         p0, p1 = T + rc * np.array([c, s_]), T + (rf - VT.MURO) * np.array([c, s_])
         ax.add_patch(Polygon([p0 - n_, p1 - n_, p1 + n_, p0 + n_], closed=True, fc="#bdbdbd", ec="k", lw=0.6, zorder=7.2))
@@ -365,7 +365,7 @@ def detalles():
     y chaflan (seccion por el hotel) comparado con F18."""
     fig = hoja("DETALLE 1 – MÓDULO DEL BARRIL: poyetes, entrantes, huecos y aletas")
     # seccion radial por el centro de un modulo
-    a = 360 * 0.5 / E.N_AL + math.degrees(E.A_CH) - 90
+    a = 360 * 0.5 / E.N_AL + math.degrees(E.A_CH) - 90   # (sección de detalle: módulo genérico)
     ang = math.radians(a)
     p0 = (E.T[0], E.T[1]); p1 = (E.T[0] + 20 * math.cos(ang), E.T[1] + 20 * math.sin(ang))
     ax = fig.add_axes([0.04, 0.06, 0.40, 0.86])

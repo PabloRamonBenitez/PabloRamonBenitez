@@ -19,7 +19,7 @@ def add(pid, zona, desc, p):
 
 
 def circ(c, r, z, n, k, fase=0.0):
-    a = 2 * math.pi * (k + fase) / n
+    a = 2 * math.pi * (k + fase) / n + E.FASE_AL
     return (c[0] + r * math.cos(a), c[1] + r * math.sin(a), z)
 
 

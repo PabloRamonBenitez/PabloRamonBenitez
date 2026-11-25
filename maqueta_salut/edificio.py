@@ -471,9 +471,10 @@ def torre():
     # pantalla de lamas que forra el cuerpo en cuña por su cara exterior y sus dos caras laterales, separada 0,3 [F08, F11, F13]
     lam = []
     def lama(r, da, rot_r=True):
-        return (caja(-0.25, 0.25, -0.12, 0.12, _v["ESC_Z0"] + 0.3, _v["ESC_ZL"]) if rot_r else caja(-0.12, 0.12, -0.25, 0.25, _v["ESC_Z0"] + 0.3, _v["ESC_ZL"])) \
+        _e = _v["LAMA_E"] / 2                                          # lamas finas (canto 0,25 hacia fuera, espesor LAMA_E) [dron, usuario]
+        return (caja(-0.125, 0.125, -_e, _e, _v["ESC_Z0"] + 0.3, _v["ESC_ZL"]) if rot_r else caja(-_e, _e, -0.125, 0.125, _v["ESC_Z0"] + 0.3, _v["ESC_ZL"])) \
             .translate((r, 0, 0)).rotate((0, 0, math.degrees(ESC_ANG + da))).translate((T[0], T[1], 0))
-    nl = int(2 * ESC_HB * ESC_R1 / 0.8)
+    nl = int(2 * ESC_HB * ESC_R1 / _v["LAMA_P"])
     for k in range(nl + 1):
         lam.append(lama(ESC_R1 - 0.25, -ESC_HB + 2 * ESC_HB * k / nl))
     for hh in VT.catalogo():                                   # las lamas se abren delante de las puertas
@@ -485,7 +486,7 @@ def torre():
         r = rf + 0.2
         while r < ESC_R1 - 0.3:
             lam.append(lama(r, sg * (ESC_HB + math.atan2(0.45, r)), rot_r=False))
-            r += 0.8
+            r += _v["LAMA_P"]
     return m + (Manifold.batch_boolean(lam, OpType.Add) - CORTE_ESC)
 
 

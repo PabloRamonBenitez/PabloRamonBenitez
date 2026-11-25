@@ -48,7 +48,7 @@ chk.append(("escalera: cuerpo en cuña cerrado", float(_hay(13.0, 0.0, 20.0)), 1
 chk.append(("escalera: fachada retranqueada presente (r < RR)", float(_hay(V["ESC_RR"] - 0.2, dm + 0.03, E.Z_B0 + 0.6)), 1.0))
 chk.append(("escalera: delante del retranqueo, vacío hasta la barandilla", float(not _hay(V["ESC_RR"] + 0.6, dm, zm)), 1.0))
 chk.append(("escalera: ventana en la fachada retranqueada (vacío = 1)", float(not _hay(V["ESC_RR"] - 0.2, dm, E.Z_B0 + 2 * E.F + 1.8)), 1.0))
-chk.append(("escalera: lamas a los lados de la cuña", float(_hay(14.0, E.ESC_HB + math.atan2(0.45, 14.0), 20.0) or _hay(14.4, E.ESC_HB + math.atan2(0.45, 14.4), 20.0)), 1.0))
+chk.append(("escalera: lamas a los lados de la cuña", float(any(_hay(rr, E.ESC_HB + math.atan2(0.45, rr), 20.0) for rr in [13.4 + 0.05 * i for i in range(24)])), 1.0))
 chk.append(("escalera: no sobresale más allá de las lamas", float(not _hay(V["ESC_R1"] + 0.3, 0.0, 20.0)), 1.0))
 px, py = E.esc_ang_pt(V["ESC_RC"] - 0.3, 0)
 bb3 = (t ^ E.caja(px - 0.1, px + 0.1, py - 0.1, py + 0.1, -1, 80)).bounding_box()

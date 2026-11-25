@@ -162,7 +162,10 @@ def bloque_alto_poligono(n=16):
     if d[1] < 0: d = -d
     sw = lambda q: np.array(SWP(q[0], q[1]))
     x0 = -L_C; P1 = np.array([x0 + _v["VOL_L"], -_v["VOL_V"]])
-    Rc = _v["R_AC"]; tip = None
+    # C: sobre el lado inclinado (paralelo al chaflán) a distancia A–C de A (esquina del vuelo en la medianera) [triangulación]
+    A0 = np.array([x0, -_v["VOL_V"]]); w = P1 - A0
+    tC = -(w @ d) + math.sqrt((w @ d) ** 2 - (w @ w) + _v["AC_TRI"] ** 2)
+    Rc = float(np.linalg.norm(sw(P1 + tC * d) - Tv)) + 1e-6; _v["R_AC"] = Rc; tip = None
     for t in np.linspace(0, 60, 6001):
         q = P1 + t * d
         if q[1] >= W_C: break

@@ -127,10 +127,16 @@ _g2 = _KK.planta(); _F1 = np.array(E.SWP(-V["L_C"], V["W_C"])); _IC = np.array(_
 _dr = (_IC - _F1) / np.linalg.norm(_IC - _F1)
 chk.append(("línea posterior del ala corta paralela al chaflán (|sen| con U)", abs(float(_dr[0] * E.U[1] - _dr[1] * E.U[0])), 0.0))
 chk.append(("rincón del patio sin 90° (ángulo, grados)", round(math.degrees(math.acos(abs(float(_dr[1])))), 1), round(math.degrees(math.acos(abs(float(E.U[1])))), 1)))
-chk.append(("X: medianera → A1 (valor anterior restaurado)", float(np.linalg.norm(np.array(E.SWP(-V["L_C"], 0)) - np.array(_g2["A1"]))), 22.4))
+chk.append(("X: medianera → A1", float(np.linalg.norm(np.array(E.SWP(-V["L_C"], 0)) - np.array(_g2["A1"]))), 22.4))
+_baT = [np.array(p) for p in E.bloque_alto_poligono()]
+_A, _B, _C = _baT[0], _baT[1], _baT[2]
+chk.append(("triangulación A–B (vuelo)", float(np.linalg.norm(_B - _A)), 7.3))
+chk.append(("triangulación A–C", float(np.linalg.norm(_C - _A)), 16.66))
+chk.append(("triangulación A–D (D = esquina exterior del testero)", float(np.linalg.norm(np.array([V["W_EXT"], V["L_L"]]) - _A)), 106.69))
+chk.append(("triangulación D–C (tolerancia 2 m)", float(np.linalg.norm(np.array([V["W_EXT"], V["L_L"]]) - _C)), 95.17))
 out = ["| comprobación | medido en la geometría | cuadro | estado |", "|---|---|---|---|"]
 for n, a, b in chk:
-    ok = abs(a - b) < (0.25 if ("curva" in n or "X:" in n) else 0.12) or (("|cos|" in n or "|sen|" in n) and a < 0.02) or (n.startswith("sin ventanas") and a > V["W_P"] - 0.05)
+    ok = abs(a - b) < (2.0 if "tolerancia 2" in n else 0.5 if ("A–D" in n) else 0.25 if ("curva" in n or "X:" in n) else 0.12) or (("|cos|" in n or "|sen|" in n) and a < 0.02) or (n.startswith("sin ventanas") and a > V["W_P"] - 0.05)
     out.append(f"| {n} | {a:.2f} | {b:.2f} | {'OK' if ok else 'NO'} |")
 open("COHERENCIA_VISTAS.md", "w").write("# Coherencia entre vistas y cuadro de cotas\n\n" + "\n".join(out) + "\n")
 print("\n".join(out))

@@ -46,10 +46,10 @@ COTAS = {
  "POR_D":  (1.3,  "vuelo del porche (muros y marquesina) delante del testero", "croquis del usuario (65 px / 49 px/m)"),
  "POR_E":  (0.35, "espesor de los muros del porche", "croquis del usuario"),
  "ESQ_D":  (1.2,  "muro de esquina: la fachada exterior del ala sobresale del testero en toda su altura", "F73 (franja verde en la esquina) · croquis del usuario"),
- "VOL_L": (6.0, "cuerpo volado: frente desde la medianera", "croquis del usuario (medido)"),
+ "VOL_L": (7.3, "cuerpo volado: frente A–B desde la medianera (perpendicular al colindante)", "triangulación satélite A–B = 7,3 (usuario marca A y B en la planta)"),
  "VOL_V": (1.2, "vuelo del cuerpo volado sobre la alineación de fachada (colindante)", "usuario · foto frontal del ala corta"),
  "Z_VOL0": (6.6, "cara inferior del cuerpo volado", "foto frontal (proporción vertical)"),
- "R_AC": (16.8, "radio del arco cóncavo con que el bloque alto remata hacia la torre (equidistante al tambor: R_AL + 1,5)", "usuario (línea A) · foto al pie de la torre"),
+ "R_AC": (18.6, "radio del arco del bloque alto (DERIVADO: pasa por C)", "A–C 16,66 con el lado B–C paralelo al chaflán"),
  "LOG_D": (1.8, "profundidad de la logia de planta 1 bajo el vuelo (vidrio retranqueado)", "foto frontal · croquis del usuario"),
  "LOG_PX": (3.0, "pilar intermedio de la logia", "foto frontal (pilar blanco)"),
  "PUERTAS_H": (3, "puertas del hotel en planta baja alrededor de la columna (por lado)", "usuario (imagina más entradas) · F18 (puertas bajo la banda del hotel)"),
@@ -59,6 +59,7 @@ COTAS = {
  "LUC_H": (1.8, "altura del lucernario", "Alamy: 45 px / 25 px/m"),
  "LOG_X0": (0.6, "logia: inicio", "croquis del usuario"),
  "LOG_X1": (5.75, "logia: fin", "croquis del usuario"),
+ "AC_TRI": (16.66, "distancia A–C: de la esquina del vuelo en la medianera al final del lado inclinado (arranque del arco)", "triangulación satélite A–C = 16,66 (usuario marca C)"),
  "H_PET":  (1.3,  "peto exterior de la terraza del ala larga (corona ≈ +8,5)", "F73 esquina del testero +8,5 ± 0,6"),
  "VA_0": (4.63, "alféizar fila alta (0,545 H)", "F73 vertical exacta, 3 huecos ±0,006 H"),
  "VA_1": (6.32, "dintel fila alta (0,743 H)", "F73 vertical exacta, 3 huecos ±0,002 H"),
@@ -217,7 +218,7 @@ def niveles():
 
 # Margen (±) de cada cota: medido en varias fotos ≈ 0,3-0,6 · una foto ≈ 1 · estimado ≈ 1,5-2 · satélite ≈ 1
 RANGOS = {
- "Z_PB": 0.3, "Z_P1": 0.3, "Z_BAR": 0.8, "Z_BARC": 0.8, "Z_ALTO": 1.0, "Z_LAD0": 0.5, "Z_FIN": 0.9, "H_PET": 0.6, "VA_0": 0.5, "VA_1": 0.6, "VB_0": 0.3, "VB_1": 0.4, "L_HOR": 2.0, "VOL_L": 1.0, "VOL_V": 0.3, "Z_VOL0": 0.4, "R_AC": 1.5, "LOG_D": 0.5, "LOG_PX": 0.8, "LOG_X0": 0.5, "LOG_X1": 0.8, "LUC_X": 1.5, "LUC_Y": 1.5, "LUC_R": 0.5, "LUC_H": 0.5,
+ "Z_PB": 0.3, "Z_P1": 0.3, "Z_BAR": 0.8, "Z_BARC": 0.8, "Z_ALTO": 1.0, "Z_LAD0": 0.5, "Z_FIN": 0.9, "H_PET": 0.6, "VA_0": 0.5, "VA_1": 0.6, "VB_0": 0.3, "VB_1": 0.4, "L_HOR": 2.0, "VOL_L": 0.3, "AC_TRI": 0.3, "VOL_V": 0.3, "Z_VOL0": 0.4, "R_AC": 1.5, "LOG_D": 0.5, "LOG_PX": 0.8, "LOG_X0": 0.5, "LOG_X1": 0.8, "LUC_X": 1.5, "LUC_Y": 1.5, "LUC_R": 0.5, "LUC_H": 0.5,
  "Z_LAD1": 1.0, "Z_CON": 0.8, "Z_CU0": 0.6, "Z_CU1": 0.6, "Z_ALE": 0.6, "Z_B0": 0.4, "F": 0.05, "N_PL": 0,
  "Z_T1": 0.5, "Z_G1": 0.5, "Z_V1": 0.5, "Z_R1": 0.6, "R_COL": 0.3, "R_CONO": 0.3, "R_CU": 0.5, "R_B": 0.3,
  "R_AL": 0.3, "R_T": 0.5, "R_G": 0.5, "R_V": 0.6, "R_R": 0.25, "OV_X": 1.0, "OV_Y": 1.5, "OR_X": 0.5, "N_AL": 0,

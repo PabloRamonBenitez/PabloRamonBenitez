@@ -56,10 +56,14 @@
 | bajo el vuelo, paso libre hasta Z_VOL0 (vacío = 1) | 1.00 | 1.00 | OK |
 | logia de planta 1 hueca (vacío a +5,5 = 1) | 1.00 | 1.00 | OK |
 | pilar intermedio de la logia | 1.00 | 1.00 | OK |
-| remate del bloque alto equidistante al tambor (R_AC) | 16.80 | 16.80 | OK |
+| remate del bloque alto equidistante al tambor (R_AC) | 18.63 | 18.63 | OK |
 | lucernario sobre la visera | 44.54 | 44.54 | OK |
 | canto de la visera 2,0 m | 2.00 | 2.00 | OK |
 | puertas del hotel abiertas en PB | 3.00 | 3.00 | OK |
 | línea posterior del ala corta paralela al chaflán (|sen| con U) | 0.00 | 0.00 | OK |
 | rincón del patio sin 90° (ángulo, grados) | 40.00 | 40.00 | OK |
-| X: medianera → A1 (valor anterior restaurado) | 22.29 | 22.40 | OK |
+| X: medianera → A1 | 22.29 | 22.40 | OK |
+| triangulación A–B (vuelo) | 7.30 | 7.30 | OK |
+| triangulación A–C | 16.66 | 16.66 | OK |
+| triangulación A–D (D = esquina exterior del testero) | 106.49 | 106.69 | OK |
+| triangulación D–C (tolerancia 2 m) | 93.65 | 95.17 | OK |

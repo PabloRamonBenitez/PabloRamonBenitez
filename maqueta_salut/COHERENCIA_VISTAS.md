@@ -52,3 +52,11 @@
 | porche del testero: muro derecho | 4.40 | 4.40 | OK |
 | porche: paso libre delante de la puerta (vacío bajo la marquesina = 1) | 1.00 | 1.00 | OK |
 | muro de esquina del testero (sobresale ESQ_D) | 8.30 | 8.30 | OK |
+| cuerpo volado: vuela VOL_V sobre la calle, a cota del bloque alto | 11.50 | 11.50 | OK |
+| bajo el vuelo, paso libre hasta Z_VOL0 (vacío = 1) | 1.00 | 1.00 | OK |
+| logia de planta 1 hueca (vacío a +5,5 = 1) | 1.00 | 1.00 | OK |
+| pilar intermedio de la logia | 1.00 | 1.00 | OK |
+| remate del bloque alto equidistante al tambor (R_AC) | 16.80 | 16.80 | OK |
+| lucernario sobre la visera | 44.74 | 44.74 | OK |
+| canto de la visera 2,0 m | 2.00 | 2.00 | OK |
+| puertas del hotel abiertas en PB | 3.00 | 3.00 | OK |

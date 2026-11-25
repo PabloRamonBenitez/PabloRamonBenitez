@@ -50,7 +50,7 @@ def catalogo():
         dx, dy = x - KC[0], y - KC[1]; c, s = math.cos(PHI), math.sin(PHI)
         return (KC[0] + c * dx - s * dy, KC[1] + s * dx + c * dy)
     xA = W_P - E._a
-    x0, x1 = -E.L_C + E.L_LADR + 0.4, xA
+    x0, x1 = -E.L_C + V["VOL_L"] + 0.4, xA
     a, b = R(x0, 0.0), R(x1, 0.0)
     tt = ((b[0] - a[0]) / math.dist(a, b), (b[1] - a[1]) / math.dist(a, b))
     _h(H, "AC1", "ala corta banda calle", "banda", ((a[0] + b[0]) / 2, (a[1] + b[1]) / 2), tt, (tt[1], -tt[0]), x1 - x0, 4.6, 6.6)
@@ -79,6 +79,16 @@ def catalogo():
     c, s = math.cos(E.ESC_ANG), math.sin(E.ESC_ANG)
     for nm, z0 in ():
         _h(H, nm, "escalera puertas", "puerta", (T[0] + V["ESC_RC"] * c, T[1] + V["ESC_RC"] * s), (-s, c), (c, s), 1.2, z0, z0 + 2.2)
+    # 6d. puertas del hotel en planta baja, junto a la columna, en la fachada retranqueada RETR [usuario, F18]
+    yfp = -(E.R_COL - E.RET) + V["RETR"]
+    for i in range(int(V["PUERTAS_H"])):
+        X = E.R_COL + 1.2 + i * 2.6
+        _h(H, f"HP{i + 1}", "hotel puertas PB", "puerta", E.P(X, yfp), U, out, 1.8, 0.0, 2.5)
+    # 6e. ventanas de la fachada posterior del bloque alto (línea A) [croquis del usuario]
+    for i, xx in enumerate((1.5, 3.0, 7.5, 10.5)):
+        a, b = R(-E.L_C + xx, E.W_C), R(-E.L_C + xx + 1.2, E.W_C)
+        tt = ((b[0] - a[0]) / math.dist(a, b), (b[1] - a[1]) / math.dist(a, b))
+        _h(H, f"BA{i + 1}", "bloque alto posterior", "ventana", ((a[0] + b[0]) / 2, (a[1] + b[1]) / 2), tt, (-tt[1], tt[0]), 1.2, 8.3, 10.1)
     # 7. tambor: 19 ojos circulares [F01, F09]
     zt = (E.Z_B1 + E.Z_T1) / 2
     for k in range(V["N_AL"]):

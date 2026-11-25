@@ -132,7 +132,7 @@ def cotas_planta(ax):
     ax.text(E.W_P + 10.5, yA - 6 * V_["S_VEN"], f"{int(V_['N_VEN'])} huecos a {V_['S_VEN']:.2f}\n(PB: los {int(V_['N_VEN_B'])} junto al testero)".replace(".", ","),
             fontsize=6, rotation=90, va="center")
     # cota de cubierta de cada volumen
-    for (x, y), z in (((3, 70), E.Z_BAR_C), ((10, 70), E.Z_P1 + E._v["H_PET"]), ((tuple(E.SWP(-12, 9))), E.Z_ALTO), ((tuple(E.SWP(-21.5, 6))), E._v["Z_LAD1"]),
+    for (x, y), z in (((3, 70), E.Z_BAR_C), ((10, 70), E.Z_P1 + E._v["H_PET"]), ((tuple(E.SWP(-12, 9))), E.Z_ALTO), 
                       (E.esc_ang_pt(E.ESC_R0 - 1.2, 0), E._v["ESC_Z1"])):
         ax.text(x, y, f"+{z:.2f}".replace(".", ","), fontsize=6.5, color="navy", ha="center", bbox=dict(fc="white", ec="navy", lw=0.4, pad=0.6), zorder=70)
     # trazas de las secciones

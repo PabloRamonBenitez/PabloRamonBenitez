@@ -1,4 +1,4 @@
-# Lote de cambios pendientes (se aplican y comprueban juntos)
+# Lote de cambios (APLICADO el 25/11 – ver estado al final)
 
 Ya aplicado: porche del testero (muros + marquesina) y muro de esquina [croquis usuario, F73].
 
@@ -42,3 +42,23 @@ Ya aplicado: porche del testero (muros + marquesina) y muro de esquina [croquis 
 - La diagonal de la línea A es la proyección del cuerpo del bloque alto (planta 2) que vuela 1,2 m; su lado inclinado es PARALELO a la fachada de la planta primera del chaflán (amarillo en el croquis).
 - El vuelo de 1,2 m se mide desde la línea exterior de la fachada (alineación con el edificio colindante).
 - El bloque alto mantiene su altura (+11,50) también en la zona curva.
+
+## Estado tras aplicar (25/11)
+| # | estado | cómo |
+|---|---|---|
+| 1 | hecho | L_C 24,0 → 23,4 (X ≈ 22,4 por la proporción 6 / X del croquis) |
+| 2 | hecho | cuerpo volado 6,0 × 1,2 m, cara inferior +6,6, lado inclinado paralelo al chaflán |
+| 3 | hecho | la línea F sale sola: proyección de planta 1 sobre la PB retranqueada |
+| 4 | hecho | la discontinua negra errónea desaparece (era la caja de ladrillo antigua) |
+| 5 | hecho | muros de la logia (medianera 0,6, pilar 0,7, final 0,25) |
+| 6 | hecho | bloque alto completo: diagonal + arco cóncavo R 16,8 (= R_AL + 1,5) hasta la línea A; 4 ventanas posteriores |
+| 7 | hecho | proyección de planta 1 sobre la PB a lo largo del chaflán (discontinua) |
+| 8 | hecho | 3 puertas del hotel en PB junto a la columna (catálogo de huecos) |
+| 9 | NO cambiado | el escalón «?» junto a la escalera: sin foto que lo resuelva |
+| 10 | hecho | logia de planta 1 con vidrio retranqueado 1,8 m y antepecho |
+| 11 | NO aplicado | hipótesis de la línea posterior: sin prueba en las cenitales; fondo del ala corta sigue estimado |
+| 12 | hecho | lucernario de 12 costillas (R 2,2, h 2,0) sobre la visera, descentrado hacia el chaflán |
+| 13 | hecho | visera: canto 2,0 m (Z_V1 42,5) y R 12,4 (Alamy); el remate queda más alto (7,6 m) |
+| 14 | no dibujado | núcleo interior bajo el remate (la banda es maciza en el modelo) |
+| 15 | parcial | foto frontal usada para cotas aproximadas del vuelo, logia y pilar (sin medición fina) |
+Comprobaciones: 58/58 coherencia, 16/16 reglas de planos.

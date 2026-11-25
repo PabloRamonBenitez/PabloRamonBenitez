@@ -106,6 +106,23 @@ chk.append(("porche del testero: muro izquierdo", ztop(V["POR_X0"] + 0.15, _y), 
 chk.append(("porche del testero: muro derecho", ztop(V["POR_X1"] - 0.15, _y), 4.4))
 chk.append(("porche: paso libre delante de la puerta (vacío bajo la marquesina = 1)", float((m ^ E.caja(5.5, 5.7, _y - .1, _y + .1, 1.0, 2.0)).is_empty()), 1.0))
 chk.append(("muro de esquina del testero (sobresale ESQ_D)", ztop(V["W_P"] - 0.15, V["L_L"] + V["ESQ_D"] - 0.2), V["Z_FIN"] + 1.1))
+_sw = lambda x, y: E.SWP(x, y)
+_q = _sw(-V["L_C"] + 3.0, -V["VOL_V"] + 0.3)
+chk.append(("cuerpo volado: vuela VOL_V sobre la calle, a cota del bloque alto", ztop(*_q), V["Z_ALTO"]))
+_r = m ^ E.caja(_q[0] - .1, _q[0] + .1, _q[1] - .1, _q[1] + .1, 1.0, V["Z_VOL0"] - 0.2)
+chk.append(("bajo el vuelo, paso libre hasta Z_VOL0 (vacío = 1)", float(_r.is_empty()), 1.0))
+_q = _sw(-V["L_C"] + 1.8, 0.9)
+chk.append(("logia de planta 1 hueca (vacío a +5,5 = 1)", float((m ^ E.caja(_q[0] - .05, _q[0] + .05, _q[1] - .05, _q[1] + .05, 5.4, 5.5)).is_empty()), 1.0))
+_q = _sw(-V["L_C"] + V["LOG_PX"], 0.9)
+chk.append(("pilar intermedio de la logia", float(not (m ^ E.caja(_q[0] - .05, _q[0] + .05, _q[1] - .05, _q[1] + .05, 5.4, 5.5)).is_empty()), 1.0))
+import math as _mt
+_ba = E.bloque_alto_poligono(); _d = min(_mt.dist(p, E.T) for p in _ba[3:-1])
+chk.append(("remate del bloque alto equidistante al tambor (R_AC)", _d, V["R_AC"]))
+_pl = E.P(V["LUC_X"], V["LUC_Y"])
+chk.append(("lucernario sobre la visera", (E.torre() ^ E.caja(_pl[0] - .1, _pl[0] + .1, _pl[1] - .1, _pl[1] + .1, 0, 60)).bounding_box()[5], V["Z_V1"] + 0.24 + V["LUC_H"]))
+chk.append(("canto de la visera 2,0 m", V["Z_V1"] - V["Z_G1"], 2.0))
+_hp = [h for h in VT.catalogo() if h["grupo"] == "hotel puertas PB"]
+chk.append(("puertas del hotel abiertas en PB", sum(float((m ^ E.caja(h["p"][0] - h["n"][0] * 0.4 - .05, h["p"][0] - h["n"][0] * 0.4 + .05, h["p"][1] - h["n"][1] * 0.4 - .05, h["p"][1] - h["n"][1] * 0.4 + .05, 1.0, 1.1)).is_empty()) for h in _hp), len(_hp)))
 out = ["| comprobación | medido en la geometría | cuadro | estado |", "|---|---|---|---|"]
 for n, a, b in chk:
     ok = abs(a - b) < (0.25 if "curva" in n else 0.12) or ("|cos|" in n and a < 0.02) or (n.startswith("sin ventanas") and a > V["W_P"] - 0.05)

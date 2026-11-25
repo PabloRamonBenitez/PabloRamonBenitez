@@ -54,7 +54,8 @@ def cotas_completas(ax):
     cadena(ax, [A1, A1 + k * U, A1 + (k + 2 * V["R_COL"]) * U, np.array(E90)], -4.0, paso=2.4)
     # ala corta: calle y fondo
     SWP = G["SWP"]
-    cadena(ax, [SWP(-V["L_C"], 0), SWP(-V["L_C"] + V["L_HOR"], 0), SWP(-V["L_C"] + V["L_HOR"] + V["L_LAD"], 0), A1], -3.0, paso=2.4)
+    cadena(ax, [SWP(-V["L_C"], 0), SWP(-V["L_C"] + V["LOG_PX"], 0), SWP(-V["L_C"] + V["VOL_L"], 0), A1], -3.0, paso=2.4)
+    L.cota(ax, SWP(-V["L_C"], 0), SWP(-V["L_C"], -V["VOL_V"]), -1.5, "vuelo", fs=FS)
     cadena(ax, [SWP(-V["L_C"], 0), SWP(-V["L_C"], V["W_C"])], 3.0, total=False)
     # rampa: ancho y radio de la curva
     L.cota(ax, (WP, 45), (WX, 45), 0.0, "", fs=FS)

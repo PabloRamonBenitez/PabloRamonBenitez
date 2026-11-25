@@ -3,6 +3,7 @@ Coordenadas (m): calle Ivana Mazepy = eje x (y=0, fachada a la calle del ala cor
 (perpendicular a la calle, Bing F35/F48: 83-90 grados); cara interior del ala larga en x=0.
 Fuentes de cada cota entre corchetes."""
 import math
+import numpy as np
 from manifold3d import Manifold, CrossSection, OpType
 
 SEG = 96
@@ -147,9 +148,40 @@ def plantas_base():
     o_c = (A1[0] + RETR * N[0], A1[1] + RETR * N[1])              # paralela retranqueada al chaflan
     a1 = _inter(o_s, US, o_c, U)
     b1 = _inter(o_c, U, (W_P - RETR, 0.0), (0.0, 1.0))
-    PB = [SWP(-L_C + L_LADR, RETR), a1, b1, (W_P - RETR, Y_CUNA), (W_P, Y_CUNA), (W_P, L_L),
-          (0.0, L_L), IC, SWP(-L_C + L_LADR, W_C)]
+    PB = [SWP(-L_C, RETR), a1, b1, (W_P - RETR, Y_CUNA), (W_P, Y_CUNA), (W_P, L_L),
+          (0.0, L_L), IC, SWP(-L_C, W_C)]
     return dict(P1=P1, PB=PB, Q=Q, IC=IC)
+
+
+def bloque_alto_poligono(n=16):
+    """planta del bloque alto del ala corta (real): de la medianera, con el cuerpo volado VOL_V sobre la calle en
+    VOL_L m; lado inclinado paralelo al chaflán; remate hacia la torre en arco cóncavo equidistante al tambor (R_AC)
+    hasta la fachada posterior (línea A) [croquis del usuario, foto frontal, foto al pie de la torre]"""
+    US_, NS_ = np.array(US), np.array(NS); Uv = np.array(U); Tv = np.array(T)
+    d = np.array([-(Uv @ US_), Uv @ NS_])
+    if d[1] < 0: d = -d
+    sw = lambda q: np.array(SWP(q[0], q[1]))
+    x0 = -L_C; P1 = np.array([x0 + _v["VOL_L"], -_v["VOL_V"]])
+    Rc = _v["R_AC"]; tip = None
+    for t in np.linspace(0, 60, 6001):
+        q = P1 + t * d
+        if q[1] >= W_C: break
+        if np.linalg.norm(sw(q) - Tv) <= Rc: tip = q; break
+    pts = [sw((x0, -_v["VOL_V"])), sw(P1)]
+    if tip is None:
+        tq = P1 + (W_C - P1[1]) / d[1] * d
+        pts += [sw(tq), sw((x0, W_C))]
+        return [tuple(p) for p in pts]
+    a0 = math.atan2(*(sw(tip) - Tv)[::-1])
+    xs = np.linspace(tip[0], x0, 4000); qr = None
+    for x in xs:
+        if np.linalg.norm(sw((x, W_C)) - Tv) >= Rc: qr = np.array([x, W_C]); break
+    a1 = math.atan2(*(sw(qr) - Tv)[::-1])
+    if a1 - a0 > math.pi: a1 -= 2 * math.pi
+    if a0 - a1 > math.pi: a1 += 2 * math.pi
+    arc = [Tv + Rc * np.array([math.cos(a0 + (a1 - a0) * k / n), math.sin(a0 + (a1 - a0) * k / n)]) for k in range(n + 1)]
+    pts += [sw(tip)] + arc[1:] + [sw((x0, W_C))]
+    return [tuple(p) for p in pts]
 
 
 def curva_poligono():
@@ -186,14 +218,12 @@ def base():
     def ROT(m):                          # coordenadas 'de L recta' -> planta real (giro de la calle alrededor de KC)
         return m.translate((-KC[0], -KC[1], 0)).rotate((0, 0, math.degrees(PHI))).translate((KC[0], KC[1], 0))
     sc = []
-    # ala corta: bloque alto (detras de la banda del restaurante) y ladrillo sobre pilares en el extremo
-    sc.append(caja(-L_C + L_LADR, xA - 1.0, 5.5, W_C, Z_P1 - 0.01, Z_ALTO))
-    L_HOR = _v["L_HOR"]
-    sc.append(caja(-L_C, -L_C + L_HOR, 0, W_C, _v["Z_PB"], _v["Z_P1"]))                     # extremo: cuerpo de hormigon sobre pilares [F72]
-    sc.append(caja(-L_C + L_HOR, -L_C + L_HOR + L_LADR, 0, W_C, 0, _v["Z_LAD1"]))          # volumen de ladrillo del suelo a cubierta [F72]
-    for xp in (-L_C + 0.6, -L_C + _v["L_HOR"] - 0.6):
-        for yp in (0.6, W_C - 0.6):
-            sc.append(caja(xp - 0.35, xp + 0.35, yp - 0.35, yp + 0.35, 0, 5.01))
+    # ala corta: bloque alto (planta 2) con cuerpo volado sobre la calle y remate curvo hacia la torre; planta 1 con
+    # logia bajo el vuelo junto a la medianera [croquis del usuario, foto frontal del ala corta]
+    from shapely.geometry import Polygon as _SP
+    from shapely.geometry.polygon import orient as _or
+    ba = list(_or(_SP(bloque_alto_poligono()).buffer(0), 1.0).exterior.coords)[:-1]
+    s.append(prisma(ba, _v["Z_VOL0"], Z_ALTO))
     for i in range(6):                                      # lucernarios en diente de sierra [F01]
         x = -L_C + L_LADR + 1.5 + 2.0 * i
         sc.append(Manifold.extrude(CrossSection.square((1.4, 1.4), True), 1.0, 0, 0, (0.05, 0.05)).translate((x, 8.5, Z_ALTO - 0.01)))
@@ -266,7 +296,18 @@ def base():
           caja(0, 0.1, yr1 - 0.01, yb1 + _v["V_BAR"], Z_BAR_C - 0.01, Z_BAR_C + 1.0)]                 # lado patio
     m = Manifold.batch_boolean(s, OpType.Add)
     # huecos de ventanas (franjas continuas casi a paño) [F09, F14]
-    hue = [ROT(caja(-L_C + L_LADR + 0.4, xA, -1, 0.3, 4.6, 6.6))]
+    hue = [ROT(caja(-L_C + _v["VOL_L"] + 0.4, xA, -1, 0.3, 4.6, 6.6))]
+    # logia de planta 1 bajo el vuelo: hueco retranqueado LOG_D entre muro de medianera (0,6), pilar (0,7) y muro final (0,25)
+    ld, lx = _v["LOG_D"], _v["LOG_PX"]; x0l = -L_C
+    m = m - ROT(caja(x0l + 0.6, x0l + _v["VOL_L"] - 0.25, -1, ld, Z_PB + 0.01, Z_P1 - 0.01))
+    m = m + ROT(caja(x0l + lx - 0.35, x0l + lx + 0.35, 0, ld, Z_PB, Z_P1))                       # pilar intermedio
+    m = m + ROT(caja(x0l + 0.6, x0l + _v["VOL_L"] - 0.25, 0, 0.25, Z_PB, Z_PB + 1.0))             # antepecho / poyete
+    # puertas del hotel en planta baja junto a la columna [usuario, F18]
+    for hh in __import__("ventanas").catalogo():
+        if hh["grupo"] in ("hotel puertas PB", "bloque alto posterior"):
+            a = math.degrees(math.atan2(hh["n"][1], hh["n"][0]))
+            b = Manifold.cube((1.2, hh["w"], hh["z1"] - hh["z0"])).translate((-0.6, -hh["w"] / 2, hh["z0"]))
+            hue.append(b.rotate((0, 0, a)).translate((hh["p"][0], hh["p"][1], 0)))
     # HUECOS DEL ALA LARGA (pasada 11, proporciones F73/F01/F47): 11 arriba, 7 abajo bajo los 7 más cercanos al
     # testero, intereje S_VEN, hueco 0,47 S; marco que sale MAR_P y vidrio MAR_R por detrás del frente del marco
     import ventanas as VT                                # catálogo único de huecos (mismo que planos)
@@ -349,6 +390,9 @@ def torre():
     s.append(cil(pv, R_V, Z_G1, Z_V1))
     s.append(cil(pv, R_V, Z_V1 - 0.01, Z_V1 + 1.0) - cil(pv, R_V - 0.08, Z_V1 - 0.1, Z_V1 + 1.1))   # barandilla de la cubierta de la visera [F08]
     s.append(cil(pr, R_R, Z_V1, Z_R1))
+    pl_ = P(_v["LUC_X"], _v["LUC_Y"])                        # lucernario piramidal de 12 costillas sobre la visera [fotos 25/11]
+    s.append(Manifold.cylinder(0.25, _v["LUC_R"] + 0.15, _v["LUC_R"] + 0.15, 12).translate((pl_[0], pl_[1], Z_V1 - 0.01)))
+    s.append(Manifold.cylinder(_v["LUC_H"], _v["LUC_R"], 0.25, 12).translate((pl_[0], pl_[1], Z_V1 + 0.24)))
     # ESCALERA en sector: quita las plantas/balcones/aletas del barril en ese sector y pone el núcleo cerrado
     def sector(r0, r1, z0, z1, da0=None, da1=None):
         da0 = -ESC_HA if da0 is None else da0; da1 = ESC_HA if da1 is None else da1

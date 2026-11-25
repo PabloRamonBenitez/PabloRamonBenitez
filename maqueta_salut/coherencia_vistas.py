@@ -21,7 +21,7 @@ chk = [
  ("barandilla del testero", ztop(3, V["L_L"] - 0.2), V["Z_FIN"] + 1.1),
  ("rampa arriba (superficie)", ztop(V["W_P"] + 1.5, y0 + 0.3), V["Z_CON"]),
  ("rampa de acceso a mitad (perfil curvo)", ztop(V["W_P"] + 1.5, (y0 + E.Y_CUNA) / 2), V["Z_CON"] * 0.5 * (1 + V["RAMPA_C"] * 0.5)),
- ("largo ala larga L_L (muro, sin la marquesina)", float((m ^ E.caja(0.5, 2, 30, 200, 6, 6.5)).bounding_box()[4]), V["L_L"]),
+ ("largo ala larga L_L (muro, sin porche ni esquina)", float((m ^ E.caja(0.5, 2, 30, 200, 6, 6.5)).bounding_box()[4]), V["L_L"]),
 ]
 yv = V["L_L"] - V["VEN_FIN"] - V["VEN_W"] + 0.2
 for z, nm, ref in ((V["VA_0"] + 0.5, "vidrio fila alta (MAR_R tras el frente del marco)", V["W_P"] + V["MAR_P"] - V["MAR_R"]), (V["VB_0"] + 0.4, "vidrio fila baja", V["W_P"] + V["MAR_P"] - V["MAR_R"])):
@@ -101,6 +101,11 @@ import ventanas as _VT
 chk.append(("paños de la planta 1 del chaflán: restaurante (5 y pico)", sum(1 for h in _VT.catalogo() if h["grupo"] == "chaflán restaurante"), 6))
 chk.append(("paños enteros del hotel (4) + resto macizo junto a E90 (m)", sum(1 for h in _VT.catalogo() if h["grupo"] == "chaflán hotel") + round(V["HOT_L"] - 4 * V["M_CH"], 2) / 10, 4 + round(V["HOT_L"] - 4 * V["M_CH"], 2) / 10))
 chk.append(("hotel: de la columna a E90 = HOT_L", float(np.linalg.norm(np.array(_g["E90"]) - (np.array(E.T) - (E.R_COL - E.RET) * np.array(E.N))) - E.R_COL), V["HOT_L"]))
+_y = V["L_L"] + V["POR_D"] - 0.2
+chk.append(("porche del testero: muro izquierdo", ztop(V["POR_X0"] + 0.15, _y), 4.4))
+chk.append(("porche del testero: muro derecho", ztop(V["POR_X1"] - 0.15, _y), 4.4))
+chk.append(("porche: paso libre delante de la puerta (vacío bajo la marquesina = 1)", float((m ^ E.caja(5.5, 5.7, _y - .1, _y + .1, 1.0, 2.0)).is_empty()), 1.0))
+chk.append(("muro de esquina del testero (sobresale ESQ_D)", ztop(V["W_P"] - 0.15, V["L_L"] + V["ESQ_D"] - 0.2), V["Z_FIN"] + 1.1))
 out = ["| comprobación | medido en la geometría | cuadro | estado |", "|---|---|---|---|"]
 for n, a, b in chk:
     ok = abs(a - b) < (0.25 if "curva" in n else 0.12) or ("|cos|" in n and a < 0.02) or (n.startswith("sin ventanas") and a > V["W_P"] - 0.05)

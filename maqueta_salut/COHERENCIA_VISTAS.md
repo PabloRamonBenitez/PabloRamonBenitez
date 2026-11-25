@@ -10,7 +10,7 @@
 | barandilla del testero | 8.30 | 8.30 | OK |
 | rampa arriba (superficie) | 7.15 | 7.20 | OK |
 | rampa de acceso a mitad (perfil curvo) | 3.97 | 3.96 | OK |
-| largo ala larga L_L (muro, sin la marquesina) | 94.80 | 94.80 | OK |
+| largo ala larga L_L (muro, sin porche ni esquina) | 94.80 | 94.80 | OK |
 | vidrio fila alta (MAR_R tras el frente del marco) | 12.66 | 12.66 | OK |
 | vidrio fila baja | 12.66 | 12.66 | OK |
 | sin ventanas donde la rampa es alta | 12.75 | 12.74 | OK |
@@ -48,3 +48,7 @@
 | paños de la planta 1 del chaflán: restaurante (5 y pico) | 6.00 | 6.00 | OK |
 | paños enteros del hotel (4) + resto macizo junto a E90 (m) | 4.03 | 4.03 | OK |
 | hotel: de la columna a E90 = HOT_L | 10.10 | 10.10 | OK |
+| porche del testero: muro izquierdo | 4.40 | 4.40 | OK |
+| porche del testero: muro derecho | 4.40 | 4.40 | OK |
+| porche: paso libre delante de la puerta (vacío bajo la marquesina = 1) | 1.00 | 1.00 | OK |
+| muro de esquina del testero (sobresale ESQ_D) | 8.30 | 8.30 | OK |

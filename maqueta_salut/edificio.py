@@ -281,7 +281,11 @@ def base():
     # testero: puerta de servicio con marquesina saliente y ventana encima [F73: a 0,49-0,63 del ancho desde la esquina exterior]
     hue.append(caja(W_P - 0.63 * W_P, W_P - 0.49 * W_P, L_L - 0.3, L_L + 1, 0.0, 2.6))
     hue.append(caja(W_P - 0.55 * W_P, W_P - 0.43 * W_P, L_L - 0.3, L_L + 1, 4.6, 5.3))
-    marcos.append(caja(W_P - 0.71 * W_P, W_P - 0.36 * W_P, L_L - 0.01, L_L + 1.2, 3.1, 4.4))
+    px0, px1, pd, pe = _v["POR_X0"], _v["POR_X1"], _v["POR_D"], _v["POR_E"]
+    marcos += [caja(px0, px0 + pe, L_L - 0.01, L_L + pd, 0.0, 4.4),                  # porche: muros a los lados de la puerta [usuario, F73]
+               caja(px1 - pe, px1, L_L - 0.01, L_L + pd, 0.0, 4.4),
+               caja(px0, px1, L_L - 0.01, L_L + pd, 4.0, 4.4),                         # marquesina sobre los muros
+               caja(W_P - 0.3, W_P, L_L - 0.01, L_L + _v["ESQ_D"], 0.0, _v["Z_FIN"] + 1.1)]   # muro de esquina en toda la altura [F73]
     m = m + Manifold.batch_boolean(marcos, OpType.Add)
     m = m - Manifold.batch_boolean(hue, OpType.Add)
     # chaflan (coordenadas de torre): franjas de ventanas restaurante / hotel

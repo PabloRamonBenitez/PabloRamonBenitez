@@ -62,4 +62,4 @@
 | puertas del hotel abiertas en PB | 3.00 | 3.00 | OK |
 | línea posterior del ala corta paralela al chaflán (|sen| con U) | 0.00 | 0.00 | OK |
 | rincón del patio sin 90° (ángulo, grados) | 40.00 | 40.00 | OK |
-| X: medianera → A1 (foto frontal 12,7) | 12.69 | 12.70 | OK |
+| X: medianera → A1 (valor anterior restaurado) | 22.29 | 22.40 | OK |

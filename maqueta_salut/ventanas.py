@@ -80,7 +80,7 @@ def catalogo():
         X = E.R_COL + 1.2 + i * 2.6
         _h(H, f"HP{i + 1}", "hotel puertas PB", "puerta", E.P(X, yfp), U, out, 1.8, 0.0, 2.5)
     # 6e. ventanas de la fachada posterior del bloque alto (línea A) [croquis del usuario]
-    for i, xx in enumerate((1.0, 2.6, 5.5, 7.1)):
+    for i, xx in enumerate((1.5, 3.0, 7.5, 10.5)):
         a, b = R(-E.L_C + xx, E.W_C), R(-E.L_C + xx + 1.2, E.W_C)
         tt = ((b[0] - a[0]) / math.dist(a, b), (b[1] - a[1]) / math.dist(a, b))
         _h(H, f"BA{i + 1}", "bloque alto posterior", "ventana", ((a[0] + b[0]) / 2, (a[1] + b[1]) / 2), tt, (-tt[1], tt[0]), 1.2, 8.3, 10.1)

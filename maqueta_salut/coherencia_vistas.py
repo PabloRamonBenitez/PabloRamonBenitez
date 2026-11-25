@@ -127,7 +127,7 @@ _g2 = _KK.planta(); _F1 = np.array(E.SWP(-V["L_C"], V["W_C"])); _IC = np.array(_
 _dr = (_IC - _F1) / np.linalg.norm(_IC - _F1)
 chk.append(("línea posterior del ala corta paralela al chaflán (|sen| con U)", abs(float(_dr[0] * E.U[1] - _dr[1] * E.U[0])), 0.0))
 chk.append(("rincón del patio sin 90° (ángulo, grados)", round(math.degrees(math.acos(abs(float(_dr[1])))), 1), round(math.degrees(math.acos(abs(float(E.U[1])))), 1)))
-chk.append(("X: medianera → A1 (foto frontal 12,7)", float(np.linalg.norm(np.array(E.SWP(-V["L_C"], 0)) - np.array(_g2["A1"]))), 12.7))
+chk.append(("X: medianera → A1 (valor anterior restaurado)", float(np.linalg.norm(np.array(E.SWP(-V["L_C"], 0)) - np.array(_g2["A1"]))), 22.4))
 out = ["| comprobación | medido en la geometría | cuadro | estado |", "|---|---|---|---|"]
 for n, a, b in chk:
     ok = abs(a - b) < (0.25 if ("curva" in n or "X:" in n) else 0.12) or (("|cos|" in n or "|sen|" in n) and a < 0.02) or (n.startswith("sin ventanas") and a > V["W_P"] - 0.05)

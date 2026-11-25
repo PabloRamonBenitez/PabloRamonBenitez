@@ -81,3 +81,10 @@ Comprobaciones: 58/58 coherencia, 16/16 reglas de planos.
 | base del barril +13,90 | – | sin cambio (confirmado) | F09: 88 px sobre +7,20 a 12,9 px/m = +14,0 |
 | alzado 3 | render del 3D | **dibujado pieza a pieza** (alzado_calle.py) | – |
 | plantas | contorno único de lo de encima | contornos de cada nivel superior en discontinua; títulos con cota de suelo y de corte | – |
+
+## Corrección (25/11, tarde): la medición de X con la foto frontal se DESCARTA
+- Error de método: sustituí una medida ya establecida (planta casada con la triangulación A-B-C-D-E) por una sola lectura de una foto
+  tomada en perspectiva y fotografiada de pantalla, sin contrastarla. Restaurado: X ≈ 22,4, vuelo 6,0, logia 0,6–5,75, pilar a 3,0.
+- Contraste con la triangulación (CADENA_PUNTOS.md): B–C = 14,98 m (A-C 16,66 con A-B 7,3 ⟂) ↔ línea A del modelo = 15,6 m ✓.
+  A–B = 7,3 m ↔ fondo del bloque alto en la medianera del modelo = 13,9 m ✗ → conflicto pendiente de resolver con el usuario.
+- Se mantiene: línea posterior paralela al chaflán, sin marquesina, sin dientes de sierra, alzado de calle dibujado, contornos en plantas.

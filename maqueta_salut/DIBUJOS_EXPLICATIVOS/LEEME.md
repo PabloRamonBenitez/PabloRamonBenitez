@@ -14,8 +14,8 @@
 | 10 | PROP_ALZADO2_VENTANAS | ventanas del ala larga sacadas por proporciones |
 | 11 | PERFIL_HUECOS_F73 | perfiles de intensidad para medir los huecos en F73 |
 | 12 | DETALLE_HUECO_ALA | detalle de hueco del ala larga (sección y alzado) |
-| 13 | COMPARA_ALAMY | alzado del modelo junto a la foto de Alamy |
-| 14 | GENERATRICES_ESQUEMA | un origen por cilindro: alturas en la generatriz frontal, foto y esquema |
-| 15 | GENERATRICES_ALAMY | lo mismo sobre el alzado real del modelo, con cotas y diámetros |
+| 13 | GENERATRICES_ESQUEMA | un origen por cilindro: alturas en la generatriz frontal, foto y esquema |
+| 14 | GENERATRICES_ALAMY | método MGF sobre el alzado real del modelo, con cotas y diámetros (tras aplicar: diferencias ≤ 0,04 m) |
+| 15–25 | ZONAS_01…11 | zonas de verificación Z01–Z31: axonometrías, plantas por niveles, situación de secciones y secciones SA/SB/SC… (`zonas_laminas.py`) |
 
 Todos se regeneran desde los scripts de `maqueta_salut/` (p. ej. `generatrices_esquema.py`, `generatrices_alamy.py`, `opciones_AB.py`, `hipotesis_giro.py`).

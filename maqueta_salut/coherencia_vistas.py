@@ -122,7 +122,7 @@ _ba = E.bloque_alto_poligono(); _d = min(_mt.dist(p, E.T) for p in _ba[3:-1])
 chk.append(("remate del bloque alto equidistante al tambor (R_AC)", _d, V["R_AC"]))
 _pl = E.P(V["LUC_X"], V["LUC_Y"])
 chk.append(("lucernario sobre la visera", (E.torre() ^ E.caja(_pl[0] - .1, _pl[0] + .1, _pl[1] - .1, _pl[1] + .1, 0, 60)).bounding_box()[5], V["Z_V1"] + 0.24 + V["LUC_H"]))
-chk.append(("canto de la visera 1,8 m (Alamy)", V["Z_V1"] - V["Z_G1"], 1.8))
+chk.append(("canto de la visera 1,90 m (MGF Alamy)", V["Z_V1"] - V["Z_G1"], 1.9))
 _hp = [h for h in VT.catalogo() if h["grupo"] == "hotel puertas PB"]
 chk.append(("puertas del hotel abiertas en PB", sum(float((m ^ E.caja(h["p"][0] - h["n"][0] * 0.4 - .05, h["p"][0] - h["n"][0] * 0.4 + .05, h["p"][1] - h["n"][1] * 0.4 - .05, h["p"][1] - h["n"][1] * 0.4 + .05, 1.0, 1.1)).is_empty()) for h in _hp), len(_hp)))
 _g2 = _KK.planta(); _F1 = np.array(E.SWP(-V["L_C"], V["W_C"])); _IC = np.array(_g2["IC"])

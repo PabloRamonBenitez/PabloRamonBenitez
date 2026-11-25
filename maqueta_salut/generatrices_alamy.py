@@ -113,3 +113,13 @@ fig.subplots_adjust(bottom=0.17, top=0.93, left=0.04, right=0.99)
 fig.savefig("GENERATRICES_ALAMY.png", dpi=80)
 for r in rows: print(r)
 print("luc", zl0, zl1)
+
+# ---- comprobación MGF: el modelo debe reproducir la foto (tolerancias: 0,10 m en cota, 0,15 m en eje y radio)
+print("\nComprobación MGF (foto − modelo):")
+ok = True
+for k, xf, xm, hf, hm, zf, zm, df, dm in rows:
+    r1, r2, r3 = zf - zm, xf - xm, (df - dm) / 2
+    bien = abs(r1) <= 0.10 and abs(r2) <= 0.15 and abs(r3) <= 0.15
+    ok &= bien
+    print(f"  {k:7s} coronación {r1:+.2f}  eje {r2:+.2f}  radio {r3:+.2f}  {'OK' if bien else 'NO'}")
+print("MGF:", "OK" if ok else "FALLA")

@@ -75,3 +75,14 @@ Un elemento a radio R y ángulo φ del eje de la vista cae en x = R·sen φ. As�
 - Parte alta: tambor +38,73 · visera +41,29 / +43,18 · remate +50,81 · centro de los ojos +35,84.
 - F09 y las demás fotos antiguas de la torre ya no son referencia. En las láminas se sustituyen por la foto de Alamy medida
   (alamy_torre / alamy_alto / alamy_barril).
+
+## Dirección de la vista de Alamy: corregida de 230° a 179,7° (`vista_alamy.py`, PLANTA_ORIENTACION_ALAMY.png)
+- **Error:** las aletas se repiten cada 18,95°, así que solo fijan el giro módulo un paso. El giro de 7,6° escondía una dirección de vista equivocada.
+- **Referencia no periódica:** la cuña de la escalera aparece en el borde izquierdo de la silueta (s −15,8…−16,2; corona +40,6/+41,7),
+  así que su eje está a ~90° del eje de la vista. Con las aletas (α mod 18,95° = 9,21°, dispersión 0,8°) quedan tres candidatas:
+  160,8° (la escalera taparía los balcones de la izquierda ✗), **179,7° ✓** y 198,7° (la escalera quedaría oculta ✗).
+- **Consecuencias:**
+  - giro de los muros 14,21°: M3 = 71,05° y M5 = 108,95° son los bordes del hueco de escalera, de 2 módulos (37,9°);
+  - lado ciego 110°–166°, junto a la escalera; 14 ojos;
+  - desplazamientos (componente lateral de Alamy + componente U de F09): banda (−0,5; −3,70), visera (−2,4; −4,09), remate (0,6; −0,38), lucernario (0; −13,06).
+- **Comprobación:** aletas, residuo medio 0,03 m; escalera lateral −16,20 (foto −15,8…−16,2); lucernario lateral 8,34 (foto 8,34); MGF y 66 + 18 comprobaciones OK.

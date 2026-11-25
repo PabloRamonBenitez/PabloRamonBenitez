@@ -13,6 +13,7 @@ import matplotlib.pyplot as plt
 from PIL import Image
 import edificio as E
 import laminas as LM
+import vista_alamy as VA
 
 V = E._v
 FOTO = sys.argv[1] if len(sys.argv) > 1 else "/tmp/claude-0/-home-user-PabloRamonBenitez/6aecfee3-0e37-5370-9a32-0a87a530abec/scratchpad/alamy.jpg"
@@ -35,8 +36,7 @@ BAR = [1337, 1421, 1464, 1481, 1515, 1595, 1640, 1655, 1688, 1770, 1815, 1827, 1
 im = Image.open(FOTO).convert("RGB"); W, H = im.size
 crop = im.crop((0, Y0 + 150, W, Y0 + 2200))
 ext = (s(0), s(W), z(2200), z(150))
-_a = math.radians(-(math.degrees(math.atan2(E.U[1], E.U[0])) - 90))
-XTm = math.cos(_a) * E.T[0] - math.sin(_a) * E.T[1]
+XTm = VA.x_eje_alzado()
 
 
 def lineas(ax, dx=0.0, foto=True):
@@ -59,10 +59,10 @@ def lineas(ax, dx=0.0, foto=True):
 
 
 fig, (a1, a2) = plt.subplots(1, 2, figsize=(22, 13), sharey=True, gridspec_kw=dict(wspace=0.03))
-LM.alzado(a1, tuple(E.U), "")
+LM.alzado(a1, VA.MIRA, "")
 lineas(a1, dx=XTm)
 a1.set_xlim(XTm - 20, XTm + 24)
-a1.set_title("MODELO – alzado de la torre desde −U (la vista de Alamy), sin perspectiva", fontsize=10, loc="left", weight="bold")
+a1.set_title("MODELO – alzado de la torre en la dirección de Alamy (179,7°), sin perspectiva", fontsize=10, loc="left", weight="bold")
 a2.imshow(crop, extent=ext, aspect="auto")
 lineas(a2)
 a2.set_xlim(-20, 24)
@@ -79,7 +79,7 @@ for zz, t in niveles:
 fig.text(0.02, 0.012,
          ("Referencia: cara inferior de la losa de cubierta del barril (y = 1337 px) = +32,50 · 56,53 px/m vertical (5 forjados, paso 175,25 px) · 64,4 px/m horizontal\n"
           f"Barril (vertical celeste): canto {V['FOR_C']:.2f} · hueco 1,45 · poyete {V['FOR_P']:.2f} · ranura {V['FOR_R']:.2f} · forjados +32,50 / 29,35 / 26,29 / 23,17 / 20,09 (modelo 32,5 / 29,4 / 26,3 / 23,2 / 20,1)\n"
-          f"Ojos: {sum(1 for _ in range(1))*13} (lado ciego 140°–215°), Ø {V['OJO_D']:.2f}, tubo {V['OJO_V']:.2f}, centro +{V['OJO_Z']:.2f} · aletas 19, giro {V['FASE_AL']}°").replace(".", ","),
+          f"Vista {V['VISTA_ALAMY']}° (cuña de la escalera en el borde izquierdo) · ojos {sum(1 for h in __import__('ventanas').catalogo() if h['grupo'] == 'tambor ojos')} (lado ciego {V['OJO_C0']:.0f}°–{V['OJO_C1']:.0f}°), Ø {V['OJO_D']:.2f}, tubo {V['OJO_V']:.2f}, centro +{V['OJO_Z']:.2f} · 19 muros, giro {V['FASE_AL']}°, hueco de escalera {V['ESC_SEC']}° (2 módulos)").replace(".", ","),
          fontsize=9, va="bottom")
 fig.suptitle("ALZADO DE LA TORRE – medido sobre Alamy por generatrices frontales (MGF)", fontsize=13, x=0.02, ha="left", weight="bold")
 fig.subplots_adjust(bottom=0.08, top=0.95, left=0.03, right=0.95)

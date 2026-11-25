@@ -17,8 +17,9 @@
 | 23 | DETALLE_HUECO_ALA | detalle de hueco del ala larga (sección y alzado) |
 | 24 | GENERATRICES_ESQUEMA | un origen por cilindro: alturas en la generatriz frontal, foto y esquema |
 | 25 | GENERATRICES_ALAMY | método MGF sobre el alzado real del modelo, con cotas y diámetros (tras aplicar: diferencias ≤ 0,04 m) |
-| 26 | MGF_TAMBOR | MGF en tambor y barril: 19 aletas (giro 7,6°), 13 ojos (lado ciego 140°–215°), Ø 1,70, tubos de 0,8 |
+| 26 | MGF_TAMBOR | MGF en tambor y barril: 19 aletas (giro 14,21°), 14 ojos (lado ciego 110°–166°), Ø 1,70, tubos de 0,8 |
 | 27 | ALZADO_TORRE_ALAMY | **alzado de la torre medido sobre Alamy (código de la verdad)**: 4 generatrices + vertical del barril (canto, hueco, poyete, ranura, forjados) |
 | 28 | F78_LECTURA | lectura de la foto de la base (lucernarios, barandilla, base de la escalera) para resolver dudas |
 
 Todos se regeneran desde los scripts de `maqueta_salut/` (p. ej. `generatrices_esquema.py`, `generatrices_alamy.py`, `opciones_AB.py`, `hipotesis_giro.py`).
+| 29 | PLANTA_ORIENTACION_ALAMY | torre en planta: 19 muros con su ángulo, escalera entre M3 y M5, 14 ojos, lado ciego, desplazamientos y dirección de la cámara de Alamy (179,7°) |

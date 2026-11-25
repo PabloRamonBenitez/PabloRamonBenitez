@@ -12,14 +12,15 @@ from PIL import Image
 from scipy.ndimage import gaussian_filter1d, label
 from scipy.signal import find_peaks
 import edificio as E, ventanas as VE
+import vista_alamy as VA
 
 V = E._v
 FOTO = sys.argv[1] if len(sys.argv) > 1 else "/tmp/claude-0/-home-user-PabloRamonBenitez/6aecfee3-0e37-5370-9a32-0a87a530abec/scratchpad/alamy.jpg"
 PV, PH, XT, Y_REF = 175.25 / 3.10, 64.4, 1078, 1337
 z = lambda y: E.Z_B1 + (Y_REF - y) / PV     # y = 1337: cara inferior de la losa de cubierta del barril
 T, U, N = np.array(E.T), np.array(E.U), np.array(E.N)
-xpx = lambda p: XT - ((np.asarray(p) - T) @ N) * PH          # derecha de la foto = −N
-delante = lambda p: (np.asarray(p) - T) @ U < 0               # cámara del lado −U
+xpx = lambda p: XT + VA.lat(p) * PH                           # vista corregida (VISTA_ALAMY)
+delante = VA.delante
 
 im = Image.open(FOTO).convert("RGB"); W, H = im.size; y0 = int(H * 0.22)
 g = np.asarray(im.convert("L")).astype(float)[y0:int(H * 0.62)]

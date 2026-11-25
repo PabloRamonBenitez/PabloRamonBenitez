@@ -18,6 +18,7 @@ import matplotlib.pyplot as plt
 from matplotlib.patches import Rectangle, Polygon
 from PIL import Image
 import edificio as E
+import vista_alamy as VA
 
 V = E._v
 FOTO = sys.argv[1] if len(sys.argv) > 1 else "/tmp/claude-0/-home-user-PabloRamonBenitez/6aecfee3-0e37-5370-9a32-0a87a530abec/scratchpad/alamy.jpg"
@@ -38,9 +39,9 @@ CIL = {
 LUC = dict(c=1615, base=728, top=625)
 mod = {  # modelo: (desplazamiento lateral en la vista = −N, z0, z1, radio)
     "tambor": (0.0, E.Z_B1 + V["FOR_C"], E.Z_T1, V["R_T"]),
-    "banda":  (-V["OB_Y"], E.Z_T1 - V["H_PT"], E.Z_G1, V["R_G"]),
-    "visera": (-V["OV_Y"], E.Z_G1, E.Z_V1, V["R_V"]),
-    "remate": (-V["OR_Y"], E.Z_V1, E.Z_R1, V["R_R"]),
+    "banda":  (VA.lat(E.P(V["OB_X"], V["OB_Y"])), E.Z_T1 - V["H_PT"], E.Z_G1, V["R_G"]),
+    "visera": (VA.lat(E.P(V["OV_X"], V["OV_Y"])), E.Z_G1, E.Z_V1, V["R_V"]),
+    "remate": (VA.lat(E.P(V["OR_X"], V["OR_Y"])), E.Z_V1, E.Z_R1, V["R_R"]),
 }
 foto_lat = {k: s(c["c"]) for k, c in CIL.items()}
 # bordes de silueta en la foto (px) → diámetros medidos a la altura de cada cilindro
@@ -48,15 +49,14 @@ SIL = {"tambor": (210, 1950, 1150), "banda": (647, 1864, 920), "visera": (612, 2
 
 import math
 import laminas as LM
-_a = math.radians(-(math.degrees(math.atan2(E.U[1], E.U[0])) - 90))
-XT = math.cos(_a) * E.T[0] - math.sin(_a) * E.T[1]      # eje de la torre en el alzado del modelo (derecha = −N)
+XT = VA.x_eje_alzado()      # eje de la torre en el alzado del modelo (vista de Alamy)
 
 im = Image.open(FOTO).convert("RGB"); W, H = im.size; y0 = int(H * 0.22)
 crop = im.crop((0, y0 + 150, W, y0 + 1560))
 ext = (XT + s(0), XT + s(W), z(1560), z(150))
 
 fig, (a2, a1) = plt.subplots(1, 2, figsize=(22, 11), sharey=True, gridspec_kw=dict(wspace=0.03))
-LM.alzado(a2, tuple(E.U), "")
+LM.alzado(a2, VA.MIRA, "")
 a1.imshow(crop, extent=ext, aspect="auto")
 
 def cota_v(ax, x, za, zb, col, lado=1):

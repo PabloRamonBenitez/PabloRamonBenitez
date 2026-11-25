@@ -18,6 +18,7 @@ import matplotlib.pyplot as plt
 from matplotlib.patches import Rectangle, Polygon
 from PIL import Image
 import edificio as E
+import vista_alamy as VA
 
 V = E._v
 FOTO = sys.argv[1] if len(sys.argv) > 1 else "/tmp/claude-0/-home-user-PabloRamonBenitez/6aecfee3-0e37-5370-9a32-0a87a530abec/scratchpad/alamy.jpg"
@@ -38,9 +39,9 @@ CIL = {
 LUC = dict(c=1615, base=728, top=625)
 mod = {  # modelo: (desplazamiento lateral en la vista = −N, z0, z1, radio)
     "tambor": (0.0, E.Z_B1 + V["FOR_C"], E.Z_T1, V["R_T"]),
-    "banda":  (-V["OB_Y"], E.Z_T1 - V["H_PT"], E.Z_G1, V["R_G"]),
-    "visera": (-V["OV_Y"], E.Z_G1, E.Z_V1, V["R_V"]),
-    "remate": (-V["OR_Y"], E.Z_V1, E.Z_R1, V["R_R"]),
+    "banda":  (VA.lat(E.P(V["OB_X"], V["OB_Y"])), E.Z_T1 - V["H_PT"], E.Z_G1, V["R_G"]),
+    "visera": (VA.lat(E.P(V["OV_X"], V["OV_Y"])), E.Z_G1, E.Z_V1, V["R_V"]),
+    "remate": (VA.lat(E.P(V["OR_X"], V["OR_Y"])), E.Z_V1, E.Z_R1, V["R_R"]),
 }
 foto_lat = {k: s(c["c"]) for k, c in CIL.items()}
 im = Image.open(FOTO).convert("RGB"); W, H = im.size; y0 = int(H * 0.22)
@@ -76,7 +77,7 @@ for ax, t in ((a1, "FOTO (Alamy) – cada altura leída sobre la generatriz fron
     ax.set_title(t, fontsize=10, loc="left", weight="bold")
     ax.axvline(0, color="0.5", lw=0.5, ls=":")
     ax.set_xlim(-17, 17); ax.set_ylim(29, 52); ax.set_aspect("equal")
-    ax.set_xlabel("m en horizontal desde el eje del tambor (derecha de la foto = hacia la plaza, −N)", fontsize=8)
+    ax.set_xlabel("m en horizontal desde el eje del tambor (derecha de la foto, vista a 179,7°)", fontsize=8)
 a1.set_ylabel("cota (m)")
 txt = ["cilindro   desplaz. foto / modelo   altura foto / modelo   coronación foto / modelo"]
 for k, xf, xm, hf, hm, zf, zm in rows:

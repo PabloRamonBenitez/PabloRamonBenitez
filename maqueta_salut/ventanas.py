@@ -84,12 +84,19 @@ def catalogo():
         a, b = R(-E.L_C + xx, E.W_C), R(-E.L_C + xx + 1.2, E.W_C)
         tt = ((b[0] - a[0]) / math.dist(a, b), (b[1] - a[1]) / math.dist(a, b))
         _h(H, f"BA{i + 1}", "bloque alto posterior", "ventana", ((a[0] + b[0]) / 2, (a[1] + b[1]) / 2), tt, (-tt[1], tt[0]), 1.2, 8.3, 10.1)
+    # 6f. puerta del tambor a la cubierta del barril, junto a la escalera (lado izquierdo mirando la escalera) [foto de frente, usuario]
+    at = math.radians(V["TP_ANG"]); c, s = math.cos(at), math.sin(at); zb = E.Z_B1 + V["FOR_C"]
+    _h(H, "TP1", "tambor puerta", "puerta", (T[0] + E.R_T * c, T[1] + E.R_T * s), (-s, c), (c, s), V["TP_W"], zb, zb + V["TP_H"])
+    # 6g. cristalera suelo-techo con dintel en el hueco de 2 m entre tambor y escalera, a la altura del tambor [foto de frente]
+    am = E.ESC_ANG - (E.ESC_HA + E.ESC_HB) / 2; c, s = math.cos(am), math.sin(am); rr = V["ESC_RR"]
+    _h(H, "CR1", "escalera cristalera", "ventana", (T[0] + rr * c, T[1] + rr * s), (-s, c), (c, s), 0.95 * rr * (E.ESC_HA - E.ESC_HB), zb, V["CR_Z1"])
     # 7. tambor: 19 ojos circulares [F01, F09]
     zt = (E.Z_B1 + E.Z_T1) / 2
     for k in range(V["N_AL"]):
         a_ = 2 * math.pi * (k + 0.5) / V["N_AL"] + E.FASE_AL
         if en_escalera(a_, E.R_T): continue
         if V["OJO_C0"] < math.degrees(a_) % 360 < V["OJO_C1"]: continue      # lado ciego (Alamy, MGF)
+        if 0 < math.degrees(E.ESC_ANG - E.ESC_HA - a_) % 360 < 360 / V["N_AL"]: continue   # junto a la escalera (lado izq.): puerta, no ojo [foto de frente]
         if V["OJO_C1"] < math.degrees(a_) % 360 < V["OJO_C1"] + 18:          # primer ojo tras el lado ciego: fuera de módulo [Alamy]
             a_ += math.radians(V["OJO_DP"])
         c, s = math.cos(a_), math.sin(a_); zo, ro = V["OJO_Z"], V["OJO_D"] / 2

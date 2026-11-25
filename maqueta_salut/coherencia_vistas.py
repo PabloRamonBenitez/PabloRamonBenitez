@@ -50,9 +50,9 @@ chk.append(("escalera: delante del retranqueo, vacío hasta la barandilla", floa
 chk.append(("escalera: ventana en la fachada retranqueada (vacío = 1)", float(not _hay(V["ESC_RR"] - 0.2, dm, E.Z_B0 + 2 * E.F + 1.8)), 1.0))
 chk.append(("escalera: lamas a los lados de la cuña", float(any(_hay(rr, E.ESC_HB + math.atan2(0.45, rr), 20.0) for rr in [13.4 + 0.05 * i for i in range(24)])), 1.0))
 chk.append(("escalera: no sobresale más allá de las lamas", float(not _hay(V["ESC_R1"] + 0.3, 0.0, 20.0)), 1.0))
-px, py = E.esc_ang_pt(V["ESC_RC"] - 0.3, 0)
+px, py = E.esc_ang_pt(V["ESC_RC"] - 0.3, -E.ESC_HB + 0.15 / V["ESC_RS"])      # sobre el muro inclinado (lado izquierdo)
 bb3 = (t ^ E.caja(px - 0.1, px + 0.1, py - 0.1, py + 0.1, -1, 80)).bounding_box()
-chk.append(("escalera: coronación en r = ESC_RC − 0,3 (cubierta inclinada ESC_ZI → ESC_Z1, Alamy)", bb3[5], V["ESC_ZI"] + (V["ESC_RC"] - 0.3 - V["ESC_RS"]) * (V["ESC_Z1"] - V["ESC_ZI"]) / (V["ESC_R1"] + 0.3 - V["ESC_RS"])))
+chk.append(("escalera: coronación del muro inclinado en r = ESC_RC − 0,3 (ESC_ZI → ESC_Z1, Alamy/dron)", bb3[5], V["ESC_ZI"] + (V["ESC_RC"] - 0.3 - V["ESC_RS"]) * (V["ESC_Z1"] - V["ESC_ZI"]) / (V["ESC_R1"] + 0.3 - V["ESC_RS"])))
 chk.append(("escalera: arranca sobre la rampa (ESC_Z0)", (t ^ E.caja(*(lambda q: (q[0]-.05, q[0]+.05, q[1]-.05, q[1]+.05))(E.esc_ang_pt(12.0, 0.0)), 0, 30)).bounding_box()[2], V["ESC_Z0"]))
 yb0_ = E.plantas_base()["Q"][1] + 0.5; yr1_ = yb0_ + V["R2_L"]
 chk.append(("rampa 1 llega a la cota de la terraza (sin escalón)", V["Z_CON"], V["Z_P1"]))

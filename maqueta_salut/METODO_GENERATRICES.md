@@ -124,3 +124,12 @@ Esto es ahora la verdad sobre la escalera:
 - **~2 m (una puerta)** entre el corte del barril y el cuerpo de la escalera: la cuña pasa de 25° a **20,2°**.
   Su frente queda en 5,6 m, que coincide con los 5,8–6,0 m de la foto lateral (antes daba 6,9).
 - Las lamas del cuerpo terminan bajo el remate (+38,20). El remate es inclinado; su punto más alto es la esquina exterior (+41,6).
+
+## Zona A, puerta y muro final (25/11, fotos del usuario)
+- **Lado izquierdo** de la escalera (mirándola de frente; borde del hueco a 71,05°), sin lamas:
+  - la zona A (rellanos con barandilla, fachada retranqueada) sube hasta arriba;
+  - a la altura del tambor hay una **cristalera de suelo a techo con dintel** (+33,09 → +37,70; dintel hasta +38,73);
+  - hay una **puerta en el tambor** (66°, 1,0 × 2,2) **donde había un ojo**: ese ojo (61,6°) se quita y quedan 13 ojos.
+- **Lado derecho:** el borde del corte del barril está cerrado con lamas.
+- **Por encima del tambor** no hay una caja: solo un **muro** con la coronación inclinada (+40,8 → +41,6) al final de la zona A, y un peto bajo sobre el cuerpo.
+- **Regla:** antes de cambiar una pieza se revisan TODAS las fotos donde aparece, no solo la última.

@@ -434,7 +434,10 @@ def torre():
     m = m - sector(RS, R_AL + 1.0, Z_T1, ZO + 0.5, -ESC_HA + 0.01, ESC_HA - 0.01)
     # 2) cuerpo en cuña; por debajo pasa la rampa. Por encima del tambor la caja solo llega hasta RS (cielo hasta la banda)
     #    y su cubierta baja de ZO (fuera) a ZI (dentro) [Alamy, collage]
-    esc = [sector(ESC_R0, ESC_RC, _v["ESC_Z0"], Z_T1, -ESC_HB, ESC_HB), sector(RS, ESC_RC, Z_T1 - 0.01, ZO, -ESC_HB, ESC_HB)]
+    esc = [sector(ESC_R0, ESC_RC, _v["ESC_Z0"], Z_T1, -ESC_HB, ESC_HB),
+           # por encima del tambor solo hay un MURO con la coronación inclinada, al final de la zona A (lado izquierdo) [dron, usuario]
+           sector(RS, ESC_R1 + 0.3, Z_T1 - 0.01, ZO, -ESC_HB, -ESC_HB + 0.3 / RS),
+           sector(ESC_RC - 0.2, ESC_RC, Z_T1 - 0.01, Z_T1 + 1.1, -ESC_HB, ESC_HB)]      # peto bajo sobre el cuerpo
     # cubierta inclinada de la caja de escalera: plano de ESC_ZI (en ESC_RS) a ESC_Z1 (en ESC_R1 + 0,3); corta cuerpo y lamas [Alamy]
     _ri, _ro = _v["ESC_RS"] - 1.0, ESC_R1 + 1.5
     _sl = (_v["ESC_Z1"] - _v["ESC_ZI"]) / (ESC_R1 + 0.3 - _v["ESC_RS"])
@@ -449,6 +452,14 @@ def torre():
             esc.append(sector(RR, rf, z, z + 0.3, d0, d1))
             esc.append(sector(rf - 0.08, rf, z + 0.3, z + 1.3, d0, d1))
     m = m + (Manifold.batch_boolean(esc, OpType.Add) - CORTE_ESC)
+    # cristalera suelo-techo con dintel entre tambor y escalera (lado izquierdo) y puerta del tambor [foto de frente, usuario]
+    _zb = Z_B1 + FC; _d0, _d1 = -ESC_HA, -ESC_HB
+    m = m + sector(_v["ESC_RR"] - 0.05, _v["ESC_RR"], _zb, _v["CR_Z1"], _d0, _d1) + sector(_v["ESC_RR"] - 0.3, _v["ESC_RR"] + 0.2, _v["CR_Z1"], Z_T1, _d0, _d1)
+    import ventanas as VTp
+    for hh in VTp.catalogo():
+        if hh["grupo"] == "tambor puerta":
+            a_ = math.degrees(math.atan2(hh["n"][1], hh["n"][0]))
+            m = m - Manifold.cube((0.6, hh["w"], hh["z1"] - hh["z0"])).translate((R_T - 0.3, -hh["w"] / 2, hh["z0"])).rotate((0, 0, a_)).translate((T[0], T[1], 0))
     # ventanas de las habitaciones: un hueco por modulo entre aletas, sobre el poyete [F04, F06, F09]
     import ventanas as VT                                # catálogo único de huecos (mismo que planos)
     hue = []
@@ -489,7 +500,7 @@ def torre():
             lam.append(lama(r, sg * (ESC_HB + math.atan2(0.45, r)), rot_r=False))
             r += _v["LAMA_P"]
     # los dos bordes del corte del barril, cerrados con lamas de la coronación del tambor hacia abajo [fotos 25/11, usuario]
-    for sg in (-1, 1):
+    for sg in (1,):                                            # solo el borde derecho: el izquierdo está libre (puerta y cristalera) [foto de frente]
         r = _v["ESC_RR"] + 0.2
         while r < R_B:
             lam.append(lama(r, sg * (ESC_HA - math.atan2(0.2, r)), rot_r=False, z0=Z_B0, z1=Z_T1))

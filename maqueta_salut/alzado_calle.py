@@ -64,17 +64,18 @@ def torre(ax, zo=10):
         ax.add_patch(Ellipse((uT + E.R_T * (o @ EU), zt), 1.6 * abs(o @ ED), 1.6, fc="0.2", ec="k", lw=0.4, zorder=zo + 3))
     # banda acristalada con montantes
     zb0 = E.Z_T1 - V["H_PT"]
-    rect(ax, uT - E.R_G, uT + E.R_G, zb0, E.Z_G1, VIDR, zo + 1)
+    uB = u_of(E.P(V["OB_X"], V["OB_Y"]))
+    rect(ax, uB - E.R_G, uB + E.R_G, zb0, E.Z_G1, VIDR, zo + 1)
     nm = int(2 * math.pi * E.R_G / 2.4)
     for k in range(nm):
         a = 2 * math.pi * k / nm; o = np.array([math.cos(a), math.sin(a)])
         if o @ ED < 0:
-            uu = uT + E.R_G * (o @ EU); ax.plot([uu, uu], [zb0, E.Z_G1], color="0.9", lw=0.5, zorder=zo + 2)
+            uu = uB + E.R_G * (o @ EU); ax.plot([uu, uu], [zb0, E.Z_G1], color="0.9", lw=0.5, zorder=zo + 2)
     # visera, remate y lucernario
     pv = np.array(E.P(V["OV_X"], V["OV_Y"])); uv = u_of(pv)
     rect(ax, uv - E.R_V, uv + E.R_V, E.Z_G1, E.Z_V1, HORM, zo + 4)
     ax.plot([uv - E.R_V, uv + E.R_V], [E.Z_V1 + 1.0, E.Z_V1 + 1.0], color="k", lw=0.4, zorder=zo + 4)
-    pr = np.array(E.P(V["OR_X"], 0.0)); ur = u_of(pr)
+    pr = np.array(E.P(V["OR_X"], V["OR_Y"])); ur = u_of(pr)
     rect(ax, ur - E.R_R, ur + E.R_R, E.Z_V1, E.Z_R1, HORM, zo + 4)
     pl = np.array(E.P(V["LUC_X"], V["LUC_Y"])); ul = u_of(pl)
     ax.add_patch(Polygon([(ul - V["LUC_R"], E.Z_V1), (ul + V["LUC_R"], E.Z_V1), (ul, E.Z_V1 + V["LUC_H"] + 0.25)],

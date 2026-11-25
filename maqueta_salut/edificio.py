@@ -52,7 +52,8 @@ Z_CU0, Z_CU1, Z_ALETA0, Z_B0, F, N_PL = _v["Z_CU0"], _v["Z_CU1"], _v["Z_ALE"], _
 Z_B1 = Z_B0 + N_PL * F
 Z_T1, Z_G1, Z_V1, Z_R1 = _v["Z_T1"], _v["Z_G1"], _v["Z_V1"], _v["Z_R1"]
 R_COL, R_CU, R_B, R_AL, R_T, R_G, R_V, R_R = _v["R_COL"], _v["R_CU"], _v["R_B"], _v["R_AL"], _v["R_T"], _v["R_G"], _v["R_V"], _v["R_R"]
-OFF_V, OFF_R, N_AL = (_v["OV_X"], _v["OV_Y"]), (_v["OR_X"], 0.0), int(_v["N_AL"])
+OFF_V, OFF_R, N_AL = (_v["OV_X"], _v["OV_Y"]), (_v["OR_X"], _v["OR_Y"]), int(_v["N_AL"])
+OFF_B = (_v["OB_X"], _v["OB_Y"])
 W_P, W_BAR, L_L, L_FIN, W_EXT = _v["W_P"], _v["W_BAR"], _v["L_L"], _v["L_FIN"], _v["W_EXT"]
 Y_CUNA = _v["Y_CA"] + _v["R_FIN"]           # pie de la concha sobre la fachada (≈ Bing 59,67)
 A_CH, TH_L = math.radians(_v["ACH"]), math.radians(_v["THL"])
@@ -384,11 +385,12 @@ def torre():
         ojo = Manifold.cylinder(0.5, 0.8, 0.8, 24).rotate((0, 90, 0)).translate((R_T - 0.1, 0, (Z_B1 + Z_T1) / 2))
         s.append(ojo.rotate((0, 0, a)).translate((T[0], T[1], 0)))
     pv = P(*OFF_V); pr = P(*OFF_R)
-    s.append(cil(T, R_G - 0.3, Z_T1 - _v["H_PT"], Z_G1))
+    pb_ = P(*OFF_B)                                       # banda descentrada hacia la plaza [Alamy]
+    s.append(cil(pb_, R_G - 0.3, Z_T1 - _v["H_PT"], Z_G1))
     nm = int(2 * math.pi * R_G / 2.4)
     for k in range(nm):                                     # montantes de la banda acristalada [F10, F17]
         mt = Manifold.cube((0.5, 0.25, Z_G1 - Z_T1 + _v["H_PT"])).translate((R_G - 0.45, -0.125, Z_T1 - _v["H_PT"]))
-        s.append(mt.rotate((0, 0, 360 * k / nm)).translate((T[0], T[1], 0)))
+        s.append(mt.rotate((0, 0, 360 * k / nm)).translate((pb_[0], pb_[1], 0)))
     s.append(cil(pv, R_V, Z_G1, Z_V1))
     s.append(cil(pv, R_V, Z_V1 - 0.01, Z_V1 + 1.0) - cil(pv, R_V - 0.08, Z_V1 - 0.1, Z_V1 + 1.1))   # barandilla de la cubierta de la visera [F08]
     s.append(cil(pr, R_R, Z_V1, Z_R1))

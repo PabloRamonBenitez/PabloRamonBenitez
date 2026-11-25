@@ -51,15 +51,18 @@ COTAS = {
  "Z_VOL0": (6.6, "cara inferior del cuerpo volado", "foto frontal (proporción vertical)"),
  "R_AC": (18.6, "radio del arco del bloque alto (DERIVADO: pasa por C)", "A–C 16,66 con el lado B–C paralelo al chaflán"),
  "LOG_D": (1.8, "profundidad de la logia de planta 1 bajo el vuelo (vidrio retranqueado)", "foto frontal · croquis del usuario"),
- "LOG_PX": (3.0, "pilar intermedio de la logia", "foto frontal (pilar blanco)"),
+ "LOG_PX": (3.2, "pilar intermedio de la logia", "foto frontal: a 0,4 del ancho de la logia"),
  "PUERTAS_H": (3, "puertas del hotel en planta baja alrededor de la columna (por lado)", "usuario (imagina más entradas) · F18 (puertas bajo la banda del hotel)"),
- "LUC_X": (-1.0, "lucernario: X en coordenadas de torre", "Alamy: a 8,2 m del eje · postal aérea: lado del chaflán"),
- "LUC_Y": (-8.0, "lucernario: Y", "ver LUC_X (|P| = 8,1)"),
+ "LUC_X": (0.0, "lucernario: X (según U)", "F01 / postal: de frente al mirar desde la plaza"),
+ "LUC_Y": (-8.2, "lucernario: Y (según N)", "Alamy (referencia): vista desde −U (rótulo САЛЮТ de frente); 25 px/m vertical por el paso de forjados (175 px/3,1 m) y 28,4 px/m horizontal por el barril (foto de pantalla deformada): 8,2 m a la derecha"),
  "LUC_R": (1.6, "radio de la base del lucernario", "Alamy: base 92 px / 28,4 px/m = 3,2 m"),
  "LUC_H": (1.8, "altura del lucernario", "Alamy: 45 px / 25 px/m"),
  "LOG_X0": (0.6, "logia: inicio", "croquis del usuario"),
- "LOG_X1": (5.75, "logia: fin", "croquis del usuario"),
+ "LOG_X1": (7.05, "logia: fin (bajo el final del vuelo, muro de 0,25)", "el vuelo A–B mide 7,3 (triangulación)"),
  "AC_TRI": (16.66, "distancia A–C: de la esquina del vuelo en la medianera al final del lado inclinado (arranque del arco)", "triangulación satélite A–C = 16,66 (usuario marca C)"),
+ "OB_X": (0.0, "banda: desplazamiento según U", "F09: centrada"),
+ "OB_Y": (-2.6, "banda: desplazamiento según N (− hacia la plaza)", "Alamy (referencia): vista desde −U (rótulo САЛЮТ de frente); 25 px/m vertical por el paso de forjados (175 px/3,1 m) y 28,4 px/m horizontal por el barril (foto de pantalla deformada): centro 2,6 m a la derecha (= −N)"),
+ "OR_Y": (0.5, "remate: desplazamiento según N", "Alamy (referencia): vista desde −U (rótulo САЛЮТ de frente); 25 px/m vertical por el paso de forjados (175 px/3,1 m) y 28,4 px/m horizontal por el barril (foto de pantalla deformada): centro 0,5 m a la izquierda"),
  "H_PET":  (1.3,  "peto exterior de la terraza del ala larga (corona ≈ +8,5)", "F73 esquina del testero +8,5 ± 0,6"),
  "VA_0": (4.63, "alféizar fila alta (0,545 H)", "F73 vertical exacta, 3 huecos ±0,006 H"),
  "VA_1": (6.32, "dintel fila alta (0,743 H)", "F73 vertical exacta, 3 huecos ±0,002 H"),
@@ -77,20 +80,20 @@ COTAS = {
  "N_PL":   (6,    "plantas del barril (5 de ventanas + pavés)", "F09"),
  "Z_T1":   (38.2, "coronación del tambor de ojos", "F09"),
  "Z_G1":   (40.5, "coronación de la banda acristalada", "F09"),
- "Z_V1": (42.5, "coronación de la visera (canto de 2,0 m)", "foto Alamy casi en alzado: canto/forjado = 55/85 px × 3,1 → 2,0 m (antes 3,2)"),
- "Z_R1": (50.1, "coronación del remate (sin antenas)", "F09: 6,4 m sobre el borde superior de la visera (12,9 px/m de los forjados) · antes 49,1"),
+ "Z_V1": (42.3, "coronación de la visera (canto 1,8)", "Alamy (referencia): vista desde −U (rótulo САЛЮТ de frente); 25 px/m vertical por el paso de forjados (175 px/3,1 m) y 28,4 px/m horizontal por el barril (foto de pantalla deformada): canto 45 px"),
+ "Z_R1": (49.7, "coronación del remate", "Alamy (referencia): vista desde −U (rótulo САЛЮТ de frente); 25 px/m vertical por el paso de forjados (175 px/3,1 m) y 28,4 px/m horizontal por el barril (foto de pantalla deformada): 7,4 m sobre la visera (185 px)"),
  "R_COL":  (3.25, "radio de la columna (Ø 6,5)", "F09, F14"),
  "R_CONO": (3.25, "pie de la columna: recto (lo que parecía un cono era un toldo)", "usuario; F15/F18"),
  "R_CU":   (9.0,  "radio del cuello (Ø 18)", "F01, F02"),
  "R_B":    (14.4, "radio del borde de balcones", "escala"),
  "R_AL":   (15.3, "radio a la punta de las aletas (Ø 30,6)", "escala"),
  "R_T":    (13.55,"radio del tambor de ojos (Ø 27,1)", "F01, F09, F14"),
- "R_G": (9.9, "radio de la banda acristalada", "Alamy 9,5 · F09 10,4 (F08 11,9 descartada)"),
- "R_V": (11.9, "radio de la visera", "Alamy (casi alzado, escala por R_AL): 11,7 · F09: 12,8 → 11,9"),
- "R_R": (4.95, "radio del remate", "F09 9,8 · F08 9,7 · F14 10,3 · F01 10,0 · F70 9,6 (diámetros)"),
- "OV_X": (-2.4, "desplazamiento de la visera a lo largo del chaflán", "F09 frontal: 2,3–2,5 a la izquierda"),
- "OV_Y": (-3.6, "desplazamiento de la visera hacia la plaza (−)", "Alamy: desplazamiento lateral ≥ 4,3 → |OV| = 4,3 con OV_X de F09"),
- "OR_X":   (0.6,  "desplazamiento del remate", "F09"),
+ "R_G": (9.5, "radio de la banda acristalada", "Alamy (referencia): vista desde −U (rótulo САЛЮТ de frente); 25 px/m vertical por el paso de forjados (175 px/3,1 m) y 28,4 px/m horizontal por el barril (foto de pantalla deformada): 540 px"),
+ "R_V": (11.7, "radio de la visera", "Alamy (referencia): vista desde −U (rótulo САЛЮТ de frente); 25 px/m vertical por el paso de forjados (175 px/3,1 m) y 28,4 px/m horizontal por el barril (foto de pantalla deformada): 665 px"),
+ "R_R": (4.85, "radio del remate", "Alamy (referencia): vista desde −U (rótulo САЛЮТ de frente); 25 px/m vertical por el paso de forjados (175 px/3,1 m) y 28,4 px/m horizontal por el barril (foto de pantalla deformada): 275 px (F09 4,9)"),
+ "OV_X": (-2.4, "visera: desplazamiento según U (a lo largo del chaflán)", "F09 (vista según N): 2,4 a la izquierda"),
+ "OV_Y": (-4.3, "visera: desplazamiento según N (− hacia la plaza)", "Alamy (referencia): vista desde −U (rótulo САЛЮТ de frente); 25 px/m vertical por el paso de forjados (175 px/3,1 m) y 28,4 px/m horizontal por el barril (foto de pantalla deformada): centro 4,3 m a la derecha (= −N)"),
+ "OR_X": (0.6, "remate: desplazamiento según U", "F09"),
  "N_AL":   (19,   "aletas / muros radiales", "fuentes + F09"),
  "ESC_W": (8.8, "largo radial de la caja (ESC_R1 − ESC_R0)", "F36 cubierta 8,3–8,8 m"),
  "ESC_X": (5.43, "eje de la escalera: radial desde el centro de la torre a lo largo del ala larga (dentro del ala)", "F58 (cenital casi vertical): la caja está en el encuentro barril–ala, dentro de la franja del ala · usuario"),
@@ -200,9 +203,9 @@ def elementos():
     zb1 = V_["Z_B0"] + V_["N_PL"] * V_["F"]
     cil("barril", T, V_["R_AL"], V_["Z_ALE"], zb1 + 0.65, "Z06")
     cil("tambor de ojos", T, V_["R_T"], zb1 + 0.65, V_["Z_T1"], "Z04")
-    cil("banda acristalada", T, V_["R_G"], V_["Z_T1"] - V_["H_PT"], V_["Z_G1"], "Z03")
+    cil("banda acristalada", P(V_["OB_X"], V_["OB_Y"]), V_["R_G"], V_["Z_T1"] - V_["H_PT"], V_["Z_G1"], "Z03")
     cil("visera", P(V_["OV_X"], V_["OV_Y"]), V_["R_V"], V_["Z_G1"], V_["Z_V1"], "Z02")
-    cil("remate", P(V_["OR_X"], 0), V_["R_R"], V_["Z_V1"], V_["Z_R1"], "Z01")
+    cil("remate", P(V_["OR_X"], V_["OR_Y"]), V_["R_R"], V_["Z_V1"], V_["Z_R1"], "Z01")
     import math as _m
     _ang = _m.atan2(V_["ESC_Y"] - T[1], V_["ESC_X"] - T[0]); _hb = _m.radians(V_["ESC_SECB"]) / 2
     _pt = lambda r, d: (T[0] + r * _m.cos(_ang + d), T[1] + r * _m.sin(_ang + d))
@@ -221,7 +224,7 @@ RANGOS = {
  "Z_PB": 0.3, "Z_P1": 0.3, "Z_BAR": 0.8, "Z_BARC": 0.8, "Z_ALTO": 1.0, "Z_LAD0": 0.5, "Z_FIN": 0.9, "H_PET": 0.6, "VA_0": 0.5, "VA_1": 0.6, "VB_0": 0.3, "VB_1": 0.4, "L_HOR": 2.0, "VOL_L": 0.3, "AC_TRI": 0.3, "VOL_V": 0.3, "Z_VOL0": 0.4, "R_AC": 1.5, "LOG_D": 0.5, "LOG_PX": 0.8, "LOG_X0": 0.5, "LOG_X1": 0.8, "LUC_X": 1.5, "LUC_Y": 1.5, "LUC_R": 0.5, "LUC_H": 0.5,
  "Z_LAD1": 1.0, "Z_CON": 0.8, "Z_CU0": 0.6, "Z_CU1": 0.6, "Z_ALE": 0.6, "Z_B0": 0.4, "F": 0.05, "N_PL": 0,
  "Z_T1": 0.5, "Z_G1": 0.5, "Z_V1": 0.5, "Z_R1": 0.6, "R_COL": 0.3, "R_CONO": 0.3, "R_CU": 0.5, "R_B": 0.3,
- "R_AL": 0.3, "R_T": 0.5, "R_G": 0.5, "R_V": 0.6, "R_R": 0.25, "OV_X": 1.0, "OV_Y": 1.5, "OR_X": 0.5, "N_AL": 0,
+ "R_AL": 0.3, "R_T": 0.5, "R_G": 0.5, "R_V": 0.6, "R_R": 0.25, "OV_X": 1.0, "OV_Y": 1.5, "OR_X": 0.5, "OR_Y": 0.5, "OB_X": 0.5, "OB_Y": 0.8, "N_AL": 0,
  "ESC_W": 1.5, "ESC_X": 1.0, "H_PT": 0.3, "R_ENT": 1.0, "POR_X0": 0.3, "POR_X1": 0.3, "POR_D": 0.3, "ESQ_D": 0.3, "REST_L": 0.8, "HOT_L": 0.6, "R_RAMPA": 2.0, "M_CH": 0.2, "ESC_Z0": 1.0, "RAMPA_C": 0.1, "ESC_SEC": 4.0, "ESC_SECB": 4.0, "ESC_RR": 0.8, "ESC_RC": 1.0, "ESC_Y": 2.0, "ESC_Z1": 0.8, "W_P": 0.5, "W_BAR": 0.5, "V_BAR": 0.5, "L_L": 1.0, "L_FIN": 0.5, "Y_CA": 0.6, "R_FIN": 2.0, "S_VEN": 0.3, "N_VEN_B": 0, "MAR_P": 0.02, "MAR_B": 0.05, "MAR_R": 0.04, "R2_L": 3.0, "N_VEN": 0, "VEN_W": 0.2, "VEN_FIN": 1.5, "Z_ARC": 0.5, "U_ARC": 0.1, "D_CUNA": 1.0,
  "W_EXT": 1.0, "THL": 2.3, "ACH": 8.0, "COL": 0.3, "L_CHF": 3.0, "T_POS": 0.1,
  "D_HOTF": 2.0, "RET": 0.5, "RETR": 0.5, "L_C": 3.0, "W_C": 1.0, "L_LAD": 1.5,

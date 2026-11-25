@@ -37,7 +37,8 @@
 | barandilla en la cubierta de la visera | 1.00 | 1.00 | OK |
 | pasillo entre tambor y banda (vacío a +Z_T1−0,5) | 1.00 | 1.00 | OK |
 | peto del tambor hasta +Z_T1 | 1.00 | 1.00 | OK |
-| remate: coronación | 50.10 | 50.10 | OK |
+| remate: coronación | 49.70 | 49.70 | OK |
+| banda descentrada hacia la plaza (vidrio a R_G del centro de la banda) | 1.00 | 1.00 | OK |
 | entrada a la terraza abierta sobre la banda del hotel | 7.20 | 7.20 | OK |
 | barandilla en el lado largo de la azotea del bar | 12.50 | 12.50 | OK |
 | plataforma de giro a +7,2 (curva exterior) | 7.20 | 7.20 | OK |
@@ -57,8 +58,8 @@
 | logia de planta 1 hueca (vacío a +5,5 = 1) | 1.00 | 1.00 | OK |
 | pilar intermedio de la logia | 1.00 | 1.00 | OK |
 | remate del bloque alto equidistante al tambor (R_AC) | 18.63 | 18.63 | OK |
-| lucernario sobre la visera | 44.54 | 44.54 | OK |
-| canto de la visera 2,0 m | 2.00 | 2.00 | OK |
+| lucernario sobre la visera | 44.34 | 44.34 | OK |
+| canto de la visera 1,8 m (Alamy) | 1.80 | 1.80 | OK |
 | puertas del hotel abiertas en PB | 3.00 | 3.00 | OK |
 | línea posterior del ala corta paralela al chaflán (|sen| con U) | 0.00 | 0.00 | OK |
 | rincón del patio sin 90° (ángulo, grados) | 40.00 | 40.00 | OK |

@@ -136,6 +136,16 @@ def prisma(poly, z0, z1):
 def cil(c, r, z0, z1, seg=SEG):
     return Manifold.cylinder(z1 - z0, r, r, seg).translate((c[0], c[1], z0))
 
+def baranda(c, r, z0, h, paso=2.0):
+    """barandilla ABIERTA (transparente en las fotos): pasamanos + travesaño + postes cada ~2 m [Alamy: se ve a través]"""
+    n = max(int(2 * math.pi * r / paso), 8)
+    ps = [Manifold.cube((0.09, 0.09, h)).translate((r - 0.1, -0.045, z0)).rotate((0, 0, 360 * k / n)) for k in range(n)]
+    anillo = lambda za, ha: cil(c, r, za, za + ha) - cil(c, r - 0.07, za - 0.1, za + ha + 0.1)
+    out = anillo(z0 + h - 0.07, 0.07) + anillo(z0 + 0.5, 0.07)
+    for p in ps: out = out + p.translate((c[0], c[1], 0))
+    return out
+
+
 
 def plantas_base():
     """poligonos de planta baja y planta primera (definicion unica), con L de angulo interior TH_L"""
@@ -373,7 +383,7 @@ def torre():
         s.append(cil(T, R_B, z, z + FC) - cil(T, rf - 0.1, z - 0.1, z + FC + 0.05))          # canto del forjado [MGF Alamy]
         s.append(cil(T, R_B, z + FC + FR, z + FC + FR + FP) - cil(T, R_B - 0.25, z + FC, z + FC + FR + FP + 0.05))  # poyete tras la ranura [MGF Alamy]
     s.append(cil(T, R_B, Z_B1, Z_B1 + FC))
-    s.append(cil(T, R_B, Z_B1 + FC, Z_B1 + FC + _v["BAR_B"]) - cil(T, R_B - 0.2, Z_B1, Z_B1 + FC + _v["BAR_B"] + 0.1))   # peto + barandilla 1,1 m de la cubierta del barril [F09, F08]
+    s.append(baranda(T, R_B - 0.05, Z_B1 + FC, _v["BAR_B"]))   # peto + barandilla 1,1 m de la cubierta del barril [F09, F08]
     for k in range(N_AL):
         a = 2 * math.pi * k / N_AL + FASE_AL
         al = Manifold.cube((R_AL - rf + 0.2, 0.4, Z_B1 + FC - Z_ALETA0)).translate((rf - 0.1, -0.2, Z_ALETA0))
@@ -394,7 +404,7 @@ def torre():
         mt = Manifold.cube((0.5, 0.25, Z_G1 - Z_T1 + _v["H_PT"])).translate((R_G - 0.45, -0.125, Z_T1 - _v["H_PT"]))
         s.append(mt.rotate((0, 0, 360 * k / nm)).translate((pb_[0], pb_[1], 0)))
     s.append(cil(pv, R_V, Z_G1, Z_V1))
-    s.append(cil(pv, R_V, Z_V1 - 0.01, Z_V1 + 1.0) - cil(pv, R_V - 0.08, Z_V1 - 0.1, Z_V1 + 1.1))   # barandilla de la cubierta de la visera [F08]
+    s.append(baranda(pv, R_V, Z_V1, 1.0))                  # barandilla abierta de la cubierta de la visera [F08, Alamy]
     s.append(cil(pr, R_R, Z_V1, Z_R1))
     pl_ = P(_v["LUC_X"], _v["LUC_Y"])                        # lucernario piramidal de 12 costillas sobre la visera [fotos 25/11]
     s.append(Manifold.cylinder(0.25, _v["LUC_R"] + 0.15, _v["LUC_R"] + 0.15, 12).translate((pl_[0], pl_[1], Z_V1 - 0.01)))

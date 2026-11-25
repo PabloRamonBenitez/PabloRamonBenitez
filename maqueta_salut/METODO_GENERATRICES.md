@@ -86,3 +86,9 @@ Un elemento a radio R y ángulo φ del eje de la vista cae en x = R·sen φ. As�
   - lado ciego 110°–166°, junto a la escalera; 14 ojos;
   - desplazamientos (componente lateral de Alamy + componente U de F09): banda (−0,5; −3,70), visera (−2,4; −4,09), remate (0,6; −0,38), lucernario (0; −13,06).
 - **Comprobación:** aletas, residuo medio 0,03 m; escalera lateral −16,20 (foto −15,8…−16,2); lucernario lateral 8,34 (foto 8,34); MGF y 66 + 18 comprobaciones OK.
+
+## Barandillas abiertas (25/11)
+La barandilla de la visera y la del barril estaban modeladas como muros macizos de 1 m y 0,85 m. En el alzado se dibujaban como parte de la losa:
+la visera parecía medir 2,9 m en lugar de 1,89 m, y el modelo no se parecía a la foto aunque la medida fuera correcta.
+Ahora son barandillas abiertas (pasamanos, travesaño y postes cada 2 m), como se ven en las fotos (transparentes).
+Regla del método: **en el alzado del modelo se mira el silueteado de cada pieza, no solo su cota**; un elemento transparente en la foto no puede ser macizo en el modelo.

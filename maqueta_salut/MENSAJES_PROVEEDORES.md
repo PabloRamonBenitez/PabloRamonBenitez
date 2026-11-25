@@ -136,9 +136,9 @@ Descartar si responden que solo venden el archivo digital, el máster en PLA o l
 ## Seguimiento
 | # | Proveedor | Canal | Enviado | Respuesta | Precio total en Badajoz | Molde (piezas / Shore) | Máster | Plazo | Coladas | Aduanas | Notas |
 |---|---|---|---|---|---|---|---|---|---|---|---|
-| 1 | MoldeSilicona | web / Etsy | | | | | | | | no (ES) | sin desistimiento; 48 h para reclamar defectos |
-| 2 | Milab3D | web | | | | | | | | no (ES) | |
-| 3 | ModelArte | tel./WhatsApp | | | | | | | | no (ES) | confirmar STL |
+| 1 | MoldeSilicona | info@moldesilicona.com | 25/11 (Gmail, enlace al STL) | | | | | | | no (ES) | sin desistimiento; 48 h para reclamar defectos |
+| 2 | Milab3D | info@milab3d.com | 25/11 (Gmail, enlace al STL) | | | | | | | no (ES) | |
+| 3 | ModelArte | modelarte@modelarte.net | 25/11 (Gmail, enlace al STL) | | | | | | | no (ES) | confirmar STL |
 | 4 | Etsy 4564160897 | Etsy | | | | | | | | ? | |
 | 5 | 3DDeluxeStore | Etsy | | | | | | | | ? | ~150 $ |
 | 6 | One-Stop Service | Etsy | | | | | | | | ? | |

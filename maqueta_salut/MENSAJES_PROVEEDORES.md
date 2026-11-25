@@ -147,3 +147,6 @@ Descartar si responden que solo venden el archivo digital, el máster en PLA o l
 | 9 | PreMold | Etsy | | | | | | | | no (UE) | |
 | 10 | Etsy 4617960102 | Etsy | | | | | | | | ? | comprobar si sigue activo |
 | 11 | MoldeSilicona (Etsy) | Etsy | | | | | | | | no (ES) | duplicado del 1 por Etsy |
+| 12 | Flossy Candle (Polonia, UE) | kontakt@flossycandle.pl | 25/11 (Gmail, STL adjunto, inglés) | | | | | | | no (UE) | molde a medida ~599,99 zł |
+| 13 | BK Silicone (China) | info@bksilicone.com | 25/11 (Gmail, STL adjunto, inglés) | | | | | | | sí (preguntado DDP) | master SLA, 5–15 días |
+| 14 | MinghuiLink (China, Shenzhen) | info@siliconeab.com | 25/11 (Gmail, STL adjunto, inglés) | | | | | | | sí (preguntado DDP) | aire 5–10 d / mar 20–40 d |

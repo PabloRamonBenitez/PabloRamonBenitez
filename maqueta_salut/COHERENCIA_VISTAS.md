@@ -57,6 +57,9 @@
 | logia de planta 1 hueca (vacío a +5,5 = 1) | 1.00 | 1.00 | OK |
 | pilar intermedio de la logia | 1.00 | 1.00 | OK |
 | remate del bloque alto equidistante al tambor (R_AC) | 16.80 | 16.80 | OK |
-| lucernario sobre la visera | 44.74 | 44.74 | OK |
+| lucernario sobre la visera | 44.54 | 44.54 | OK |
 | canto de la visera 2,0 m | 2.00 | 2.00 | OK |
 | puertas del hotel abiertas en PB | 3.00 | 3.00 | OK |
+| línea posterior del ala corta paralela al chaflán (|sen| con U) | 0.00 | 0.00 | OK |
+| rincón del patio sin 90° (ángulo, grados) | 40.00 | 40.00 | OK |
+| X: medianera → A1 (foto frontal 12,7) | 12.69 | 12.70 | OK |

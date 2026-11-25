@@ -40,6 +40,12 @@ def planta(ax, zc, titulo, aerea=False):
         arriba = M ^ Manifold.cube((BIG, BIG, 100)).translate((-BIG / 2, -BIG / 2, zc))
         L.dibujar_vista(ax, abajo)
         L.encima(ax, arriba)
+        for zn in (E._v["Z_VOL0"] + 0.3, E.Z_P1 + 0.5, E.Z_ALTO - 0.5):        # contornos interiores de lo que hay encima
+            if zn > zc + 0.3:
+                for P in M.slice(zn).to_polygons():
+                    P = np.array(P)
+                    if len(P) > 2 and abs(np.dot(P[:, 0], np.roll(P[:, 1], -1)) - np.dot(P[:, 1], np.roll(P[:, 0], -1))) / 2 > 2.0:
+                        ax.plot(*np.vstack([P, P[:1]]).T, color="0.3", lw=0.6, ls=(0, (5, 3)), zorder=4)
         L.corte(ax, M.slice(zc), huecos=VT.cortados(zc))
         estructura_torre(ax, zc)
     recorridos(ax, None if aerea else zc)
@@ -142,8 +148,8 @@ def cotas_planta(ax):
 
 
 def plantas():
-    lst = [(1.8, "PLANTA 0 (baja) – corte a +1,80"), (5.6, "PLANTA 1 – corte a +5,60 (bandas de ventanas)"),
-           (9.2, "PLANTA 2 – corte a +9,20 (terraza, bar, bloque alto)"), (13.0, "PLANTA 3 – corte a +13,00 (cuello)"),
+    lst = [(1.8, "PLANTA BAJA (suelo ±0,00) – corte a +1,80"), (5.6, "PLANTA 1 (suelo +3,20) – corte a +5,60, por las ventanas"),
+           (9.2, "PLANTA 2 (suelo +7,20: terraza, bar, bloque alto) – corte a +9,20"), (13.0, "PLANTA 3 (cuello) – corte a +13,00"),
            (E.Z_B0 + 3 * E.F + 2.0, f"PLANTA 4 – planta tipo de habitaciones (corte a +{E.Z_B0 + 3 * E.F + 2.0:.2f})".replace(".", ",")),
            (E.Z_B1 + 2.5, f"PLANTA ÚLTIMA – tambor de ojos y terraza de servicio (corte a +{E.Z_B1 + 2.5:.2f})".replace(".", ",")), (None, "PLANTA AÉREA – cubiertas")]
     for zc, tit in lst:
@@ -244,6 +250,11 @@ def huecos_seccion(p0, p1):
 
 
 def alzado(ax, d, titulo):
+    if np.allclose(d, (0, 1)):                       # alzado a la calle: dibujado pieza a pieza (alzado_calle.py)
+        import alzado_calle as AC
+        uT, uM = AC.dibujar(ax)
+        ejes(ax, (uM - 6, uT + 32), (-6, 52)); ax.set_title(titulo, fontsize=9, loc="left")
+        return uM - 6, uT + 19
     a = math.degrees(math.atan2(d[1], d[0])) - 90.0          # d -> +y
     m = M.rotate((0, 0, -a)).rotate((-90, 0, 0))
     L.dibujar_vista(ax, m)

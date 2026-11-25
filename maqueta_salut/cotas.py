@@ -46,17 +46,19 @@ COTAS = {
  "POR_D":  (1.3,  "vuelo del porche (muros y marquesina) delante del testero", "croquis del usuario (65 px / 49 px/m)"),
  "POR_E":  (0.35, "espesor de los muros del porche", "croquis del usuario"),
  "ESQ_D":  (1.2,  "muro de esquina: la fachada exterior del ala sobresale del testero en toda su altura", "F73 (franja verde en la esquina) · croquis del usuario"),
- "VOL_L": (6.0, "cuerpo volado del bloque alto: largo en fachada desde la medianera", "croquis del usuario"),
+ "VOL_L": (9.0, "cuerpo volado: frente desde la medianera", "foto frontal: 600 px / 66 px/m = 9,1 (el croquis decía ≈ 6)"),
  "VOL_V": (1.2, "vuelo del cuerpo volado sobre la alineación de fachada (colindante)", "usuario · foto frontal del ala corta"),
- "Z_VOL0": (6.6, "cara inferior del cuerpo volado", "foto frontal (personas como escala): el vuelo arranca sobre la logia de planta 1"),
+ "Z_VOL0": (7.0, "cara inferior del cuerpo volado", "foto frontal: 475 px sobre el suelo / 66 px/m ≈ 7,2 (−0,2 por el canto)"),
  "R_AC": (16.8, "radio del arco cóncavo con que el bloque alto remata hacia la torre (equidistante al tambor: R_AL + 1,5)", "usuario (línea A) · foto al pie de la torre"),
  "LOG_D": (1.8, "profundidad de la logia de planta 1 bajo el vuelo (vidrio retranqueado)", "foto frontal · croquis del usuario"),
- "LOG_PX": (3.0, "posición del pilar intermedio de la logia desde la medianera", "foto frontal (pilar blanco)"),
+ "LOG_PX": (4.4, "pilar intermedio de la logia (eje, desde la medianera)", "foto frontal: pilar blanco a 290 px / 66"),
  "PUERTAS_H": (3, "puertas del hotel en planta baja alrededor de la columna (por lado)", "usuario (imagina más entradas) · F18 (puertas bajo la banda del hotel)"),
- "LUC_X": (-1.0, "lucernario de la visera: X en coordenadas de torre", "fotos de la claraboya (Instagram), postal aérea, interior (hueco circular)"),
- "LUC_Y": (-8.0, "lucernario de la visera: Y (hacia la plaza −)", "postal aérea: entre el remate y el borde, lado del chaflán"),
- "LUC_R": (2.2, "radio de la base del lucernario (12 costillas)", "foto Instagram (escala: barandilla 1 m)"),
- "LUC_H": (2.0, "altura del lucernario", "foto Instagram"),
+ "LUC_X": (-1.0, "lucernario: X en coordenadas de torre", "Alamy: a 8,2 m del eje · postal aérea: lado del chaflán"),
+ "LUC_Y": (-8.0, "lucernario: Y", "ver LUC_X (|P| = 8,1)"),
+ "LUC_R": (1.6, "radio de la base del lucernario", "Alamy: base 92 px / 28,4 px/m = 3,2 m"),
+ "LUC_H": (1.8, "altura del lucernario", "Alamy: 45 px / 25 px/m"),
+ "LOG_X0": (1.6, "logia: inicio (cara del muro de medianera)", "foto frontal: 105 px / 66"),
+ "LOG_X1": (7.6, "logia: fin (muro final)", "foto frontal: 505 px / 66"),
  "H_PET":  (1.3,  "peto exterior de la terraza del ala larga (corona ≈ +8,5)", "F73 esquina del testero +8,5 ± 0,6"),
  "VA_0": (4.63, "alféizar fila alta (0,545 H)", "F73 vertical exacta, 3 huecos ±0,006 H"),
  "VA_1": (6.32, "dintel fila alta (0,743 H)", "F73 vertical exacta, 3 huecos ±0,002 H"),
@@ -82,11 +84,11 @@ COTAS = {
  "R_B":    (14.4, "radio del borde de balcones", "escala"),
  "R_AL":   (15.3, "radio a la punta de las aletas (Ø 30,6)", "escala"),
  "R_T":    (13.55,"radio del tambor de ojos (Ø 27,1)", "F01, F09, F14"),
- "R_G":    (10.85,"radio de la banda acristalada (Ø 21,7)", "F09"),
- "R_V": (12.4, "radio de la visera", "F09 12,8 · Alamy 11,65 (32 px/m por el tambor) → 12,4"),
+ "R_G": (9.9, "radio de la banda acristalada", "Alamy 9,5 · F09 10,4 (F08 11,9 descartada)"),
+ "R_V": (11.9, "radio de la visera", "Alamy (casi alzado, escala por R_AL): 11,7 · F09: 12,8 → 11,9"),
  "R_R": (4.95, "radio del remate", "F09 9,8 · F08 9,7 · F14 10,3 · F01 10,0 · F70 9,6 (diámetros)"),
- "OV_X": (-2.4, "desplazamiento de la visera a lo largo del chaflán", "F09 (frontal): centro de la visera 2,3–2,5 m a la izquierda del tambor + F08 (otra dirección): 1,7 m → resuelto en 2 direcciones"),
- "OV_Y": (-2.15, "desplazamiento de la visera hacia la plaza (−)", "F09 + F08 (ver OV_X); antes −4,2 (calibración C02/C04)"),
+ "OV_X": (-2.4, "desplazamiento de la visera a lo largo del chaflán", "F09 frontal: 2,3–2,5 a la izquierda"),
+ "OV_Y": (-3.6, "desplazamiento de la visera hacia la plaza (−)", "Alamy: desplazamiento lateral ≥ 4,3 → |OV| = 4,3 con OV_X de F09"),
  "OR_X":   (0.6,  "desplazamiento del remate", "F09"),
  "N_AL":   (19,   "aletas / muros radiales", "fuentes + F09"),
  "ESC_W": (8.8, "largo radial de la caja (ESC_R1 − ESC_R0)", "F36 cubierta 8,3–8,8 m"),
@@ -106,7 +108,7 @@ COTAS = {
  "D_HOTF": (0.0, "de C al arranque recto de la rampa (DERIVADA: la esquina curva ocupa este tramo)", "geometría de la curva"),
  "RET":    (1.5,  "lo que asoma la columna delante de la planta primera", "F09/F18"),
  "RETR":   (2.5,  "retranqueo de la planta baja bajo la planta primera", "F09, F14, F47"),
- "L_C": (23.4, "ala corta: de la esquina exterior de la L (KC) a la medianera a lo largo de la calle", "croquis del usuario: X algo más corta (6 m del vuelo = 0,27 X) → −0,6 m"),
+ "L_C": (13.8, "ala corta: KC → medianera a lo largo de la calle (X = medianera → A1 = 12,7)", "foto frontal del ala corta: X = 835 px a 66 px/m (escala: coronación de planta 1 +7,20 = 475 px; personas 1,7 m dan 65 px/m) → 12,7 ± 1,5"),
  "W_C":    (12.74,"fondo del ala corta (igual que el ala larga)", "mapa Bing: las dos alas del mismo ancho"),
  "L_LAD":  (5.0,  "largo de la caja de ladrillo", "F01"),
 }
@@ -159,7 +161,7 @@ def planta():
     # esquina: el chaflán sigue hasta E90 y el borde de la rampa vuelve en curva hasta (W_EXT, C.y + D_HOTF)
     R = V["R_RAMPA"]; gr = V["GIRO_R"]; yS = C[1] + V["D_HOTF"]; cen = np.array([V["W_EXT"] + R, yS])
     ARC = [cen + R * np.array([math.cos(math.pi + gr * (1 - t)), math.sin(math.pi + gr * (1 - t))]) for t in np.linspace(0, 1, 13)]
-    IC = inter(SWP(0, V["W_C"]), US, np.array([0.0, 0.0]), np.array([0.0, 1.0]))
+    IC = inter(SWP(-V["L_C"], V["W_C"]), U, np.array([0.0, 0.0]), np.array([0.0, 1.0]))   # línea posterior paralela al chaflán [usuario]
     P1 = [SWP(-V["L_C"], 0), A1, C] + ARC + [np.array([V["W_P"], yS]), np.array([V["W_P"], V["L_L"]]),
           np.array([0, V["L_L"]]), IC, SWP(-V["L_C"], V["W_C"])]
     o_s = KC + V["RETR"] * NS; o_c = A1 + V["RETR"] * N
@@ -215,7 +217,7 @@ def niveles():
 
 # Margen (±) de cada cota: medido en varias fotos ≈ 0,3-0,6 · una foto ≈ 1 · estimado ≈ 1,5-2 · satélite ≈ 1
 RANGOS = {
- "Z_PB": 0.3, "Z_P1": 0.3, "Z_BAR": 0.8, "Z_BARC": 0.8, "Z_ALTO": 1.0, "Z_LAD0": 0.5, "Z_FIN": 0.9, "H_PET": 0.6, "VA_0": 0.5, "VA_1": 0.6, "VB_0": 0.3, "VB_1": 0.4, "L_HOR": 2.0, "VOL_L": 1.0, "VOL_V": 0.3, "Z_VOL0": 0.4, "R_AC": 1.5, "LOG_D": 0.5, "LOG_PX": 0.8, "LUC_X": 1.5, "LUC_Y": 1.5, "LUC_R": 0.5, "LUC_H": 0.5,
+ "Z_PB": 0.3, "Z_P1": 0.3, "Z_BAR": 0.8, "Z_BARC": 0.8, "Z_ALTO": 1.0, "Z_LAD0": 0.5, "Z_FIN": 0.9, "H_PET": 0.6, "VA_0": 0.5, "VA_1": 0.6, "VB_0": 0.3, "VB_1": 0.4, "L_HOR": 2.0, "VOL_L": 1.0, "VOL_V": 0.3, "Z_VOL0": 0.4, "R_AC": 1.5, "LOG_D": 0.5, "LOG_PX": 0.8, "LOG_X0": 0.5, "LOG_X1": 0.8, "LUC_X": 1.5, "LUC_Y": 1.5, "LUC_R": 0.5, "LUC_H": 0.5,
  "Z_LAD1": 1.0, "Z_CON": 0.8, "Z_CU0": 0.6, "Z_CU1": 0.6, "Z_ALE": 0.6, "Z_B0": 0.4, "F": 0.05, "N_PL": 0,
  "Z_T1": 0.5, "Z_G1": 0.5, "Z_V1": 0.5, "Z_R1": 0.6, "R_COL": 0.3, "R_CONO": 0.3, "R_CU": 0.5, "R_B": 0.3,
  "R_AL": 0.3, "R_T": 0.5, "R_G": 0.5, "R_V": 0.6, "R_R": 0.25, "OV_X": 1.0, "OV_Y": 1.5, "OR_X": 0.5, "N_AL": 0,

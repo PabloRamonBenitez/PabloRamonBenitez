@@ -123,9 +123,14 @@ chk.append(("lucernario sobre la visera", (E.torre() ^ E.caja(_pl[0] - .1, _pl[0
 chk.append(("canto de la visera 2,0 m", V["Z_V1"] - V["Z_G1"], 2.0))
 _hp = [h for h in VT.catalogo() if h["grupo"] == "hotel puertas PB"]
 chk.append(("puertas del hotel abiertas en PB", sum(float((m ^ E.caja(h["p"][0] - h["n"][0] * 0.4 - .05, h["p"][0] - h["n"][0] * 0.4 + .05, h["p"][1] - h["n"][1] * 0.4 - .05, h["p"][1] - h["n"][1] * 0.4 + .05, 1.0, 1.1)).is_empty()) for h in _hp), len(_hp)))
+_g2 = _KK.planta(); _F1 = np.array(E.SWP(-V["L_C"], V["W_C"])); _IC = np.array(_g2["IC"])
+_dr = (_IC - _F1) / np.linalg.norm(_IC - _F1)
+chk.append(("línea posterior del ala corta paralela al chaflán (|sen| con U)", abs(float(_dr[0] * E.U[1] - _dr[1] * E.U[0])), 0.0))
+chk.append(("rincón del patio sin 90° (ángulo, grados)", round(math.degrees(math.acos(abs(float(_dr[1])))), 1), round(math.degrees(math.acos(abs(float(E.U[1])))), 1)))
+chk.append(("X: medianera → A1 (foto frontal 12,7)", float(np.linalg.norm(np.array(E.SWP(-V["L_C"], 0)) - np.array(_g2["A1"]))), 12.7))
 out = ["| comprobación | medido en la geometría | cuadro | estado |", "|---|---|---|---|"]
 for n, a, b in chk:
-    ok = abs(a - b) < (0.25 if "curva" in n else 0.12) or ("|cos|" in n and a < 0.02) or (n.startswith("sin ventanas") and a > V["W_P"] - 0.05)
+    ok = abs(a - b) < (0.25 if ("curva" in n or "X:" in n) else 0.12) or (("|cos|" in n or "|sen|" in n) and a < 0.02) or (n.startswith("sin ventanas") and a > V["W_P"] - 0.05)
     out.append(f"| {n} | {a:.2f} | {b:.2f} | {'OK' if ok else 'NO'} |")
 open("COHERENCIA_VISTAS.md", "w").write("# Coherencia entre vistas y cuadro de cotas\n\n" + "\n".join(out) + "\n")
 print("\n".join(out))

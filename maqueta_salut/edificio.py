@@ -140,7 +140,7 @@ def plantas_base():
     t = 0.0                            # sin cara a 90 grados: el chaflan llega directo a la fachada del ala
     Q = (C[0] + t * N[0], C[1] + t * N[1])
     F0 = SWP(-L_C, 0.0); F1 = SWP(-L_C, W_C)
-    IC = _inter(SWP(0, W_C), US, (0.0, 0.0), (0.0, 1.0))           # rincon interior de la L
+    IC = _inter(SWP(-L_C, W_C), U, (0.0, 0.0), (0.0, 1.0))         # línea posterior del ala corta paralela al chaflán: sin 90° [usuario]
     g = _K.planta()
     ARC = [tuple(p) for p in g["ARC"]]
     P1 = [F0, A1, C] + ARC + [(W_P, g["YS"]), (W_P, L_L), (0.0, L_L), IC, F1]     # el chaflán sigue hasta E90 [F09, usuario]
@@ -224,11 +224,9 @@ def base():
     from shapely.geometry.polygon import orient as _or
     ba = list(_or(_SP(bloque_alto_poligono()).buffer(0), 1.0).exterior.coords)[:-1]
     s.append(prisma(ba, _v["Z_VOL0"], Z_ALTO))
-    for i in range(6):                                      # lucernarios en diente de sierra [F01]
-        x = -L_C + L_LADR + 1.5 + 2.0 * i
-        sc.append(Manifold.extrude(CrossSection.square((1.4, 1.4), True), 1.0, 0, 0, (0.05, 0.05)).translate((x, 8.5, Z_ALTO - 0.01)))
-    mq = Manifold.sphere(1.0, 48).scale((4.0, 2.2, 1.6)) ^ caja(-5, 5, 0, 3, 0, 2)
-    sc.append(mq.translate((xA - 7.0, 0.3, 0)))                       # marquesina curva [PASADA 1: F15]
+    for i in range(3):                                      # claraboyas piramidales sobre la cubierta de planta 1, detrás de la línea A [aéreas actuales]
+        x = -L_C + 6.5 + 2.2 * i
+        sc.append(Manifold.extrude(CrossSection.square((1.6, 1.6), True), 0.9, 0, 0, (0.05, 0.05)).translate((x, W_C + 2.0, Z_P1 - 0.01)))
     s.append(ROT(Manifold.batch_boolean(sc, OpType.Add)))
     # ala larga: bar en la mitad interior hasta el tramo final; terraza con peto en la mitad exterior [F47, Bing]
     yb0 = pl["Q"][1] + 0.5                                              # la rampa del techo arranca junto a la torre y pasa bajo la escalera
@@ -296,12 +294,13 @@ def base():
           caja(0, 0.1, yr1 - 0.01, yb1 + _v["V_BAR"], Z_BAR_C - 0.01, Z_BAR_C + 1.0)]                 # lado patio
     m = Manifold.batch_boolean(s, OpType.Add)
     # huecos de ventanas (franjas continuas casi a paño) [F09, F14]
-    hue = [ROT(caja(-L_C + _v["VOL_L"] + 0.4, xA, -1, 0.3, 4.6, 6.6))]
+    hue = []
     # logia de planta 1 bajo el vuelo: hueco retranqueado LOG_D entre muro de medianera (0,6), pilar (0,7) y muro final (0,25)
     ld, lx = _v["LOG_D"], _v["LOG_PX"]; x0l = -L_C
-    m = m - ROT(caja(x0l + 0.6, x0l + _v["VOL_L"] - 0.25, -1, ld, Z_PB + 0.01, Z_P1 - 0.01))
+    lx0, lx1 = x0l + _v["LOG_X0"], x0l + _v["LOG_X1"]
+    m = m - ROT(caja(lx0, lx1, -1, ld, Z_PB + 0.01, Z_P1 - 0.01))
     m = m + ROT(caja(x0l + lx - 0.35, x0l + lx + 0.35, 0, ld, Z_PB, Z_P1))                       # pilar intermedio
-    m = m + ROT(caja(x0l + 0.6, x0l + _v["VOL_L"] - 0.25, 0, 0.25, Z_PB, Z_PB + 1.0))             # antepecho / poyete
+    m = m + ROT(caja(lx0, lx1, 0, 0.25, Z_PB, Z_PB + 1.0))                                       # antepecho / poyete
     # puertas del hotel en planta baja junto a la columna [usuario, F18]
     for hh in __import__("ventanas").catalogo():
         if hh["grupo"] in ("hotel puertas PB", "bloque alto posterior"):

@@ -171,7 +171,7 @@ def hoja_detalles():
 if __name__ == "__main__":
     plt.rcParams["figure.max_open_warning"] = 0
     p = portada(); PAGS.append(p)
-    for zc, t in [(1.8, "Planta 0 (baja) – corte a +1,80"), (5.6, "Planta 1 – corte a +5,60"),
+    for zc, t in [(1.8, "Planta baja (suelo ±0,00) – corte a +1,80"), (5.6, "Planta 1 (suelo +3,20) – corte a +5,60"),
                   (9.2, "Planta 2 – corte a +9,20 (terraza, bar, bloque alto)"), (13.0, "Planta 3 – corte a +13,00 (cuello)"),
                   (E.Z_B0 + 3 * E.F + 2.0, f"Planta tipo de habitaciones – corte a +{E.Z_B0 + 3 * E.F + 2.0:.2f}"),
                   (E.Z_B1 + 2.5, f"Planta última – tambor – corte a +{E.Z_B1 + 2.5:.2f}"), (None, "Planta de cubiertas")]:

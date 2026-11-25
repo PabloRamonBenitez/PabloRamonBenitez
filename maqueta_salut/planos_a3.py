@@ -144,9 +144,9 @@ def hoja_detalle():
 if __name__ == "__main__":
     plt.rcParams["figure.max_open_warning"] = 0
     p = IA.portada(); IA.PAGS.append(p)
-    hoja_planta(1.8, "PLANTA BAJA – corte a +1,80", [("18.webp", "F18 – planta baja del chaflán y entrada del hotel"), ("71.webp", "F71 – rampa de acceso y esquina"), ("73.webp", "F73 – testero y huecos del ala")])
-    hoja_planta(5.6, "PLANTA PRIMERA – corte a +5,60 (bandas de vidrio)", [("9.webp", "F09 – chaflán frontal: X 12,8 · columna 6,4 · Y 10,1"), ("18.webp", "F18 – 5 y pico / 4 y pico paños"), ("47.webp", "F47 – huecos del ala y rampa")])
-    hoja_planta(9.2, "PLANTA SEGUNDA – corte a +9,20 (terraza, bar, rampas)", [("47.webp", "F47 – terraza-restaurante"), ("76.webp", "F76 – maqueta: curva de la rampa y techo en rampa"), ("1.webp", "F01 – vista aérea 1984")])
+    hoja_planta(1.8, "PLANTA BAJA (suelo ±0,00) – corte a +1,80", [("18.webp", "F18 – planta baja del chaflán y entrada del hotel"), ("71.webp", "F71 – rampa de acceso y esquina"), ("73.webp", "F73 – testero y huecos del ala")])
+    hoja_planta(5.6, "PLANTA PRIMERA (suelo +3,20) – corte a +5,60, por las ventanas", [("9.webp", "F09 – chaflán frontal: X 12,8 · columna 6,4 · Y 10,1"), ("18.webp", "F18 – 5 y pico / 4 y pico paños"), ("47.webp", "F47 – huecos del ala y rampa")])
+    hoja_planta(9.2, "PLANTA SEGUNDA (suelo +7,20) – corte a +9,20 (terraza, bar, bloque alto)", [("47.webp", "F47 – terraza-restaurante"), ("76.webp", "F76 – maqueta: curva de la rampa y techo en rampa"), ("1.webp", "F01 – vista aérea 1984")])
     hoja_planta(E.Z_B0 + 3 * E.F + 2.0, "PLANTA TIPO DE HABITACIONES", [("8.webp", "F08 – barril, aletas y escalera"), ("58.webp", "F58 – cenital: encuentro barril – ala")])
     hoja_planta(None, "PLANTA DE CUBIERTAS", [("36.webp", "F36 – cenital"), ("62.webp", "F62 – cenital")])
     S = {k: (k, p0, p1, t) for k, p0, p1, t in LM.SECC}

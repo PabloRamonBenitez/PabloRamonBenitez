@@ -71,7 +71,11 @@ def hoja_triple(titulo, e, u_rng, v_rng, secc, zc, d, t_alz, den, refs):
     ax_p.text(u_rng[0] + 0.5, v_rng[1] - 1, f"PLANTA a +{zc:.2f}".replace(".", ","), fontsize=6.5, weight="bold", va="top")
     # alzado
     ax_a = fig.add_axes([x0 / w, y_alz / h, wd / w, hz / h])
-    LM.alzado(ax_a, d, "")
+    if titulo.startswith("ALA CORTA"):
+        import alzado_calle as AC
+        AC.dibujar(ax_a, coord="e", cotas=False)
+    else:
+        LM.alzado(ax_a, d, "")
     [t_.remove() for t_ in list(ax_a.texts) if t_.get_text().startswith('+')]; [l_.remove() for l_ in list(ax_a.lines) if (len(l_.get_xdata()) == 4 or (len(l_.get_xdata()) == 2 and abs(max(l_.get_xdata()) - min(l_.get_xdata()) - 1.2) < 0.05))]
     ax_a.set_xlim(*u_rng); ax_a.set_ylim(*ZL); ax_a.set_aspect("equal"); ax_a.axis("off")
     ax_a.text(u_rng[0] + 0.5, ZL[1] - 1, t_alz, fontsize=6.5, weight="bold", va="top")
@@ -158,7 +162,7 @@ if __name__ == "__main__":
                 ("L4", tuple(p0), tuple(p1), "a lo largo del ala corta por el bloque alto y la torre"), 9.2, (-d_[1], d_[0]),
                 "ALZADO 3 – calle", 800, [(T @ d_, "eje torre"), (np.array(E.SWP(-E.L_C, 0)) @ d_, "extremo ala corta")])
     hoja_transversal()
-    for zc, t in [(1.8, "Planta 0 (baja) – corte a +1,80"), (5.6, "Planta 1 – corte a +5,60"),
+    for zc, t in [(1.8, "Planta baja (suelo ±0,00) – corte a +1,80"), (5.6, "Planta 1 (suelo +3,20) – corte a +5,60"),
                   (9.2, "Planta 2 – corte a +9,20 (terraza, bar, rampas)"), (13.0, "Planta 3 – corte a +13,00 (cuello)"),
                   (E.Z_B0 + 3 * E.F + 2.0, f"Planta tipo de habitaciones – corte a +{E.Z_B0 + 3 * E.F + 2.0:.2f}"),
                   (E.Z_B1 + 2.5, f"Planta última – tambor – corte a +{E.Z_B1 + 2.5:.2f}"), (None, "Planta de cubiertas")]:

@@ -62,3 +62,22 @@ Ya aplicado: porche del testero (muros + marquesina) y muro de esquina [croquis 
 | 14 | no dibujado | núcleo interior bajo el remate (la banda es maciza en el modelo) |
 | 15 | parcial | foto frontal usada para cotas aproximadas del vuelo, logia y pilar (sin medición fina) |
 Comprobaciones: 58/58 coherencia, 16/16 reglas de planos.
+
+## Segunda vuelta (25/11, tras la revisión del usuario)
+| punto | antes | ahora | de dónde sale |
+|---|---|---|---|
+| X (medianera → A1) | 22,4 (−0,6 sin medir) | **12,7 ± 1,5** | foto frontal: 835 px; escala 66 px/m por la coronación de planta 1 (+7,20 = 475 px) y 65 px/m por las personas (1,7 m) |
+| frente del vuelo | 6,0 (croquis) | **9,0** | foto frontal 600 px |
+| cara inferior del vuelo | 6,6 | 7,0 | foto frontal |
+| logia | 0,6–5,75 | 1,6–7,6, pilar a 4,4 | foto frontal |
+| línea posterior | perpendicular a la calle (90°) | **paralela al chaflán**, desde la medianera en la línea A hasta la fachada del patio (rincón a 40°) | teoría del usuario |
+| banda de ventanas en la calle | sí | **no** (ladrillo ciego) | foto frontal |
+| semicírculo de 2 m en la calle | marquesina de F15 (mala lectura) | **quitado** | – |
+| triángulos sobre el bloque alto | dientes de sierra de F01 | **quitados**; 3 claraboyas sobre la cubierta de planta 1 detrás de la línea A | aéreas actuales |
+| visera | R 12,4, desplazamiento 3,2 | **R 11,9, desplazamiento 4,3** | Alamy (escala por el barril): R 11,7, lateral ≥ 4,3; F09 R 12,8, lateral 2,4 |
+| banda | R 10,85 | **9,9** | Alamy 9,5 · F09 10,4 |
+| lucernario | R 2,2, h 2,0 | **R 1,6, h 1,8** | Alamy: base 92 px, alto 45 px |
+| tambor / remate / canto visera | 5,7 / 7,6 / 2,0 | sin cambio (confirmado) | Alamy: 5,5 / 7,4 / 1,8 a 25 px/m |
+| base del barril +13,90 | – | sin cambio (confirmado) | F09: 88 px sobre +7,20 a 12,9 px/m = +14,0 |
+| alzado 3 | render del 3D | **dibujado pieza a pieza** (alzado_calle.py) | – |
+| plantas | contorno único de lo de encima | contornos de cada nivel superior en discontinua; títulos con cota de suelo y de corte | – |

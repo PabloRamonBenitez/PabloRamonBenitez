@@ -44,16 +44,11 @@ def catalogo():
             w = min(M, E.R_COL + L_ - 0.2 - x)
             _h(H, f"{nm}{i + 1}", grupo, "ventana", E.P(sg * (x + w / 2), yf), U, out, w - 0.15, z0, z1)
             x += M; i += 1
-    # 5. ala corta: banda continua a la calle (+4,6/+6,6) [F09, F14]
+    # 5. ala corta: la fachada a la calle tras la logia es ladrillo ciego (foto frontal) → sin banda de ventanas
     PHI, KC = E.PHI, E.KC
     def R(x, y):
         dx, dy = x - KC[0], y - KC[1]; c, s = math.cos(PHI), math.sin(PHI)
         return (KC[0] + c * dx - s * dy, KC[1] + s * dx + c * dy)
-    xA = W_P - E._a
-    x0, x1 = -E.L_C + V["VOL_L"] + 0.4, xA
-    a, b = R(x0, 0.0), R(x1, 0.0)
-    tt = ((b[0] - a[0]) / math.dist(a, b), (b[1] - a[1]) / math.dist(a, b))
-    _h(H, "AC1", "ala corta banda calle", "banda", ((a[0] + b[0]) / 2, (a[1] + b[1]) / 2), tt, (tt[1], -tt[0]), x1 - x0, 4.6, 6.6)
     # 6. torre: un hueco por módulo entre aletas y por planta, en la línea de vidrio rf [F04, F06, F09]
     T = E.T; rf = E.R_B - 1.8
     def en_escalera(a_, r_):          # módulo ocupado por la caja de la escalera insertada en el cilindro
@@ -85,7 +80,7 @@ def catalogo():
         X = E.R_COL + 1.2 + i * 2.6
         _h(H, f"HP{i + 1}", "hotel puertas PB", "puerta", E.P(X, yfp), U, out, 1.8, 0.0, 2.5)
     # 6e. ventanas de la fachada posterior del bloque alto (línea A) [croquis del usuario]
-    for i, xx in enumerate((1.5, 3.0, 7.5, 10.5)):
+    for i, xx in enumerate((1.0, 2.6, 5.5, 7.1)):
         a, b = R(-E.L_C + xx, E.W_C), R(-E.L_C + xx + 1.2, E.W_C)
         tt = ((b[0] - a[0]) / math.dist(a, b), (b[1] - a[1]) / math.dist(a, b))
         _h(H, f"BA{i + 1}", "bloque alto posterior", "ventana", ((a[0] + b[0]) / 2, (a[1] + b[1]) / 2), tt, (-tt[1], tt[0]), 1.2, 8.3, 10.1)

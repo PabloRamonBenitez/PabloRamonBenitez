@@ -1,6 +1,7 @@
 """JUEGO A3 DE PRESENTACIÓN: plantas 1:400 con cotas encadenadas (huecos / tramos / total) en todas las fachadas,
 muros cortados rellenos, grafismo de rampas y escalera; secciones y alzados alineados a escala; fotos de
 comprobación junto a cada dibujo; cajetín y escala gráfica. Todo sale de cotas.py / edificio.py."""
+import traduccion  # textos de los planos en ucraniano (usuario 26/11)
 import math
 import numpy as np
 import matplotlib

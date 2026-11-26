@@ -1,5 +1,6 @@
 """Planos 2D dibujados DIRECTAMENTE desde cotas.py (no son cortes de un 3D):
 plantas, secciones y alzados por proyeccion de elementos simples + tabla de cotas + comprobacion entre planos."""
+import traduccion  # textos de los planos en ucraniano (usuario 26/11)
 import math, numpy as np, matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
@@ -175,6 +176,7 @@ def comprobacion():
 
 # ------------------------------------------------------------------------------------- MAIN
 if __name__ == "__main__":
+    traduccion.ACTIVO = False                       # hojas de trabajo (notas y tablas): en español; los juegos A3/A4 y el plano de lugar, en ucraniano
     # hoja 1: cuadro de cotas
     f = hoja("CUADRO DE COTAS (fuente única)"); ax = f.add_axes([0.02, 0.02, 0.96, 0.92]); ax.axis("off")
     filas = [f"{k:<7} {v[0]:>8}   {v[1]:<62} {v[2]}" for k, v in K.COTAS.items()]

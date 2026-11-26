@@ -1,6 +1,7 @@
 """PLANOS A4 MONTADOS COMO EN ARQUITECTURA: en cada hoja, sección longitudinal (arriba), planta (centro) y
 alzado (abajo) a la MISMA escala y alineados en el mismo eje horizontal, con líneas de referencia que cruzan
 los tres dibujos. Plantas completas en hojas aparte. Todo sale de la misma geometría (edificio.py / cotas.py)."""
+import traduccion  # textos de los planos en ucraniano (usuario 26/11)
 import math
 import numpy as np
 import matplotlib

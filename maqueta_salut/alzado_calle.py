@@ -1,6 +1,7 @@
 """ALZADO 3 – CALLE dibujado como alzado de arquitectura (no es un render del 3D): cada pieza se proyecta en la
 dirección perpendicular a la calle a partir del cuadro de cotas y se dibuja con su material (ladrillo con trama,
 hormigón blanco, vidrio oscuro), de atrás hacia delante. Fuentes de cada pieza en cotas.py."""
+import traduccion  # textos de los planos en ucraniano (usuario 26/11)
 import math
 import numpy as np
 from matplotlib.patches import Polygon, Rectangle, Ellipse
@@ -195,6 +196,7 @@ def dibujar(ax, coord="l", cotas=True):
 
 
 if __name__ == "__main__":
+    traduccion.ACTIVO = False                       # hojas de trabajo (notas y tablas): en español; los juegos A3/A4 y el plano de lugar, en ucraniano
     import matplotlib; matplotlib.use("Agg")
     import matplotlib.pyplot as plt
     fig, ax = plt.subplots(figsize=(14, 12))

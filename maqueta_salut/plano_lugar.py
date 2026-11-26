@@ -10,6 +10,7 @@ Entorno según las fotos de 1984 (antes de las vallas posteriores):
   parque arbolado hacia el Dniéper ............. F01, F23, F47
   colindante al otro lado de la medianera ....... F01, F72
 Las posiciones del arbolado y el trazado de los caminos son APROXIMADAS (fotos oblicuas): se dibujan con su forma."""
+import traduccion  # textos de los planos en ucraniano (usuario 26/11)
 import math
 import numpy as np
 import matplotlib

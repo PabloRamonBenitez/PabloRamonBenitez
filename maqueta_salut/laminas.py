@@ -1,5 +1,6 @@
 """Juego de planos del Hotel Salut (desde edificio.py, medidas de fotos):
 7 plantas (0,1,2,3,4, ultima, aerea), 8 secciones (3 longitudinales), 5 alzados con su foto de comprobacion."""
+import traduccion  # textos de los planos en ucraniano (usuario 26/11)
 import math, sys
 import numpy as np
 import matplotlib
@@ -756,6 +757,7 @@ def cuadro_cotas():
 
 
 if __name__ == "__main__":
+    traduccion.ACTIVO = False                       # hojas de trabajo (notas y tablas): en español; los juegos A3/A4 y el plano de lugar, en ucraniano
     plantas(); secciones(); alzados(); detalles(); coherencia(); cuadro_cotas()
     plt.rcParams['figure.max_open_warning'] = 0
     with PdfPages("SALUT_planos_definitivos.pdf") as pdf:

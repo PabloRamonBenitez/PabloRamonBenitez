@@ -48,6 +48,7 @@ def planta(ax, zc, titulo, aerea=False):
                         ax.plot(*np.vstack([P, P[:1]]).T, color="0.3", lw=0.6, ls=(0, (5, 3)), zorder=4)
         L.corte(ax, M.slice(zc), huecos=VT.cortados(zc))
         estructura_torre(ax, zc)
+        proyecciones_planta(ax, zc)
         # sin interiores inventados: solo lo que sale de fotos (usuario, 26/11)
     if aerea or zc > E.Z_P1:                               # lucernarios piramidales bajo el cuello: base + aristas [F78]
         from matplotlib.patches import Polygon as _Pg
@@ -65,6 +66,27 @@ def planta(ax, zc, titulo, aerea=False):
     for tx in ax.texts: tx.set_clip_on(True)           # ningún rótulo fuera de su planta
     ax.set_title(titulo, fontsize=10, loc="left")
 
+
+
+def proyecciones_planta(ax, zc):
+    """proyección (trazo largo) de lo que está por encima del corte: las 19 ménsulas/vigas radiales bajo el barril
+    (de R_CU a R_AL, ancho 0,40), el borde del barril y de las aletas, la losa volada del cuello, y en las plantas
+    de la torre la banda, la visera y el remate desplazados"""
+    from matplotlib.patches import Circle, Polygon as Pg
+    if zc is None: return
+    T = np.array(E.T); LS = (0, (6, 3)); V = E._v
+    def circ(c, r, t=None):
+        ax.add_patch(Circle(tuple(c), r, fill=False, ec="0.25", lw=0.4, ls=LS, zorder=4.2))
+    if zc < E.Z_CU1:
+        for k in range(V["N_AL"]):
+            a = 2 * math.pi * k / V["N_AL"] + E.FASE_AL; u = np.array([math.cos(a), math.sin(a)]); w = np.array([-u[1], u[0]]) * 0.2
+            ax.add_patch(Pg([T + u * E.R_CU - w, T + u * E.R_AL - w, T + u * E.R_AL + w, T + u * E.R_CU + w], closed=True, fill=False,
+                            ec="0.25", lw=0.4, ls=LS, zorder=4.2))
+        circ(T, E.R_AL); circ(T, E.R_B)
+        if zc < E.Z_CU0: circ(T, E.R_CU + 0.6); circ(T, E.R_CU)
+        ax.text(*(T + np.array([0, -(E.R_AL + 1.0)])), "vigas radiales (ménsulas) y barril por encima", fontsize=4.2, ha="center", style="italic", zorder=9)
+    if zc < E.Z_T1:
+        circ(E.P(*E.OFF_B), E.R_G); circ(E.P(*E.OFF_V), E.R_V); circ(E.P(*E.OFF_R), E.R_R)
 
 def recorridos(ax, zc=None):
     """grafismo de arquitectura: rampas, escalera, proyecciones y cotas de nivel (grafismo.py)"""
@@ -348,6 +370,11 @@ def nucleo_seccion(ax, p0, p1):
     if dist < E.R_G + 1:
         hg = math.sqrt(max(E.R_T ** 2 - dist ** 2, 0))
         ax.add_patch(Rectangle((sc - hg, E.Z_T1 - E._v["H_PT"] - 0.3), 2 * hg, 0.3, fc="white", ec="k", hatch="////", lw=0.9, zorder=6.5))
+    pv = np.array(E.P(*E.OFF_V)) - p0; scv = pv @ tl; dv = abs(pv[0] * tl[1] - pv[1] * tl[0])
+    if dv < E.R_V:                                              # visera: losas inferior y superior cortadas en todo su ancho [usuario 26/11]
+        hv = math.sqrt(E.R_V ** 2 - dv ** 2)
+        for z0_ in (E.Z_G1, E.Z_V1 - 0.35):
+            ax.add_patch(Rectangle((scv - hv, z0_), 2 * hv, 0.35, fc="white", ec="k", hatch="////", lw=1.1, zorder=6.6))
     if dist >= E.R_COL - 0.05: return
     h = math.sqrt(E.R_COL ** 2 - dist ** 2)
     for sg in (-1, 1):

@@ -485,7 +485,7 @@ def torre():
     # pie de la escalera: núcleo de hormigón bajo la losa blanca y celosía baja de lamas sobre la terraza [F78, foto de frente]
     _hn = ESC_HB * _v["ESC_NU"]
     m = m + sector(ESC_R0 + 1.0, ESC_RC - 0.6, Z_P1 - 0.01, _v["ESC_Z0"] + 0.01, -_hn, _hn)
-    m = m + sector(ESC_R0, ESC_RC + 0.3, _v["ESC_Z0"] - 0.3, _v["ESC_Z0"], -ESC_HB, ESC_HB)          # losa blanca
+    m = m + sector(ESC_R0, ESC_RC + 0.3, _v["ESC_Z0"] - _v["ESC_LE"], _v["ESC_Z0"], -ESC_HB, ESC_HB)   # losa blanca [foto de frente]
     # cristalera suelo-techo con dintel entre tambor y escalera (lado izquierdo) y puerta del tambor [foto de frente, usuario]
     _zb = Z_B1 + FC; _d0, _d1 = -ESC_HA, -ESC_HB
     m = m + sector(_v["ESC_RR"] - 0.05, _v["ESC_RR"], _zb, _v["CR_Z1"], _d0, _d1) + sector(_v["ESC_RR"] - 0.3, _v["ESC_RR"] + 0.2, _v["CR_Z1"], Z_T1, _d0, _d1)

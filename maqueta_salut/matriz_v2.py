@@ -45,13 +45,13 @@ E = {  # evidencias documentadas en la conversación (zona -> {col: (estado, not
  "Z35": {"C20": ("OK", "rampa al techo (usuario)"), "C22": ("≈", "")},
  "Z29": {"C26": ("OK", "remate 2,97; frente 6,0"), "C27": ("OK", "16 lamas; cuña 20,2°; 2 m hasta el corte"), "C28": ("OK", "muro de coronación inclinada"), "C24": ("OK", "borde de silueta −16,2; +40,8→+41,6"), "C23": ("≈", "dentro del ala")},
  "Z30": {"C27": ("OK", "cristalera con dintel, rellanos, borde dcho. con lamas")},
- "Z33": {"C25": ("≈", "losa blanca, núcleo, celosía"), "C27": ("≈", "losa a +12,2 por el paso de la rampa; F78 sugería +11–11,5")},
+ "Z33": {"C25": ("OK", "losa +11,1–11,6"), "C27": ("OK", "losa +11,1/+11,6 por el paso de forjados (173 px); núcleo baja a +7,2")},
 }
 CONFLICTOS = [
  ("Z09", "Base del cuello", "F09 +9,03 · F70 +9,2 · F14 +9,0/9,4", "RESUELTO 26/11: Z_CU0 = 9,20 (DUDA1_BASE_CUELLO.png)"),
  ("Z21", "Perfil de la concha", "Booking + F24", "RESUELTO 26/11: P2 convexo (z = 7,2 (1 − u²)) y arco G3 (horizontal 27 %, al suelo 42 %)"),
  ("Z32", "Lucernarios bajo el cuello", "F78 + usuario", "RESUELTO 26/11: 6 de 1,0 m, r 4,7, 33°–100°"),
- ("Z33", "Losa de arranque de la escalera", "F78 +11–11,5 frente al paso de la rampa (exige ≥ +12,1)", "decidir"),
+ ("Z33", "Losa de arranque de la escalera", "foto de frente + F78", "RESUELTO 26/11: losa +11,1 → +11,6"),
  ("Z20", "Línea posterior del ala corta", "teoría del usuario, sin foto", "fondo del ala corta estimado (W_C 12,74)"),
  ("Z02", "Cara superior de la visera", "Alamy +43,18 / F09 +43,6", "se sigue a Alamy"),
  ("—", "U de 180° y curva abierta de la rampa (planta de cubiertas)", "foto de la base con trazos del usuario", "sin incorporar"),

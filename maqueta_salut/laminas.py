@@ -205,6 +205,31 @@ def orientar(m, p0=None, a_deg=0.0):
     return m.rotate((0, 0, -a_deg)).rotate((-90, 0, 0))
 
 
+
+def tramos_escalera(ax, p0, p1):
+    """escalera de ida y vuelta dibujada en la sección cuando el corte pasa por la cuña (no planos vacíos) [usuario 26/11]:
+    por planta, un tramo hacia fuera hasta el rellano intermedio y otro de vuelta; peldaños de 0,17 × 0,28"""
+    V = E._v; p0 = np.array(p0, float); p1 = np.array(p1, float); d = (p1 - p0) / np.linalg.norm(p1 - p0); n = np.array([-d[1], d[0]])
+    ax_ = np.array([math.cos(E.ESC_ANG), math.sin(E.ESC_ANG)]); T = np.array(E.T)
+    ra, rb = V["ESC_R0"] + 1.6, V["ESC_RC"] - 1.6
+    pa, pb = T + ra * ax_, T + rb * ax_
+    if max(abs((pa - p0) @ n), abs((pb - p0) @ n)) > 2 * V["ESC_RC"] * math.sin(E.ESC_HB): return
+    ua, ub = (pa - p0) @ d, (pb - p0) @ d
+    z = E.Z_B0 - E.F
+    while z < V["ESC_ZL"] - 0.5:
+        for k, (u0, u1, za, zb, st) in enumerate(((ua, ub, z, z + E.F / 2, "-"), (ub, ua, z + E.F / 2, z + E.F, ":"))):
+            if za < V["ESC_Z0"]: continue
+            npel = max(int(round((zb - za) / 0.17)), 2)
+            us = np.linspace(u0, u1, npel + 1); zs = np.linspace(za, zb, npel + 1)
+            xs, ys = [us[0]], [zs[0]]
+            for i in range(npel):
+                xs += [us[i], us[i + 1]]; ys += [zs[i + 1], zs[i + 1]]
+            ax.plot(xs, ys, color="k", lw=0.7 if k == 0 else 0.4, ls="-" if k == 0 else (0, (2, 1.5)), zorder=30)
+            ax.plot([u0, u1], [za - 0.25, zb - 0.25], color="k", lw=0.5 if k == 0 else 0.3, zorder=30)
+        for uu, zz in ((ub, z + E.F / 2), (ua, z + E.F)):            # rellanos
+            ax.plot([uu - 1.3 * np.sign(ub - ua) * (1 if uu == ub else -1), uu], [zz, zz], color="k", lw=0.8, zorder=30)
+        z += E.F
+
 def seccion(ax, p0, p1, titulo):
     a = math.degrees(math.atan2(p1[1] - p0[1], p1[0] - p0[0]))
     Lg = math.hypot(p1[0] - p0[0], p1[1] - p0[1])
@@ -219,6 +244,7 @@ def seccion(ax, p0, p1, titulo):
     for z, t in ((E.Z_PB, "techo PB"), (E.Z_P1, "terraza / planta 1"), (E.Z_BAR, "bar"), (E.Z_ALTO, "bloque alto"),
                  (E.Z_B0, "1ª planta hab."), (E.Z_B1, "cubierta hab."), (E.Z_T1, "tambor"), (E.Z_V1, "visera"), (E.Z_R1, "remate")):
         L.nivel(ax, Lg + 1, z, t)
+    tramos_escalera(ax, p0, p1)
     cruces(ax, p0, p1, titulo.split(':')[0].replace('SECCIÓN ', '').strip())
     ejes(ax, (-2, Lg + 12), (-2, 53))
     ax.set_title(titulo, fontsize=9, loc="left")
@@ -275,6 +301,19 @@ def huecos_seccion(p0, p1):
     return out
 
 
+
+def letras_alzado(ax, d):
+    """rótulo САЛЮТ dibujado sobre sus 5 letras en cualquier alzado (las letras miran a la cámara de Alamy)"""
+    d = np.array(d, float) / np.linalg.norm(d); r_ = np.array([d[1], -d[0]])
+    a = math.degrees(math.atan2(d[1], d[0])) - 90.0; ca, sa = math.cos(math.radians(-a)), math.sin(math.radians(-a))
+    for ch, L_ in zip("САЛЮТ", E.letrero()):
+        nrm = np.array([math.cos(math.radians(L_["rot"])), math.sin(math.radians(L_["rot"]))])
+        vis = -(nrm @ d)
+        if vis < 0.15: continue
+        x = ca * L_["c"][0] - sa * L_["c"][1]
+        ax.text(x, (L_["z0"] + L_["z1"]) / 2, ch, fontsize=9 * max(vis, 0.4), ha="center", va="center", weight="bold", zorder=40,
+                family="DejaVu Sans", color="k")
+
 def alzado(ax, d, titulo):
     if np.allclose(d, (0, 1)):                       # alzado a la calle: dibujado pieza a pieza (alzado_calle.py)
         import alzado_calle as AC
@@ -284,6 +323,7 @@ def alzado(ax, d, titulo):
     a = math.degrees(math.atan2(d[1], d[0])) - 90.0          # d -> +y
     m = M.rotate((0, 0, -a)).rotate((-90, 0, 0))
     L.dibujar_vista(ax, m)
+    letras_alzado(ax, d)
     V = np.asarray(m.to_mesh().vert_properties)[:, :2]
     x0, x1 = V[:, 0].min(), V[:, 0].max()
     ax.axhline(0, color="k", lw=1.6)

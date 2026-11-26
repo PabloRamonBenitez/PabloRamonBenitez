@@ -23,14 +23,34 @@ for i in range(5):                                         # autobuses aparcados
     ax.add_patch(Polygon(q, closed=True, fc="white", ec="0.4", lw=0.6, zorder=2))
 ax.text(*E.P(15, -27), "aparcamiento de autobuses\n(F14, F15, F70)", fontsize=8, ha="center", color="0.3")
 # parque detrás del ala larga: césped y caminos curvos (F24, F47)
-park = [(E.W_EXT + 2, 20), (60, 20), (60, 100), (E.W_EXT + 2, 100)]
+park = [(E.W_EXT + 2, 20), (60, 20), (60, 104), (-14, 104), (-14, 97), (E.W_EXT + 2, 97)]
 ax.add_patch(Polygon(park, closed=True, fc="#e3f0d8", ec="none", zorder=0))
+# camino de coches que entra desde la plaza junto a la concha y rodea el ala larga por detrás (F47 rojo, F73 rojo) [usuario 26/11]
+tt = np.linspace(0, 1, 80)
+cx = np.r_[E.W_EXT + 3 + 6 * np.sin(np.linspace(0, math.pi / 2, 20)), np.full(40, E.W_EXT + 9.0), E.W_EXT + 9.0 - (E.W_EXT + 9.0 + 6) * np.sin(np.linspace(0, math.pi / 2, 20)) ]
+cy = np.r_[np.linspace(18, 34, 20), np.linspace(34, 96, 40), 96 + 4 * (1 - np.cos(np.linspace(0, math.pi / 2, 20)))]
+ax.plot(cx, cy, color="#c9b896", lw=14, solid_capstyle="round", zorder=1)
+ax.plot(cx, cy, color="0.45", lw=0.6, ls=(0, (6, 4)), zorder=1.1)
+ax.text(E.W_EXT + 12, 66, "camino de coches que rodea\nel edificio por detrás (F47, F73)", fontsize=9, color="0.25", rotation=90, va="center")
+for (x0, y0, x1, y1) in ((E.W_EXT + 0.5, 59, E.W_EXT + 5.5, 95),):                 # césped entre el edificio y el camino (verde de F47, F73)
+    ax.add_patch(Polygon([(x0, y0), (x1, y0), (x1, y1), (x0, y1)], closed=True, fc="#b9dca0", ec="none", zorder=0.5))
 t = np.linspace(0, 1, 60)
-ax.text(40, 75, "parque con caminos curvos\n(F24, F47; trazado esquemático)", fontsize=10, color="#4b6b3a", ha="center")
+ax.text(40, 75, "parque (F24, F47)", fontsize=10, color="#4b6b3a", ha="center")
 for xy in ((25, 45), (32, 60), (44, 52), (50, 82), (28, 88), (20, 70)):
     ax.add_patch(Circle(xy, 2.2, fc="#b8d7a2", ec="#6f9a5a", lw=0.6, zorder=1))
 # edificios vecinos (siluetas)
-ax.add_patch(Polygon([E.SWP(-45, -1.5), E.SWP(-V["L_C"], -1.5), E.SWP(-V["L_C"], 24), E.SWP(-45, 24)], closed=True, fc="0.85", ec="0.5", hatch="///", zorder=1))
+ax.add_patch(Polygon([E.SWP(-45, 0), E.SWP(-V["L_C"], 0), E.SWP(-V["L_C"], 24), E.SWP(-45, 24)], closed=True, fc="0.85", ec="0.5", hatch="///", zorder=1))
+cuerpo = [E.SWP(-V["L_C"] - 14, -1.2), E.SWP(-V["L_C"], -1.2), E.SWP(-V["L_C"], 9), E.SWP(-V["L_C"] - 14, 9)]   # parte del colindante que sale a la calle
+ax.add_patch(Polygon(cuerpo, closed=True, fc="0.8", ec="k", lw=0.8, zorder=1.2))
+def diente(x, y):
+    q = [E.SWP(x - 0.8, y - 0.8), E.SWP(x + 0.8, y - 0.8), E.SWP(x + 0.8, y + 0.8), E.SWP(x - 0.8, y + 0.8)]
+    ax.add_patch(Polygon(q, closed=True, fc="#dfe8ee", ec="k", lw=0.6, zorder=1.3))
+    ax.plot(*zip(E.SWP(x - 0.8, y + 0.8), E.SWP(x + 0.8, y + 0.8)), color="k", lw=1.4, zorder=1.31)      # cara acristalada vertical
+for i in range(5):
+    diente(-V["L_C"] - 12 + 2.2 * i, 1.6)                                    # 5 en línea
+for i, (x, y) in enumerate(((-V["L_C"] - 11.5, 5.0), (-V["L_C"] - 9.0, 6.2), (-V["L_C"] - 6.5, 5.0), (-V["L_C"] - 4.0, 6.2), (-V["L_C"] - 2.2, 4.4))):
+    diente(x, y)                                                           # 5 en otra disposición
+ax.text(*E.SWP(-V["L_C"] - 7, 11.5), "colindante: cuerpo a la calle con 10 lucernarios\nen diente de sierra (F01, 1984)", fontsize=8, ha="center", zorder=9)
 ax.text(*E.SWP(-36, 10), "edificio colindante", fontsize=9, rotation=90, ha="center")
 # el hotel: huella de planta primera, torre y escalera
 ax.add_patch(Polygon(pl["P1"], closed=True, fc="0.75", ec="k", lw=1.4, zorder=3))

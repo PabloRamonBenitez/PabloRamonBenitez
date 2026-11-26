@@ -256,9 +256,8 @@ def base():
         perfil = CrossSection([[(0.0, 0.0), (1.6, 0.0), (0.0, 1.0)]])          # cara vertical acristalada + faldón inclinado
         if perfil.area() <= 0: perfil = CrossSection([[(0.0, 0.0), (0.0, 1.0), (1.6, 0.0)]])
         return Manifold.extrude(perfil, 1.6).rotate((90, 0, 0)).translate((x - 0.8, y + 0.8, Z_P1 - 0.01))
-    for i in range(5):
-        sc.append(diente(-L_C + 5.0 + 2.1 * i, W_C + 1.8))
-        sc.append(diente(-L_C + 6.0 + 2.1 * i, W_C + 4.6 + 0.6 * (i % 2)))
+    # (los 10 lucernarios en diente de sierra de F01 son del EDIFICIO COLINDANTE, en su parte que sale a la calle:
+    #  no van en el modelo; se dibujan en el entorno) [usuario 26/11]
     s.append(ROT(Manifold.batch_boolean(sc, OpType.Add)))
     # ala larga: bar en la mitad interior hasta el tramo final; terraza con peto en la mitad exterior [F47, Bing]
     yb0 = pl["Q"][1] + _v["R2_Y0"]                                      # arranca tras el vuelo del cuello (rellano del giro en U delante) [usuario 26/11]
@@ -408,7 +407,8 @@ def letrero():
 
 def torre():
     s = [cil(T, R_COL, 0, Z_CU0 + 0.1),
-         Manifold.cylinder(4.0, _v["R_CONO"], R_COL, SEG).translate((T[0], T[1], 0)),   # pie de columna (recto: el 'cono' era un toldo) cil(T, R_CU, Z_CU0, Z_CU1 + 0.05),
+         Manifold.cylinder(4.0, _v["R_CONO"], R_COL, SEG).translate((T[0], T[1], 0)),   # pie de columna (recto: el 'cono' era un toldo)
+         cil(T, R_CU, Z_CU0, Z_CU1 + 0.05),                                             # CUELLO (base del tambor de habitaciones) [F70, F14, F09]
          cil(T, R_CU + 0.6, Z_CU0, Z_CU0 + 0.6)]                       # losa inferior del cuello, volada [F18, F50]
     # vigas radiales bajo el barril y barril con forjados/poyetes + aletas
     s.append(cil(T, R_B - 0.1, Z_CU1 - 0.01, Z_ALETA0 + 0.05))   # fondo del barril (sofito plano a la cota de las aletas)
@@ -490,6 +490,7 @@ def torre():
             esc.append(sector(RR, rf, z, z + 0.3, d0, d1))
             esc.append(sector(rf - 0.08, rf, z + 0.3, z + 1.3, d0, d1))
     m = m + (Manifold.batch_boolean(esc, OpType.Add) - CORTE_ESC)
+    m = m + sector(ESC_R0, ESC_RC, _v["ESC_ZL"] - 0.3, _v["ESC_ZL"], -ESC_HB, ESC_HB)     # forjado superior de la escalera (sin hueco visto) [usuario 26/11]
     # pie de la escalera: núcleo de hormigón bajo la losa blanca y celosía baja de lamas sobre la terraza [F78, foto de frente]
     _hn = ESC_HB * _v["ESC_NU"]
     m = m + sector(ESC_R0 + 1.0, ESC_RC - 0.6, Z_P1 - 0.01, _v["ESC_Z0"] + 0.01, -_hn, _hn)

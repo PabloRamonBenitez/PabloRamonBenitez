@@ -125,6 +125,7 @@ def hoja_alz_secc(titulo, d_alz, t_alz, secc, e, u_rng, den, lista_fotos):
         fig.text(x0 / W, (y_s + hz + 2) / H, f"SECCIÓN {kk} – {tx}", fontsize=8, weight="bold")
     fig.text(x0 / W, 289 / H, titulo, fontsize=10, weight="bold", va="top")
     # las fotos empiezan donde acaba el último rótulo del dibujo (cotas de nivel incluidas): nunca se pisan
+    traduccion.traducir(fig)                             # medir los rótulos ya traducidos (son más largos)
     fig.canvas.draw(); rr = fig.canvas.get_renderer(); xmax = x0 + wd
     for a_ in fig.axes:
         for t_ in a_.texts:

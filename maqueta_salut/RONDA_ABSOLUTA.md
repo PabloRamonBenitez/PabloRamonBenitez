@@ -216,3 +216,11 @@ Comprobación interna:
   - flechas llenas en las entradas (hotel, restaurante, rampa);
   - rótulos sin solapes y leyenda completa.
 - **Origen de cada parte**: la glorieta y su tamaño son una propuesta para que el camión maniobre; no salen de ninguna foto. El trazado del vial sí sale de F35, F47 y F73.
+
+## 12. Planos en ucraniano (26/11, noche)
+- **Juegos A3, A4 y plano de lugar**: todos los textos en ucraniano (títulos, rótulos, leyendas, cajetín, cotas de nivel y unidades en «м»).
+  - Plantas con numeración ucraniana: la planta baja es el 1.er piso.
+  - Se conservan los códigos de las fotos (F01…), los ejes y las secciones (L1, S4…) y las cifras.
+- **Comprobado**: ninguna palabra en español en los tres PDF.
+- **En español**: las hojas de trabajo (láminas definitivas, planos 2D con el cuadro de cotas), los dibujos explicativos y los informes, que sirven para revisar.
+

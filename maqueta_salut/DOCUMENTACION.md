@@ -4,6 +4,8 @@ Todo sale de una fuente única: el cuadro de cotas (`cotas.py`). De ahí se gene
 Normas de representación: Ching, *Manual de dibujo arquitectónico*, y *Normas de graficación* (ver `REPRESENTACION.md`).
 
 ## Planos
+Los juegos A3 y A4 y el plano de lugar van **en ucraniano** (`traduccion.py`). Las hojas de trabajo, las tablas y los informes siguen en español.
+
 | Archivo | Contenido |
 |---|---|
 | `SALUT_planos_A3_presentacion.pdf` | **Juego de presentación A3**: portada e índice, **plano de lugar 1984**, plantas 1:400, secciones y alzados alineados (1:500), detalle del módulo. Todas las láminas llevan sus fotos de contraste. |

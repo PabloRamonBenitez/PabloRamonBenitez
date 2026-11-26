@@ -145,6 +145,8 @@ def hoja_detalle():
     xl2, yl2 = (-2, 22), (8, 42)
     ax2, _ = IA.eje_escala(fig, (195, 50), xl2, yl2, 200)
     LM.planta(ax2, 9.2, ""); cotas_completas(ax2); IA.fijar(ax2, xl2, yl2, "planta +9,20: esquina, meseta, techo-rampa y escalera")
+    for a_ in (ax, ax2):                                 # a 1:200 nada sale de su recuadro (rótulos y cotas de la planta general)
+        for art in list(a_.texts) + list(a_.lines) + list(a_.patches): art.set_clip_on(True)
     fotos(fig, 322, 60, 86, 220, [("8.webp", "F08 – escalera en cuña con lamas"), ("11.webp", "F11 – rellanos tras las lamas"), ("18.webp", "F18 – chaflán: restaurante, columna, hotel")])
     IA.barra(fig, 14, 40, 200, 10)
     IA.cajetin(fig, "1:200")

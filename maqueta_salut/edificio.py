@@ -224,6 +224,16 @@ def plataforma_curva():
                     gm = orient(gm, 1.0)
                     out.append(prisma(list(gm.exterior.coords)[:-1], Z_P1 - 0.01, Z_P1 + 1.0))       # peto 1 m
             break
+    # final del giro: el peto se cierra en U (∩) en el extremo junto a la columna [F78, curvas azules del usuario]
+    from shapely.geometry import LineString as _LS
+    g = _K.planta(); C_ = np.array(g["C"]); E9 = np.array(g["E90"])
+    d = (E9 - C_) / np.linalg.norm(E9 - C_); n = np.array(N); w = _v["GIRO_W"]
+    th = np.linspace(0, math.pi, 24)
+    cen = C_ + n * w / 2
+    arco = [tuple(cen - n * (w / 2) * math.cos(t) - d * (w / 2) * math.sin(t)) for t in th]
+    lin = _LS(arco + [tuple(C_ + n * w + d * _v["GIRO_L"])])
+    u_ = orient(lin.buffer(0.125, cap_style=2), 1.0)
+    out.append(prisma(list(u_.exterior.coords)[:-1], Z_P1 - 0.01, Z_P1 + 1.0))
     return out
 
 
@@ -320,7 +330,7 @@ def base():
     m = m + ROT(caja(lx0, lx1, 0, 0.25, Z_PB, Z_PB + 1.0))                                       # antepecho / poyete
     # puertas del hotel en planta baja junto a la columna [usuario, F18]
     for hh in __import__("ventanas").catalogo():
-        if hh["grupo"] in ("hotel puertas PB", "bloque alto posterior"):
+        if hh["grupo"] in ("hotel puertas PB", "bloque alto posterior", "cristalera PB concha"):
             a = math.degrees(math.atan2(hh["n"][1], hh["n"][0]))
             b = Manifold.cube((1.2, hh["w"], hh["z1"] - hh["z0"])).translate((-0.6, -hh["w"] / 2, hh["z0"]))
             hue.append(b.rotate((0, 0, a)).translate((hh["p"][0], hh["p"][1], 0)))

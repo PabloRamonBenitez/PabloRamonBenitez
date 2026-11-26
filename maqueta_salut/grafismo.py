@@ -55,32 +55,17 @@ def rampas(ax, zc):
     pmin = 0.0                                                         # junto al hotel, casi plana
     eje_rampa(ax, [(xr, E.Y_CUNA - 0.3), (xr, y0)], 0.0, V["Z_CON"],
               f"RAMPA DE ACCESO · sube · P = {pmin:.0f}–{pmax:.0f} %", discont=arriba)
-    # recorrido del coche: sube por la rampa, a la izquierda siguiendo la curva hacia fuera, y a la derecha por la
-    # meseta (sobre la prolongación del chaflán) hasta el arranque del techo del restaurante, bajo la escalera
     import cotas as KK
-    g = KK.planta(); C = np.array(g["C"]); E90 = np.array(g["E90"]); yS = g["YS"]
+    g = KK.planta(); C = np.array(g["C"]); E90 = np.array(g["E90"])
     yb0 = E.plantas_base()["Q"][1] + V["R2_Y0"]; xb = (E.W_BAR + V["V_BAR"]) / 2
-    ctrl = [np.array([xr, yS + 4.0]), np.array([xr + 0.3, yS - 1.5]), (E90 + C) / 2 + np.array([1.5, 1.8]),
-            np.array([E.W_P - 1.5, E.T[1] + 6.0]), np.array([E.T[0], E.T[1] + 6.1]),           # rodea los lucernarios por fuera (giro en U)
-            np.array([xb, E.T[1] + 6.3]), np.array([xb, yb0 + 2.5])]
-    def bez(P, n=60):
-        out = []
-        for i in range(len(P) - 2):
-            p0, p1, p2 = (P[i] + P[i + 1]) / 2, P[i + 1], (P[i + 1] + P[i + 2]) / 2
-            if i == 0: p0 = P[0]
-            if i == len(P) - 3: p2 = P[-1]
-            for t in np.linspace(0, 1, n // (len(P) - 2)):
-                out.append((1 - t) ** 2 * p0 + 2 * (1 - t) * t * p1 + t ** 2 * p2)
-        return np.array(out)
-    cam = bez(ctrl)
-    ax.plot(cam[:, 0], cam[:, 1], color="#1a5fb4", lw=0.8, ls=(0, (6, 2, 1, 2)), zorder=81)
-    ax.add_patch(FancyArrowPatch(tuple(cam[-4]), tuple(cam[-1]), arrowstyle="-|>", mutation_scale=7, color="#1a5fb4", lw=0.8, zorder=81))
-    ax.text(E90[0] + 0.6, E90[1] + 1.5, "90°", fontsize=5, zorder=81)
-    ax.text((E90[0] + C[0]) / 2 + 1.2, (E90[1] + C[1]) / 2 + 3.0, "meseta +7,20\n(hotel debajo)".replace(".", ","), fontsize=4.4, style="italic", zorder=81)
+    ax.text((E90[0] + C[0]) / 2 + 1.2, (E90[1] + C[1]) / 2 + 3.0, "meseta +7,20\n(hotel debajo)", fontsize=4.4, style="italic", zorder=81)
+    ax.text(C[0] - 1.0, C[1] - 1.6, "final del giro\n(peto en U)", fontsize=4.4, style="italic", zorder=81)
     # 2) techo del restaurante en rampa: +7,2 → +11,5
     p2 = (E.Z_BAR_C - V["Z_P1"]) / V["R2_L"] * 100
-    eje_rampa(ax, [(xb, yb0 + 0.3), (xb, yb0 + V["R2_L"])], V["Z_P1"], E.Z_BAR_C,
-              f"TECHO DEL RESTAURANTE EN RAMPA (bajo la escalera) · sube · P = {p2:.0f} %", discont=zc is not None and zc < E.Z_BAR_C)
+    if zc is None or zc > E.Z_BAR_C:                               # cubierta inclinada (no es rampa de paso): solo en cubiertas
+        ax.annotate("", (xb, yb0 + V["R2_L"] - 0.5), (xb, yb0 + 0.5), arrowprops=dict(arrowstyle="-|>", lw=0.6, color="0.2"), zorder=81)
+        ax.text(xb + 0.5, yb0 + V["R2_L"] / 2, f"cubierta inclinada del restaurante +7,20 → +{E.Z_BAR_C:.2f} ({p2:.0f} %)".replace(".", ","),
+                fontsize=4.6, rotation=90, va="center", zorder=81)
 
 
 def escalera(ax, zc):

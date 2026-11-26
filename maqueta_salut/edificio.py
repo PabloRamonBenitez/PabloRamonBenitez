@@ -256,8 +256,16 @@ def base():
         perfil = CrossSection([[(0.0, 0.0), (1.6, 0.0), (0.0, 1.0)]])          # cara vertical acristalada + faldón inclinado
         if perfil.area() <= 0: perfil = CrossSection([[(0.0, 0.0), (0.0, 1.0), (1.6, 0.0)]])
         return Manifold.extrude(perfil, 1.6).rotate((90, 0, 0)).translate((x - 0.8, y + 0.8, Z_P1 - 0.01))
-    # (los 10 lucernarios en diente de sierra de F01 son del EDIFICIO COLINDANTE, en su parte que sale a la calle:
-    #  no van en el modelo; se dibujan en el entorno) [usuario 26/11]
+    # 10 lucernarios en diente de sierra sobre la cubierta del bloque alto, junto a la medianera, en la parte que sale
+    # a la calle: 5 en línea y 5 en otra disposición [F01 1984, usuario 26/11]
+    def diente(x, y):
+        perfil = CrossSection([[(0.0, 0.0), (1.2, 0.0), (0.0, 0.8)]])
+        if perfil.area() <= 0: perfil = CrossSection([[(0.0, 0.0), (0.0, 0.8), (1.2, 0.0)]])
+        return Manifold.extrude(perfil, 1.0).rotate((90, 0, 0)).translate((x - 0.5, y + 0.6, Z_ALTO - 0.01))
+    for i in range(5):
+        sc.append(diente(-L_C + 1.0 + 1.3 * i, -_v["VOL_V"] + 1.4))
+    for x, y in ((1.2, 4.2), (2.8, 5.4), (4.4, 4.2), (6.0, 5.4), (3.6, 7.6)):
+        sc.append(diente(-L_C + x, y))
     s.append(ROT(Manifold.batch_boolean(sc, OpType.Add)))
     # ala larga: bar en la mitad interior hasta el tramo final; terraza con peto en la mitad exterior [F47, Bing]
     yb0 = pl["Q"][1] + _v["R2_Y0"]                                      # arranca tras el vuelo del cuello (rellano del giro en U delante) [usuario 26/11]

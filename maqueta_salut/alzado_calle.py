@@ -57,7 +57,7 @@ def torre(ax, zo=10):
         o = np.array([math.cos(L_["a"]), math.sin(L_["a"])])
         if o @ ED > 0.3: continue
         uu = u_of(L_["c"]); w = L_["l"] / 2 * (abs(o @ EU) + abs(o @ ED))
-        ax.add_patch(Polygon([(uu - w, L_["z"]), (uu + w, L_["z"]), (uu, L_["z"] + L_["h"])], closed=True, fc="#dfe8ee", ec="k", lw=0.5, zorder=zo + 2))
+        ax.add_patch(Polygon([(uu - w, L_["z"]), (uu + w, L_["z"]), (uu, L_["z"] + L_["h"])], closed=True, fc="white", ec="k", lw=0.5, zorder=zo + 2))
     # columna, cuello y losa
     rect(ax, uT - E.R_COL, uT + E.R_COL, 0, E.Z_CU0, HORM, zo + 3)
     rect(ax, uT - E.R_CU, uT + E.R_CU, E.Z_CU0, E.Z_CU1, HORM, zo + 1)

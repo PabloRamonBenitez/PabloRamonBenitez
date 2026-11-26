@@ -55,7 +55,7 @@ def planta(ax, zc, titulo, aerea=False):
         for L_ in LS:
             u = np.array([math.cos(L_["a"]), math.sin(L_["a"])]); v = np.array([-u[1], u[0]]); c = np.array(L_["c"]); h = L_["l"] / 2
             q = [c + u * h + v * h, c - u * h + v * h, c - u * h - v * h, c + u * h - v * h]
-            ax.add_patch(_Pg(q, closed=True, fc="#e6eef3", ec="k", lw=0.5, zorder=6.4))
+            ax.add_patch(_Pg(q, closed=True, fc="white", ec="k", lw=0.5, zorder=6.4))
             for qq in q: ax.plot(*zip(c, qq), color="k", lw=0.3, zorder=6.45)
         if LS:
             c = np.array(LS[len(LS) // 2]["c"]); d = c - np.array(E.T); d /= np.linalg.norm(d)
@@ -89,11 +89,11 @@ def estructura_torre(ax, zc):
             return [E.esc_ang_pt(r1, d0 + (d1 - d0) * k / n) for k in range(n + 1)] + [E.esc_ang_pt(r0, d1 - (d1 - d0) * k / n) for k in range(n + 1)]
         HB, mw = E.ESC_HB, math.atan2(VT.MURO, E.ESC_RC)
         for d0, d1 in (((-HB, -HB + mw), (HB - mw, HB)) if zc < E.Z_T1 else ()):
-            ax.add_patch(Polygon(sec(E.ESC_R0, E.ESC_RC, d0, d1), closed=True, fc="#9a9a9a", ec="k", lw=1.0, zorder=7.3))
+            ax.add_patch(Polygon(sec(E.ESC_R0, E.ESC_RC, d0, d1), closed=True, fc="white", ec="k", hatch="////", lw=1.0, zorder=7.3))
         for r0 in ((E.ESC_R0, E.ESC_RC - VT.MURO) if zc < E.Z_T1 else ()):
-            ax.add_patch(Polygon(sec(r0, r0 + VT.MURO, -HB, HB), closed=True, fc="#9a9a9a", ec="k", lw=1.0, zorder=7.3))
+            ax.add_patch(Polygon(sec(r0, r0 + VT.MURO, -HB, HB), closed=True, fc="white", ec="k", hatch="////", lw=1.0, zorder=7.3))
         if zc > E.Z_T1:                                   # por encima del tambor: solo el muro de coronación inclinada [dron, usuario]
-            ax.add_patch(Polygon(sec(E._v["ESC_RS"], E.ESC_R1 + 0.3, -HB, -HB + 0.3 / E._v["ESC_RS"]), closed=True, fc="#9a9a9a", ec="k", lw=1.0, zorder=7.4))
+            ax.add_patch(Polygon(sec(E._v["ESC_RS"], E.ESC_R1 + 0.3, -HB, -HB + 0.3 / E._v["ESC_RS"]), closed=True, fc="white", ec="k", hatch="////", lw=1.0, zorder=7.4))
         if E._v["ESC_Z0"] < zc < E._v["ESC_ZL"]:
             nl = int(E._v["LAMA_N"]) - 1
             for k in range(nl + 1):
@@ -166,14 +166,14 @@ def cotas_planta(ax):
     # cota de cubierta de cada volumen
     for (x, y), z in (((3, 70), E.Z_BAR_C), ((10, 70), E.Z_P1 + E._v["H_PET"]), ((tuple(E.SWP(-12, 9))), E.Z_ALTO), 
                       (E.esc_ang_pt(E.ESC_R0 - 1.2, 0), E._v["ESC_Z1"])):
-        ax.text(x, y, f"+{z:.2f}".replace(".", ","), fontsize=6.5, color="navy", ha="center", bbox=dict(fc="white", ec="navy", lw=0.4, pad=0.6), zorder=70)
+        ax.text(x, y, f"+{z:.2f}".replace(".", ","), fontsize=6.5, color="k", ha="center", bbox=dict(fc="white", ec="k", lw=0.4, pad=0.6), zorder=70)
     # trazas de las secciones
     for k, p0, p1, _ in SECC:
-        ax.plot(*zip(p0, p1), "-.", color="crimson", lw=0.7, zorder=65)
+        ax.plot(*zip(p0, p1), "-.", color="k", lw=0.7, zorder=65)
         t_ = (np.array(p1, float) - np.array(p0, float)); t_ /= np.linalg.norm(t_); n_ = np.array([-t_[1], t_[0]])   # sentido de la vista (Ching, p. 70)
         for q in (np.array(p0, float), np.array(p1, float)):
-            ax.annotate("", tuple(q + n_ * 2.2), tuple(q), arrowprops=dict(arrowstyle="-|>", color="crimson", lw=0.8), zorder=66)
-        ax.text(*p0, k, color="crimson", fontsize=8, weight="bold", zorder=66); ax.text(*p1, k, color="crimson", fontsize=8, weight="bold", zorder=66)
+            ax.annotate("", tuple(q + n_ * 2.2), tuple(q), arrowprops=dict(arrowstyle="-|>", color="k", lw=0.8), zorder=66)
+        ax.text(*p0, k, color="k", fontsize=8, weight="bold", zorder=66); ax.text(*p1, k, color="k", fontsize=8, weight="bold", zorder=66)
     for tx in ax.texts: tx.set_clip_on(True)
 
 def plantas():
@@ -210,46 +210,54 @@ def orientar(m, p0=None, a_deg=0.0):
 
 
 def tramos_escalera(ax, p0, p1):
-    """escalera de ida y vuelta en sección, representación normalizada [usuario 26/11]:
-    tramo CORTADO = losa (zanca) de 0,15 con peldaños, rellenada con la trama de lo cortado; rellanos cortados de 0,20;
-    tramo VISTO (el de vuelta, detrás del plano) = peldaños y zanca en línea fina; pasamanos a 0,90 (sin diseño de barandilla:
-    no hay datos); cota de paso libre de cabeza. Peldaño 0,172 × 0,28 (9 contrahuellas por tramo, F = 3,10)."""
+    """escalera de ida y vuelta en sección [usuario 26/11; Ching]:
+    - un tramo por media planta: cada FORJADO del barril es rellano de planta y a media altura hay rellano intermedio;
+    - rellanos de 1,60 (lo que hace falta para girar con el ancho del tramo);
+    - muro central entre los dos tramos (ojo de la escalera);
+    - la escalera llega a la ÚLTIMA planta (salida a la cubierta del barril) y no sigue: por encima, paso libre hasta el forjado superior;
+    - si el corte pasa por el muro central, el muro va cortado; si pasa por un tramo, ese tramo va cortado y detrás
+      se ve el muro central (el otro tramo queda oculto, en discontinua)."""
     from matplotlib.patches import Polygon as Pg, Rectangle
     V = E._v; p0 = np.array(p0, float); p1 = np.array(p1, float); d = (p1 - p0) / np.linalg.norm(p1 - p0); n = np.array([-d[1], d[0]])
     ax_ = np.array([math.cos(E.ESC_ANG), math.sin(E.ESC_ANG)]); T = np.array(E.T)
     pin, pout = T + (V["ESC_R0"] + 0.3) * ax_, T + (V["ESC_RC"] - 0.3) * ax_
-    if max(abs((pin - p0) @ n), abs((pout - p0) @ n)) > V["ESC_RC"] * math.sin(E.ESC_HB): return
+    off = (T - p0) @ n                                          # distancia del corte al eje de la escalera
+    if abs(off) > V["ESC_RC"] * math.sin(E.ESC_HB): return
     uin, uout = (pin - p0) @ d, (pout - p0) @ d; s = np.sign(uout - uin)
-    nst, h, t, w = 9, E.F / 18, 0.28, 0.15
+    nst, h, t, w, LR = 9, E.F / 18, 0.28, 0.15, 1.60
     run = (nst - 1) * t
-    uB = uout - s * 1.5; uA = uB - s * run                   # rellano intermedio 1,50 contra el muro exterior; el de planta enlaza con el pasillo
-    ST = dict(fc="white", ec="k", lw=0.8, hatch="......", zorder=31)
-    z = E.Z_B0
-    k = 0
-    while z + E.F <= V["ESC_ZL"] + 0.01:
+    uB = uout - s * LR; uA = uB - s * run
+    CUT = dict(fc="white", ec="k", lw=1.1, hatch="////", zorder=31)
+    z_fin = E.Z_B1                                              # última planta: salida a la cubierta del barril
+    muro_cortado = abs(off) < 0.2
+    zz0 = E.Z_B0
+    if muro_cortado:                                            # muro central cortado entre los tramos
+        ax.add_patch(Rectangle((min(uA, uB), zz0), abs(uB - uA), z_fin - zz0, **CUT))
+    else:                                                       # muro central visto detrás del tramo cortado
+        ax.add_patch(Rectangle((min(uA, uB), zz0), abs(uB - uA), z_fin - zz0, fc="none", ec="k", lw=0.45, zorder=29))
+    cosa = t / math.hypot(t, h)
+    z = zz0
+    while z < z_fin - 0.01:
         zi = z + E.F / 2
-        # tramo 1 (sube hacia fuera): CORTADO
-        top = [(uA, z)]
-        for i in range(nst):
-            top += [(uA + s * t * i, z + h * (i + 1)), (uA + s * t * (i + 1) if i < nst - 1 else uB, z + h * (i + 1))]
-        cosa = t / math.hypot(t, h); sol = [(uB, zi - w / cosa - 0.0), (uA, z - w / cosa)]
-        ax.add_patch(Pg(top + [(uB, zi - 0.20)] + sol, closed=True, **ST))
-        # rellano intermedio cortado y rellano de planta (losa del forjado en el hueco)
-        ax.add_patch(Rectangle((min(uB, uout), zi - 0.20), abs(uout - uB), 0.20, **ST))
-        ax.add_patch(Rectangle((min(uin, uA), z + E.F - 0.20), abs(uA - uin), 0.20, **ST))
-        # tramo 2 (baja de vuelta hacia dentro, detrás del plano): VISTO
-        xs, ys = [uB], [zi]
-        for i in range(nst):
-            xs += [uB - s * t * i, uB - s * t * (i + 1) if i < nst - 1 else uA]; ys += [zi + h * (i + 1)] * 2
-        ax.plot(xs, ys, color="0.35", lw=0.35, zorder=29)
-        ax.plot([uB, uA], [zi - w / cosa, z + E.F - w / cosa], color="0.35", lw=0.35, zorder=29)
-        # pasamanos a 0,90 sobre la línea de peldaños (solo el visto; sin diseño de barandilla)
-        ax.plot([uA, uB], [z + 0.9 + h, zi + 0.9], color="k", lw=0.5, zorder=32)
-        ax.plot([uB, uA], [zi + 0.9 + h, z + E.F + 0.9], color="0.35", lw=0.35, zorder=29)
-        if k == 1:                                            # paso libre de cabeza bajo el rellano de planta
-            um = (uA + uB) / 2; zs = z + h * (nst / 2 + 0.5)
-            L.cota(ax, (um, zs), (um, z + E.F - 0.20), -0.6 * s, "libre", fs=4.5)
-        k += 1; z += E.F
+        for k, (ua_, ub_, za, zb) in enumerate(((uA, uB, z, zi), (uB, uA, zi, z + E.F))):
+            sg = np.sign(ub_ - ua_)
+            top = [(ua_, za)]
+            for i_ in range(nst):
+                top += [(ua_ + sg * t * i_, za + h * (i_ + 1)), (ua_ + sg * t * (i_ + 1) if i_ < nst - 1 else ub_, za + h * (i_ + 1))]
+            sol = [(ub_, zb - w / cosa), (ua_, za - w / cosa)]
+            cortado = (not muro_cortado) and ((k == 0) == (off * s > 0))
+            if muro_cortado or cortado:
+                if cortado: ax.add_patch(Pg(top + sol, closed=True, **CUT))
+            else:                                               # tramo oculto tras el muro central
+                ax.plot(*np.array(top).T, color="k", lw=0.3, ls=(0, (3, 2)), zorder=28)
+        # rellanos cortados (abarcan todo el ancho): intermedio contra el muro exterior y de planta = forjado del barril
+        ax.add_patch(Rectangle((min(uB, uout), zi - 0.20), abs(uout - uB), 0.20, **CUT))
+        ax.add_patch(Rectangle((min(uin, uA), z + E.F - 0.20), abs(uA - uin), 0.20, **CUT))
+        z += E.F
+    ax.add_patch(Rectangle((min(uin, uA), zz0 - 0.20), abs(uA - uin), 0.20, **CUT))
+    # paso libre de cabeza sobre el último rellano hasta el forjado superior
+    zt = V["ESC_ZL"] - 0.3
+    L.cota(ax, ((uin + uA) / 2, z_fin), ((uin + uA) / 2, zt), 0.0, "paso libre", fs=4.5)
 
 def seccion(ax, p0, p1, titulo):
     a = math.degrees(math.atan2(p1[1] - p0[1], p1[0] - p0[0]))
@@ -304,7 +312,7 @@ def forjados_seccion(ax, cs, hueco_u=None):
                 g = g.difference(box(hueco_u[0], zl - 1, hueco_u[1], zl + 1))
             for gm in getattr(g, "geoms", [g]):
                 if gm.geom_type == "Polygon" and not gm.is_empty and gm.area > 0.3:
-                    ax.add_patch(Polygon(np.array(gm.exterior.coords), closed=True, fc="#9a9a9a", ec="k", lw=0.9, zorder=6))
+                    ax.add_patch(Polygon(np.array(gm.exterior.coords), closed=True, fc="white", ec="k", hatch="////", lw=0.9, zorder=6))
 
 
 def nucleo_seccion(ax, p0, p1):
@@ -319,17 +327,17 @@ def nucleo_seccion(ax, p0, p1):
         hc = math.sqrt(E.R_CU ** 2 - dist ** 2)
         for sg in (-1, 1):
             x = sc + sg * hc
-            ax.add_patch(Rectangle((x - (0.4 if sg > 0 else 0), E.Z_CU0), 0.4, E.Z_CU1 - E.Z_CU0, fc="#9a9a9a", ec="k", lw=0.9, zorder=6.5))
+            ax.add_patch(Rectangle((x - (0.4 if sg > 0 else 0), E.Z_CU0), 0.4, E.Z_CU1 - E.Z_CU0, fc="white", ec="k", hatch="////", lw=0.9, zorder=6.5))
         hl = math.sqrt(max((E.R_CU + 0.6) ** 2 - dist ** 2, 0))
-        ax.add_patch(Rectangle((sc - hl, E.Z_CU0), 2 * hl, 0.6, fc="#9a9a9a", ec="k", lw=0.9, zorder=6.5))
+        ax.add_patch(Rectangle((sc - hl, E.Z_CU0), 2 * hl, 0.6, fc="white", ec="k", hatch="////", lw=0.9, zorder=6.5))
     if dist < E.R_B:
         hb = math.sqrt(E.R_B ** 2 - dist ** 2)
-        ax.add_patch(Rectangle((sc - hb, E.Z_CU1 - 0.4), 2 * hb, 0.4, fc="#9a9a9a", ec="k", lw=0.9, zorder=6.5))
+        ax.add_patch(Rectangle((sc - hb, E.Z_CU1 - 0.4), 2 * hb, 0.4, fc="white", ec="k", hatch="////", lw=0.9, zorder=6.5))
     if dist >= E.R_COL - 0.05: return
     h = math.sqrt(E.R_COL ** 2 - dist ** 2)
     for sg in (-1, 1):
         x = sc + sg * h
-        ax.add_patch(Rectangle((x - (VT.MURO if sg > 0 else 0), 0), VT.MURO, E.Z_B1, fc="#9a9a9a", ec="k", lw=0.9, zorder=6.5))
+        ax.add_patch(Rectangle((x - (VT.MURO if sg > 0 else 0), 0), VT.MURO, E.Z_B1, fc="white", ec="k", hatch="////", lw=0.9, zorder=6.5))
     ax.text(sc, E.Z_B0 + 1.5 * E.F, "núcleo", fontsize=6, ha="center", rotation=90, zorder=7)
 
 
@@ -418,8 +426,8 @@ def cruces(ax, p0, p1, k0, ytop=50):
         s = ((q0[0] - p0[0]) * e[1] - (q0[1] - p0[1]) * e[0]) / den
         u = ((q0[0] - p0[0]) * t[1] - (q0[1] - p0[1]) * t[0]) / den
         if 0 <= s <= L_ and 0 <= u <= 1:
-            ax.plot([s, s], [-1, ytop], color="crimson", lw=0.7, ls="-.", zorder=60)
-            ax.text(s, ytop + 0.5, k, color="crimson", fontsize=8, weight="bold", ha="center", zorder=60)
+            ax.plot([s, s], [-1, ytop], color="k", lw=0.7, ls="-.", zorder=60)
+            ax.text(s, ytop + 0.5, k, color="k", fontsize=8, weight="bold", ha="center", zorder=60)
 
 
 
@@ -429,8 +437,8 @@ def secciones():
     ax = fig.add_axes([0.05, 0.04, 0.55, 0.9])
     planta(ax, None, "situación de las secciones", aerea=True)
     for k, p0, p1, _ in SECC:
-        ax.plot(*zip(p0, p1), "-.", color="crimson", lw=1)
-        ax.text(*p0, k, color="crimson", fontsize=10, weight="bold"); ax.text(*p1, k, color="crimson", fontsize=10, weight="bold")
+        ax.plot(*zip(p0, p1), "-.", color="k", lw=1)
+        ax.text(*p0, k, color="k", fontsize=10, weight="bold"); ax.text(*p1, k, color="k", fontsize=10, weight="bold")
     ejes(ax, (-32, 36), (-12, 102))
     OUT.append(fig)
     for grupo in [[s] for s in SECC]:

@@ -207,28 +207,46 @@ def orientar(m, p0=None, a_deg=0.0):
 
 
 def tramos_escalera(ax, p0, p1):
-    """escalera de ida y vuelta dibujada en la sección cuando el corte pasa por la cuña (no planos vacíos) [usuario 26/11]:
-    por planta, un tramo hacia fuera hasta el rellano intermedio y otro de vuelta; peldaños de 0,17 × 0,28"""
+    """escalera de ida y vuelta en sección, representación normalizada [usuario 26/11]:
+    tramo CORTADO = losa (zanca) de 0,15 con peldaños, rellenada con la trama de lo cortado; rellanos cortados de 0,20;
+    tramo VISTO (el de vuelta, detrás del plano) = peldaños y zanca en línea fina; pasamanos a 0,90 (sin diseño de barandilla:
+    no hay datos); cota de paso libre de cabeza. Peldaño 0,172 × 0,28 (9 contrahuellas por tramo, F = 3,10)."""
+    from matplotlib.patches import Polygon as Pg, Rectangle
     V = E._v; p0 = np.array(p0, float); p1 = np.array(p1, float); d = (p1 - p0) / np.linalg.norm(p1 - p0); n = np.array([-d[1], d[0]])
     ax_ = np.array([math.cos(E.ESC_ANG), math.sin(E.ESC_ANG)]); T = np.array(E.T)
-    ra, rb = V["ESC_R0"] + 1.6, V["ESC_RC"] - 1.6
-    pa, pb = T + ra * ax_, T + rb * ax_
-    if max(abs((pa - p0) @ n), abs((pb - p0) @ n)) > 2 * V["ESC_RC"] * math.sin(E.ESC_HB): return
-    ua, ub = (pa - p0) @ d, (pb - p0) @ d
-    z = E.Z_B0 - E.F
-    while z < V["ESC_ZL"] - 0.5:
-        for k, (u0, u1, za, zb, st) in enumerate(((ua, ub, z, z + E.F / 2, "-"), (ub, ua, z + E.F / 2, z + E.F, ":"))):
-            if za < V["ESC_Z0"]: continue
-            npel = max(int(round((zb - za) / 0.17)), 2)
-            us = np.linspace(u0, u1, npel + 1); zs = np.linspace(za, zb, npel + 1)
-            xs, ys = [us[0]], [zs[0]]
-            for i in range(npel):
-                xs += [us[i], us[i + 1]]; ys += [zs[i + 1], zs[i + 1]]
-            ax.plot(xs, ys, color="k", lw=0.7 if k == 0 else 0.4, ls="-" if k == 0 else (0, (2, 1.5)), zorder=30)
-            ax.plot([u0, u1], [za - 0.25, zb - 0.25], color="k", lw=0.5 if k == 0 else 0.3, zorder=30)
-        for uu, zz in ((ub, z + E.F / 2), (ua, z + E.F)):            # rellanos
-            ax.plot([uu - 1.3 * np.sign(ub - ua) * (1 if uu == ub else -1), uu], [zz, zz], color="k", lw=0.8, zorder=30)
-        z += E.F
+    pin, pout = T + (V["ESC_R0"] + 0.3) * ax_, T + (V["ESC_RC"] - 0.3) * ax_
+    if max(abs((pin - p0) @ n), abs((pout - p0) @ n)) > V["ESC_RC"] * math.sin(E.ESC_HB): return
+    uin, uout = (pin - p0) @ d, (pout - p0) @ d; s = np.sign(uout - uin)
+    nst, h, t, w = 9, E.F / 18, 0.28, 0.15
+    run = (nst - 1) * t
+    uB = uout - s * 1.5; uA = uB - s * run                   # rellano intermedio 1,50 contra el muro exterior; el de planta enlaza con el pasillo
+    ST = dict(fc="white", ec="k", lw=0.8, hatch="......", zorder=31)
+    z = E.Z_B0
+    k = 0
+    while z + E.F <= V["ESC_ZL"] + 0.01:
+        zi = z + E.F / 2
+        # tramo 1 (sube hacia fuera): CORTADO
+        top = [(uA, z)]
+        for i in range(nst):
+            top += [(uA + s * t * i, z + h * (i + 1)), (uA + s * t * (i + 1) if i < nst - 1 else uB, z + h * (i + 1))]
+        cosa = t / math.hypot(t, h); sol = [(uB, zi - w / cosa - 0.0), (uA, z - w / cosa)]
+        ax.add_patch(Pg(top + [(uB, zi - 0.20)] + sol, closed=True, **ST))
+        # rellano intermedio cortado y rellano de planta (losa del forjado en el hueco)
+        ax.add_patch(Rectangle((min(uB, uout), zi - 0.20), abs(uout - uB), 0.20, **ST))
+        ax.add_patch(Rectangle((min(uin, uA), z + E.F - 0.20), abs(uA - uin), 0.20, **ST))
+        # tramo 2 (baja de vuelta hacia dentro, detrás del plano): VISTO
+        xs, ys = [uB], [zi]
+        for i in range(nst):
+            xs += [uB - s * t * i, uB - s * t * (i + 1) if i < nst - 1 else uA]; ys += [zi + h * (i + 1)] * 2
+        ax.plot(xs, ys, color="0.35", lw=0.35, zorder=29)
+        ax.plot([uB, uA], [zi - w / cosa, z + E.F - w / cosa], color="0.35", lw=0.35, zorder=29)
+        # pasamanos a 0,90 sobre la línea de peldaños (solo el visto; sin diseño de barandilla)
+        ax.plot([uA, uB], [z + 0.9 + h, zi + 0.9], color="k", lw=0.5, zorder=32)
+        ax.plot([uB, uA], [zi + 0.9 + h, z + E.F + 0.9], color="0.35", lw=0.35, zorder=29)
+        if k == 1:                                            # paso libre de cabeza bajo el rellano de planta
+            um = (uA + uB) / 2; zs = z + h * (nst / 2 + 0.5)
+            L.cota(ax, (um, zs), (um, z + E.F - 0.20), -0.6 * s, "libre", fs=4.5)
+        k += 1; z += E.F
 
 def seccion(ax, p0, p1, titulo):
     a = math.degrees(math.atan2(p1[1] - p0[1], p1[0] - p0[0]))

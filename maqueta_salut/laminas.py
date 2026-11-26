@@ -238,7 +238,7 @@ def seccion(ax, p0, p1, titulo):
     L.dibujar_vista(ax, mas_alla)
     cs = m.slice(0.0)
     L.corte(ax, cs, huecos=huecos_seccion(p0, p1))
-    forjados_seccion(ax, cs)
+    forjados_seccion(ax, cs, hueco_escalera(p0, p1))
     nucleo_seccion(ax, p0, p1)
     ax.axhline(0, color="k", lw=1.6)
     for z, t in ((E.Z_PB, "techo PB"), (E.Z_P1, "terraza / planta 1"), (E.Z_BAR, "bar"), (E.Z_ALTO, "bloque alto"),
@@ -250,8 +250,22 @@ def seccion(ax, p0, p1, titulo):
     ax.set_title(titulo, fontsize=9, loc="left")
 
 
-def forjados_seccion(ax, cs):
-    """forjados de 0,30 dentro de cada recinto cortado: techo de PB en la base y cada planta del barril"""
+
+def hueco_escalera(p0, p1):
+    """tramo [u0, u1] de la línea de sección que cae dentro de la cuña de la escalera (en planta), o None"""
+    from shapely.geometry import Polygon as SP, LineString
+    V = E._v; n = 24
+    pts = [E.esc_ang_pt(V["ESC_RC"], -E.ESC_HB + 2 * E.ESC_HB * k / n) for k in range(n + 1)] + \
+          [E.esc_ang_pt(V["ESC_R0"], E.ESC_HB - 2 * E.ESC_HB * k / n) for k in range(n + 1)]
+    g = SP(pts).buffer(0).intersection(LineString([p0, p1]))
+    if g.is_empty or g.length < 0.5: return None
+    p0 = np.array(p0, float); d = (np.array(p1, float) - p0); d /= np.linalg.norm(d)
+    us = [(np.array(c) - p0) @ d for c in g.coords] if g.geom_type == "LineString" else [(np.array(c) - p0) @ d for gg in g.geoms for c in gg.coords]
+    return (min(us) + VT.MURO, max(us) - VT.MURO)
+
+def forjados_seccion(ax, cs, hueco_u=None):
+    """forjados de 0,30 dentro de cada recinto cortado: techo de PB en la base y cada planta del barril;
+    se interrumpen en la caja de la escalera (hueco_u = tramo de la sección dentro de la cuña) [usuario 26/11]"""
     from matplotlib.patches import Polygon
     from shapely.geometry import Polygon as SP, box
     niveles = [E.Z_PB] + [E.Z_B0 + i * E.F for i in range(1, E._v["N_PL"])]
@@ -264,6 +278,8 @@ def forjados_seccion(ax, cs):
         for zl in niveles:
             if not (z0 + 0.5 < zl < z1 - 0.5): continue
             g = inn.intersection(box(x0 - 1, zl - VT.MURO, x1 + 1, zl))
+            if hueco_u is not None and zl > E.Z_CU1:
+                g = g.difference(box(hueco_u[0], zl - 1, hueco_u[1], zl + 1))
             for gm in getattr(g, "geoms", [g]):
                 if gm.geom_type == "Polygon" and not gm.is_empty and gm.area > 0.3:
                     ax.add_patch(Polygon(np.array(gm.exterior.coords), closed=True, fc="#9a9a9a", ec="k", lw=0.9, zorder=6))
@@ -276,6 +292,17 @@ def nucleo_seccion(ax, p0, p1):
     T = np.array(E.T); q = T - p0; sc = q @ tl; dist = abs(q[0] * tl[1] - q[1] * tl[0])
     for R in (E.R_COL, E.R_COL - VT.MURO):
         pass
+    # BASE DEL TAMBOR cortada: muros del cuello (0,40), losa inferior volada (0,60) y fondo del barril (0,40) [usuario 26/11]
+    if dist < E.R_CU:
+        hc = math.sqrt(E.R_CU ** 2 - dist ** 2)
+        for sg in (-1, 1):
+            x = sc + sg * hc
+            ax.add_patch(Rectangle((x - (0.4 if sg > 0 else 0), E.Z_CU0), 0.4, E.Z_CU1 - E.Z_CU0, fc="#9a9a9a", ec="k", lw=0.9, zorder=6.5))
+        hl = math.sqrt(max((E.R_CU + 0.6) ** 2 - dist ** 2, 0))
+        ax.add_patch(Rectangle((sc - hl, E.Z_CU0), 2 * hl, 0.6, fc="#9a9a9a", ec="k", lw=0.9, zorder=6.5))
+    if dist < E.R_B:
+        hb = math.sqrt(E.R_B ** 2 - dist ** 2)
+        ax.add_patch(Rectangle((sc - hb, E.Z_CU1 - 0.4), 2 * hb, 0.4, fc="#9a9a9a", ec="k", lw=0.9, zorder=6.5))
     if dist >= E.R_COL - 0.05: return
     h = math.sqrt(E.R_COL ** 2 - dist ** 2)
     for sg in (-1, 1):

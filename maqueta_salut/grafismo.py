@@ -21,8 +21,8 @@ def cota_nivel(ax, p, z, z_=82):
 
 
 def eje_rampa(ax, pts, z0, z1, rotulo, discont=False, z_=81, ancho=None):
-    """RAMPA en planta (convención del usuario): triángulo muy claro con la base en el ARRANQUE (abajo, z0) y el vértice,
-    marcado con un punto, en el EXTREMO SUPERIOR (z1); dos líneas finas del punto a las esquinas del arranque.
+    """RAMPA en planta (convención del usuario): triángulo muy fino y claro con la base en el ARRANQUE (abajo, z0) y el vértice en el
+    EXTREMO SUPERIOR (z1), donde confluyen las dos líneas (sin marcar ningún punto).
     pts: eje de abajo (pts[0]) a arriba (pts[-1]); ancho: ancho de la rampa (si no, 2,4 m)."""
     pts = [np.array(p, float) for p in pts]
     a, b = pts[0], pts[-1]
@@ -31,7 +31,6 @@ def eje_rampa(ax, pts, z0, z1, rotulo, discont=False, z_=81, ancho=None):
     for s in (-1, 1):
         ax.plot([a[0] + s * n[0] * w, b[0]], [a[1] + s * n[1] * w, b[1]], color="0.45", lw=0.3, ls=ls, zorder=z_)
     ax.plot([a[0] - n[0] * w, a[0] + n[0] * w], [a[1] - n[1] * w, a[1] + n[1] * w], color="0.45", lw=0.3, ls=ls, zorder=z_)
-    ax.add_patch(Circle(tuple(b), 0.22, fc=K, ec=K, lw=0.3, zorder=z_ + 0.1))          # el punto, en el extremo superior
     m = a + (b - a) * 0.45
     ang = _ang(a, b)
     if ang > 90: ang -= 180

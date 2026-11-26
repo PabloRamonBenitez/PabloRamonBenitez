@@ -72,7 +72,7 @@ COTAS = {
  "Z_LAD1": (10.0, "coronación de la caja de ladrillo", "F01, F19"),
  "Z_CON":  (7.2,  "llegada de la rampa de acceso a la terraza-restaurante = cota de la terraza", "lógica de recorrido · peto F09 +8,3 ± 0,8"),
  # --- torre
- "Z_CU0":  (10.4, "base del cuello", "F09"),
+ "Z_CU0": (9.2, "base del cuello = cara inferior de la losa volada", "F09 +9,03 · F70 +9,05 (aparente) / +9,2 · F14 +9,02 (aparente) / +9,4; escala por el paso de forjados en cada foto · antes 10,40"),
  "Z_CU1":  (13.9, "cara superior del cuello = cara inferior del barril (primer forjado)", "F09 14,4 ± 0,6 ajustado por coherencia con Z_B0 (pasada 7)"),
  "Z_ALE":  (15.2, "borde inferior de las aletas (fin de las ménsulas)", "F09"),
  "Z_B0":   (13.9, "primer forjado del barril", "F09 (paso 3,10)"),

@@ -15,7 +15,7 @@ COLS = [  # (col, foto, descripción)
  ("C24", "ALAMY", "casi alzado: código de la verdad de la torre"), ("C25", "F78", "base: cuello, lucernarios, pie de escalera"),
  ("C26", "ESC-LAT", "escalera de frente/lateral (juntas = forjados)"), ("C27", "ESC-FRENTE", "escalera de frente (2 fotos del usuario)"),
  ("C28", "DRON", "dron: tambor, terraza, muro inclinado, letras"), ("C29", "BOOKING", "concha desde la plaza (líneas roja/amarilla/verde)"),
- ("C30", "FRONTAL", "ala corta frontal (logia, vuelo)")]
+ ("C30", "FRONTAL", "ala corta frontal (logia, vuelo)"), ("C31", "F70", "postal 1984 frontal (paso de forjados)")]
 OLD = ["C01", "C02", "C03", "C04", "C05", "C06", "C07", "C08", "C09", "C10", "C11", "C12", "C13", "C14", "C15", "C16", "C17", "C18"]
 
 E = {  # evidencias documentadas en la conversación (zona -> {col: (estado, nota)})
@@ -27,7 +27,7 @@ E = {  # evidencias documentadas en la conversación (zona -> {col: (estado, not
  "Z06": {"C24": ("OK", "forjados ≤0,05; canto 0,59, poyete 0,78, ranura 0,27; 19 aletas, giro 14,21°"), "C04": ("OK", "7 forjados, rms 0,02"), "C26": ("OK", "juntas de lamas cada 3,10")},
  "Z07": {"C04": ("OK", "+13,90")},
  "Z08": {"C25": ("≈", "aristas de las aletas bajo el barril")},
- "Z09": {"C04": ("NO", "base del cuello +9,0 en F09 frente a +10,40"), "C25": ("?", "")},
+ "Z09": {"C04": ("OK", "+9,03 (7 forjados + profundidad)"), "C03": ("OK", "F14: +9,02 aparente / ≈ +9,4"), "C31": ("OK", "+9,05 aparente / +9,2"), "C25": ("≈", "pirámides casi tocan el cuello")},
  "Z32": {"C25": ("≈", "6 pirámides visibles; posición deducida (terraza a +7,20), no medida")},
  "Z11": {"C04": ("OK", "X 12,8; 6 paños"), "C05": ("OK", "5 y pico")},
  "Z13": {"C04": ("OK", "Y 10,1; 4 paños"), "C05": ("OK", "4 y pico; esquina a 90°")},
@@ -48,7 +48,7 @@ E = {  # evidencias documentadas en la conversación (zona -> {col: (estado, not
  "Z33": {"C25": ("≈", "losa blanca, núcleo, celosía"), "C27": ("≈", "losa a +12,2 por el paso de la rampa; F78 sugería +11–11,5")},
 }
 CONFLICTOS = [
- ("Z09", "Base del cuello", "F09 la da a +9,0 (con corrección de profundidad); modelo +10,40", "F09 ya no es la referencia de la torre; falta otra foto de la base"),
+ ("Z09", "Base del cuello", "F09 +9,03 · F70 +9,2 · F14 +9,0/9,4", "RESUELTO 26/11: Z_CU0 = 9,20 (DUDA1_BASE_CUELLO.png)"),
  ("Z21", "Perfil de la concha", "Booking (rojo: borde superior; verde: borde inferior; amarillo: subida al techo del restaurante)", "sin incorporar"),
  ("Z32", "Lucernarios bajo el cuello", "F78 muestra 6; su posición sale de la terraza a +7,20, no de una medida", "contrastar ángulo de la cámara de F78"),
  ("Z33", "Losa de arranque de la escalera", "F78 +11–11,5 frente al paso de la rampa (exige ≥ +12,1)", "decidir"),

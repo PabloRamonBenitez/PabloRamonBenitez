@@ -25,7 +25,7 @@ def P3(X, Y, z):
 
 
 GEO = {"banda_rest": (P3(-14, yf, E.Z_P1), P3(-4, yf, E.Z_P1)),
-       "banda_hotel": (P3(4, yf, E.Z_P1), P3(E.R_COL + E.HOT, yf, E.Z_P1))}
+       "banda_hotel": (P3(4, yf, E.Z_P1), P3(E.R_COL + E._v["HOT_L"], yf, E.Z_P1))}
 
 
 def dlin(K, A, B, q):

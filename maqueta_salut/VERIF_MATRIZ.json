@@ -1,0 +1,176 @@
+{
+"Z06": {
+"C01": [
+"OK",
+"F01: 67/71 puntos sobre aristas (94 %)"
+],
+"C21": [
+"OK",
+"F73: 45/52 puntos sobre aristas (87 %)"
+]
+},
+"Z02": {
+"C01": [
+"OK",
+"F01: 20/24 puntos sobre aristas (83 %)"
+],
+"C21": [
+"≈",
+"F73: 11/15 puntos sobre aristas (73 %)"
+]
+},
+"Z04": {
+"C01": [
+"OK",
+"F01: 13/13 puntos sobre aristas (100 %)"
+],
+"C21": [
+"≈",
+"F73: 8/12 puntos sobre aristas (67 %)"
+]
+},
+"Z01": {
+"C01": [
+"OK",
+"F01: 6/6 puntos sobre aristas (100 %)"
+],
+"C21": [
+"≈",
+"F73: 0/5 puntos sobre aristas (0 %) · F73 calibrada con rms 27 px (débil); en F01 y Alamy el remate encaja"
+]
+},
+"Z10": {
+"C01": [
+"≈",
+"F01: 2/6 puntos sobre aristas (33 %) · pie de la columna tapado por la fuente y los árboles"
+]
+},
+"Z09": {
+"C01": [
+"≈",
+"F01: 5/8 puntos sobre aristas (62 %)"
+],
+"C21": [
+"OK",
+"F73: 3/3 puntos sobre aristas (100 %)"
+]
+},
+"Z29": {
+"C01": [
+"OK",
+"F01: 1/1 puntos sobre aristas (100 %)"
+],
+"C21": [
+"OK",
+"F73: 1/1 puntos sobre aristas (100 %)"
+]
+},
+"Z23": {
+"C01": [
+"NO",
+"F01: 8/21 puntos sobre aristas (38 %)"
+],
+"C21": [
+"OK",
+"F73: 14/14 puntos sobre aristas (100 %)"
+]
+},
+"Z26": {
+"C01": [
+"≈",
+"F01: 17/24 puntos sobre aristas (71 %)"
+],
+"C21": [
+"OK",
+"F73: 31/31 puntos sobre aristas (100 %)"
+]
+},
+"Z27": {
+"C01": [
+"OK",
+"F01: 2/2 puntos sobre aristas (100 %)"
+],
+"C21": [
+"OK",
+"F73: 5/5 puntos sobre aristas (100 %)"
+]
+},
+"Z24": {
+"C01": [
+"≈",
+"F01: 54/72 puntos sobre aristas (75 %)"
+],
+"C21": [
+"OK",
+"F73: 69/72 puntos sobre aristas (96 %)"
+]
+},
+"Z25": {
+"C01": [
+"OK",
+"F01: 9/9 puntos sobre aristas (100 %)"
+],
+"C21": [
+"OK",
+"F73: 15/17 puntos sobre aristas (88 %)"
+]
+},
+"Z21": {
+"C01": [
+"≈",
+"F01: 2/21 puntos sobre aristas (10 %) · borde de la concha de bajo contraste: la silueta roja sigue el perfil gris, el detector de aristas no lo encuentra"
+],
+"C21": [
+"OK",
+"F73: 20/20 puntos sobre aristas (100 %)"
+]
+},
+"Z22": {
+"C01": [
+"≈",
+"F01: 14/20 puntos sobre aristas (70 %)"
+],
+"C21": [
+"OK",
+"F73: 21/21 puntos sobre aristas (100 %)"
+]
+},
+"Z11": {
+"C01": [
+"≈",
+"F01: 2/5 puntos sobre aristas (40 %) · los 3 fallos están a 0,7–0,9 m (umbral 0,6): casi"
+],
+"C21": [
+"OK",
+"F73: 15/15 puntos sobre aristas (100 %)"
+]
+},
+"Z12": {
+"C01": [
+"OK",
+"F01: 5/6 puntos sobre aristas (83 %)"
+],
+"C21": [
+"OK",
+"F73: 4/4 puntos sobre aristas (100 %)"
+]
+},
+"Z03": {
+"C21": [
+"OK",
+"F73: 5/6 puntos sobre aristas (83 %)"
+]
+},
+"Z30": {
+"C21": [
+"OK",
+"F73: 2/2 puntos sobre aristas (100 %)"
+]
+},
+"Z35": {
+"C21": [
+"OK",
+"F73: 1/1 puntos sobre aristas (100 %)"
+]
+}
+}

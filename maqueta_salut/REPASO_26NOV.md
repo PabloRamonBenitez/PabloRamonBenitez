@@ -34,3 +34,14 @@ Ver la hoja «Conflictos abiertos»: base del cuello (F09 +9,0 / modelo +10,40),
 
 ## 5. Siguiente paso propuesto
 Barrido foto por foto (no zona por zona): para cada foto se hace su collage al 50 % sobre la vista del modelo desde la misma dirección y se marcan todas sus zonas a la vez. Orden: F01 → F73 → F47 → F18 → F09 → F08 → F71 → F78 → resto.
+
+## Barrido foto por foto (26/11)
+Herramienta: verif_foto.py. Calibra la cámara SOLO con la torre (siluetas y forjados) y proyecta 622 puntos de referencia del modelo actual.
+Cada punto visible es OK si cae a ≤ 0,6 m de una arista de la foto. Zona = OK si ≥ 80 %, ≈ si ≥ 50 %, NO si menos.
+- Actualizado: perfil de la concha (P2/G3) y cubierta inclinada del restaurante en puntos_ref.py; canto del barril (0,59) en calib_e.py.
+- **F01** (rms de la cámara 12 px): 230 OK / 80 NO. Torre, bar y testero OK. Columna y borde de la concha ≈ (pie tapado; poco contraste).
+  NO: pie de la fachada exterior del ala larga en y 67–82 (1,5–3,4 m) → **duda 7**.
+- **F73** (rms 27 px, más débil): 275 OK / 15 NO. Concha 20/20 OK, ala larga, ventanas y testero OK. Remate 0/5 (atribuible a la cámara).
+  Esquina alta del bar vista sobre el testero (2 puntos) → **duda 8**.
+- Nuevo en F01: dientes de sierra sobre una cubierta a la izquierda de la torre (1984) → **duda 9** (se habían quitado).
+Matriz: 60 OK · 27 ≈ · 1 NO · 157 ?.

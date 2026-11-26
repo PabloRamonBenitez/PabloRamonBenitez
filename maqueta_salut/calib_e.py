@@ -7,7 +7,7 @@ import edificio as E
 
 T = np.array(E.T)
 CIL = {   # clave: (centro, radio, cota)
-    "barril_sup": (T, E.R_AL, E.Z_B1 + 0.65), "barril_inf": (T, E.R_AL, E.Z_ALETA0),
+    "barril_sup": (T, E.R_AL, E.Z_B1 + E._v["FOR_C"]), "barril_inf": (T, E.R_AL, E.Z_ALETA0),
     "tambor": (T, E.R_T, (E.Z_B1 + E.Z_T1) / 2), "visera": (np.array(E.P(*E.OFF_V)), E.R_V, (E.Z_G1 + E.Z_V1) / 2),
     "remate": (np.array(E.P(*E.OFF_R)), E.R_R, (E.Z_V1 + E.Z_R1) / 2), "columna": (T, E.R_COL, 5.6),
     "columna_pie": (T, E.R_COL, 0.5), "cuello": (T, E.R_CU, (E.Z_CU0 + E.Z_CU1) / 2),

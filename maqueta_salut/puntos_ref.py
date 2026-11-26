@@ -79,22 +79,23 @@ def generar():
         add(f"BAR-{nm}", "BAR", f"bar {nm}", (x, y, z))
     for yy in np.arange(yb0, yb1, 5.0):
         add(f"BAR-BOR-{yy:05.1f}", "BAR", f"borde cubierta volada y={yy:.1f}", (V["W_BAR"] + V["V_BAR"], yy, E.Z_BAR_C))
-    # ---------------- RAMPA 2 (terraza → azotea del bar)
-    xr2 = V["W_BAR"] + V["V_BAR"]; ya2 = E.T[1] + V["ESC_R1"] + 0.3
+    # ---------------- cubierta inclinada del restaurante (+7,2 → +11,5), arranca tras los lucernarios [26/11]
+    xr2 = V["W_BAR"] + V["V_BAR"]; ya2 = Q[1] + V["R2_Y0"]
     for j in range(11):
         u = j / 10
-        add(f"RA2-PET-{j:02d}", "RAMPA 2", f"peto rampa 2 u={u:.1f}", (xr2, ya2 + u * V["R2_L"], E.Z_P1 + u * (E.Z_BAR_C - E.Z_P1) + 1.0))
-    # ---------------- RAMPA (perfil del peto y del arco)
-    y0r = Q[1] + V["D_HOTF"]; YA, YB = V["Y_CA"], V["Y_CA"] + V["R_FIN"]
-    Y_ARC = y0r + V["U_ARC"] * (E.Y_CUNA - y0r)
+        add(f"RA2-PET-{j:02d}", "RAMPA 2", f"borde cubierta inclinada u={u:.1f}", (xr2, ya2 + u * V["R2_L"], E.Z_P1 + u * (E.Z_BAR_C - E.Z_P1)))
+    # ---------------- concha: coronación del peto (perfil P2) y borde inferior (arco G3) [26/11]
+    y0r = Q[1] + V["D_HOTF"]; LR = E.Y_CUNA - y0r
+    Y_ARC = y0r + V["U_ARC"] * LR
     for j in range(21):
-        yy = y0r + j / 20 * (YB - y0r)
-        if yy <= YA: zr = V["Z_CON"]
+        u = j / 20; yy = y0r + u * LR
+        zr = max(0.05, V["Z_CON"] * (1 - u ** V["RAMPA_P"]))
+        if yy >= Y_ARC: zs = 0.0
         else:
-            t = min((yy - YA) / (YB - YA), 1.0); zr = max(0.05, V["Z_CON"] * (1 - math.sqrt(max(0.0, 1 - (1 - t) ** 2))))
-        zs = 0.0 if yy >= Y_ARC else min(V["Z_ARC"] * math.sqrt(max(0.0, 1 - ((yy - y0r) / (Y_ARC - y0r)) ** 2)), zr - 0.6)
-        add(f"RAM-PET-{j:02d}", "RAMPA peto", f"coronación concha y={yy:.1f}", (V["W_EXT"], yy, zr + (1.0 if yy <= YA else 0.0)))
-        add(f"RAM-ARC-{j:02d}", "RAMPA arco", f"intradós arco y={yy:.1f}", (V["W_EXT"], yy, zs))
+            ua = (yy - y0r) / (Y_ARC - y0r); w = 0.0 if ua <= V["ARC_D"] else (ua - V["ARC_D"]) / (1 - V["ARC_D"])
+            zs = max(0.0, min(V["Z_ARC"] * math.sqrt(max(0.0, 1 - w ** 2)), zr - 0.6))
+        add(f"RAM-PET-{j:02d}", "RAMPA peto", f"coronación concha y={yy:.1f}", (V["W_EXT"], yy, zr + V["H_PET"]))
+        add(f"RAM-ARC-{j:02d}", "RAMPA arco", f"borde inferior y={yy:.1f}", (V["W_EXT"], yy, zs))
     # ---------------- BASE: chaflán y ala corta (vértices de P1 y PB a sus cotas)
     for i, p in enumerate(pl["P1"]):
         add(f"BAS-P1-{i}", "BASE planta 1", f"vértice P1 {i} coronación", (p[0], p[1], E.Z_P1))

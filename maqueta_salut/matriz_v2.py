@@ -57,6 +57,12 @@ CONFLICTOS = [
  ("—", "U de 180° y curva abierta de la rampa", "F78 + maqueta F76 + usuario", "RESUELTO 26/11: peto con curva abierta y final en U"),
 ]
 
+import json as _js, os as _os
+if _os.path.exists("VERIF_MATRIZ.json"):                 # barrido foto por foto (cámara calibrada con la torre)
+    for _z, _d in _js.load(open("VERIF_MATRIZ.json")).items():
+        for _c, (_s, _n) in _d.items():
+            if _c not in E.get(_z, {}) or E[_z][_c][0] in ("?", "≈"):
+                E.setdefault(_z, {})[_c] = (_s, _n)
 wb = openpyxl.Workbook(); ws = wb.active; ws.title = "Matriz v2"
 F = {"OK": "B7E1A1", "≈": "FFE699", "NO": "F4A6A6", "?": "E7E6E6", "–": "FFFFFF"}
 hdr = ["Zona", "Descripción", "Grupo"] + [f"{c}\n{f}" for c, f, _ in COLS] + ["OK", "≈", "NO", "?", "visibles", "estado"]

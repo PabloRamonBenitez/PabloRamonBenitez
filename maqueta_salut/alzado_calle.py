@@ -114,6 +114,8 @@ def torre(ax, zo=10):
         uu = u_of(L_["c"]); ww = L_["w"] * abs(nrm @ ED) + 0.3 * abs(nrm @ EU)
         rect(ax, uu - ww / 2, uu + ww / 2, L_["z0"], L_["z1"], dict(fc="white", ec="k", lw=0.5), zo + 5)
         if abs(nrm @ ED) > 0.5: ax.text(uu, (L_["z0"] + L_["z1"]) / 2, L_["ch"], fontsize=6, ha="center", va="center", zorder=zo + 6, clip_on=True)
+    import laminas as _LM
+    _LM.vidrios_alzado(ax, ED, u_of)                                                      # vidrios (Ching) y figuras humanas
     for gx, gy, gz, ga in E.gargolas():                                                   # gárgolas: una por módulo y planta [F18, F08]
         nrm = np.array([math.cos(ga), math.sin(ga)])
         if nrm @ ED > -0.2: continue

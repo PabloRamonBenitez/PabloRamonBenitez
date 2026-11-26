@@ -1,0 +1,32 @@
+# Hotel Salut (Kyiv, 1984) – documentación del levantamiento (26/11/2026)
+
+Todo sale de una fuente única: el cuadro de cotas (`cotas.py`). De ahí se generan el 3D, las plantas, las secciones, los alzados y el STL.
+Normas de representación: Ching, *Manual de dibujo arquitectónico*, y *Normas de graficación* (ver `REPRESENTACION.md`).
+
+## Planos
+| Archivo | Contenido |
+|---|---|
+| `SALUT_planos_A3_presentacion.pdf` | **Juego de presentación A3**: portada e índice, **plano de lugar 1984**, plantas 1:400, secciones y alzados alineados (1:500), detalle del módulo. Todas las láminas llevan sus fotos de contraste. |
+| `SALUT_planos_A4.pdf` | Juego para imprimir en A4: sección, planta y alzado alineados en cada hoja; plantas por niveles. |
+| `PLANO_LUGAR_1984.pdf` | Plano de lugar a 1:750, con el entorno según las fotos de 1984: plaza, calle Ivana Mazepy, fuente, césped, camino de coches, parque y colindante. |
+| `SALUT_planos_definitivos.pdf` | Láminas de trabajo: plantas, secciones, alzados, detalles, comprobaciones y cuadro de cotas. |
+| `SALUT_planos_2D.pdf` | Cuadro de cotas completo (valor, fuente y margen) y reglas de coherencia de los planos. |
+
+## Modelo
+| Archivo | Contenido |
+|---|---|
+| `Hotel_Salut_15cm_v3.stl` | STL para el molde de silicona: 15 cm de alto, escala ≈ 1:339. Las gárgolas no van en el STL (medirían 0,3 mm). |
+| `VISTA3D_1…4.png` | Vistas del 3D junto a la foto equivalente. |
+
+## Comprobación
+| Archivo | Contenido |
+|---|---|
+| `MATRIZ_ZONAS_FOTOS_v2.xlsx` / `MATRIZ_v2.png` | Tabla de 35 zonas × 28 fotos: **79 OK · 145 ≈ · 0 NO · 0 ?**. Incluye las hojas Evidencias, Conflictos, Columnas y Juntas. |
+| `COHERENCIA_VISTAS.md` | 89 comprobaciones entre el 3D, el catálogo de huecos y los planos: 89/89 OK. |
+| `RONDA_ABSOLUTA.md` | Informe de la ronda del 26/11: tus indicaciones una por una, las hipótesis H1–H4, las preguntas P3–P5 y la duda 7, con sus pruebas. |
+| `DIBUJOS_EXPLICATIVOS/DIBUJOS_EXPLICATIVOS.pdf` | Las 56 láminas explicativas (zonas, MGF, collages de Alamy y F09, dudas 1–7, hipótesis), una por página. |
+
+## Pendiente
+- 4 zonas sin ningún OK, porque no hay foto que las mida: PB del ala corta, línea posterior, fachada del patio y patio.
+- En las secciones, lo visto tras el corte sigue siendo una imagen, no líneas.
+- Por encima del tambor, Alamy no coincide con las demás fotos (≈ 10 %): se usan sus alturas, no sus anchos.

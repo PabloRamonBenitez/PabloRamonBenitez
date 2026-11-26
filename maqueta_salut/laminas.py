@@ -416,6 +416,32 @@ def letras_alzado(ax, d):
         if -(np.array([math.cos(ga), math.sin(ga)]) @ d) < 0.2: continue
         ax.plot([ca * gx - sa * gy], [gz], "o", ms=1.1, color="k", zorder=41, clip_on=True)
 
+
+def vidrios_alzado(ax, d, umap, figuras=True):
+    """Ching: el vidrio en alzado se indica con trazos diagonales de reflejo (línea superficial fina); figura humana para
+    la escala. d = dirección en la que mira el observador; umap(P) = coordenada horizontal del alzado de un punto de planta."""
+    import ventanas as VT
+    d = np.asarray(d, float) / np.linalg.norm(d)
+    for h in VT.catalogo():
+        if h["tipo"] not in ("ventana", "puerta") or h["grupo"].startswith("torre planta") or h["grupo"] == "escalera retranqueo": continue
+        n = np.asarray(h["n"], float)
+        if n @ d > -0.3: continue
+        t = np.asarray(h["t"], float); p = np.asarray(h["p"], float)
+        ua, ub = sorted((umap(p - t * h["w"] / 2), umap(p + t * h["w"] / 2)))
+        du, dz = ub - ua, h["z1"] - h["z0"]
+        if du < 0.4 or dz < 0.4: continue
+        for f0, f1 in ((0.18, 0.62), (0.42, 0.82)):
+            ax.plot([ua + f0 * du, ua + (f0 + 0.22) * du], [h["z0"] + (f1 - 0.3) * dz, h["z0"] + f1 * dz], color="k", lw=0.22, zorder=42, clip_on=True)
+    V = E._v; pb = np.array(E.P(V["OB_X"], V["OB_Y"])); uc = umap(pb)            # banda acristalada del tambor
+    for k in np.arange(-0.8, 0.81, 0.2):
+        u0 = uc + k * E.R_G
+        ax.plot([u0, u0 + 0.9], [E.Z_T1 + 0.4, E.Z_T1 + 1.5], color="k", lw=0.22, zorder=42, clip_on=True)
+    if figuras:                                                                    # figuras humanas a pie de calle
+        ut = umap(np.array(E.T))
+        for du_ in (-14.0, -11.5, 13.0):
+            L.figura(ax, ut + du_, 0.0)
+
+
 def alzado(ax, d, titulo):
     if np.allclose(d, (0, 1)):                       # alzado a la calle: dibujado pieza a pieza (alzado_calle.py)
         import alzado_calle as AC
@@ -426,6 +452,8 @@ def alzado(ax, d, titulo):
     m = M.rotate((0, 0, -a)).rotate((-90, 0, 0))
     L.dibujar_vista(ax, m)
     letras_alzado(ax, d)
+    _a = math.radians(-a); _c, _s = math.cos(_a), math.sin(_a)
+    vidrios_alzado(ax, d, lambda P_: _c * P_[0] - _s * P_[1])
     V = np.asarray(m.to_mesh().vert_properties)[:, :2]
     x0, x1 = V[:, 0].min(), V[:, 0].max()
     import cotas_rel as CR

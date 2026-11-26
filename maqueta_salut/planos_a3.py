@@ -122,7 +122,7 @@ def hoja_alz_secc(titulo, d_alz, t_alz, secc, e, u_rng, den, lista_fotos):
         ax_s.set_xlim(u_rng[0] - off, u_rng[1] - off); ax_s.set_ylim(*ZL); ax_s.set_aspect("equal"); ax_s.axis("off")
         fig.text(x0 / W, (y_s + hz + 2) / H, f"SECCIÓN {kk} – {tx}", fontsize=8, weight="bold")
     fig.text(x0 / W, 289 / H, titulo, fontsize=10, weight="bold", va="top")
-    xf = x0 + wd + 10
+    xf = x0 + wd + 36                                    # deja sitio a las cotas de nivel rotuladas a la derecha del dibujo
     fotos(fig, xf, 48, 408 - xf, 232, lista_fotos)
     IA.barra(fig, x0, 14, den, 20)
     IA.cajetin(fig, f"1:{den}")
@@ -147,6 +147,8 @@ def hoja_detalle():
 if __name__ == "__main__":
     plt.rcParams["figure.max_open_warning"] = 0
     p = IA.portada(); IA.PAGS.append(p)
+    import plano_lugar as PLG
+    IA.PAGS.append(PLG.hoja_lugar())                                     # plano de lugar 1984 (Ching: situación)
     hoja_planta(1.8, "PLANTA BAJA (suelo ±0,00) – corte a +1,80", [("18.webp", "F18 – planta baja del chaflán y entrada del hotel"), ("71.webp", "F71 – rampa de acceso y esquina"), ("73.webp", "F73 – testero y huecos del ala")])
     hoja_planta(5.6, "PLANTA PRIMERA (suelo +3,20) – corte a +5,60, por las ventanas", [("alamy_torre.png", "ALAMY – torre medida por MGF"), ("18.webp", "F18 – 5 y pico / 4 y pico paños"), ("47.webp", "F47 – huecos del ala y rampa")])
     hoja_planta(9.2, "PLANTA SEGUNDA (suelo +7,20) – corte a +9,20 (terraza, bar, bloque alto)", [("47.webp", "F47 – terraza-restaurante"), ("76.webp", "F76 – maqueta: curva de la rampa y techo en rampa"), ("1.webp", "F01 – vista aérea 1984")])

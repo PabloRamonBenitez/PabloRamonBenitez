@@ -76,7 +76,7 @@ ZONAS = [
  ("Z34", "Claraboyas piramidales sobre la cubierta del ala corta", "Ala corta", "pri",
   [([(-E.L_C + 5.5, E.W_C + 1), (-E.L_C + 12.5, E.W_C + 1), (-E.L_C + 12.5, E.W_C + 3), (-E.L_C + 5.5, E.W_C + 3)], E.Z_P1, E.Z_P1 + 1.5)]),
  ("Z35", "Techo del restaurante en rampa (+7,20 → +11,50)", "Ala larga", "pri",
-  [([(0, Qy + 0.5), (E.W_BAR + E._v["V_BAR"], Qy + 0.5), (E.W_BAR + E._v["V_BAR"], Qy + 0.5 + E._v["R2_L"]), (0, Qy + 0.5 + E._v["R2_L"])], E.Z_P1, E.Z_BAR_C)]),
+  [([(0, Qy + E._v["R2_Y0"]), (E.W_BAR + E._v["V_BAR"], Qy + E._v["R2_Y0"]), (E.W_BAR + E._v["V_BAR"], Qy + E._v["R2_Y0"] + E._v["R2_L"]), (0, Qy + E._v["R2_Y0"] + E._v["R2_L"])], E.Z_P1, E.Z_BAR_C)]),
  ("Z31", "Patio interior de la L", "Escalera", "pri",
   [([(-E.L_C + E.L_LADR, E.W_C), (0, E.W_C), (0, 45), (-E.L_C + E.L_LADR, 45)], 0, 0.5)]),
 ]

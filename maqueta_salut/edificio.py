@@ -245,7 +245,7 @@ def base():
         sc.append(Manifold.extrude(CrossSection.square((1.6, 1.6), True), 0.9, 0, 0, (0.05, 0.05)).translate((x, W_C + 2.0, Z_P1 - 0.01)))
     s.append(ROT(Manifold.batch_boolean(sc, OpType.Add)))
     # ala larga: bar en la mitad interior hasta el tramo final; terraza con peto en la mitad exterior [F47, Bing]
-    yb0 = pl["Q"][1] + 0.5                                              # la rampa del techo arranca junto a la torre y pasa bajo la escalera
+    yb0 = pl["Q"][1] + _v["R2_Y0"]                                      # arranca tras el vuelo del cuello (rellano del giro en U delante) [usuario 26/11]
     yb1 = L_L - L_FIN                                                   # 1984: el bar acaba sobre la 1a ventana [F01, F47]
     yr1 = yb0 + _v["R2_L"]                                              # fin de la rampa-cubierta
     s += [caja(0, W_BAR, yr1 - 0.01, yb1, Z_P1 - 0.01, Z_BAR),
@@ -367,20 +367,12 @@ def base():
 
 
 def lucernarios_cuello():
-    """lucernarios piramidales de vidrio en anillo sobre la terraza, bajo el vuelo del cuello: uno por módulo donde la
-    cubierta está a +Z_P1 (fuera de la escalera y de la rampa) [F78]. Devuelve [dict(c, a (rad), l, h, z)] – 3D y planos."""
+    """6 lucernarios piramidales pequeños sobre la terraza a +Z_P1, pegados a la columna bajo el cuello, desde donde llega
+    la rampa de la concha hasta debajo de la escalera (juntos ≈ 75°) [usuario 26/11, F78]. Devuelve [dict(c, a, l, h, z)]."""
     out = []
-    try:
-        b = base()
-    except Exception:
-        return out
-    for k in range(N_AL):
-        a = 2 * math.pi * (k + 0.5) / N_AL + FASE_AL
-        if abs((a - ESC_ANG + math.pi) % (2 * math.pi) - math.pi) < ESC_HA + math.pi / N_AL: continue
-        c = (T[0] + _v["LUC_CR"] * math.cos(a), T[1] + _v["LUC_CR"] * math.sin(a))
-        bb = (b ^ caja(c[0] - 0.05, c[0] + 0.05, c[1] - 0.05, c[1] + 0.05, -1, 30)).bounding_box()
-        if abs(bb[5] - Z_P1) < 0.05:
-            out.append(dict(c=c, a=a, l=_v["LUC_CL"], h=_v["LUC_CH"], z=Z_P1))
+    for a in np.radians(np.linspace(_v["LUC_A0"], _v["LUC_A1"], 6)):
+        out.append(dict(c=(T[0] + _v["LUC_CR"] * math.cos(a), T[1] + _v["LUC_CR"] * math.sin(a)), a=float(a),
+                        l=_v["LUC_CL"], h=_v["LUC_CH"], z=Z_P1))
     return out
 
 def letrero():

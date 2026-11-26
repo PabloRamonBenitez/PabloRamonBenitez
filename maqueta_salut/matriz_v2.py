@@ -28,7 +28,7 @@ E = {  # evidencias documentadas en la conversación (zona -> {col: (estado, not
  "Z07": {"C04": ("OK", "+13,90")},
  "Z08": {"C25": ("≈", "aristas de las aletas bajo el barril")},
  "Z09": {"C04": ("OK", "+9,03 (7 forjados + profundidad)"), "C03": ("OK", "F14: +9,02 aparente / ≈ +9,4"), "C31": ("OK", "+9,05 aparente / +9,2"), "C25": ("≈", "pirámides casi tocan el cuello")},
- "Z32": {"C25": ("≈", "6 pirámides visibles; posición deducida (terraza a +7,20), no medida")},
+ "Z32": {"C25": ("OK", "6 pequeñas, 33°–100°, en el camino de la rampa (usuario 26/11)")},
  "Z11": {"C04": ("OK", "X 12,8; 6 paños"), "C05": ("OK", "5 y pico")},
  "Z13": {"C04": ("OK", "Y 10,1; 4 paños"), "C05": ("OK", "4 y pico; esquina a 90°")},
  "Z16": {"C30": ("OK", "logia, pilar, ladrillo ciego"), "C01": ("OK", "triangulación A–B")},
@@ -50,7 +50,7 @@ E = {  # evidencias documentadas en la conversación (zona -> {col: (estado, not
 CONFLICTOS = [
  ("Z09", "Base del cuello", "F09 +9,03 · F70 +9,2 · F14 +9,0/9,4", "RESUELTO 26/11: Z_CU0 = 9,20 (DUDA1_BASE_CUELLO.png)"),
  ("Z21", "Perfil de la concha", "Booking + F24", "RESUELTO 26/11: P2 convexo (z = 7,2 (1 − u²)) y arco G3 (horizontal 27 %, al suelo 42 %)"),
- ("Z32", "Lucernarios bajo el cuello", "F78 muestra 6; su posición sale de la terraza a +7,20, no de una medida", "contrastar ángulo de la cámara de F78"),
+ ("Z32", "Lucernarios bajo el cuello", "F78 + usuario", "RESUELTO 26/11: 6 de 1,0 m, r 4,7, 33°–100°"),
  ("Z33", "Losa de arranque de la escalera", "F78 +11–11,5 frente al paso de la rampa (exige ≥ +12,1)", "decidir"),
  ("Z20", "Línea posterior del ala corta", "teoría del usuario, sin foto", "fondo del ala corta estimado (W_C 12,74)"),
  ("Z02", "Cara superior de la visera", "Alamy +43,18 / F09 +43,6", "se sigue a Alamy"),

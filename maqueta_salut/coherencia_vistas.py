@@ -54,7 +54,7 @@ px, py = E.esc_ang_pt(V["ESC_RC"] - 0.3, -E.ESC_HB + 0.15 / V["ESC_RS"])      # 
 bb3 = (t ^ E.caja(px - 0.1, px + 0.1, py - 0.1, py + 0.1, -1, 80)).bounding_box()
 chk.append(("escalera: coronación del muro inclinado en r = ESC_RC − 0,3 (ESC_ZI → ESC_Z1, Alamy/dron)", bb3[5], V["ESC_ZI"] + (V["ESC_RC"] - 0.3 - V["ESC_RS"]) * (V["ESC_Z1"] - V["ESC_ZI"]) / (V["ESC_R1"] + 0.3 - V["ESC_RS"])))
 chk.append(("escalera: la losa blanca arranca a ESC_Z0 junto al núcleo (F78)", (t ^ E.caja(*(lambda q: (q[0]-.05, q[0]+.05, q[1]-.05, q[1]+.05))(E.esc_ang_pt(12.0, 0.8 * E.ESC_HB)), 9, 30)).bounding_box()[2], V["ESC_Z0"] - 0.3))
-yb0_ = E.plantas_base()["Q"][1] + 0.5; yr1_ = yb0_ + V["R2_L"]
+yb0_ = E.plantas_base()["Q"][1] + V["R2_Y0"]; yr1_ = yb0_ + V["R2_L"]
 chk.append(("rampa 1 llega a la cota de la terraza (sin escalón)", V["Z_CON"], V["Z_P1"]))
 chk.append(("techo del restaurante: arranca a cota de terraza junto a la torre", ztop(3.0, yb0_ + 0.2), E.Z_P1 + (E.Z_BAR_C - E.Z_P1) * 0.2 / V["R2_L"]))
 chk.append(("techo del restaurante: a mitad de la rampa", ztop(3.0, (yb0_ + yr1_) / 2), (E.Z_P1 + E.Z_BAR_C) / 2))

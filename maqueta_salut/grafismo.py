@@ -59,9 +59,10 @@ def rampas(ax, zc):
     # meseta (sobre la prolongación del chaflán) hasta el arranque del techo del restaurante, bajo la escalera
     import cotas as KK
     g = KK.planta(); C = np.array(g["C"]); E90 = np.array(g["E90"]); yS = g["YS"]
-    yb0 = C[1] + 0.5; xb = (E.W_BAR + V["V_BAR"]) / 2
+    yb0 = E.plantas_base()["Q"][1] + V["R2_Y0"]; xb = (E.W_BAR + V["V_BAR"]) / 2
     ctrl = [np.array([xr, yS + 4.0]), np.array([xr + 0.3, yS - 1.5]), (E90 + C) / 2 + np.array([1.5, 1.8]),
-            np.array([E.W_P - 1.0, C[1] + 1.2]), np.array([xb + 2.5, C[1] + 0.8]), np.array([xb, yb0 + 2.5])]
+            np.array([E.W_P - 1.5, E.T[1] + 6.0]), np.array([E.T[0], E.T[1] + 6.1]),           # rodea los lucernarios por fuera (giro en U)
+            np.array([xb, E.T[1] + 6.3]), np.array([xb, yb0 + 2.5])]
     def bez(P, n=60):
         out = []
         for i in range(len(P) - 2):

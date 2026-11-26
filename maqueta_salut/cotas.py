@@ -155,7 +155,7 @@ COTAS = {
  "RET":    (1.5,  "lo que asoma la columna delante de la planta primera", "F09/F18"),
  "RETR":   (2.5,  "retranqueo de la planta baja bajo la planta primera", "F09, F14, F47"),
  "L_C": (23.4, "ala corta: KC → medianera (X ≈ 22,4) – RESTAURADO; pendiente de casar con la triangulación A-B-C", "versión anterior a la medición errónea de la foto frontal (12,7 descartado)"),
- "W_C":    (12.74,"fondo del ala corta (igual que el ala larga)", "mapa Bing: las dos alas del mismo ancho"),
+ "W_C": (12.74, "fondo del ala corta (igual que el ala larga)", "DECIDIDO 26/11 (usuario, duda 6): H2 = ancho del ala larga; ninguna foto lo mide; H1 haría volar el bloque alto sobre el patio"),
  "L_LAD":  (5.0,  "largo de la caja de ladrillo", "F01"),
 }
 V = {k: v[0] for k, v in COTAS.items()}

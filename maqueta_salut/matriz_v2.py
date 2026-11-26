@@ -35,7 +35,7 @@ E = {  # evidencias documentadas en la conversación (zona -> {col: (estado, not
  "Z17": {"C30": ("≈", "")},
  "Z18": {"C01": ("OK", "A–B 7,3 · A–C 16,66 · A–D 106,5/106,7 · D–C 1,5 %"), "C30": ("≈", "")},
  "Z19": {"C01": ("OK", "vuelo 1,2"), "C30": ("≈", "")},
- "Z20": {"C01": ("?", "teoría del usuario, sin foto que la confirme")},
+ "Z20": {"C01": ("≈", "línea posterior paralela al chaflán; fondo 12,74 decidido (H2)")},
  "Z34": {"C17": ("≈", "aéreas actuales")},
  "Z21": {"C29": ("OK", "rojo P2 convexo y verde G3 (usuario 26/11); sin retranqueo de PB tras el arco"), "C22": ("≈", "giro H1 confirmado"), "C20": ("≈", "")},
  "Z24": {"C21": ("OK", "11 + 7 huecos, alturas exactas"), "C01": ("OK", "11/7"), "C19": ("OK", "11/7")},
@@ -52,9 +52,9 @@ CONFLICTOS = [
  ("Z21", "Perfil de la concha", "Booking + F24", "RESUELTO 26/11: P2 convexo (z = 7,2 (1 − u²)) y arco G3 (horizontal 27 %, al suelo 42 %)"),
  ("Z32", "Lucernarios bajo el cuello", "F78 + usuario", "RESUELTO 26/11: 6 de 1,0 m, r 4,7, 33°–100°"),
  ("Z33", "Losa de arranque de la escalera", "foto de frente + F78", "RESUELTO 26/11: losa +11,1 → +11,6"),
- ("Z20", "Línea posterior del ala corta", "teoría del usuario, sin foto", "fondo del ala corta estimado (W_C 12,74)"),
- ("Z02", "Cara superior de la visera", "Alamy +43,18 / F09 +43,6", "se sigue a Alamy"),
- ("—", "U de 180° y curva abierta de la rampa (planta de cubiertas)", "foto de la base con trazos del usuario", "sin incorporar"),
+ ("Z20", "Línea posterior del ala corta", "teoría del usuario + duda 6", "DECIDIDO 26/11: H2, fondo 12,74 (sin foto que lo mida)"),
+ ("Z02", "Cara superior de la visera", "Alamy +43,18 / F09 +43,6", "RESUELTO: manda Alamy (código de la verdad de la torre)"),
+ ("—", "U de 180° y curva abierta de la rampa", "F78 + maqueta F76 + usuario", "RESUELTO 26/11: peto con curva abierta y final en U"),
 ]
 
 wb = openpyxl.Workbook(); ws = wb.active; ws.title = "Matriz v2"

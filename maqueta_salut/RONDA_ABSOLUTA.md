@@ -200,3 +200,19 @@ Comprobación interna:
   - doble vidrio;
   - vierteaguas con goterón;
   - mochetas cerradas y caras del muro finas.
+
+## 11. Plano de lugar: viario de servicio (26/11, noche)
+- **Camión rígido de servicio de 9 m** (2,5 de ancho; radio de giro exterior 10,0, interior 4,0):
+  - entra por la plaza con una embocadura de acuerdos de R 4;
+  - sube por la calzada de servicio de 5,0 m paralela al ala (la que se ve en Google Maps, F35);
+  - da la vuelta sin maniobras en una **glorieta de giro** (bordillo exterior R 10,0, isleta ajardinada R 4,0) junto al testero;
+  - vuelve por el carril contrario.
+
+  Se dibujan el eje del recorrido, la envolvente de barrido (vuelo exterior y rueda trasera interior), el sentido y la silueta del camión.
+- **Peatonales** (trazado verde del usuario), con despiece de losas: la senda en diagonal a la plaza, el enlace y la senda pegada al césped que rodea el testero.
+- **Representación**:
+  - calzada con doble línea de bordillo y eje a trazos;
+  - sendas con losas;
+  - flechas llenas en las entradas (hotel, restaurante, rampa);
+  - rótulos sin solapes y leyenda completa.
+- **Origen de cada parte**: la glorieta y su tamaño son una propuesta para que el camión maniobre; no salen de ninguna foto. El trazado del vial sí sale de F35, F47 y F73.

@@ -79,34 +79,41 @@ def escalera(ax, zc):
         ax.text(c[0], c[1], f"caja de escalera\npor encima (+{V['ESC_Z0']:.2f})".replace(".", ","), fontsize=4.3, ha="center", va="center",
                 style="italic", color="0.25", zorder=79)
         return
-    r0, r1 = V["ESC_R0"] + 0.3, V["ESC_RC"] - 0.3
-    ra, rb = r0 + 1.3, r1 - 1.3                                   # rellanos en los extremos
-    nps = 10; huella = (rb - ra) / nps
-    rc = ra + (rb - ra) * 0.55                                    # corte del tramo (a la altura del plano)
+    # MISMA GEOMETRÍA QUE LA SECCIÓN (tramos_escalera): dos tramos de 9 tabicas (huella 0,28, tabica F/18) a cada lado del muro
+    # central; RELLANO DE VUELTA de 1,60 al fondo del cono (junto a las lamas) y RELLANO DE PLANTA hacia el pasillo [usuario 26/11]
+    uin, uout = V["ESC_R0"] + 0.3, V["ESC_RC"] - 0.3
+    LR, t, nst = 1.60, 0.28, 9
+    uB = uout - LR; uA = uB - (nst - 1) * t
+    def P_(r, v): return E.esc_ang_pt(r, v / r)                  # punto a radio r y desplazamiento lateral v
+    def hw(r): return r * math.tan(E.ESC_HB) - 0.30               # cara interior del muro de la cuña
+    mc = 0.08                                                     # semiespesor del muro central
+    # muro central (cortado) entre los dos tramos
+    ax.add_patch(Polygon([P_(uA, -mc), P_(uB, -mc), P_(uB, mc), P_(uA, mc)], closed=True, fc="white", ec=K, lw=0.8, hatch="////", zorder=79))
+    kc = 6                                                        # el plano de corte (≈ 1,1 m sobre el rellano) cruza la 6.ª huella
     for sg in (-1, 1):
-        for k in range(nps + 1):
-            r = ra + k * huella
-            hw = r * math.sin(E.ESC_HB) - 0.35
-            p, q = E.esc_ang_pt(r, sg * 0.15 / r), E.esc_ang_pt(r, sg * hw / r)
-            arr = sg < 0 and r > rc                                # tramo de subida por encima del corte: discontinuo
-            ax.plot([p[0], q[0]], [p[1], q[1]], color=K, lw=0.45, ls=(0, (3, 2)) if arr else "-", zorder=79)
-    a, b = E.esc_ang_pt(ra, 0), E.esc_ang_pt(rb, 0)
-    ax.plot([a[0], b[0]], [a[1], b[1]], color=K, lw=0.9, zorder=79)                        # muro central (ojo)
-    # flecha "sube" en el tramo de un lado y vuelta en el otro
-    s = -1
-    pa = E.esc_ang_pt(ra + 0.2, s * 1.0 / ra); pb = E.esc_ang_pt(rc, s * 1.0 / rc)
+        for k in range(nst):
+            r = uA + k * t
+            p, q = P_(r, sg * mc), P_(r, sg * hw(r))
+            arriba = sg < 0 and k > kc                            # tramo de subida por encima del corte: discontinuo
+            ax.plot([p[0], q[0]], [p[1], q[1]], color=K, lw=0.45, ls=(0, (3, 2)) if arriba else "-", zorder=79)
+    for r in (uA, uB):                                            # bordes de los rellanos (línea de peldaño de arranque y llegada)
+        p, q = P_(r, -hw(r)), P_(r, hw(r))
+        ax.plot([p[0], q[0]], [p[1], q[1]], color=K, lw=0.6, zorder=79)
+    rc = uA + (kc + 0.5) * t                                      # línea de corte en zigzag sobre el tramo de subida
+    w_ = hw(rc)
+    zz = [P_(rc - 0.25, -w_), P_(rc - 0.05, -w_ * 0.55), P_(rc + 0.05, -w_ * 0.45), P_(rc + 0.25, -mc)]
+    ax.plot([p[0] for p in zz], [p[1] for p in zz], color=K, lw=0.7, zorder=80)
+    # flechas: «sube» desde el rellano de planta; «baja» por el otro tramo (el que llega desde la planta inferior)
+    va = -(mc + hw(uA)) / 2; vb = (mc + hw(uA)) / 2
+    pa, pb = P_(uA + 0.15, va), P_(rc - 0.1, va)
+    ax.add_patch(Circle(pa, 0.07, fc="white", ec=K, lw=0.5, zorder=80))
     ax.add_patch(FancyArrowPatch(pa, pb, arrowstyle="-|>", mutation_scale=6, color=K, lw=0.5, zorder=80))
-    ax.add_patch(Circle(pa, 0.18, fc=K, ec=K, zorder=80))
-    ax.text(*E.esc_ang_pt((ra + rc) / 2, s * 2.2 / ((ra + rc) / 2)), "sube", fontsize=4.5, ha="center", zorder=80)
-    # línea de corte en zigzag
-    hw = rc * math.sin(E.ESC_HB) - 0.3
-    z1 = E.esc_ang_pt(rc - 0.4, -hw / rc); z2 = E.esc_ang_pt(rc - 0.1, -hw / 2 / rc); z3 = E.esc_ang_pt(rc + 0.1, -hw / 2 / rc)
-    z4 = E.esc_ang_pt(rc + 0.4, -0.1 / rc)
-    ax.plot([z1[0], z2[0], z3[0], z4[0]], [z1[1], z2[1], z3[1], z4[1]], color=K, lw=0.7, zorder=80)
-    for rr in (ra, rb):                                            # rellanos
-        p = E.esc_ang_pt(rr - 0.6 if rr == ra else rr + 0.6, 0)
-        ax.text(*p, "rell.", fontsize=3.8, ha="center", va="center", zorder=80)
-
+    ax.text(*P_((uA + rc) / 2, va - 0.55), "sube", fontsize=4.3, ha="center", va="center", rotation=math.degrees(E.ESC_ANG) - 90, zorder=80)
+    pc, pd = P_(uA + 0.15, vb), P_(uB - 0.2, vb)
+    ax.add_patch(FancyArrowPatch(pc, pd, arrowstyle="-|>", mutation_scale=6, color=K, lw=0.5, zorder=80))
+    ax.text(*P_((uA + uB) / 2, vb + 0.55), "baja", fontsize=4.3, ha="center", va="center", rotation=math.degrees(E.ESC_ANG) - 90, zorder=80)
+    ax.text(*P_((uB + uout) / 2, 0), "rellano de vuelta", fontsize=3.9, ha="center", va="center", rotation=math.degrees(E.ESC_ANG) - 90, zorder=80)
+    ax.text(*P_((uin + uA) / 2, 0), "rellano de planta", fontsize=3.9, ha="center", va="center", rotation=math.degrees(E.ESC_ANG) - 90, zorder=80)
 
 def proyecciones(ax, zc):
     """vuelos por encima del corte, en discontinua gruesa y rotulados"""

@@ -9,8 +9,8 @@
 | 2 | Visera desplazada; ventanal «mayoritariamente centrado» (22/11) | ⚠ ver H2: la banda sale desplazada −1,5/−1,9 m en F09/F14 |
 | 3 | Ojos más pequeños que en el modelo (22/11) | ✔ Ø 1,66–1,70 (Alamy); F14 da 1,6 |
 | 4 | Letras circulares alrededor, no rectas (22/11) | ✘ hoy son un plano frente a Alamy → H4 |
-| 5 | Terraza de servicio con puerta y **canalones (puntitos)** sobre las habitaciones (22/11) | ✘ los canalones no están modelados → P3 |
-| 6 | La **primera planta del barril es distinta** y encaja con la segunda (22/11) | ✘ no está diferenciada → P4 |
+| 5 | Terraza de servicio con puerta y **canalones (puntitos)** sobre las habitaciones (22/11) | ⚠ encontrados en F18 y F08: una gárgola por módulo y por planta; no modelados → P3 |
+| 6 | La **primera planta del barril es distinta** y encaja con la segunda (22/11) | ⚠ pavés anotado, pero la geometría es igual que arriba; F09 mide una banda de 1,09 sin ranura y el pavés retranqueado → P4 |
 | 7 | La L, chaflán y torre insertada; lobby con circulaciones (22/11) | ✔ |
 | 8 | Bar de 6,21, sección constante, sombrillas; bar acaba 7,81 antes del testero (22–23/11) | ✔ |
 | 9 | 11 + 7 ventanas al final del ala larga, sin zapato (22–23/11) | ✔ (fachada 0,80 retranqueada, 26/11) |
@@ -21,7 +21,7 @@
 | 14 | 6 lucernarios pequeños bajo el cuello (26/11) | ✔ |
 | 15 | Porche del testero, logia, vuelo 1,2, triangulación A–B–C (25/11) | ✔ |
 | 16 | 10 lucernarios en diente de sierra en nuestro edificio junto a la medianera (26/11) | ✔ posición estimada |
-| 17 | **Fuente** al pie de la columna (26/11) | ✘ fuera del modelo y de los planos (retiraste el entorno) → P5 |
+| 17 | **Fuente** al pie de la columna (26/11) | ✘ media luna en F01, F14 y F15 (Ø ≈ 6–7 m, estimado); no modelada → P5 |
 | 18 | Escalera: tramos por media planta, rellanos, muro central, para en la última planta (26/11) | ✔ |
 | 19 | Sistema de cotas relacionadas y proyecciones (26/11) | ✔ (proyecciones en secciones: pendiente) |
 
@@ -40,11 +40,12 @@ Alamy es una foto de pantalla: su escala horizontal puede cambiar de una fila a 
 **H3 · Remate centrado en U**: F09 +0,1, F14 −0,2 (modelo +0,6).
 
 **H4 · Letras en arco** (HIPOTESIS_LETRAS.png): con el plano actual, desde F09 (≈ 320°) se verían por detrás, pero «CA» se lee de frente;
-en F10 siguen la curva del remate. En F23 aparecen letras a los dos lados del remate → quizá el letrero rodea más de media vuelta.
+en F10 y F19 siguen la curva del remate; en F08, tras …АЛЮТ, aparece otra С → **la palabra se repite**. En F23 aparecen letras a los dos lados.
+«ГОТЕЛЬ» en el borde de la visera (F19) es un añadido reciente: no está en F09, F14 ni F70.
 
 ## 3. Preguntas
 - P1 (H1): ¿cambio visera a R 12,8 y remate a R 5,1, manteniendo las alturas de Alamy?
-- P2 (H4): ¿las letras van en arco alrededor del remate? ¿Una sola palabra o se repite (F23 muestra letras a los dos lados)?
-- P3: los «puntitos» sobre las habitaciones, ¿son gárgolas o canalones en el borde de la cubierta del barril? ¿Uno por módulo?
-- P4: ¿qué cambia en la primera planta del barril: el poyete, los huecos o el canto?
-- P5: la fuente al pie de la columna, ¿la quieres en el modelo y en la planta baja, aunque hoy no exista?
+- P2 (H4): САЛЮТ en arco y repetido. ¿Dos veces (≈ 150° cada una, una hacia Alamy y otra opuesta) o tres?
+- P3 (PREGUNTAS_P3_P5.png): las gárgolas (Ø ≈ 0,10, una por módulo y por planta) en el molde medirían 0,3 mm. ¿Las dibujo solo en alzados y secciones, no en el 3D?
+- P4: primera planta: pavés de 1,40 retranqueado y, delante, una banda continua de 1,09 sin ranura, con el borde a +14,51 (F09). ¿Aplico la hipótesis A (pavés en el plano de las ventanas)?
+- P5: la fuente en media luna al pie de la columna (1984), ¿la pongo en la planta baja y en el 3D, con un bordillo de 0,4?

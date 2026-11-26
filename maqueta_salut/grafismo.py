@@ -20,29 +20,26 @@ def cota_nivel(ax, p, z, z_=82):
             bbox=dict(boxstyle="square,pad=0.15", fc="white", ec=K, lw=0.5), zorder=z_)
 
 
-def eje_rampa(ax, pts, z0, z1, rotulo, discont=False, z_=81):
-    """pts: polilínea del eje de abajo (z0) a arriba (z1)"""
+def eje_rampa(ax, pts, z0, z1, rotulo, discont=False, z_=81, ancho=None):
+    """RAMPA en planta (convención del usuario): triángulo muy claro con la base en el ARRANQUE (abajo, z0) y el vértice,
+    marcado con un punto, en el EXTREMO SUPERIOR (z1); dos líneas finas del punto a las esquinas del arranque.
+    pts: eje de abajo (pts[0]) a arriba (pts[-1]); ancho: ancho de la rampa (si no, 2,4 m)."""
     pts = [np.array(p, float) for p in pts]
+    a, b = pts[0], pts[-1]
+    d = b - a; d /= np.linalg.norm(d); n = np.array([-d[1], d[0]]); w = (ancho or 2.4) / 2
     ls = (0, (5, 3)) if discont else "-"
-    xs, ys = zip(*pts)
-    ax.plot(xs, ys, color=K, lw=0.6, ls=ls, zorder=z_)
-    # triángulo de arranque (abajo)
-    d = pts[1] - pts[0]; d /= np.linalg.norm(d); n = np.array([-d[1], d[0]])
-    a = pts[0]; tri = [a + n * 0.45, a - n * 0.45, a + d * 0.8]
-    ax.add_patch(Polygon(tri, closed=True, fc=K, ec=K, lw=0.4, zorder=z_))
-    # flecha de subida (arriba)
-    ax.add_patch(FancyArrowPatch(tuple(pts[-2] + (pts[-1] - pts[-2]) * 0.6), tuple(pts[-1]), arrowstyle="-|>", mutation_scale=7,
-                                 color=K, lw=0.6, zorder=z_))
-    L = sum(np.linalg.norm(pts[i + 1] - pts[i]) for i in range(len(pts) - 1))
-    m = pts[len(pts) // 2 - 1] + (pts[len(pts) // 2] - pts[len(pts) // 2 - 1]) * 0.5 if len(pts) > 2 else (pts[0] + pts[1]) / 2
-    ang = _ang(pts[0], pts[1]) if len(pts) == 2 else _ang(pts[len(pts) // 2 - 1], pts[len(pts) // 2])
+    for s in (-1, 1):
+        ax.plot([a[0] + s * n[0] * w, b[0]], [a[1] + s * n[1] * w, b[1]], color="0.45", lw=0.3, ls=ls, zorder=z_)
+    ax.plot([a[0] - n[0] * w, a[0] + n[0] * w], [a[1] - n[1] * w, a[1] + n[1] * w], color="0.45", lw=0.3, ls=ls, zorder=z_)
+    ax.add_patch(Circle(tuple(b), 0.22, fc=K, ec=K, lw=0.3, zorder=z_ + 0.1))          # el punto, en el extremo superior
+    m = a + (b - a) * 0.45
+    ang = _ang(a, b)
     if ang > 90: ang -= 180
     if ang < -90: ang += 180
-    ax.text(m[0] + n[0] * 0.6, m[1] + n[1] * 0.6, rotulo, fontsize=5, rotation=ang, rotation_mode="anchor", ha="center",
-            va="bottom", zorder=z_)
-    cota_nivel(ax, pts[0] - d * 1.2, z0)
-    dl = pts[-1] - pts[-2]; dl /= np.linalg.norm(dl)
-    cota_nivel(ax, pts[-1] + dl * 1.2, z1)
+    ax.text(m[0] + n[0] * (w + 0.5), m[1] + n[1] * (w + 0.5), rotulo, fontsize=4.6, rotation=ang, rotation_mode="anchor", ha="center",
+            va="bottom", zorder=z_, color="0.25")
+    cota_nivel(ax, a - d * 1.2, z0)
+    cota_nivel(ax, b + d * 1.2, z1)
 
 
 def rampas(ax, zc):
@@ -53,8 +50,9 @@ def rampas(ax, zc):
     # 1) rampa de acceso público (concha): de la plaza (±0) a la terraza (+7,2); sigue en curva a +7,2
     pmax = V["Z_CON"] * V["RAMPA_P"] / (E.Y_CUNA - y0) * 100          # pendiente al pie (perfil 1 − u^p)
     pmin = 0.0                                                         # junto al hotel, casi plana
-    eje_rampa(ax, [(xr, E.Y_CUNA - 0.3), (xr, y0)], 0.0, V["Z_CON"],
-              f"RAMPA DE ACCESO · sube · P = {pmin:.0f}–{pmax:.0f} %", discont=arriba)
+    xr = (E.W_P + E.W_EXT - 0.25) / 2                                # eje entre fachada y peto
+    eje_rampa(ax, [(xr, E.Y_CUNA - 0.3), (xr, y0 + 0.3)], 0.0, V["Z_CON"],
+              f"rampa de acceso · sube a +{V['Z_CON']:.2f}".replace(".", ","), discont=arriba, ancho=E.W_EXT - E.W_P - 0.45)
     import cotas as KK
     g = KK.planta(); C = np.array(g["C"]); E90 = np.array(g["E90"])
     yb0 = E.plantas_base()["Q"][1] + V["R2_Y0"]; xb = (E.W_BAR + V["V_BAR"]) / 2

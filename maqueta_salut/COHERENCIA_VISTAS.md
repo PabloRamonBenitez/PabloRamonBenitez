@@ -8,8 +8,8 @@
 | terraza tras el fin del bar | 7.20 | 7.20 | OK |
 | tramo final sin bar (testero) | 7.20 | 7.20 | OK |
 | barandilla del testero | 8.30 | 8.30 | OK |
-| rampa arriba (superficie) | 7.15 | 7.20 | OK |
-| rampa de acceso a mitad (perfil curvo) | 3.97 | 3.96 | OK |
+| rampa arriba (superficie) | 7.20 | 7.20 | OK |
+| rampa de acceso a mitad (perfil convexo P2) | 5.41 | 5.40 | OK |
 | largo ala larga L_L (muro, sin porche ni esquina) | 94.80 | 94.80 | OK |
 | vidrio fila alta (MAR_R tras el frente del marco) | 12.66 | 12.66 | OK |
 | vidrio fila baja | 12.66 | 12.66 | OK |
@@ -33,7 +33,7 @@
 | la rampa del techo pasa bajo la escalera, junto al núcleo, con ≥ 2,5 m libres | 1.00 | 1.00 | OK |
 | relieve del marco (frente) | 12.82 | 12.82 | OK |
 | huecos del catálogo abiertos en el 3D (ala + torre) | 120.00 | 120.00 | OK |
-| hueco 11 por encima de la concha (concha bajo su alféizar) | 0.49 | 0.49 | OK |
+| hueco 11 por encima de la concha (concha bajo su alféizar) | 0.79 | 0.79 | OK |
 | barandilla en la cubierta de la visera | 1.00 | 1.00 | OK |
 | pasillo entre tambor y banda (vacío a +Z_T1−0,5) | 1.00 | 1.00 | OK |
 | peto del tambor hasta +Z_T1 | 1.00 | 1.00 | OK |

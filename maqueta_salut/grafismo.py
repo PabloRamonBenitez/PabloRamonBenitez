@@ -51,8 +51,8 @@ def rampas(ax, zc):
     xr = (E.W_P + E.W_EXT) / 2
     arriba = zc is not None and zc < V["Z_P1"] - 1.0           # la rampa queda por encima del corte en su tramo alto
     # 1) rampa de acceso público (concha): de la plaza (±0) a la terraza (+7,2); sigue en curva a +7,2
-    pmax = V["Z_CON"] * (1 + V["RAMPA_C"]) / (E.Y_CUNA - y0) * 100
-    pmin = V["Z_CON"] * (1 - V["RAMPA_C"]) / (E.Y_CUNA - y0) * 100
+    pmax = V["Z_CON"] * V["RAMPA_P"] / (E.Y_CUNA - y0) * 100          # pendiente al pie (perfil 1 − u^p)
+    pmin = 0.0                                                         # junto al hotel, casi plana
     eje_rampa(ax, [(xr, E.Y_CUNA - 0.3), (xr, y0)], 0.0, V["Z_CON"],
               f"RAMPA DE ACCESO · sube · P = {pmin:.0f}–{pmax:.0f} %", discont=arriba)
     # recorrido del coche: sube por la rampa, a la izquierda siguiendo la curva hacia fuera, y a la derecha por la

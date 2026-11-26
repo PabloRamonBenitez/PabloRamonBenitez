@@ -15,6 +15,7 @@ COTAS = {
  "N_VEN": (11, "huecos fila alta", "F73 11 · F01 11 · F47 11"),
  "VEN_W": (1.6, "ancho del hueco (0,47 S)", "F73 ajuste proyectivo: hueco/intereje 0,47"),
  "VEN_FIN": (2.94, "macizo esquina testero → borde del 1er hueco (1,1 S al centro)", "F01 1,22 S · F47 1,05 S (F73 actual 2,5 S: anotado)"),
+ "RAMPA_P": (2.0, "perfil convexo de la rampa de acceso: z = Z_CON·(1 − u^p) (casi plana junto al hotel, más inclinada al pie)", "usuario 26/11: propuesta P2 (línea roja de Booking, F24)"),
  "Z_ARC":  (3.2,  "arranque del arco bajo la rampa (hueco de la planta baja hundida)", "F47 vacío oscuro bajo la concha · F71 curva · F76 arco"),
  "U_ARC":  (0.72, "fracción de la rampa donde el arco llega al suelo", "F71 / F47 (estimado ± 0,1)"),
  "S_VEN": (3.4, "intereje de huecos del ala larga", "fila equiespaciada (F73 1,0 px, F01 1,3, F47 1,6); escala: huecos ~cuadrados (usuario) y arco a 35 m (Bing) → 2,94–3,55 → 3,4"),
@@ -258,7 +259,7 @@ RANGOS = {
  "FASE_AL": 1.0, "ESC_ZI": 0.4, "ESC_ZL": 0.5, "LAMA_E": 0.04, "LAMA_N": 0, "LUC_CR": 0.8, "LUC_CL": 0.4, "LUC_CH": 0.4, "ESC_NU": 0.15, "ESC_CB": 0.5, "TP_ANG": 3.0, "TP_W": 0.2, "TP_H": 0.2, "CR_Z1": 0.4, "LAMA_P": 0.1, "ESC_RS": 0.8, "SIG_S0": 0.5, "SIG_S1": 0.5, "SIG_Z0": 0.2, "SIG_Z1": 0.2, "REM_ZR": 0.3, "REM_ZH": 0.15, "VISTA_ALAMY": 2.0, "FOR_C": 0.05, "FOR_R": 0.05, "FOR_P": 0.05, "BAR_B": 0.15, "OJO_D": 0.1, "OJO_V": 0.3, "OJO_Z": 0.2, "OJO_C0": 10.0, "OJO_C1": 6.0, "OJO_DP": 2.0, "Z_LAD1": 1.0, "Z_CON": 0.8, "Z_CU0": 0.6, "Z_CU1": 0.6, "Z_ALE": 0.6, "Z_B0": 0.4, "F": 0.05, "N_PL": 0,
  "Z_T1": 0.5, "Z_G1": 0.5, "Z_V1": 0.5, "Z_R1": 0.6, "R_COL": 0.3, "R_CONO": 0.3, "R_CU": 0.5, "R_B": 0.3,
  "R_AL": 0.3, "R_T": 0.5, "R_G": 0.5, "R_V": 0.6, "R_R": 0.25, "OV_X": 1.0, "OV_Y": 1.5, "OR_X": 0.5, "OR_Y": 0.5, "OB_X": 0.5, "OB_Y": 0.8, "N_AL": 0,
- "ESC_W": 1.5, "ESC_X": 1.0, "H_PT": 0.3, "R_ENT": 1.0, "POR_X0": 0.3, "POR_X1": 0.3, "POR_D": 0.3, "ESQ_D": 0.3, "REST_L": 0.8, "HOT_L": 0.6, "R_RAMPA": 2.0, "M_CH": 0.2, "ESC_Z0": 1.0, "RAMPA_C": 0.1, "ESC_SEC": 4.0, "ESC_SECB": 4.0, "ESC_RR": 0.8, "ESC_RC": 1.0, "ESC_Y": 2.0, "ESC_Z1": 0.8, "W_P": 0.5, "W_BAR": 0.5, "V_BAR": 0.5, "L_L": 1.0, "L_FIN": 0.5, "Y_CA": 0.6, "R_FIN": 2.0, "S_VEN": 0.3, "N_VEN_B": 0, "MAR_P": 0.02, "MAR_B": 0.05, "MAR_R": 0.04, "R2_L": 3.0, "N_VEN": 0, "VEN_W": 0.2, "VEN_FIN": 1.5, "Z_ARC": 0.5, "U_ARC": 0.1, "D_CUNA": 1.0,
+ "ESC_W": 1.5, "ESC_X": 1.0, "H_PT": 0.3, "R_ENT": 1.0, "POR_X0": 0.3, "POR_X1": 0.3, "POR_D": 0.3, "ESQ_D": 0.3, "REST_L": 0.8, "HOT_L": 0.6, "R_RAMPA": 2.0, "M_CH": 0.2, "ESC_Z0": 1.0, "RAMPA_C": 0.1, "RAMPA_P": 0.5, "ESC_SEC": 4.0, "ESC_SECB": 4.0, "ESC_RR": 0.8, "ESC_RC": 1.0, "ESC_Y": 2.0, "ESC_Z1": 0.8, "W_P": 0.5, "W_BAR": 0.5, "V_BAR": 0.5, "L_L": 1.0, "L_FIN": 0.5, "Y_CA": 0.6, "R_FIN": 2.0, "S_VEN": 0.3, "N_VEN_B": 0, "MAR_P": 0.02, "MAR_B": 0.05, "MAR_R": 0.04, "R2_L": 3.0, "N_VEN": 0, "VEN_W": 0.2, "VEN_FIN": 1.5, "Z_ARC": 0.5, "U_ARC": 0.1, "D_CUNA": 1.0,
  "W_EXT": 1.0, "THL": 2.3, "ACH": 8.0, "COL": 0.3, "L_CHF": 3.0, "T_POS": 0.1,
  "D_HOTF": 2.0, "RET": 0.5, "RETR": 0.5, "L_C": 3.0, "W_C": 1.0, "L_LAD": 1.5,
 }

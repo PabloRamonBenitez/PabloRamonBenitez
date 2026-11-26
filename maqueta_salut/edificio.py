@@ -265,7 +265,7 @@ def base():
     Y_ARC = y0 + _v["U_ARC"] * (Y_CUNA - y0)
     def zr(yy):
         u = min(max((yy - y0) / LR, 0.0), 1.0)
-        return max(0.05, _v["Z_CON"] * (1 - u) * (1 + C_ * u))
+        return max(0.05, _v["Z_CON"] * (1 - u ** _v["RAMPA_P"]))          # perfil P2 convexo [usuario 26/11, Booking, F24]
     def zs(yy):         # intradós del arco bajo la rampa junto al hotel (paso en planta baja) [F47, F71, F76]
         if yy >= Y_ARC: return 0.0
         u = (yy - y0) / (Y_ARC - y0)
@@ -280,7 +280,7 @@ def base():
     def fp(v):
         x, y, z = v
         yy = yp + min(max(y, 0.0), 1.0) * (YB - yp)
-        return (W_P + WR - 0.25 + x * 0.25, yy, zr(yy) - 0.01 + z * 1.0)          # peto de 1 m en el borde exterior
+        return (W_P + WR - 0.25 + x * 0.25, yy, zr(yy) - 0.01 + z * _v["H_PET"])   # peto como el de la terraza (+8,50 junto al hotel)
     peto = Manifold.cube((1, 1, 1)).refine(40).warp(fp)
     s += [rampa, peto]
     # ESQUINA [usuario, F09, F18]: la rampa abre hacia fuera en curva y llega a 90° al chaflán prolongado (E90);

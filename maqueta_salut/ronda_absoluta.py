@@ -32,13 +32,14 @@ put("C04", "Z06", "OK", "F09: peto del barril/tambor 368/349 = 1,054 (modelo 1,0
 put("C05", "Z06", "OK", "F18: gárgolas, una por módulo y planta en el canto bajo la ranura (modelo 17 × 6, solo en planos)")
 put("C10", "Z06", "≈", "F08: gárgola centrada entre aletas en el canto de la cubierta del barril")
 # Z07 1.ª planta (pavés)
-put("C04", "Z07", "OK", "F09 (12,9 px/m): banda 1,09 SIN ranura + pavés 1,40; borde inferior +14,51")
+put("C04", "Z07", "OK", "F09 (12,9 px/m): banda 1,09 SIN ranura + pavés 1,40; borde inferior +14,51; collage: aletas enrasadas en la 1.ª planta")
+put("C03", "Z07", "OK", "F14 (13,29 px/m): pavés 1,43 · banda 1,13 · borde +14,44 (independiente de F09); escalón de las aletas en la 2.ª planta")
 put("C05", "Z07", "OK", "F18: techo visible sobre el pavés (retranqueado, en el plano de las ventanas); banda continua")
 # Z08 fondo inclinado y ménsulas
-put("C04", "Z08", "OK", "F09: fondo en sombra bajo la banda (borde +14,51 → cuello +13,90)")
-put("C05", "Z08", "OK", "F18: 19 vigas bajo el fondo inclinado, de la aleta al cuello")
+put("C04", "Z08", "OK", "F09/F14: fondo PLANO a +14,5 con vigas radiales rectas (1,1 m en sombra bajo la banda); las diagonales de F18/F14 son las vigas en perspectiva")
+put("C05", "Z08", "OK", "F18: 19 vigas bajo el fondo, de la aleta al cuello, convergiendo en perspectiva; croquis del usuario: fondo horizontal, ángulo recto")
 # Z09 cuello
-put("C04", "Z09", "OK", "F09: cuello 223 px = 17,3 m (modelo 18,0; ±1)")
+put("C04", "Z09", "OK", "F09: cuello 223 px = 17,3 m (modelo 18,0; ±1); F18: sin losa volada, acaba en ángulo recto")
 # Z15 fuente
 put("C01", "Z15", "OK", "F01: vaso en media luna, cuerda 145 px frente a la columna 83 px (6,5 m) → 11,4 m (R 5,7)")
 put("C03", "Z15", "≈", "F14: chorros en abanico ante la cristalera de PB, bordillo bajo")

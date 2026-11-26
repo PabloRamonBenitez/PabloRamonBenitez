@@ -24,8 +24,8 @@ ZONAS = [
  ("Z05", "Cubierta del barril: barandilla abierta, peto cortado en la escalera", "Torre", "cil", (T, E.R_T - 0.5, E.R_B, E.Z_B1, E.Z_B1 + 1.1)),
  ("Z06", "Barril: forjados, canto, poyete, ranura, 19 aletas y gárgolas", "Torre", "cil", (T, 0, E.R_AL, E.Z_B0 + E.F, E.Z_B1)),
  ("Z07", "Barril: 1.ª planta (pavés 1,40, banda 1,09 sin ranura)", "Torre", "cil", (T, 0, E.R_AL, E.Z_B0, E.Z_B0 + E.F)),
- ("Z08", "Ménsulas y fondo inclinado (+13,90 → +14,51)", "Torre", "cil", (T, E.R_CU, E.R_AL, 12.6, E.Z_B0)),
- ("Z09", "Cuello y losa inferior volada", "Torre", "cil", (T, 0, E.R_CU + 0.6, E.Z_CU0, E.Z_B0)),
+ ("Z08", "Vigas radiales y fondo plano (+14,51), aletas con escalón", "Torre", "cil", (T, E.R_CU, E.R_AL, 12.6, E.Z_B0)),
+ ("Z09", "Cuello (sin losa volada, ángulo recto)", "Torre", "cil", (T, 0, E.R_CU + 0.6, E.Z_CU0, E.Z_B0)),
  ("Z10", "Columna", "Torre", "cil", (T, 0, E.R_COL, 0, E.Z_CU0)),
  # ---------------------------------------------------------------- CHAFLAN
  ("Z11", "Chaflán: banda del restaurante (P1, franja de ventanas)", "Chaflán", "pri",

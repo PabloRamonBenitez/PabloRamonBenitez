@@ -441,22 +441,18 @@ def torre():
     s = [cil(T, R_COL, 0, Z_CU0 + 0.1),
          Manifold.cylinder(4.0, _v["R_CONO"], R_COL, SEG).translate((T[0], T[1], 0)),   # pie de columna (recto: el 'cono' era un toldo)
          cil(T, R_CU, Z_CU0, Z_CU1 + 0.05),                                             # CUELLO (base del tambor de habitaciones) [F70, F14, F09]
-         cil(T, R_CU + 0.6, Z_CU0, Z_CU0 + 0.6)]                       # losa inferior del cuello, volada [F18, F50]
+         ]                                                   # (sin losa volada: el cuello acaba en ángulo recto) [F18, usuario 26/11]
     s.append(fuente())                                      # fuente en media luna al pie de la columna (1984) [F01, F14, F15]
     # vigas radiales bajo el barril y barril con forjados/poyetes + aletas
-    zbi = _v["Z_BI"]                                         # fondo inclinado: sube del cuello (+Z_CU1) al borde exterior (+Z_BI) [F09, F18; usuario]
-    prof = [(0.0, Z_CU1 - 0.01), (R_CU, Z_CU1 - 0.01), (R_B - 0.1, zbi), (R_B - 0.1, Z_ALETA0 + 0.05), (0.0, Z_ALETA0 + 0.05)]
-    s.append(Manifold.revolve(CrossSection([prof]), SEG).translate((T[0], T[1], 0)))
-    for k in range(N_AL):                                   # 19 vigas radiales (ménsulas) 0,4 bajo el fondo, de la punta de la aleta al cuello [F18]
+    zbi = _v["Z_BI"]                                         # FONDO PLANO del barril a +Z_BI = +Z_CU1, borde en ángulo recto [F09, F18, F14, usuario]
+    s.append(cil(T, R_B, zbi, zbi + 0.5))
+    for k in range(N_AL):                                   # 19 vigas radiales rectas bajo el fondo, del cuello a la banda [F18, F14, usuario]
         a = math.degrees(2 * math.pi * k / N_AL + FASE_AL)
-        pts = [(R_CU - 0.3, Z_CU1 - 0.4), (R_AL, zbi), (R_AL, Z_ALETA0 + 0.05), (R_CU - 0.3, Z_ALETA0 + 0.05)]
-        pl_ = Manifold.extrude(CrossSection([pts]), 0.4).translate((0, 0, -0.2)).rotate((90, 0, 0))
-        if pl_.volume() <= 0:
-            pl_ = Manifold.extrude(CrossSection([pts[::-1]]), 0.4).translate((0, 0, -0.2)).rotate((90, 0, 0))
-        s.append(pl_.rotate((0, 0, a)).translate((T[0], T[1], 0)))
+        vg = Manifold.cube((R_B - 0.05 - (R_CU - 0.3), 0.4, _v["VIG_H"] + 0.01)).translate((R_CU - 0.3, -0.2, zbi - _v["VIG_H"]))
+        s.append(vg.rotate((0, 0, a)).translate((T[0], T[1], 0)))
     rf = R_B - 1.8
     FC, FR, FP = _v["FOR_C"], _v["FOR_R"], _v["FOR_P"]          # sección de planta del barril [MGF Alamy]
-    s.append(cil(T, rf, Z_B0, Z_B1 + 0.4))
+    s.append(cil(T, rf, _v["Z_BI"], Z_B1 + 0.4))
     s.append(cil(T, R_B, _v["Z_BI"], _v["Z_BI"] + _v["BAN_1"]) - cil(T, R_B - 0.25, _v["Z_BI"] - 0.1, _v["Z_BI"] + _v["BAN_1"] + 0.1))  # 1.ª planta: banda continua sin ranura delante del pavés [F09, F18]
     for i in range(1, N_PL):
         z = Z_B0 + i * F
@@ -466,7 +462,8 @@ def torre():
     s.append(baranda(T, R_B - 0.05, Z_B1 + FC, _v["BAR_B"]))   # peto + barandilla 1,1 m de la cubierta del barril [F09, F08]
     for k in range(N_AL):
         a = 2 * math.pi * k / N_AL + FASE_AL
-        al = Manifold.cube((R_AL - rf + 0.2, 0.4, Z_B1 + FC - Z_ALETA0)).translate((rf - 0.1, -0.2, Z_ALETA0))
+        al = Manifold.cube((R_B - rf + 0.1, 0.4, Z_B1 + FC - _v["Z_BI"])).translate((rf - 0.1, -0.2, _v["Z_BI"]))      # dentro de la banda, desde el fondo
+        al = al + Manifold.cube((R_AL - R_B + 0.05, 0.4, Z_B1 + FC - Z_ALETA0)).translate((R_B - 0.05, -0.2, Z_ALETA0))  # fuera: escalón en ángulo recto en la 2.ª planta
         s.append(al.rotate((0, 0, math.degrees(a))).translate((T[0], T[1], 0)))
     # tambor de ojos, banda, visera, remate
     zp = Z_T1 - _v["H_PT"]                                  # pasillo de servicio entre tambor y banda [F08]

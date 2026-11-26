@@ -112,3 +112,36 @@ Comprobación interna:
   - **Claraboya:** hacia la plaza (az 320°), a unos 130° de la escalera.
 - La **postal de 1984** confirma la 1.ª planta de pavés con la banda debajo y las ménsulas, y que la visera vuela por fuera del barril.
 - Tabla: **79 OK · 145 ≈ · 0 NO · 0 ?**. Coherencia: 89/89.
+
+## 6. Correcciones del usuario (26/11, tarde) y método revisado
+**Fallo de método**: comprobé los planos entre sí y cada cambio solo contra una o dos fotos. Así se colaron errores que la tabla debía cazar.
+
+**Regla nueva**: cada zona que cambie se superpone (collage, foto al 50 % y a la misma escala) en **todas** las fotos de la matriz que la muestran. Si una sola no coincide, la celda es NO.
+- Collages a escala por paso de forjados:
+  - `collage_alamy.py`, `collage_f09.py`;
+  - nuevo `collage_base.py` (F09 + F14).
+- La postal de 1984 solo vale para la forma: su perfil no es coherente para medir.
+
+**Base de la torre** (croquis del usuario: azul cortado, rojo proyectado; F18, F14, F09, postal):
+- **Fondo del barril plano** a +14,51 (F09 +14,51 · F14 +14,44), en ángulo recto. Fuera el fondo inclinado.
+  Las «diagonales» de F18 y F14 eran las vigas radiales horizontales vistas desde abajo, en perspectiva.
+- **19 vigas radiales rectas** de 0,8 de canto bajo el fondo: siguen la aleta de la 1.ª planta hasta el cuello, con fondo horizontal.
+- **Aletas con escalón**: sobresalen de la 2.ª planta hacia arriba y acaban en ángulo recto a +17,00. En la 1.ª planta quedan enrasadas con la banda: la planta se mete ≈ 0,9 m (F09, postal).
+- **Cuello sin losa volada**: acaba en ángulo recto (F18). Fuera la T de la sección.
+- En las secciones se dibuja el perfil aleta + viga como **muro proyectado**.
+
+**Cristalera bajo el arco de la concha**:
+- **3 paños** bajo el tramo horizontal, y luego la curva baja con el mismo desarrollo (5,0 m).
+- Antes había 5: U_ARC 0,42 → 0,38 · ARC_D 0,64 → 0,60.
+
+**Final del ala larga**:
+- Fuera el muro de esquina del testero (ESQ_D 1,2 → 0): **el ala acaba sin ángulo**.
+- Es el «zapato» del 22/11 y el «tacón» del 23/11.
+
+**Otras marcas rojas anteriores, revisadas**:
+- línea horizontal al final de la concha (26/11): quitada;
+- semicírculo en planta (25/11): quitado (la fuente actual está al pie de la columna: F01, F14, F15);
+- zapato del ala (22/11): quitado; el ala tiene ancho constante;
+- ángulo de 90° en la parte de atrás (25/11): quitado; línea posterior paralela.
+
+**Resultado**: coherencia 94/94 · tabla **80 OK · 144 ≈ · 0 NO · 0 ?**.

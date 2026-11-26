@@ -96,7 +96,11 @@
 "Z07": {
 "C04": [
 "OK",
-"F09 (12,9 px/m): banda 1,09 SIN ranura + pavés 1,40; borde inferior +14,51"
+"F09 (12,9 px/m): banda 1,09 SIN ranura + pavés 1,40; borde inferior +14,51; collage: aletas enrasadas en la 1.ª planta"
+],
+"C03": [
+"OK",
+"F14 (13,29 px/m): pavés 1,43 · banda 1,13 · borde +14,44 (independiente de F09); escalón de las aletas en la 2.ª planta"
 ],
 "C05": [
 "OK",
@@ -110,17 +114,17 @@
 "Z08": {
 "C04": [
 "OK",
-"F09: fondo en sombra bajo la banda (borde +14,51 → cuello +13,90)"
+"F09/F14: fondo PLANO a +14,5 con vigas radiales rectas (1,1 m en sombra bajo la banda); las diagonales de F18/F14 son las vigas en perspectiva"
 ],
 "C05": [
 "OK",
-"F18: 19 vigas bajo el fondo inclinado, de la aleta al cuello"
+"F18: 19 vigas bajo el fondo, de la aleta al cuello, convergiendo en perspectiva; croquis del usuario: fondo horizontal, ángulo recto"
 ]
 },
 "Z09": {
 "C04": [
 "OK",
-"F09: cuello 223 px = 17,3 m (modelo 18,0; ±1)"
+"F09: cuello 223 px = 17,3 m (modelo 18,0; ±1); F18: sin losa volada, acaba en ángulo recto"
 ]
 },
 "Z15": {

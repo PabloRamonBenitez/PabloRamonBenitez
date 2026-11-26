@@ -97,8 +97,9 @@ def catalogo():
         tt = ((b[0] - a[0]) / math.dist(a, b), (b[1] - a[1]) / math.dist(a, b))
         _h(H, nm, "logia", "ventana", ((a[0] + b[0]) / 2, (a[1] + b[1]) / 2), tt, (-tt[1], tt[0]), math.dist(a, b), E.Z_PB + 0.3, E.Z_P1 - 0.3)
     # 6i. cristalera de la PB bajo el arco de la concha (fachada retranqueada RETR) [usuario 26/11, F76, F24]
-    pl = E.plantas_base(); ya = pl["Q"][1] + V["D_HOTF"] + 0.6; yb = pl["PB"][3][1] - 0.6
-    xr = E.W_P - V["RETR"]; nm = max(int((yb - ya) / 2.4), 1); wm = (yb - ya) / nm
+    pl = E.plantas_base(); y0_ = pl["Q"][1] + V["D_HOTF"]; ya = y0_ + 0.6
+    yb = y0_ + V["U_ARC"] * V["ARC_D"] * (E.Y_CUNA - y0_) - 0.1           # solo bajo el tramo horizontal del arco: 3 paños [usuario 26/11 tarde]
+    xr = E.W_P - V["RETR"]; nm = max(round((yb - ya) / 2.4), 1); wm = (yb - ya) / nm
     for i in range(nm):
         _h(H, f"CP{i + 1}", "cristalera PB concha", "ventana", (xr, ya + (i + 0.5) * wm), (0, 1), (1, 0), wm - 0.15, 0.15, V["Z_ARC"] - 0.25)
     # 7. tambor: 19 ojos circulares [F01, F09]

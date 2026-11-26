@@ -353,17 +353,22 @@ def nucleo_seccion(ax, p0, p1):
     T = np.array(E.T); q = T - p0; sc = q @ tl; dist = abs(q[0] * tl[1] - q[1] * tl[0])
     for R in (E.R_COL, E.R_COL - VT.MURO):
         pass
-    # BASE DEL TAMBOR cortada: muros del cuello (0,40), losa inferior volada (0,60) y fondo del barril (0,40) [usuario 26/11]
+    # BASE DEL TAMBOR cortada: muros del cuello (0,40) con su fondo y fondo plano del barril (0,50), todo en ángulo recto [usuario 26/11]
     if dist < E.R_CU:
         hc = math.sqrt(E.R_CU ** 2 - dist ** 2)
         for sg in (-1, 1):
             x = sc + sg * hc
             ax.add_patch(Rectangle((x - (0.4 if sg > 0 else 0), E.Z_CU0), 0.4, E.Z_CU1 - E.Z_CU0, fc="white", ec="k", hatch="////", lw=0.9, zorder=6.5))
-        hl = math.sqrt(max((E.R_CU + 0.6) ** 2 - dist ** 2, 0))
-        ax.add_patch(Rectangle((sc - hl, E.Z_CU0), 2 * hl, 0.6, fc="white", ec="k", hatch="////", lw=0.9, zorder=6.5))
+        ax.add_patch(Rectangle((sc - hc + 0.4, E.Z_CU0), 2 * hc - 0.8, 0.4, fc="white", ec="k", hatch="////", lw=0.9, zorder=6.5))   # fondo del cuello entre muros (esquina en L, sin vuelo)
     if dist < E.R_B:
         hb = math.sqrt(E.R_B ** 2 - dist ** 2)
-        ax.add_patch(Rectangle((sc - hb, E.Z_CU1 - 0.4), 2 * hb, 0.4, fc="white", ec="k", hatch="////", lw=0.9, zorder=6.5))
+        ax.add_patch(Rectangle((sc - hb, E.Z_CU1), 2 * hb, 0.5, fc="white", ec="k", hatch="////", lw=0.9, zorder=6.5))       # fondo plano del barril (ángulo recto)
+    # ALETA + VIGA proyectadas (muro visto tras el corte), según el croquis del usuario: la aleta sobresale de la 2.ª planta arriba y acaba
+    # con escalón en ángulo recto; en la 1.ª planta queda enrasada con la banda y sigue por debajo como viga de canto hasta el cuello
+    V_ = E._v; zf = V_["Z_BI"] - V_["VIG_H"]
+    perfil = [(E.R_AL, E.Z_B1 + V_["FOR_C"]), (E.R_AL, V_["Z_ALE"]), (E.R_B, V_["Z_ALE"]), (E.R_B, zf), (E.R_CU, zf)]
+    for sg in (-1, 1):
+        ax.plot([sc + sg * r for r, z in perfil], [z for r, z in perfil], color="k", lw=0.55, zorder=6.4)
     if dist < E.R_T:                                            # forjado de cubierta del barril y suelo de la banda (+pasillo) [usuario 26/11]
         ht = math.sqrt(E.R_T ** 2 - dist ** 2)
         ax.add_patch(Rectangle((sc - ht, E.Z_B1 + E._v["FOR_C"] - 0.3), 2 * ht, 0.3, fc="white", ec="k", hatch="////", lw=0.9, zorder=6.5))
@@ -587,7 +592,7 @@ def detalles():
     # 1.ª planta (pavés): banda continua sin ranura y fondo inclinado [F09, F18]
     L.cota(ax, (E.R_B + 0.6, V["Z_BI"]), (E.R_B + 0.6, V["Z_BI"] + V["BAN_1"]), 0.6, "banda 1,09 sin ranura", fs=5.5)
     L.cota(ax, (rf - 0.6, V["Z_BI"] + V["BAN_1"]), (rf - 0.6, E.Z_B0 + E.F), -0.6, "pavés 1,40", fs=5.5)
-    L.cota(ax, (E.R_CU, E.Z_B0 - 0.8), (E.R_B, E.Z_B0 - 0.8), -0.4, "fondo inclinado +%.2f → +%.2f" % (E.Z_CU1, V["Z_BI"]), fs=5.5)
+    L.cota(ax, (E.R_CU, E.Z_B0 - 0.8), (E.R_B, E.Z_B0 - 0.8), -0.4, "fondo plano +%.2f · vigas %.2f" % (V["Z_BI"], V["VIG_H"]), fs=5.5)
     L.cota(ax, (rf, E.Z_B0 + 3 * E.F + 0.3), (E.R_B, E.Z_B0 + 3 * E.F + 0.3), 0.4, "balcón", fs=6)
     L.cota(ax, (E.R_B, E.Z_B0 - 1.6), (E.R_AL, E.Z_B0 - 1.6), -0.4, "vuelo aleta", fs=6)
     # alzado de 3 modulos

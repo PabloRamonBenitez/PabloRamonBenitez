@@ -52,7 +52,7 @@
 | porche del testero: muro izquierdo | 4.40 | 4.40 | OK |
 | porche del testero: muro derecho | 4.40 | 4.40 | OK |
 | porche: paso libre delante de la puerta (vacío bajo la marquesina = 1) | 1.00 | 1.00 | OK |
-| muro de esquina del testero (sobresale ESQ_D) | 8.30 | 8.30 | OK |
+| testero sin muro de esquina: nada sobresale del testero en la esquina exterior (vacío = 1) | 1.00 | 1.00 | OK |
 | cuerpo volado: vuela VOL_V sobre la calle, a cota del bloque alto | 11.50 | 11.50 | OK |
 | bajo el vuelo, paso libre hasta Z_VOL0 (vacío = 1) | 1.00 | 1.00 | OK |
 | logia de planta 1 hueca (vacío a +5,5 = 1) | 1.00 | 1.00 | OK |
@@ -80,8 +80,13 @@
 | zócalo (poyete) del remate | 1.00 | 1.00 | OK |
 | barandilla de la visera abierta: vacío entre pasamanos y travesaño | 1.00 | 1.00 | OK |
 | 1.ª planta: banda continua sin ranura (macizo en la cota de la ranura) | 1.00 | 1.00 | OK |
-| fondo inclinado: vacío bajo el borde exterior entre ménsulas | 1.00 | 1.00 | OK |
-| fondo inclinado: macizo junto al cuello sobre +Z_CU1 | 1.00 | 1.00 | OK |
+| fondo plano: vacío bajo el borde exterior entre vigas | 1.00 | 1.00 | OK |
+| viga radial bajo el fondo (en el eje de una aleta, 0,3 bajo el fondo) | 1.00 | 1.00 | OK |
+| fondo de la viga en ángulo recto: vacío bajo Z_BI − VIG_H | 1.00 | 1.00 | OK |
+| 1.ª planta: la aleta NO sobresale de la banda (vacío en R_B + 0,4) | 1.00 | 1.00 | OK |
+| 2.ª planta: la aleta sí sobresale (macizo en R_B + 0,4) | 1.00 | 1.00 | OK |
+| cuello sin losa volada (vacío en R_CU + 0,3 a +Z_CU0 + 0,3) | 1.00 | 1.00 | OK |
+| fondo plano: macizo junto al cuello sobre +Z_CU1 | 1.00 | 1.00 | OK |
 | fuente en media luna hacia la plaza: bordillo | 1.00 | 1.00 | OK |
 | fuente: nada detrás del eje (lado del edificio) | 1.00 | 1.00 | OK |
 | visera/tambor = media de F01, F02, F09, F14, F23 (0,951) | 0.95 | 0.95 | OK |

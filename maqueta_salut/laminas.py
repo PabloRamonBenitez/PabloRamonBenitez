@@ -134,8 +134,24 @@ def estructura_torre(ax, zc):
     ax.text(*T, "núcleo", fontsize=6, ha="center", va="center", zorder=8)
 
 
+def cadena(ax, pts, off, fs=4.8, color="k"):
+    """cadena de cotas exterior (estándar): segmentos parciales consecutivos sobre una misma línea"""
+    for p0, p1 in zip(pts[:-1], pts[1:]):
+        if np.linalg.norm(np.array(p1) - np.array(p0)) > 0.15:
+            L.cota(ax, p0, p1, off, "", fs=fs, color=color)
+
+
 def cotas_planta(ax):
     pl = E.plantas_base()
+    # cadenas en dos niveles de la fachada exterior del ala larga: huecos (parcial) y total [estándar]
+    hs = sorted([h for h in VT.catalogo() if h["grupo"] == "ala larga fila alta"], key=lambda h: h["p"][1])
+    pts = [(E.W_P, pl["Q"][1])] + [p for h in hs for p in ((E.W_P, h["p"][1] - h["w"] / 2), (E.W_P, h["p"][1] + h["w"] / 2))] + [(E.W_P, E.L_L)]
+    cadena(ax, pts, -1.6)
+    # ala corta, fachada a la calle: medianera, logia (muros y pilar), vuelo y chaflán
+    V_ = E._v; sw = lambda x: tuple(np.array(E.SWP(x, 0)))
+    x0 = -V_["L_C"]
+    xs = [x0, x0 + V_["LOG_X0"], x0 + V_["LOG_PX"] - 0.35, x0 + V_["LOG_PX"] + 0.35, x0 + V_["LOG_X1"], x0 + V_["VOL_L"], x0 + V_["L_C"]]
+    cadena(ax, [sw(x) for x in sorted(xs)], -1.5)
     L.cota(ax, (0, E.L_L), (E.W_P, E.L_L), 2.5, "ala")
     L.cota(ax, (0, E.L_L - 20), (E.W_BAR, E.L_L - 20), 1.5, "bar")
     L.cota(ax, (E.W_P, pl["Q"][1]), (E.W_P, E.L_L), -5, "")
@@ -171,7 +187,7 @@ def cotas_planta(ax):
     for k, p0, p1, _ in SECC:
         ax.plot(*zip(p0, p1), "-.", color="crimson", lw=0.7, zorder=65)
         ax.text(*p0, k, color="crimson", fontsize=8, weight="bold", zorder=66); ax.text(*p1, k, color="crimson", fontsize=8, weight="bold", zorder=66)
-
+    for tx in ax.texts: tx.set_clip_on(True)
 
 def plantas():
     lst = [(1.8, "PLANTA BAJA (suelo ±0,00) – corte a +1,80"), (5.6, "PLANTA 1 (suelo +3,20) – corte a +5,60, por las ventanas"),

@@ -4,6 +4,8 @@
 - lo de ENCIMA (en plantas): proyeccion en discontinua."""
 import math
 import numpy as np
+import matplotlib as _mpl
+_mpl.rcParams["hatch.color"] = "0.45"; _mpl.rcParams["hatch.linewidth"] = 0.35
 from manifold3d import Manifold
 
 RES = 0.04          # m por pixel del render de aristas
@@ -119,7 +121,7 @@ def corte(ax, cs, z=5, muro=0.30, huecos=(), polys=None):
         muros = muros.difference(unary_union(aberturas))
     for gm in getattr(muros, "geoms", [muros]):
         if gm.is_empty or gm.geom_type != "Polygon": continue
-        ax.add_patch(Polygon(np.array(gm.exterior.coords), closed=True, fc="0.72", ec="k", lw=0.9, hatch="......", zorder=z))
+        ax.add_patch(Polygon(np.array(gm.exterior.coords), closed=True, fc="white", ec="k", lw=0.8, hatch="......", zorder=z))   # muro cortado: blanco con trama punteada (estándar)
         for it in gm.interiors:
             ax.add_patch(Polygon(np.array(it.coords), closed=True, fc="white", ec="k", lw=0.9, zorder=z + 0.5))
     for h in huecos:                                     # símbolo

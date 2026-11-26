@@ -110,7 +110,7 @@ def partir(region, cortes, e=TAB):
 
 
 def dib_tabiques(ax, tabs, z=6.6):
-    _dib(ax, tabs, z, fc="0.9", ec="k", lw=0.45, hatch="//////")
+    _dib(ax, tabs, z, fc="white", ec="k", lw=0.4)                  # tabique: doble línea fina (estándar)
 
 
 def cotas_estancia(ax, g, fs=3.6):
@@ -232,7 +232,7 @@ def ala_corta(ax, zc, INT):
         """muros portantes de 0,30 (y 0,70 el del pilar en su arranque) con paso en el pasillo"""
         g = unary_union([q(xa - 0.15, xa + 0.15, -3, 45), q(xb - 0.15, xb + 0.15, -3, 45)])
         g = g.difference(q(x0 - 1, xe, yc + 0.05, y1 - 0.05)).intersection(reg.buffer(0.02))
-        _dib(ax, g, 6.9, fc="0.72", ec="k", lw=0.9, hatch="......")
+        _dib(ax, g, 6.9, fc="white", ec="k", lw=0.8, hatch="......")
         for k, x in enumerate((xa, xb)):
             eje(ax, sw(x, -6), sw(x, 30), "L" + str(k + 1))
     def plan(yc, xs_c, xs_p, n_c, n_p):

@@ -122,23 +122,31 @@ def hoja_lugar():
         poly(ax, [c - U * 1.25 - N * 5.6, c + U * 1.25 - N * 5.6, c + U * 1.25 + N * 5.6, c - U * 1.25 + N * 5.6], fc="white", ec="k", lw=0.5, zorder=3)
 
     # --- 2. lado exterior del ala larga: césped junto al edificio, camino de coches que la rodea, sendero al parque, parque
-    xr = E.W_P + 9.0
-    cx, cy, rl = xr - 13.5, E.L_L + 2.0, 13.5                       # vuelta por detrás del testero (fuera del ala) [F73, usuario]
-    camino = [tuple(E.P(20, yf - 6)), (xr, 18.0), (xr, cy)] + \
-             [(cx + rl * math.cos(a), cy + rl * math.sin(a)) for a in np.linspace(0, math.pi, 24)] + [(cx - rl, 70.0)]
-    b_cam = via(ax, camino, 5.0, z=2)
-    ax.plot(*zip((cx - rl, 70.0), (cx - rl, 50.0)), color="k", lw=0.5, ls=(0, (4, 3)), zorder=2.2)
-    sendero = [(xr, 40.0), (xr + 6, 44.0), (xr + 14, 52.0), (xr + 20, 64.0), (xr + 24, 80.0), (xr + 30, 94.0)]
-    b_sen = via(ax, sendero, 2.5, z=2, eje=False)
+    # RED DE CAMINOS según las marcas del usuario (26/11 noche) sobre F47 y F73, y lo que aún se ve en Google Maps (F35):
+    #  A · camino de coches recto, paralelo al ala, del pie de la concha hasta cerca del testero
+    #  B · abajo se abre en dos: un ramal hacia la plaza junto a la torre y otro en diagonal hacia la plaza
+    #  H · enlace transversal hacia la fachada a unos 15 m del testero
+    #  C · camino pegado al césped de la fachada que llega al testero y lo rodea hasta el lado del patio
+    xr = E.W_P + 9.0; ys = 40.0; yh = E.L_L - 15.0; xc = E.W_P + 2.2; yt = E.L_L + 4.0
+    A = [(xr, ys), (xr, E.L_L - 3.0)]
+    B1 = [(xr, ys + 1.0), (xr - 0.6, 30.0), (xr - 2.5, 22.0), (xr - 5.0, 17.0)]
+    B2 = [(xr, ys + 2.0), (xr + 6.0, 32.0), (xr + 13.0, 22.0)]
+    H = [(xr, yh), (xc, yh)]
+    C = [(xc, yh), (xc, E.L_L + 1.5)] + [(xc - 2.5 + 2.5 * math.cos(a), E.L_L + 1.5 + 2.5 * math.sin(a)) for a in np.linspace(0, math.pi / 2, 8)][1:] + \
+        [(E.W_P / 2, yt), (1.5, yt)] + [(1.5 - 2.5 + 2.5 * math.cos(a), yt - 2.5 + 2.5 * math.sin(a)) for a in np.linspace(math.pi / 2, math.pi, 8)][1:] + [(-1.0, E.L_L + 0.6)]
+    b_cam = unary_union([via(ax, A, 5.0, z=2), via(ax, B1, 4.0, z=2), via(ax, B2, 3.5, z=2, eje=False), via(ax, H, 3.0, z=2, eje=False),
+                         via(ax, C, 3.0, z=2, eje=False)])
+    b_sen = SP()
+    cy = E.L_L + 6.0
     cesped_ala = SP([(E.W_P, E.Y_CUNA - 30), (xr - 2.5, E.Y_CUNA - 30), (xr - 2.5, cy), (E.W_P, cy)])
-    parque = SP([(xr + 2.5, 20), (XL[1], 20), (XL[1], YL[1]), (xr + 2.5, YL[1])]).union(SP([(XL[0] + 25, cy), (XL[1], cy), (XL[1], YL[1]), (XL[0] + 25, YL[1])])).difference(Point(cx, cy).buffer(rl + 2.5))
-    testero = Point(cx, cy).buffer(rl - 2.5).intersection(SP([(cx - rl, E.L_L + 0.3), (cx + rl, E.L_L + 0.3), (cx + rl, cy + rl), (cx - rl, cy + rl)]))
+    parque = SP([(xr + 2.5, 20), (XL[1], 20), (XL[1], YL[1]), (xr + 2.5, YL[1])]).union(SP([(XL[0] + 25, cy), (XL[1], cy), (XL[1], YL[1]), (XL[0] + 25, YL[1])]))
+    testero = SP([(-3.0, E.L_L + 0.3), (xr - 2.5, E.L_L + 0.3), (xr - 2.5, cy), (-3.0, cy)])
     for g in (cesped_ala, parque, testero):
-        punteado(ax, g.difference(b_cam).difference(b_sen).intersection(marco), dens=0.5, z=0.8)
+        punteado(ax, g.difference(b_cam).intersection(marco), dens=0.5, z=0.8)
     for c, r in (((xr + 8, 30), 4.5), ((xr + 16, 40), 4.0), ((xr + 26, 34), 5.0), ((xr + 9, 58), 3.5), ((xr + 30, 56), 4.5),
                  ((xr + 14, 74), 5.0), ((xr + 36, 74), 5.5), ((xr + 22, 92), 4.5), ((xr + 44, 96), 5.5), ((xr + 6, 104), 4.0),
                  ((-14, 112), 4.5), ((xr + 40, 40), 5.0), ((xr + 46, 62), 4.5), ((xr + 30, 108), 5.0), ((xr + 3, 88), 3.5)):
-        arbol(ax, c, r)
+        if b_cam.distance(Point(c)) > r * 0.6: arbol(ax, c, r)
 
     # --- 3. colindante al otro lado de la medianera y linde
     col = SP([SW(x0 - 30, 0.0), SW(x0, 0.0), SW(x0, V["W_C"] + 8), SW(x0 - 30, V["W_C"] + 8)]).intersection(marco)
@@ -167,12 +175,12 @@ def hoja_lugar():
     rot((50.0, 6.0), "PLAZA\n(pavimento)", fontsize=9, weight="bold", ha="center")
     rot(SW(x0 - 30, -11.0) + np.array([0, 1.2]), "calle Ivana Mazepy", fontsize=8, ha="center", rotation=math.degrees(E.PHI))
     rot(E.P(16, -31.5), "autobuses (F14, F15, F70)", fontsize=6, ha="center")
-    rot((xr + 1.2, 70), "camino de coches: rodea el ala por detrás (F47, F73)", fontsize=6.5, rotation=90, va="center")
-    rot((E.W_P + 2.5, 82), "césped (F47, F73)", fontsize=6.5, rotation=90, va="center")
-    rot((xr + 26, 47), "sendero al parque (F47)", fontsize=6.5, rotation=55)
+    rot((xr + 3.0, 70), "camino de coches (F47, F73, Google Maps)", fontsize=6.5, rotation=90, va="center")
+    rot((xc - 1.9, yh + 6), "camino junto al testero", fontsize=5.5, rotation=90, va="center")
+    rot((E.W_P + 5.6, 62), "césped (F47, F73)", fontsize=6.5, rotation=90, va="center")
+    rot((xr + 8.5, 28.5), "a la plaza", fontsize=5.5, rotation=-55)
     rot((48, 84), "PARQUE\n(arbolado, F01, F23, F47)", fontsize=9, weight="bold", ha="center")
     rot((-8, 30), "patio de la L\n(sin foto)", fontsize=7, ha="center", style="italic")
-    rot((cx - rl - 0.8, 58), "continúa (sin foto)", fontsize=5.5, rotation=90, va="center", style="italic")
     ax.annotate("fuente en media luna (1984)", tuple(T - N * 5.0), tuple(E.P(-22, -12)), fontsize=6.5, zorder=10,
                 arrowprops=dict(arrowstyle="-", lw=0.5))
     ax.annotate("medianera (linde)", tuple(SW(x0, 4.0)), tuple(SW(x0 - 12, -2.5) + np.array([0, -1])), fontsize=6, zorder=10, arrowprops=dict(arrowstyle="-", lw=0.5))

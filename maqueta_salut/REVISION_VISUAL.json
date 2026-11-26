@@ -1,0 +1,692 @@
+{
+"Z01": {
+"C16": [
+"–",
+"maqueta: solo organización (no es lo construido)"
+],
+"C03": [
+"≈",
+"F14/F02: forma, número y posición coinciden; sin medida fiable (vista desde abajo)"
+],
+"C02": [
+"≈",
+"F23: igual que F01 desde más lejos; organización y proporciones coinciden"
+],
+"C09": [
+"≈",
+"F19: silueta desde la calle; letrero sobre el remate y rótulo ГОТЕЛЬ en la visera (actual)"
+],
+"C10": [
+"≈",
+"F08: tambor con ojos, banda, escalera con lamas y muro inclinado"
+],
+"C12": [
+"≈",
+"F10: letras sobre el remate, visera con barandilla, banda acristalada, ojos con tubos"
+]
+},
+"Z02": {
+"C16": [
+"–",
+"maqueta: solo organización (no es lo construido)"
+],
+"C03": [
+"OK",
+"F14: canto de la visera 25 px = 1,88 m (modelo 1,89)"
+],
+"C02": [
+"≈",
+"F23: igual que F01 desde más lejos; organización y proporciones coinciden"
+],
+"C09": [
+"≈",
+"F19: silueta desde la calle; letrero sobre el remate y rótulo ГОТЕЛЬ en la visera (actual)"
+],
+"C05": [
+"≈",
+"F18: cuello, ménsulas, bandas, concha con relieve; coincide en forma"
+],
+"C17": [
+"≈",
+"F35: cenital orientativa; organización en planta coincide"
+],
+"C10": [
+"≈",
+"F08: tambor con ojos, banda, escalera con lamas y muro inclinado"
+],
+"C12": [
+"≈",
+"F10: letras sobre el remate, visera con barandilla, banda acristalada, ojos con tubos"
+]
+},
+"Z03": {
+"C16": [
+"–",
+"maqueta: solo organización (no es lo construido)"
+],
+"C03": [
+"≈",
+"F14/F02: forma, número y posición coinciden; sin medida fiable (vista desde abajo)"
+],
+"C02": [
+"≈",
+"F23: igual que F01 desde más lejos; organización y proporciones coinciden"
+],
+"C09": [
+"≈",
+"F19: silueta desde la calle; letrero sobre el remate y rótulo ГОТЕЛЬ en la visera (actual)"
+],
+"C10": [
+"≈",
+"F08: tambor con ojos, banda, escalera con lamas y muro inclinado"
+],
+"C01": [
+"≈",
+"F01: visibles y coincidentes en forma (fuera del barrido por puntos)"
+],
+"C12": [
+"≈",
+"F10: letras sobre el remate, visera con barandilla, banda acristalada, ojos con tubos"
+]
+},
+"Z04": {
+"C16": [
+"–",
+"maqueta: solo organización (no es lo construido)"
+],
+"C03": [
+"≈",
+"F14/F02: forma, número y posición coinciden; sin medida fiable (vista desde abajo)"
+],
+"C02": [
+"≈",
+"F23: igual que F01 desde más lejos; organización y proporciones coinciden"
+],
+"C09": [
+"≈",
+"F19: silueta desde la calle; letrero sobre el remate y rótulo ГОТЕЛЬ en la visera (actual)"
+],
+"C05": [
+"≈",
+"F18: cuello, ménsulas, bandas, concha con relieve; coincide en forma"
+],
+"C10": [
+"≈",
+"F08: tambor con ojos, banda, escalera con lamas y muro inclinado"
+],
+"C04": [
+"OK",
+"F09: tambor +38,73 (corr. profundidad), barandilla de la cubierta del barril"
+],
+"C12": [
+"≈",
+"F10: letras sobre el remate, visera con barandilla, banda acristalada, ojos con tubos"
+],
+"C11": [
+"≈",
+"F04/F06: módulo del barril, ojos y barandilla"
+]
+},
+"Z05": {
+"C16": [
+"–",
+"maqueta: solo organización (no es lo construido)"
+],
+"C03": [
+"≈",
+"F14/F02: forma, número y posición coinciden; sin medida fiable (vista desde abajo)"
+],
+"C02": [
+"≈",
+"F23: igual que F01 desde más lejos; organización y proporciones coinciden"
+],
+"C09": [
+"≈",
+"F19: silueta desde la calle; letrero sobre el remate y rótulo ГОТЕЛЬ en la visera (actual)"
+],
+"C10": [
+"≈",
+"F08: tambor con ojos, banda, escalera con lamas y muro inclinado"
+],
+"C04": [
+"OK",
+"F09: tambor +38,73 (corr. profundidad), barandilla de la cubierta del barril"
+],
+"C01": [
+"≈",
+"F01: visibles y coincidentes en forma (fuera del barrido por puntos)"
+],
+"C12": [
+"≈",
+"F10: letras sobre el remate, visera con barandilla, banda acristalada, ojos con tubos"
+],
+"C11": [
+"≈",
+"F04/F06: módulo del barril, ojos y barandilla"
+]
+},
+"Z06": {
+"C16": [
+"–",
+"maqueta: solo organización (no es lo construido)"
+],
+"C03": [
+"OK",
+"F14: 7 forjados equidistantes, paso 41,2 px (3,10 m); 19 módulos"
+],
+"C02": [
+"≈",
+"F23: igual que F01 desde más lejos; organización y proporciones coinciden"
+],
+"C09": [
+"≈",
+"F19: silueta desde la calle; letrero sobre el remate y rótulo ГОТЕЛЬ en la visera (actual)"
+],
+"C05": [
+"≈",
+"F18: cuello, ménsulas, bandas, concha con relieve; coincide en forma"
+],
+"C17": [
+"≈",
+"F35: cenital orientativa; organización en planta coincide"
+],
+"C10": [
+"≈",
+"F08: tambor con ojos, banda, escalera con lamas y muro inclinado"
+],
+"C14": [
+"≈",
+"F12: encuentro escalera–barril–cubierta"
+],
+"C15": [
+"≈",
+"F13: escalera con lamas y borde del barril"
+],
+"C13": [
+"≈",
+"F11: rellanos tras las lamas"
+],
+"C11": [
+"≈",
+"F04/F06: módulo del barril, ojos y barandilla"
+]
+},
+"Z07": {
+"C16": [
+"–",
+"maqueta: solo organización (no es lo construido)"
+],
+"C03": [
+"≈",
+"F14/F02: forma, número y posición coinciden; sin medida fiable (vista desde abajo)"
+],
+"C02": [
+"≈",
+"F23: igual que F01 desde más lejos; organización y proporciones coinciden"
+],
+"C09": [
+"≈",
+"F19: silueta desde la calle; letrero sobre el remate y rótulo ГОТЕЛЬ en la visera (actual)"
+],
+"C05": [
+"≈",
+"F18: cuello, ménsulas, bandas, concha con relieve; coincide en forma"
+],
+"C10": [
+"≈",
+"F08: tambor con ojos, banda, escalera con lamas y muro inclinado"
+],
+"C08": [
+"≈",
+"F15: base, fuente, columna, bandas y PB hundida en forma"
+],
+"C01": [
+"≈",
+"F01: visibles y coincidentes en forma (fuera del barrido por puntos)"
+]
+},
+"Z08": {
+"C16": [
+"–",
+"maqueta: solo organización (no es lo construido)"
+],
+"C03": [
+"OK",
+"F14: base del cuello +9,0/9,4 (duda 1); ménsulas bajo el barril"
+],
+"C05": [
+"≈",
+"F18: cuello, ménsulas, bandas, concha con relieve; coincide en forma"
+],
+"C04": [
+"≈",
+"F09: base del chaflán, columna y concha en forma"
+],
+"C08": [
+"≈",
+"F15: base, fuente, columna, bandas y PB hundida en forma"
+]
+},
+"Z09": {
+"C16": [
+"–",
+"maqueta: solo organización (no es lo construido)"
+],
+"C05": [
+"≈",
+"F18: cuello, ménsulas, bandas, concha con relieve; coincide en forma"
+],
+"C08": [
+"≈",
+"F15: base, fuente, columna, bandas y PB hundida en forma"
+]
+},
+"Z10": {
+"C16": [
+"–",
+"maqueta: solo organización (no es lo construido)"
+],
+"C03": [
+"≈",
+"F14/F02: forma, número y posición coinciden; sin medida fiable (vista desde abajo)"
+],
+"C02": [
+"≈",
+"F23: igual que F01 desde más lejos; organización y proporciones coinciden"
+],
+"C09": [
+"≈",
+"F19: silueta desde la calle; letrero sobre el remate y rótulo ГОТЕЛЬ en la visera (actual)"
+],
+"C05": [
+"≈",
+"F18: cuello, ménsulas, bandas, concha con relieve; coincide en forma"
+],
+"C04": [
+"≈",
+"F09: base del chaflán, columna y concha en forma"
+],
+"C08": [
+"≈",
+"F15: base, fuente, columna, bandas y PB hundida en forma"
+]
+},
+"Z16": {
+"C16": [
+"–",
+"maqueta: solo organización (no es lo construido)"
+],
+"C03": [
+"≈",
+"F14/F02: forma, número y posición coinciden; sin medida fiable (vista desde abajo)"
+],
+"C02": [
+"≈",
+"F23: igual que F01 desde más lejos; organización y proporciones coinciden"
+],
+"C09": [
+"≈",
+"F19: silueta desde la calle; letrero sobre el remate y rótulo ГОТЕЛЬ en la visera (actual)"
+],
+"C17": [
+"≈",
+"F35: cenital orientativa; organización en planta coincide"
+],
+"C04": [
+"≈",
+"F09: base del chaflán, columna y concha en forma"
+],
+"C08": [
+"≈",
+"F15: base, fuente, columna, bandas y PB hundida en forma"
+]
+},
+"Z17": {
+"C16": [
+"–",
+"maqueta: solo organización (no es lo construido)"
+],
+"C03": [
+"≈",
+"F14/F02: forma, número y posición coinciden; sin medida fiable (vista desde abajo)"
+],
+"C09": [
+"≈",
+"F19: silueta desde la calle; letrero sobre el remate y rótulo ГОТЕЛЬ en la visera (actual)"
+],
+"C08": [
+"≈",
+"F15: base, fuente, columna, bandas y PB hundida en forma"
+]
+},
+"Z18": {
+"C16": [
+"–",
+"maqueta: solo organización (no es lo construido)"
+],
+"C03": [
+"≈",
+"F14/F02: forma, número y posición coinciden; sin medida fiable (vista desde abajo)"
+],
+"C02": [
+"≈",
+"F23: igual que F01 desde más lejos; organización y proporciones coinciden"
+],
+"C17": [
+"≈",
+"F35: cenital orientativa; organización en planta coincide"
+],
+"C10": [
+"≈",
+"F08: ala corta desde detrás, parcialmente tapada"
+]
+},
+"Z19": {
+"C16": [
+"–",
+"maqueta: solo organización (no es lo construido)"
+],
+"C02": [
+"≈",
+"F23: igual que F01 desde más lejos; organización y proporciones coinciden"
+],
+"C09": [
+"≈",
+"F19: silueta desde la calle; letrero sobre el remate y rótulo ГОТЕЛЬ en la visera (actual)"
+],
+"C17": [
+"≈",
+"F35: cenital orientativa; organización en planta coincide"
+]
+},
+"Z20": {
+"C16": [
+"–",
+"maqueta: solo organización (no es lo construido)"
+],
+"C03": [
+"≈",
+"F14/F02: forma, número y posición coinciden; sin medida fiable (vista desde abajo)"
+],
+"C10": [
+"≈",
+"F08: ala corta desde detrás, parcialmente tapada"
+]
+},
+"Z22": {
+"C16": [
+"–",
+"maqueta: solo organización (no es lo construido)"
+],
+"C05": [
+"≈",
+"F18: cuello, ménsulas, bandas, concha con relieve; coincide en forma"
+],
+"C04": [
+"≈",
+"F09: base del chaflán, columna y concha en forma"
+]
+},
+"Z23": {
+"C16": [
+"–",
+"maqueta: solo organización (no es lo construido)"
+],
+"C18": [
+"≈",
+"F38: medidas de planta del ala larga ya incorporadas (12,74 · 6,21 · 7,81 · 35,13)"
+]
+},
+"Z24": {
+"C16": [
+"–",
+"maqueta: solo organización (no es lo construido)"
+],
+"C02": [
+"≈",
+"F23: igual que F01 desde más lejos; organización y proporciones coinciden"
+]
+},
+"Z25": {
+"C16": [
+"–",
+"maqueta: solo organización (no es lo construido)"
+],
+"C02": [
+"≈",
+"F23: igual que F01 desde más lejos; organización y proporciones coinciden"
+],
+"C17": [
+"≈",
+"F35: cenital orientativa; organización en planta coincide"
+],
+"C14": [
+"≈",
+"F12: encuentro escalera–barril–cubierta"
+]
+},
+"Z26": {
+"C16": [
+"–",
+"maqueta: solo organización (no es lo construido)"
+],
+"C02": [
+"≈",
+"F23: igual que F01 desde más lejos; organización y proporciones coinciden"
+],
+"C17": [
+"≈",
+"F35: cenital orientativa; organización en planta coincide"
+],
+"C14": [
+"≈",
+"F12: encuentro escalera–barril–cubierta"
+],
+"C18": [
+"≈",
+"F38: medidas de planta del ala larga ya incorporadas (12,74 · 6,21 · 7,81 · 35,13)"
+]
+},
+"Z27": {
+"C16": [
+"–",
+"maqueta: solo organización (no es lo construido)"
+],
+"C02": [
+"≈",
+"F23: igual que F01 desde más lejos; organización y proporciones coinciden"
+],
+"C17": [
+"≈",
+"F35: cenital orientativa; organización en planta coincide"
+],
+"C18": [
+"≈",
+"F38: medidas de planta del ala larga ya incorporadas (12,74 · 6,21 · 7,81 · 35,13)"
+]
+},
+"Z28": {
+"C16": [
+"–",
+"maqueta: solo organización (no es lo construido)"
+],
+"C15": [
+"≈",
+"F13: escalera con lamas y borde del barril"
+]
+},
+"Z29": {
+"C16": [
+"–",
+"maqueta: solo organización (no es lo construido)"
+],
+"C17": [
+"≈",
+"F35: cenital orientativa; organización en planta coincide"
+],
+"C10": [
+"≈",
+"F08: tambor con ojos, banda, escalera con lamas y muro inclinado"
+],
+"C14": [
+"≈",
+"F12: encuentro escalera–barril–cubierta"
+],
+"C15": [
+"≈",
+"F13: escalera con lamas y borde del barril"
+],
+"C13": [
+"≈",
+"F11: rellanos tras las lamas"
+]
+},
+"Z30": {
+"C16": [
+"–",
+"maqueta: solo organización (no es lo construido)"
+],
+"C10": [
+"≈",
+"F08: tambor con ojos, banda, escalera con lamas y muro inclinado"
+],
+"C14": [
+"≈",
+"F12: encuentro escalera–barril–cubierta"
+],
+"C15": [
+"≈",
+"F13: escalera con lamas y borde del barril"
+],
+"C13": [
+"≈",
+"F11: rellanos tras las lamas"
+]
+},
+"Z31": {
+"C16": [
+"–",
+"maqueta: solo organización (no es lo construido)"
+],
+"C17": [
+"≈",
+"F35: cenital orientativa; organización en planta coincide"
+]
+},
+"Z21": {
+"C16": [
+"≈",
+"maqueta: giro de la rampa y techo inclinado coinciden en organización"
+],
+"C02": [
+"≈",
+"F23: igual que F01 desde más lejos; organización y proporciones coinciden"
+],
+"C05": [
+"≈",
+"F18: cuello, ménsulas, bandas, concha con relieve; coincide en forma"
+],
+"C17": [
+"≈",
+"F35: cenital orientativa; organización en planta coincide"
+],
+"C04": [
+"≈",
+"F09: base del chaflán, columna y concha en forma"
+],
+"C18": [
+"≈",
+"F38: medidas de planta del ala larga ya incorporadas (12,74 · 6,21 · 7,81 · 35,13)"
+]
+},
+"Z11": {
+"C03": [
+"≈",
+"F14/F02: forma, número y posición coinciden; sin medida fiable (vista desde abajo)"
+],
+"C09": [
+"≈",
+"F19: silueta desde la calle; letrero sobre el remate y rótulo ГОТЕЛЬ en la visera (actual)"
+],
+"C08": [
+"≈",
+"F15: base, fuente, columna, bandas y PB hundida en forma"
+]
+},
+"Z12": {
+"C03": [
+"≈",
+"F14/F02: forma, número y posición coinciden; sin medida fiable (vista desde abajo)"
+],
+"C05": [
+"≈",
+"F18: cuello, ménsulas, bandas, concha con relieve; coincide en forma"
+],
+"C04": [
+"≈",
+"F09: base del chaflán, columna y concha en forma"
+],
+"C08": [
+"≈",
+"F15: base, fuente, columna, bandas y PB hundida en forma"
+]
+},
+"Z13": {
+"C03": [
+"≈",
+"F14/F02: forma, número y posición coinciden; sin medida fiable (vista desde abajo)"
+],
+"C08": [
+"≈",
+"F15: base, fuente, columna, bandas y PB hundida en forma"
+],
+"C01": [
+"≈",
+"F01: visibles y coincidentes en forma (fuera del barrido por puntos)"
+]
+},
+"Z14": {
+"C03": [
+"≈",
+"F14/F02: forma, número y posición coinciden; sin medida fiable (vista desde abajo)"
+],
+"C05": [
+"≈",
+"F18: cuello, ménsulas, bandas, concha con relieve; coincide en forma"
+],
+"C04": [
+"≈",
+"F09: base del chaflán, columna y concha en forma"
+],
+"C08": [
+"≈",
+"F15: base, fuente, columna, bandas y PB hundida en forma"
+],
+"C01": [
+"≈",
+"F01: visibles y coincidentes en forma (fuera del barrido por puntos)"
+]
+},
+"Z15": {
+"C03": [
+"≈",
+"F14/F02: forma, número y posición coinciden; sin medida fiable (vista desde abajo)"
+],
+"C05": [
+"≈",
+"F18: cuello, ménsulas, bandas, concha con relieve; coincide en forma"
+],
+"C17": [
+"≈",
+"F35: cenital orientativa; organización en planta coincide"
+],
+"C04": [
+"≈",
+"F09: base del chaflán, columna y concha en forma"
+],
+"C01": [
+"≈",
+"F01: visibles y coincidentes en forma (fuera del barrido por puntos)"
+]
+}
+}

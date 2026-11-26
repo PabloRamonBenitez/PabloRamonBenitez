@@ -63,6 +63,11 @@ if _os.path.exists("VERIF_MATRIZ.json"):                 # barrido foto por foto
         for _c, (_s, _n) in _d.items():
             if _c not in E.get(_z, {}) or E[_z][_c][0] in ("?", "≈"):
                 E.setdefault(_z, {})[_c] = (_s, _n)
+if _os.path.exists("REVISION_VISUAL.json"):             # cierre de interrogaciones (revisión foto por foto)
+    for _z, _d in _js.load(open("REVISION_VISUAL.json")).items():
+        for _c, (_s, _n) in _d.items():
+            if _c not in E.get(_z, {}):
+                E.setdefault(_z, {})[_c] = (_s, _n)
 wb = openpyxl.Workbook(); ws = wb.active; ws.title = "Matriz v2"
 F = {"OK": "B7E1A1", "≈": "FFE699", "NO": "F4A6A6", "?": "E7E6E6", "–": "FFFFFF"}
 hdr = ["Zona", "Descripción", "Grupo"] + [f"{c}\n{f}" for c, f, _ in COLS] + ["OK", "≈", "NO", "?", "visibles", "estado"]

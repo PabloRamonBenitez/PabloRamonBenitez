@@ -54,3 +54,11 @@ Matriz: 60 OK · 27 ≈ · 1 NO · 157 ?.
 - **Ala corta:** 10 lucernarios en diente de sierra (5 en línea y 5 escalonados) en lugar de las 3 claraboyas (F01, 1984).
 - **Sección L4:** longitudinal por la terraza mirando al bar, con nueva hoja A3 «el bar: sección L4 y alzado 2».
 - **Entorno 1984** (ENTORNO_1984.png/pdf): fuente en media luna al pie de la columna (F01, F14), plaza con autobuses, calle Mazepy, edificio colindante y parque (esquemático).
+
+## Cierre de las interrogaciones (26/11)
+Revisión foto por foto de las 157 celdas «?» (revision_visual.py → REVISION_VISUAL.json):
+- **OK** solo donde hay una proporción medida que coincide (p. ej. F14: canto de la visera 1,88 / 1,89; paso de forjados 3,10; base del cuello).
+- **≈** donde la zona se ve y coincide en forma, número y posición, pero esa foto no permite una medida fiable.
+- **–** maqueta F22 (solo organización, por indicación del usuario).
+Resultado: **65 OK · 154 ≈ · 0 NO · 0 ?** (+ 25 celdas «–» de la maqueta).
+Pendiente de representación: la sección L1 no dibuja el tambor ni la banda cortados por encima de +32,50 (marcado por el usuario).

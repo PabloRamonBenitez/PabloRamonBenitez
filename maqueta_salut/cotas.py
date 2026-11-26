@@ -167,7 +167,7 @@ COTAS = {
  "D_HOTF": (0.0, "de C al arranque recto de la rampa (DERIVADA: la esquina curva ocupa este tramo)", "geometría de la curva"),
  "RET":    (1.5,  "lo que asoma la columna delante de la planta primera", "F09/F18"),
  "RETR":   (2.5,  "retranqueo de la planta baja bajo la planta primera", "F09, F14, F47"),
- "L_C": (23.4, "ala corta: KC → medianera (X ≈ 22,4) – RESTAURADO; pendiente de casar con la triangulación A-B-C", "versión anterior a la medición errónea de la foto frontal (12,7 descartado)"),
+ "L_C": (23.85, "ala corta: KC → medianera; X (medianera → arranque del chaflán) = 22,75", "DERIVADA de la triangulación del usuario: A–B 7,3 · A–C 16,66 · A–D 106,69 exactas; D–C 93,8 frente a 95,17 (1,4 %, dentro del 1,5 % admitido por el usuario). Antes 23,4 (X 22,29, valor antiguo)"),
  "W_C": (12.74, "fondo del ala corta (igual que el ala larga)", "DECIDIDO 26/11 (usuario, duda 6): H2 = ancho del ala larga; ninguna foto lo mide; H1 haría volar el bloque alto sobre el patio"),
  "L_LAD":  (5.0,  "largo de la caja de ladrillo", "F01"),
 }

@@ -129,13 +129,13 @@ _g2 = _KK.planta(); _F1 = np.array(E.SWP(-V["L_C"], V["W_C"])); _IC = np.array(_
 _dr = (_IC - _F1) / np.linalg.norm(_IC - _F1)
 chk.append(("línea posterior del ala corta paralela al chaflán (|sen| con U)", abs(float(_dr[0] * E.U[1] - _dr[1] * E.U[0])), 0.0))
 chk.append(("rincón del patio sin 90° (ángulo, grados)", round(math.degrees(math.acos(abs(float(_dr[1])))), 1), round(math.degrees(math.acos(abs(float(E.U[1])))), 1)))
-chk.append(("X: medianera → A1", float(np.linalg.norm(np.array(E.SWP(-V["L_C"], 0)) - np.array(_g2["A1"]))), 22.4))
+chk.append(("X: medianera → A1 (sale de la triangulación, no se fija a mano)", float(np.linalg.norm(np.array(E.SWP(-V["L_C"], 0)) - np.array(_g2["A1"]))), 22.75))
 _baT = [np.array(p) for p in E.bloque_alto_poligono()]
 _A, _B, _C = _baT[0], _baT[1], _baT[2]
 chk.append(("triangulación A–B (vuelo)", float(np.linalg.norm(_B - _A)), 7.3))
 chk.append(("triangulación A–C", float(np.linalg.norm(_C - _A)), 16.66))
-chk.append(("triangulación A–D (D = esquina exterior del testero)", float(np.linalg.norm(np.array([V["W_EXT"], V["L_L"]]) - _A)), 106.69))
-chk.append(("triangulación D–C (tolerancia 2 m)", float(np.linalg.norm(np.array([V["W_EXT"], V["L_L"]]) - _C)), 95.17))
+chk.append(("triangulación A–D EXACTA (D = esquina exterior del testero)", float(np.linalg.norm(np.array([V["W_EXT"], V["L_L"]]) - _A)), 106.69))
+chk.append(("triangulación D–C dentro del 1,5 % (usuario): error relativo ≤ 0,015", abs(float(np.linalg.norm(np.array([V["W_EXT"], V["L_L"]]) - _C)) / 95.17 - 1), 0.0))
 out = ["| comprobación | medido en la geometría | cuadro | estado |", "|---|---|---|---|"]
 # ---- piezas nuevas (fotos 25/11): mismo cuadro de cotas en el 3D y en el catálogo que usan los planos
 import ventanas as _VT
@@ -185,7 +185,7 @@ chk.append(("nada por encima del tambor fuera de su borde (r R_T+0,8, +40,5)", f
 _lat9 = (E.R_T + V["ESC_MO"]) * math.sin(E.ESC_ANG - math.radians(320.0)); _vis9 = V["OV_X"] + E.R_V
 chk.append(("F09: el extremo del muro no asoma a la derecha de la visera (lateral − borde visera ≤ 0,25)", max(0.0, _lat9 - _vis9), 0.0))
 for n, a, b in chk:
-    ok = abs(a - b) < (2.0 if "tolerancia 2" in n else 0.5 if ("A–D" in n) else 0.25 if ("curva" in n or "X:" in n) else 0.12) or (("|cos|" in n or "|sen|" in n) and a < 0.02) or (n.startswith("sin ventanas") and a > V["W_P"] - 0.05)
+    ok = abs(a - b) < (2.0 if "tolerancia 2" in n else 0.1 if ("A–D" in n) else 0.25 if ("curva" in n or "X:" in n) else 0.12) or (("|cos|" in n or "|sen|" in n) and a < 0.02) or (n.startswith("sin ventanas") and a > V["W_P"] - 0.05) or ("1,5 %" in n and a <= 0.015)
     out.append(f"| {n} | {a:.2f} | {b:.2f} | {'OK' if ok else 'NO'} |")
 open("COHERENCIA_VISTAS.md", "w").write("# Coherencia entre vistas y cuadro de cotas\n\n" + "\n".join(out) + "\n")
 print("\n".join(out))

@@ -145,3 +145,17 @@ Comprobación interna:
 - ángulo de 90° en la parte de atrás (25/11): quitado; línea posterior paralela.
 
 **Resultado**: coherencia 94/94 · tabla **80 OK · 144 ≈ · 0 NO · 0 ?**.
+
+## 7. Triangulación, rampa y planos antiguos (26/11, tarde)
+- **X sale de la triangulación**, no del valor antiguo.
+  - Con A–B 7,3, A–C 16,66 y A–D 106,69 exactas: X (medianera → arranque del chaflán) = **22,75** (antes 22,29) y L_C = 23,85.
+  - D–C queda en 93,8 frente a 95,17: 1,4 %, dentro del 1,5 % que admitiste para los puntos de Maps.
+  - La comprobación ya no tiene 2 m de tolerancia: A–D exacta (±0,1) y D–C ≤ 1,5 %.
+- **Rampa en planta (Ching)**:
+  - Contorno, peto, triángulo de arranque en ±0,00 y flecha «sube» con la pendiente. Fuera las curvas de nivel de la malla, que parecían peldaños.
+  - Lo mismo en el techo inclinado del restaurante y en el plano de lugar.
+- **Por qué seguías viendo el ángulo de 90° y el X antiguo**:
+  - El PDF de dibujos explicativos que te envié llevaba láminas fijas del 25/11, con geometría superada: bloque alto, esquina nueva, alzado a la calle en color y zonas.
+  - Ahora `DIBUJOS_EXPLICATIVOS.pdf` solo tiene láminas regeneradas desde el modelo de hoy.
+  - Las dudas y análisis antiguos van aparte, en `DIBUJOS_EXPLICATIVOS/HISTORICO/HISTORICO_DECISIONES.pdf`, marcados como superados.
+  - Los PDF y STL antiguos de la raíz están en `HISTORICO/`.

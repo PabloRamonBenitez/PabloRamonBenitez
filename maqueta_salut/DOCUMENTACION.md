@@ -21,10 +21,12 @@ Normas de representación: Ching, *Manual de dibujo arquitectónico*, y *Normas 
 ## Comprobación
 | Archivo | Contenido |
 |---|---|
-| `MATRIZ_ZONAS_FOTOS_v2.xlsx` / `MATRIZ_v2.png` | Tabla de 35 zonas × 28 fotos: **79 OK · 145 ≈ · 0 NO · 0 ?**. Incluye las hojas Evidencias, Conflictos, Columnas y Juntas. |
-| `COHERENCIA_VISTAS.md` | 89 comprobaciones entre el 3D, el catálogo de huecos y los planos: 89/89 OK. |
+| `MATRIZ_ZONAS_FOTOS_v2.xlsx` / `MATRIZ_v2.png` | Tabla de 35 zonas × 28 fotos: **80 OK · 144 ≈ · 0 NO · 0 ?**. Incluye las hojas Evidencias, Conflictos, Columnas y Juntas. |
+| `COHERENCIA_VISTAS.md` | 94 comprobaciones entre el 3D, el catálogo de huecos y los planos (triangulación A–B, A–C y A–D exactas): 94/94 OK. |
 | `RONDA_ABSOLUTA.md` | Informe de la ronda del 26/11: tus indicaciones una por una, las hipótesis H1–H4, las preguntas P3–P5 y la duda 7, con sus pruebas. |
-| `DIBUJOS_EXPLICATIVOS/DIBUJOS_EXPLICATIVOS.pdf` | Las 56 láminas explicativas (zonas, MGF, collages de Alamy y F09, dudas 1–7, hipótesis), una por página. |
+| `DIBUJOS_EXPLICATIVOS/DIBUJOS_EXPLICATIVOS.pdf` | Láminas explicativas **del estado actual**, regeneradas desde el modelo: zonas, MGF, collages de Alamy, F09 y la base, escalera, matriz y plano de lugar. |
+| `DIBUJOS_EXPLICATIVOS/HISTORICO/HISTORICO_DECISIONES.pdf` | Dudas, hipótesis y análisis tal como se plantearon. **Geometría superada**: no son planos. |
+| `HISTORICO/` | Juegos de planos, PDF y STL de días anteriores (no usar). |
 
 ## Pendiente
 - 4 zonas sin ningún OK, porque no hay foto que las mida: PB del ala corta, línea posterior, fachada del patio y patio.

@@ -394,13 +394,24 @@ def base():
     #   hotel: puertas 2,3 · PB hasta +3,1 · canto de hormigon volado +3,1/+4,3 · vidrio +4,3/+6,0 · rotulo
     xr0, xr1 = -_k, -R_COL
     xh0, xh1 = R_COL, R_COL + HOT + 3.0
-    m = m - en_torre(caja(xr0 - 0.5, xr1, yf - 1, yf + RETR + 0.01, Z_PB - 0.01, 4.5))          # sofito del restaurante a +4,5
+    # (sin «sofito a +4,5»: salía de los toldos de F50, que no son arquitectura [usuario 22/11 y 26/11]: banda plana sobre la PB)
     hue_t = [caja(xr0 + 0.4, xr1 - 0.3, yf - 1, yf + 0.3, 4.6, 6.4)]                            # vidrio restaurante
     xh1 = R_COL + _v["HOT_L"]                                                                      # hotel: de la columna a E90 [F09, F18]
     m = m + en_torre(caja(xh0, xh1, yf - 0.3, yf + 2.0, 3.1, 4.3))
     hue_t.append(caja(xh0 + 0.3, xh1 - 0.4, yf - 1, yf + 0.3, 4.35, 6.0))
     m = m - en_torre(caja(xh0 + 0.5, xh1 - 0.3, yf - 1, yf + RETR, -1, 3.1))                       # entrada del hotel bajo la banda
-    return m - en_torre(Manifold.batch_boolean(hue_t, OpType.Add))
+    m = m - en_torre(Manifold.batch_boolean(hue_t, OpType.Add))
+    # montantes entre paños: se leen las 5 y pico ventanas del restaurante y las 4 y pico del hotel [F09, F18, usuario]
+    import ventanas as VTc
+    mont = []
+    for hh in VTc.catalogo():
+        if not hh["grupo"].startswith("chaflán"): continue
+        t_ = np.array(hh["t"]); n_ = np.array(hh["n"]); p_ = np.array(hh["p"])
+        for s_ in (-1, 1):
+            c_ = p_ + t_ * s_ * (hh["w"] / 2 + 0.075) - n_ * 0.15
+            mt = Manifold.cube((0.15, 0.3, hh["z1"] - hh["z0"])).translate((-0.075, -0.15, hh["z0"]))
+            mont.append(mt.rotate((0, 0, math.degrees(math.atan2(t_[1], t_[0])))).translate((c_[0], c_[1], 0)))
+    return m + Manifold.batch_boolean(mont, OpType.Add)
 
 
 

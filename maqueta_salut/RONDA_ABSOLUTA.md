@@ -159,3 +159,21 @@ Comprobación interna:
   - Ahora `DIBUJOS_EXPLICATIVOS.pdf` solo tiene láminas regeneradas desde el modelo de hoy.
   - Las dudas y análisis antiguos van aparte, en `DIBUJOS_EXPLICATIVOS/HISTORICO/HISTORICO_DECISIONES.pdf`, marcados como superados.
   - Los PDF y STL antiguos de la raíz están en `HISTORICO/`.
+
+## 8. Nudo de la escalera, fachada del chaflán y sistema de comprobación (26/11, tarde)
+- **Nudo restaurante – escalera**:
+  - El cuerpo del restaurante y el vuelo de su techo atravesaban el pie de la caja de escalera, y salían tres contornos casi coincidentes.
+  - Ahora el restaurante **acaba contra el pie de la caja** (línea común), con la celosía de lamas delante.
+  - El vuelo del techo inclinado es una losa, no un macizo.
+- **Fachada del chaflán**:
+  - Fuera el «sofito a +4,5» bajo la banda del restaurante: salía de los toldos de F50. Era el escalón (recoveco) que se veía en la sección L3.
+  - Las bandas son planas sobre la PB retranqueada.
+  - Se añaden montantes entre paños, de modo que el alzado lee **5 y pico ventanas en el restaurante y 4 y pico en el hotel**, que es lo seguro (F09, F18).
+  - La fuente en media luna (F01, F14, F15) se mantiene, apoyada en la columna.
+- **Ejes**: las burbujas no se pisan (si están a < 2 m, una baja de fila). Los puntos de corte de la torre llevan solo un tic.
+- **Sistema de comprobación** (`METODO_COMPROBACION.md`), con 5 puertas:
+  1. reglas del usuario;
+  2. coherencia 3D;
+  3. dibujo (`auditoria_planos.py`: astillas, rendijas y nudos en todas las plantas y secciones, más la hoja `AUDITORIA_NUDOS.png`);
+  4. fotos (collages);
+  5. entregables actualizados.

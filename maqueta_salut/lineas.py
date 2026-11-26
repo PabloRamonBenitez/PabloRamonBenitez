@@ -137,11 +137,22 @@ def corte(ax, cs, z=5, muro=0.30, huecos=(), polys=None, hatch="......"):
             continue
         # ventana (estándar de planos): jambas cerradas, cara exterior e interior finas, marco en doble línea fina,
         # vidrio en línea media y vierteaguas exterior
-        for q in (a0, a1):
+        for q in (a0, a1):                                  # mochetas (jambas, o dintel y umbral en sección)
             ax.plot(*zip(q, q - n * e), color="k", lw=0.9, zorder=z + 2)
-        for off, lw in ((0.0, 0.35), (e, 0.35), (0.40 * e, 0.3), (0.60 * e, 0.3), (0.5 * e, 0.6)):
-            ax.plot(*zip(a0 - n * off, a1 - n * off), color="k", lw=lw, zorder=z + 2)
-        ax.plot(*zip(a0 + n * 0.06 - t * 0.05, a1 + n * 0.06 + t * 0.05), color="k", lw=0.3, zorder=z + 2)
+        for off in (0.0, e):                                # caras del muro, finas
+            ax.plot(*zip(a0 - n * off, a1 - n * off), color="k", lw=0.3, zorder=z + 2)
+        # CARPINTERÍA (detalle): marco perimetral de 0,07 × 0,10 en cada extremo, hoja de 0,05 y doble vidrio (cámara)
+        fm, fp = 0.07, 0.10; c0 = 0.45 * e
+        for q, sg in ((a0, 1), (a1, -1)):
+            ax.add_patch(Polygon([q - n * (c0 - fp / 2), q - n * (c0 + fp / 2), q + t * sg * fm - n * (c0 + fp / 2), q + t * sg * fm - n * (c0 - fp / 2)],
+                                 closed=True, fc="white", ec="k", lw=0.45, zorder=z + 2.2))
+            ax.add_patch(Polygon([q + t * sg * fm - n * (c0 - 0.035), q + t * sg * fm - n * (c0 + 0.035), q + t * sg * (fm + 0.05) - n * (c0 + 0.035),
+                                  q + t * sg * (fm + 0.05) - n * (c0 - 0.035)], closed=True, fc="white", ec="k", lw=0.35, zorder=z + 2.2))
+        g0, g1 = a0 + t * (fm + 0.05), a1 - t * (fm + 0.05)
+        for off in (c0 - 0.012, c0 + 0.012):                # doble acristalamiento
+            ax.plot(*zip(g0 - n * off, g1 - n * off), color="k", lw=0.3, zorder=z + 2.1)
+        ax.plot(*zip(a0 + n * 0.06 - t * 0.05, a0 - n * 0.02), color="k", lw=0.35, zorder=z + 2)   # vierteaguas / goterón
+        ax.plot(*zip(a0 + n * 0.06 - t * 0.05, a1 + n * 0.06 + t * 0.05), color="k", lw=0.25, zorder=z + 2)
 
 
 def encima(ax, m, z=4, muro=0.30):

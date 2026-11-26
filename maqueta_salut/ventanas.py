@@ -60,7 +60,9 @@ def catalogo():
             if en_escalera(a_, rf): continue
             c, s = math.cos(a_), math.sin(a_)
             _h(H, f"T{i}{k:02d}", f"torre planta {i + 1}", "ventana", (T[0] + rf * c, T[1] + rf * s), (-s, c), (c, s),
-               2.6 if i == 0 else 2.4, z + 1.7, z + 3.1)
+               2.6 if i == 0 else 2.4, *((z + 1.7, z + 3.1) if i == 0 else (z + V["FOR_C"], z + E.F)))
+               # puerta balconera: del suelo (cara superior del canto = suelo del balcón y de la habitación, usuario 26/11) a la cara
+               # inferior del canto siguiente; F09 ve 1,47 de vidrio sobre el poyete. 1.ª planta: pavés (ventana alta) [F09]
     # 6b. fachada retranqueada a cada lado del cuerpo de escalera: una ventana por planta y lado [F08, F11]
     RR = V["ESC_RR"]
     for i in range(V["N_PL"]):

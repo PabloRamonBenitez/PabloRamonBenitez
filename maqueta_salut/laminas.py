@@ -386,11 +386,12 @@ def forjados_seccion(ax, cs, hueco_u=None):
     se interrumpen en la caja de la escalera (hueco_u = tramo de la sección dentro de la cuña) [usuario 26/11]"""
     from matplotlib.patches import Polygon
     from shapely.geometry import Polygon as SP, box
-    niveles = [E.Z_PB] + [E.Z_B0 + i * E.F for i in range(1, E._v["N_PL"])]
+    # forjados del barril con la cara superior en la del canto: el suelo del balcón y el de la habitación a la misma cota (usuario 26/11)
+    niveles = [E.Z_PB] + [E.Z_B0 + i * E.F + E._v["FOR_C"] for i in range(1, E._v["N_PL"])]
     for P in cs.to_polygons():
         sp = SP(np.array(P)).buffer(0)
         if sp.is_empty: continue
-        inn = sp.buffer(-VT.MURO)
+        inn = sp.buffer(-VT.MURO, join_style=2)
         if inn.is_empty: continue
         x0, z0, x1, z1 = inn.bounds
         for zl in niveles:
@@ -655,7 +656,7 @@ def detalles():
         z = E.Z_B0 + i * E.F
         L.cota(ax, (E.R_B + 0.6, z), (E.R_B + 0.6, z + FC), 0.6, "canto 0,59", fs=5.5)
         L.cota(ax, (E.R_B + 0.6, z + FC + FR), (E.R_B + 0.6, z + FC + FR + FP), 0.6, "poyete 0,78", fs=5.5)
-        L.cota(ax, (rf - 0.6, z + FC), (rf - 0.6, z + E.F), -0.6, "ventana", fs=5.5)
+        L.cota(ax, (rf - 0.6, z + FC), (rf - 0.6, z + E.F), -0.6, "puerta balconera", fs=5.5)
     L.cota(ax, (E.R_B - 0.25, E.Z_B0 + E.F + FC), (E.R_B - 0.25, E.Z_B0 + E.F + FC + FR), -1.2, "ranura 0,27", fs=5.5)
     # 1.ª planta (pavés): banda continua sin ranura y fondo inclinado [F09, F18]
     L.cota(ax, (E.R_B + 0.6, V["Z_BI"]), (E.R_B + 0.6, V["Z_BI"] + V["BAN_1"]), 0.6, "banda 1,09 sin ranura", fs=5.5)

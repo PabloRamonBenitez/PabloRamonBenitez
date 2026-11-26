@@ -189,3 +189,14 @@ Comprobación interna:
   En el sector de la escalera el pasillo se abre al rellano.
 - **Secciones**: núcleo con muro de 0,45 y tabique del pasillo cortado en cada planta.
 - Los lucernarios de +7,20 ya solo salen en las plantas por debajo del barril.
+
+## 10. Forjados, balcones y carpintería (26/11, tarde, indicación del usuario)
+- **Suelo del balcón = suelo de la habitación**: los forjados del barril tienen la cara superior en la del canto. Desaparece el escalón entre el forjado interior y el del balcón.
+- **Fachada medida (MGF, Alamy)**: canto 0,59 → ranura 0,27 → poyete 0,78. Con el suelo arriba del canto, el peto queda a **1,05 sobre el suelo**, la altura normal de una barandilla. La ranura es la rendija de desagüe al nivel del suelo, donde están las gárgolas.
+- **Puerta balconera**: del suelo a la cara inferior del canto siguiente (2,51). Lo confirma F09, que ve 1,47 de vidrio por encima del poyete, justo hasta el canto. La 1.ª planta sigue con pavés.
+- **Carpintería** en plantas y secciones:
+  - marco de 0,07 × 0,10 en cada extremo;
+  - hoja de 0,05;
+  - doble vidrio;
+  - vierteaguas con goterón;
+  - mochetas cerradas y caras del muro finas.

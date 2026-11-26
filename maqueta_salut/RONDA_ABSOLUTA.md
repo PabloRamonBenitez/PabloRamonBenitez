@@ -97,3 +97,18 @@ Comprobación interna:
 - **Ahora: 76 OK · 146 ≈ · 1 NO (duda 7) · 0 ?**
 - Zonas que han pasado a tener OK medido: Z07 (pavés), Z08 (fondo inclinado), Z10 (columna, F14 6,0 m), Z14 (PB +3,20, F15), Z15 (fuente, F01) y Z34 (dientes de sierra, recuento).
 - Siguen sin ningún OK, porque **no hay foto que las mida**: Z17 (PB del ala corta), Z20 (línea posterior), Z28 (fachada del patio) y Z31 (patio).
+
+## 5. Duda 7 resuelta (tu foto de dron y la postal de 1984)
+- **Muro de coronación de la escalera** (DUDA7_RESUELTA.png):
+  - Está **sobre la cubierta del tambor**, en el eje de la cuña, de r 10,2 a r 13,85, y **acaba en el borde del tambor**. Fuera solo quedan las lamas, más bajas.
+  - Su coronación **vierte hacia dentro**: +40,80 junto a la banda → +41,60 en el borde.
+  - Antes llegaba a r 16,2, por encima de las lamas, y por eso asomaba en F09.
+  - Comprobado:
+    - F09: ✔ (ya no asoma);
+    - foto de frente: ✔ (el muro sube hacia la marca verde y las lamas empiezan donde acaba);
+    - Alamy: ≈ (las alturas encajan, pero su extremo sale 1,5 m más fuera, igual que pasa con la visera).
+- Tu foto de dron también confirma lo que ya estaba:
+  - **Letras:** desde el patio se lee САЛЮТ entero y de frente, que es la 2.ª palabra del arco.
+  - **Claraboya:** hacia la plaza (az 320°), a unos 130° de la escalera.
+- La **postal de 1984** confirma la 1.ª planta de pavés con la banda debajo y las ménsulas, y que la visera vuela por fuera del barril.
+- Tabla: **79 OK · 145 ≈ · 0 NO · 0 ?**. Coherencia: 89/89.

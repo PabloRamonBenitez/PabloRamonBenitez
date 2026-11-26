@@ -33,3 +33,4 @@ Todos se regeneran desde los scripts de `maqueta_salut/` (p. ej. `generatrices_e
 | 53 | DUDA7_ESCALERA_F09 | duda 7: la coronación de la escalera asomaría en F09 a la derecha de la visera (cielo en la foto); hipótesis A/B/C |
 | 54 | MATRIZ_v2 | la tabla zonas × fotos tras la ronda absoluta: 76 OK · 146 ≈ · 1 NO · 0 ? |
 | 55 | DUDA7_VISUAL | duda 7 en visual: opciones actual/A/B/C proyectadas sobre F09, Alamy y la foto de frente de la escalera, con planta y recuento |
+| 56 | DUDA7_RESUELTA | duda 7 resuelta con la foto de dron del usuario: muro sobre la cubierta del tambor, en el eje, hasta su borde, vierte hacia dentro; comprobado en F09, Alamy y la foto de frente |

@@ -50,9 +50,9 @@ chk.append(("escalera: delante del retranqueo, vacío hasta la barandilla", floa
 chk.append(("escalera: ventana en la fachada retranqueada (vacío = 1)", float(not _hay(V["ESC_RR"] - 0.2, dm, E.Z_B0 + 2 * E.F + 1.8)), 1.0))
 chk.append(("escalera: lamas a los lados de la cuña", float(any(_hay(rr, E.ESC_HB + math.atan2(0.45, rr), 20.0) for rr in [13.4 + 0.05 * i for i in range(24)])), 1.0))
 chk.append(("escalera: no sobresale más allá de las lamas", float(not _hay(V["ESC_R1"] + 0.3, 0.0, 20.0)), 1.0))
-px, py = E.esc_ang_pt(V["ESC_RC"] - 0.3, -E.ESC_HB + 0.15 / V["ESC_RS"])      # sobre el muro inclinado (lado izquierdo)
+px, py = E.esc_ang_pt(E.R_T - 0.2, 0.0)      # sobre el muro de coronación (eje de la cuña, cerca del borde del tambor) [dron, duda 7]
 bb3 = (t ^ E.caja(px - 0.1, px + 0.1, py - 0.1, py + 0.1, -1, 80)).bounding_box()
-chk.append(("escalera: coronación del muro inclinado en r = ESC_RC − 0,3 (ESC_ZI → ESC_Z1, Alamy/dron)", bb3[5], V["ESC_ZI"] + (V["ESC_RC"] - 0.3 - V["ESC_RS"]) * (V["ESC_Z1"] - V["ESC_ZI"]) / (V["ESC_R1"] + 0.3 - V["ESC_RS"])))
+chk.append(("escalera: coronación del muro en r = R_T − 0,2 (ESC_ZI dentro → ESC_Z1 en el borde del tambor; vierte hacia dentro)", bb3[5], V["ESC_ZI"] + (E.R_T - 0.2 - V["ESC_RS"]) * (V["ESC_Z1"] - V["ESC_ZI"]) / (E.R_T + V["ESC_MO"] - V["ESC_RS"])))
 chk.append(("escalera: la losa blanca arranca a ESC_Z0 junto al núcleo (F78)", (t ^ E.caja(*(lambda q: (q[0]-.05, q[0]+.05, q[1]-.05, q[1]+.05))(E.esc_ang_pt(12.0, 0.8 * E.ESC_HB)), 9, 30)).bounding_box()[2], V["ESC_Z0"] - V["ESC_LE"]))
 yb0_ = E.plantas_base()["Q"][1] + V["R2_Y0"]; yr1_ = yb0_ + V["R2_L"]
 chk.append(("rampa 1 llega a la cota de la terraza (sin escalón)", V["Z_CON"], V["Z_P1"]))
@@ -173,6 +173,11 @@ chk.append(("visera/tambor = media de F01, F02, F09, F14, F23 (0,951)", E.R_V / 
 chk.append(("remate/tambor = media de las 5 fotos (0,379)", E.R_R / E.R_T, 0.379))
 chk.append(("F09: la visera vuela fuera del peto del barril por la izquierda (0,9 m)", -(V["OV_X"] - E.R_V) - E.R_B, 0.9))
 chk.append(("gárgolas: una por módulo y planta fuera de la escalera (17 × 6)", float(len(E.gargolas())), 102.0))
+# ---- duda 7 (dron del usuario 26/11): muro de coronación sobre la cubierta del tambor, en el eje de la cuña
+chk.append(("muro de coronación sobre el tambor (macizo en el eje, a media longitud, +1 m)", float(_hay3(E.esc_ang_pt((V["ESC_RS"] + E.R_T) / 2, 0.0), E.Z_T1 + 1.0)), 1.0))
+chk.append(("nada por encima del tambor fuera de su borde (r R_T+0,8, +40,5)", float(not _hay3(E.esc_ang_pt(E.R_T + 0.8, 0.0), 40.5)), 1.0))
+_lat9 = (E.R_T + V["ESC_MO"]) * math.sin(E.ESC_ANG - math.radians(320.0)); _vis9 = V["OV_X"] + E.R_V
+chk.append(("F09: el extremo del muro no asoma a la derecha de la visera (lateral − borde visera ≤ 0,25)", max(0.0, _lat9 - _vis9), 0.0))
 for n, a, b in chk:
     ok = abs(a - b) < (2.0 if "tolerancia 2" in n else 0.5 if ("A–D" in n) else 0.25 if ("curva" in n or "X:" in n) else 0.12) or (("|cos|" in n or "|sen|" in n) and a < 0.02) or (n.startswith("sin ventanas") and a > V["W_P"] - 0.05)
     out.append(f"| {n} | {a:.2f} | {b:.2f} | {'OK' if ok else 'NO'} |")

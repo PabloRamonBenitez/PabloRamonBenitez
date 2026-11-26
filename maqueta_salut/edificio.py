@@ -509,8 +509,7 @@ def torre():
     # 2) cuerpo en cuña; por debajo pasa la rampa. Por encima del tambor la caja solo llega hasta RS (cielo hasta la banda)
     #    y su cubierta baja de ZO (fuera) a ZI (dentro) [Alamy, collage]
     esc = [sector(ESC_R0, ESC_RC, _v["ESC_Z0"], Z_T1, -ESC_HB, ESC_HB),
-           # por encima del tambor solo hay un MURO con la coronación inclinada, al final de la zona A (lado izquierdo) [dron, usuario]
-           sector(RS, ESC_R1 + 0.3, Z_T1 - 0.01, ZO, -ESC_HB, -ESC_HB + 0.3 / RS),
+           # (el muro de coronación va aparte, sobre la cubierta del tambor: ver MURO_ESC más abajo)
            sector(ESC_RC - 0.2, ESC_RC, Z_T1 - 0.01, Z_T1 + 1.1, -ESC_HB, ESC_HB)]      # peto bajo sobre el cuerpo
     # cubierta inclinada de la caja de escalera: plano de ESC_ZI (en ESC_RS) a ESC_Z1 (en ESC_R1 + 0,3); corta cuerpo y lamas [Alamy]
     _ri, _ro = _v["ESC_RS"] - 1.0, ESC_R1 + 1.5
@@ -526,6 +525,15 @@ def torre():
             esc.append(sector(RR, rf, z, z + 0.3, d0, d1))
             esc.append(sector(rf - 0.08, rf, z + 0.3, z + 1.3, d0, d1))
     m = m + (Manifold.batch_boolean(esc, OpType.Add) - CORTE_ESC)
+    # MURO de coronación: radial en el eje de la cuña, apoyado en la cubierta del tambor, de RS hasta el borde del tambor
+    # (las lamas siguen por fuera, más bajas); coronación inclinada que vierte hacia dentro: ZI en RS → ZO en el borde
+    # [dron 26/11 del usuario: muro sobre la terraza del tambor, acaba en su borde, «caída de agua hacia el interior»;
+    #  foto de frente: bloque a la izquierda de las lamas subiendo hacia fuera; F09: no asoma a la derecha de la visera; alturas Alamy]
+    _ro_m = R_T + _v["ESC_MO"]
+    _pm = [(RS, Z_T1 - 0.01), (_ro_m, Z_T1 - 0.01), (_ro_m, ZO), (RS, ZI)]
+    _cm = CrossSection([_pm]); _cm = _cm if _cm.area() > 0 else CrossSection([_pm[::-1]])
+    MURO_ESC = Manifold.extrude(_cm, 0.3).translate((0, 0, -0.15)).rotate((90, 0, 0)).rotate((0, 0, math.degrees(ESC_ANG))).translate((T[0], T[1], 0))
+    m = m + MURO_ESC
     m = m + sector(ESC_R0, ESC_RC, _v["ESC_ZL"] - 0.3, _v["ESC_ZL"], -ESC_HB, ESC_HB)     # forjado superior de la escalera (sin hueco visto) [usuario 26/11]
     # pie de la escalera: núcleo de hormigón bajo la losa blanca y celosía baja de lamas sobre la terraza [F78, foto de frente]
     _hn = ESC_HB * _v["ESC_NU"]

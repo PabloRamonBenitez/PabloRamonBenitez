@@ -24,7 +24,7 @@
 | escalera: ventana en la fachada retranqueada (vacío = 1) | 1.00 | 1.00 | OK |
 | escalera: lamas a los lados de la cuña | 1.00 | 1.00 | OK |
 | escalera: no sobresale más allá de las lamas | 1.00 | 1.00 | OK |
-| escalera: coronación del muro inclinado en r = ESC_RC − 0,3 (ESC_ZI → ESC_Z1, Alamy/dron) | 41.43 | 41.44 | OK |
+| escalera: coronación del muro en r = R_T − 0,2 (ESC_ZI dentro → ESC_Z1 en el borde del tambor; vierte hacia dentro) | 41.51 | 41.49 | OK |
 | escalera: la losa blanca arranca a ESC_Z0 junto al núcleo (F78) | 11.10 | 11.10 | OK |
 | rampa 1 llega a la cota de la terraza (sin escalón) | 7.20 | 7.20 | OK |
 | techo del restaurante: arranca a cota de terraza junto a la torre | 7.25 | 7.25 | OK |
@@ -88,3 +88,6 @@
 | remate/tambor = media de las 5 fotos (0,379) | 0.38 | 0.38 | OK |
 | F09: la visera vuela fuera del peto del barril por la izquierda (0,9 m) | 0.90 | 0.90 | OK |
 | gárgolas: una por módulo y planta fuera de la escalera (17 × 6) | 102.00 | 102.00 | OK |
+| muro de coronación sobre el tambor (macizo en el eje, a media longitud, +1 m) | 1.00 | 1.00 | OK |
+| nada por encima del tambor fuera de su borde (r R_T+0,8, +40,5) | 1.00 | 1.00 | OK |
+| F09: el extremo del muro no asoma a la derecha de la visera (lateral − borde visera ≤ 0,25) | 0.11 | 0.00 | OK |

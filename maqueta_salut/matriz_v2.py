@@ -57,7 +57,7 @@ CONFLICTOS = [
  ("Z02 Z01", "Radios de visera y remate", "F01, F02, F09, F14, F23 (0,951 / 0,379) frente a Alamy (0,842 / 0,34)", "RESUELTO 26/11: 5 fotos contra 1 → R_V 12,9, R_R 5,1; alturas de Alamy sin tocar"),
  ("Z03", "Banda: desplazamiento", "F09 −1,55 · F14 −1,94 · Alamy lateral 2,75", "RESUELTO 26/11: OB (−1,7, −2,26) por dos vistas"),
  ("Z01", "Letrero", "Alamy, F09, F08, F01, F19 + usuario 22/11", "RESUELTO 26/11: САЛЮТ ×2 en arco (r R_R+1,5; az 90° y 330°, 120° cada una)"),
- ("Z29", "Coronación de la escalera vista desde F09", "F09 cielo / modelo asoma", "ABIERTO: DUDA 7"),
+ ("Z29", "Coronación de la escalera vista desde F09", "F09 cielo / modelo asoma; dron del usuario", "RESUELTO 26/11 (DUDA7_RESUELTA.png): muro sobre la cubierta del tambor, en el eje, hasta su borde; vierte hacia dentro"),
  ("—", "U de 180° y curva abierta de la rampa", "F78 + maqueta F76 + usuario", "RESUELTO 26/11: peto con curva abierta y final en U"),
 ]
 

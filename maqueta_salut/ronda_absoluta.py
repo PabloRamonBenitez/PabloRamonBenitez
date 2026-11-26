@@ -50,7 +50,11 @@ put("C03", "Z15", "≈", "F14: chorros en abanico a la izquierda de la columna (
 # Z34 dientes de sierra
 put("C01", "Z34", "OK", "F01 (1984): recuento 5 en línea + 5 escalonados (usuario 26/11)")
 # Z29 escalera: conflicto nuevo con F09
-put("C04", "Z29", "NO", "F09 (320°, chaflán de frente): la coronación inclinada del modelo (az 80–82°, r hasta 16,2, +40,6/+41,6) asomaría a la "
-    "derecha de la visera; la foto muestra cielo → DUDA 7")
+put("C04", "Z29", "OK", "F09: con el muro sobre el tambor (eje de la cuña, hasta r 13,85) no asoma a la derecha de la visera (antes sí: DUDA 7)")
+put("C28", "Z29", "OK", "dron del usuario 26/11: muro sobre la terraza del tambor, acaba en su borde (fuera solo lamas), coronación que vierte hacia dentro")
+put("C28", "Z01", "OK", "dron del usuario 26/11: САЛЮТ entero y de frente desde el patio = 2.ª palabra del arco")
+put("C28", "Z02", "OK", "dron del usuario 26/11: claraboya hacia la plaza (az 320°), a ≈130° de la escalera")
+put("C24", "Z29", "≈", "Alamy: coronación +40,6 → +41,7 OK; su extremo exterior ≈ 1,5 m más fuera que el muro (Alamy por encima del tambor)")
+put("C31", "Z07", "OK", "postal 1984 (usuario 26/11): pavés en la 1.ª planta, banda continua debajo y ménsulas")
 json.dump(R, open("RONDA_ABSOLUTA.json", "w"), ensure_ascii=False, indent=0)
 print(sum(len(v) for v in R.values()), "celdas")

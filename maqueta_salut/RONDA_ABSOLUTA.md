@@ -177,3 +177,15 @@ Comprobación interna:
   3. dibujo (`auditoria_planos.py`: astillas, rendijas y nudos en todas las plantas y secciones, más la hoja `AUDITORIA_NUDOS.png`);
   4. fotos (collages);
   5. entregables actualizados.
+
+## 9. Plantas de habitaciones (26/11, tarde, indicación del usuario)
+- **Balcones de 1,20** (antes 1,80, sin medir): la fachada de ventanas está en R_B − 1,20. Va en el 3D, el STL, los alzados y las secciones.
+- **Solo en planos**: interiores supuestos con lógica estructural; el 3D sigue sin interiores.
+  - núcleo central con muro de 0,45;
+  - pasillo anular de 1,20;
+  - tabique de 0,15;
+  - muros radiales de 0,30 en el eje de cada aleta (las aletas son los muros de carga) desde el pasillo hasta la fachada.
+
+  En el sector de la escalera el pasillo se abre al rellano.
+- **Secciones**: núcleo con muro de 0,45 y tabique del pasillo cortado en cada planta.
+- Los lucernarios de +7,20 ya solo salen en las plantas por debajo del barril.

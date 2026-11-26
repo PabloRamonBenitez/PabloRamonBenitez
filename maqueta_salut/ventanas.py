@@ -50,7 +50,7 @@ def catalogo():
         dx, dy = x - KC[0], y - KC[1]; c, s = math.cos(PHI), math.sin(PHI)
         return (KC[0] + c * dx - s * dy, KC[1] + s * dx + c * dy)
     # 6. torre: un hueco por módulo entre aletas y por planta, en la línea de vidrio rf [F04, F06, F09]
-    T = E.T; rf = E.R_B - 1.8
+    T = E.T; rf = E.RF
     def en_escalera(a_, r_):          # módulo ocupado por la caja de la escalera insertada en el cilindro
         return abs((a_ - E.ESC_ANG + math.pi) % (2 * math.pi) - math.pi) < E.ESC_HA
     for i in range(V["N_PL"]):

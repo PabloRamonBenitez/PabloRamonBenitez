@@ -96,3 +96,5 @@
 | muro de coronación sobre el tambor (macizo en el eje, a media longitud, +1 m) | 1.00 | 1.00 | OK |
 | nada por encima del tambor fuera de su borde (r R_T+0,8, +40,5) | 1.00 | 1.00 | OK |
 | F09: el extremo del muro no asoma a la derecha de la visera (lateral − borde visera ≤ 0,25) | 0.11 | 0.00 | OK |
+| balcón de BAL_P: vacío entre la fachada de ventanas y el poyete | 1.00 | 1.00 | OK |
+| fachada de ventanas en R_B − BAL_P | 1.00 | 1.00 | OK |

@@ -64,7 +64,7 @@ def torre(ax, zo=10):
     rect(ax, uT - E.R_CU - 0.6, uT + E.R_CU + 0.6, E.Z_CU0, E.Z_CU0 + 0.6, HORM, zo + 1)
     # sofito del barril y ménsulas
     rect(ax, uT - E.R_B, uT + E.R_B, E.Z_CU1, E.Z_ALETA0, HORM, zo + 1)
-    rf = E.R_B - 1.8
+    rf = E.RF
     rect(ax, uT - rf, uT + rf, E.Z_B0, E.Z_B1, VIDR, zo + 1)                         # fondo acristalado
     for i in range(V["N_PL"] + 1):
         z = E.Z_B0 + i * E.F

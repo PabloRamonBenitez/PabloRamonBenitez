@@ -50,7 +50,7 @@ def planta(ax, zc, titulo, aerea=False):
         estructura_torre(ax, zc)
         proyecciones_planta(ax, zc)
         # sin interiores inventados: solo lo que sale de fotos (usuario, 26/11)
-    if aerea or zc > E.Z_P1:                               # lucernarios piramidales bajo el cuello: base + aristas [F78]
+    if (not aerea) and E.Z_P1 < zc < E._v["Z_BI"]:      # lucernarios piramidales bajo el cuello (solo se ven en las plantas bajo el barril) [F78]
         from matplotlib.patches import Polygon as _Pg
         LS = E.lucernarios_cuello()
         for L_ in LS:
@@ -164,7 +164,37 @@ def estructura_torre(ax, zc):
         if zc > E.Z_T1:
             ax.text(*E.esc_ang_pt((E._v["ESC_RS"] + E.ESC_R1) / 2, -HB + 0.12), f"muro de coronación inclinada +{E._v['ESC_ZI']:.2f} → +{E._v['ESC_Z1']:.2f}".replace(".", ","),
                     fontsize=4.5, ha="center", rotation=math.degrees(E.ESC_ANG - HB) - 90, zorder=8)
-    return                                             # núcleo interior de la torre: sin datos, no se dibuja
+    # PLANTAS DE HABITACIONES (usuario 26/11, supuesto razonado, solo en planos): núcleo central de muro NUC_E, pasillo anular de PAS_A,
+    # tabique TAB_E y muros radiales PAR_E en el eje de cada aleta hasta la fachada de ventanas (RF); en el sector de la escalera,
+    # el pasillo se abre al rellano
+    V_ = E._v
+    if not (E.Z_B0 + 0.3 < zc < E.Z_B1): return
+    def anillo(r0, r1, d0=None, d1=None, n=96):
+        if d0 is None:
+            t = np.linspace(0, 2 * math.pi, n + 1)
+            return [tuple(T + r1 * np.array([math.cos(a), math.sin(a)])) for a in t] + [tuple(T + r0 * np.array([math.cos(a), math.sin(a)])) for a in t[::-1]]
+        t = np.linspace(d0, d1, max(int(abs(d1 - d0) / (2 * math.pi) * n), 2) + 1)
+        return [tuple(T + r1 * np.array([math.cos(a), math.sin(a)])) for a in t] + [tuple(T + r0 * np.array([math.cos(a), math.sin(a)])) for a in t[::-1]]
+    rn1 = E.R_COL; rn0 = rn1 - V_["NUC_E"]; rp = rn1 + V_["PAS_A"]; rt = rp + V_["TAB_E"]
+    sty = dict(closed=True, fc="white", ec="k", hatch="////", lw=1.0, zorder=7.2)
+    ax.add_patch(Polygon(anillo(rn0, rn1), **sty))                                   # núcleo (cortado)
+    a_esc = E.ESC_ANG; he = E.ESC_HB + math.atan2(0.6, rt)
+    ax.add_patch(Polygon(anillo(rp, rt, a_esc + he, a_esc - he + 2 * math.pi), **sty))   # tabique del pasillo, abierto a la escalera
+    for k in range(int(V_["N_AL"])):                                                  # muros radiales en el eje de las aletas
+        a = 2 * math.pi * k / V_["N_AL"] + E.FASE_AL
+        if abs(math.remainder(a - a_esc, 2 * math.pi)) < E.ESC_HA + 0.03: continue
+        u = np.array([math.cos(a), math.sin(a)]); n_ = np.array([-u[1], u[0]]) * V_["PAR_E"] / 2
+        q = [T + u * rt + n_, T + u * E.RF + n_, T + u * E.RF - n_, T + u * rt - n_]
+        ax.add_patch(Polygon([tuple(p) for p in q], **sty))
+    ac = a_esc + math.pi                                                              # rótulos (lado opuesto a la escalera)
+    ax.text(*(T + (rn1 + V_["PAS_A"] / 2) * np.array([math.cos(ac), math.sin(ac)])), f"pasillo {V_['PAS_A']:.2f}".replace(".", ","),
+            fontsize=4.6, ha="center", va="center", rotation=math.degrees(ac) - 90, zorder=8)
+    ax.text(*T, "núcleo", fontsize=6, ha="center", va="center", zorder=8)
+    a2 = 2 * math.pi * 9.5 / V_["N_AL"] + E.FASE_AL
+    ax.text(*(T + (rt + E.RF) / 2 * np.array([math.cos(a2), math.sin(a2)])), "habitación", fontsize=4.6, ha="center", va="center",
+            rotation=math.degrees(a2) - 90, zorder=8)
+    ax.text(*(T + (E.RF + E.R_B) / 2 * np.array([math.cos(a2), math.sin(a2)])), f"balcón {V_['BAL_P']:.2f}".replace(".", ","), fontsize=4.2,
+            ha="center", va="center", rotation=math.degrees(a2) - 90, zorder=8)
 
 
 def cadena(ax, pts, off, fs=4.8, color="k"):
@@ -407,11 +437,22 @@ def nucleo_seccion(ax, p0, p1):
         hv = math.sqrt(E.R_V ** 2 - dv ** 2)
         for z0_ in (E.Z_G1, E.Z_V1 - 0.35):
             ax.add_patch(Rectangle((scv - hv, z0_), 2 * hv, 0.35, fc="white", ec="k", hatch="////", lw=1.1, zorder=6.6))
+    rp = E.R_COL + V_["PAS_A"]                                   # tabique del pasillo (supuesto, usuario 26/11) en las plantas de habitaciones
+    if dist < rp:
+        hp = math.sqrt(rp ** 2 - dist ** 2)
+        for i in range(int(V_["N_PL"])):
+            z = E.Z_B0 + i * E.F + (V_["FOR_C"] if i else 0.5)
+            for sg in (-1, 1):
+                x = sc + sg * hp
+                ax.add_patch(Rectangle((x - (0 if sg > 0 else V_["TAB_E"]), z), V_["TAB_E"], E.Z_B0 + (i + 1) * E.F - z, fc="white", ec="k",
+                                       hatch="////", lw=0.6, zorder=6.5))
+        ax.text(sc - hp + V_["PAS_A"] / 2 - 0.1, E.Z_B0 + 2.5 * E.F, f"pasillo {V_['PAS_A']:.2f}".replace(".", ","), fontsize=4.5, rotation=90,
+                ha="center", va="center", zorder=7)
     if dist >= E.R_COL - 0.05: return
-    h = math.sqrt(E.R_COL ** 2 - dist ** 2)
+    h = math.sqrt(E.R_COL ** 2 - dist ** 2); ne = V_["NUC_E"]                     # núcleo con muro de NUC_E
     for sg in (-1, 1):
         x = sc + sg * h
-        ax.add_patch(Rectangle((x - (VT.MURO if sg > 0 else 0), 0), VT.MURO, E.Z_G1, fc="white", ec="k", hatch="////", lw=0.9, zorder=6.5))
+        ax.add_patch(Rectangle((x - (ne if sg > 0 else 0), 0), ne, E.Z_G1, fc="white", ec="k", hatch="////", lw=0.9, zorder=6.5))
     ax.text(sc, E.Z_B0 + 1.5 * E.F, "núcleo", fontsize=6, ha="center", rotation=90, zorder=7)
 
 
@@ -608,7 +649,7 @@ def detalles():
     ax = fig.add_axes([0.04, 0.06, 0.40, 0.86])
     seccion(ax, p0, p1, "sección radial por un módulo (izquierda = núcleo)")
     ejes(ax, (6, 17), (E.Z_B0 - 3, E.Z_B0 + 3 * E.F + 0.5))
-    rf = E.R_B - 1.8
+    rf = E.RF
     V = E._v; FC, FR, FP = V["FOR_C"], V["FOR_R"], V["FOR_P"]
     for i in range(1, 3):                                   # plantas de habitaciones: canto, ranura, poyete y ventana [MGF Alamy, F09]
         z = E.Z_B0 + i * E.F

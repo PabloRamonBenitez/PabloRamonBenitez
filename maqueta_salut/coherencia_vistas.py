@@ -184,6 +184,11 @@ chk.append(("muro de coronación sobre el tambor (macizo en el eje, a media long
 chk.append(("nada por encima del tambor fuera de su borde (r R_T+0,8, +40,5)", float(not _hay3(E.esc_ang_pt(E.R_T + 0.8, 0.0), 40.5)), 1.0))
 _lat9 = (E.R_T + V["ESC_MO"]) * math.sin(E.ESC_ANG - math.radians(320.0)); _vis9 = V["OV_X"] + E.R_V
 chk.append(("F09: el extremo del muro no asoma a la derecha de la visera (lateral − borde visera ≤ 0,25)", max(0.0, _lat9 - _vis9), 0.0))
+# ---- plantas de habitaciones (usuario 26/11): balcón de BAL_P; interiores solo en planos (el 3D queda macizo)
+_ab = 2 * math.pi * (_k + 0.5) / V["N_AL"] + E.FASE_AL; _zb = E.Z_B0 + 3 * E.F + 2.0
+_pb = lambda r: (E.T[0] + r * math.cos(_ab), E.T[1] + r * math.sin(_ab))
+chk.append(("balcón de BAL_P: vacío entre la fachada de ventanas y el poyete", float(not _hay3(_pb(E.RF + 0.6), _zb)), 1.0))
+chk.append(("fachada de ventanas en R_B − BAL_P", float(_hay3(_pb(E.RF - 0.4), _zb - 1.7)), 1.0))
 for n, a, b in chk:
     ok = abs(a - b) < (2.0 if "tolerancia 2" in n else 0.1 if ("A–D" in n) else 0.25 if ("curva" in n or "X:" in n) else 0.12) or (("|cos|" in n or "|sen|" in n) and a < 0.02) or (n.startswith("sin ventanas") and a > V["W_P"] - 0.05) or ("1,5 %" in n and a <= 0.015)
     out.append(f"| {n} | {a:.2f} | {b:.2f} | {'OK' if ok else 'NO'} |")

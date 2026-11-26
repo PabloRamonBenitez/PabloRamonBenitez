@@ -52,6 +52,7 @@ Z_CU0, Z_CU1, Z_ALETA0, Z_B0, F, N_PL = _v["Z_CU0"], _v["Z_CU1"], _v["Z_ALE"], _
 Z_B1 = Z_B0 + N_PL * F
 Z_T1, Z_G1, Z_V1, Z_R1 = _v["Z_T1"], _v["Z_G1"], _v["Z_V1"], _v["Z_R1"]
 R_COL, R_CU, R_B, R_AL, R_T, R_G, R_V, R_R = _v["R_COL"], _v["R_CU"], _v["R_B"], _v["R_AL"], _v["R_T"], _v["R_G"], _v["R_V"], _v["R_R"]
+RF = R_B - _v["BAL_P"]                     # fachada de ventanas de las habitaciones (balcón de BAL_P) [usuario 26/11]
 OFF_V, OFF_R, N_AL = (_v["OV_X"], _v["OV_Y"]), (_v["OR_X"], _v["OR_Y"]), int(_v["N_AL"])
 FASE_AL = math.radians(_v.get("FASE_AL", 0.0))   # giro del módulo radial [MGF Alamy]
 OFF_B = (_v["OB_X"], _v["OB_Y"])
@@ -475,7 +476,7 @@ def torre():
         a = math.degrees(2 * math.pi * k / N_AL + FASE_AL)
         vg = Manifold.cube((R_B - 0.05 - (R_CU - 0.3), 0.4, _v["VIG_H"] + 0.01)).translate((R_CU - 0.3, -0.2, zbi - _v["VIG_H"]))
         s.append(vg.rotate((0, 0, a)).translate((T[0], T[1], 0)))
-    rf = R_B - 1.8
+    rf = RF                                                  # fachada de ventanas tras el balcón de BAL_P [usuario 26/11]
     FC, FR, FP = _v["FOR_C"], _v["FOR_R"], _v["FOR_P"]          # sección de planta del barril [MGF Alamy]
     s.append(cil(T, rf, _v["Z_BI"], Z_B1 + 0.4))
     s.append(cil(T, R_B, _v["Z_BI"], _v["Z_BI"] + _v["BAN_1"]) - cil(T, R_B - 0.25, _v["Z_BI"] - 0.1, _v["Z_BI"] + _v["BAN_1"] + 0.1))  # 1.ª planta: banda continua sin ranura delante del pavés [F09, F18]

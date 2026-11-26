@@ -33,6 +33,16 @@ M = LM.M
 huella = unary_union([SP(np.array(P)).buffer(0) for P in M.project().to_polygons() if len(P) > 2]).buffer(0.05)
 
 
+def _polys(g):
+    """solo las partes poligonales (una intersección puede dejar líneas o puntos sueltos)"""
+    if g is None or g.is_empty: return []
+    out = []
+    for x in getattr(g, "geoms", [g]):
+        if x.geom_type == "Polygon" and not x.is_empty: out.append(x)
+        elif x.geom_type in ("MultiPolygon", "GeometryCollection"): out += _polys(x)
+    return out
+
+
 def poly(ax, pts, **k):
     ax.add_patch(Polygon(np.asarray(pts), closed=True, **k))
 
@@ -47,7 +57,7 @@ def punteado(ax, geom, dens=0.55, ms=0.35, z=1):
     from shapely import contains_xy
     pts = pts[contains_xy(g, pts[:, 0], pts[:, 1])][:n]
     ax.plot(pts[:, 0], pts[:, 1], ",", color="k", ms=ms, zorder=z)
-    for gg in getattr(g, "geoms", [g]):
+    for gg in _polys(g):
         ax.plot(*gg.exterior.xy, color="k", lw=0.35, zorder=z + 0.1)
 
 
@@ -56,7 +66,7 @@ def arbol(ax, c, r, z=5):
     t = np.linspace(0, 2 * math.pi, 60)
     rr = r * (1 + 0.07 * np.sin(9 * t + rng.uniform(0, 6)))
     sh = SP(np.c_[c[0] + rr * np.cos(t), c[1] + rr * np.sin(t)]).difference(huella)
-    for g in getattr(sh, "geoms", [sh]):
+    for g in _polys(sh):
         if g.area < 1: continue
         ax.add_patch(Polygon(np.c_[g.exterior.xy], closed=True, fc="white", ec="k", lw=0.45, zorder=z))
     if not huella.contains(Point(c)):
@@ -68,7 +78,7 @@ def arbol(ax, c, r, z=5):
 def via(ax, linea, ancho, z=2, eje=True):
     """vial: bordillos a ±ancho/2 (línea media) y eje a trazos"""
     ls = LineString(linea); b = ls.buffer(ancho / 2, cap_style=2, join_style=1).difference(huella)
-    for g in getattr(b, "geoms", [b]):
+    for g in _polys(b):
         ax.add_patch(Polygon(np.c_[g.exterior.xy], closed=True, fc="white", ec="k", lw=0.7, zorder=z))
     if eje:
         l2 = ls.difference(huella)
@@ -92,7 +102,7 @@ def hoja_lugar():
             SP([SW(-2, -4.0), SW(40, -4.0), SW(40, -18), SW(-2, -18)])).difference(calle).difference(huella).intersection(
             SP([SW(x0 - 60, -4.0), SW(120, -4.0), SW(120, 200), SW(x0 - 60, 200)]))                        # solo del lado del hotel
     plaza = plaza.difference(SP([(E.W_P + 6.5, 18.0), (200, 18.0), (200, 200), (E.W_P + 6.5, 200)]))                # hasta el camino y el parque
-    for g in getattr(plaza, "geoms", [plaza]):
+    for g in _polys(plaza):
         poly(ax, np.c_[g.exterior.xy], fc="white", ec="k", lw=0.6, zorder=1)
     for s in np.arange(-30, 49, 4.0):                                # despiece del pavimento de la plaza (línea superficial)
         l = LineString([E.P(s, yf - 0.5), E.P(s, -42)]).intersection(plaza)
@@ -106,7 +116,7 @@ def hoja_lugar():
     poly(ax, np.c_[c_.exterior.xy], fc="white", ec="k", lw=0.9, zorder=1.5)
     ax.plot(*zip(SW(x0 - 60, -11.0), SW(40, -11.0)), color="k", lw=0.35, ls=(0, (10, 6)), zorder=1.6)
     a_ = acera.intersection(marco).difference(huella)
-    for g in getattr(a_, "geoms", [a_]): poly(ax, np.c_[g.exterior.xy], fc="white", ec="k", lw=0.5, zorder=1.4)
+    for g in _polys(a_): poly(ax, np.c_[g.exterior.xy], fc="white", ec="k", lw=0.5, zorder=1.4)
     for i in range(5):                                               # autobuses en fila ante el chaflán (F14, F15, F70)
         c = np.array(E.P(8 + i * 3.6, -24))
         poly(ax, [c - U * 1.25 - N * 5.6, c + U * 1.25 - N * 5.6, c + U * 1.25 + N * 5.6, c - U * 1.25 + N * 5.6], fc="white", ec="k", lw=0.5, zorder=3)
@@ -138,16 +148,16 @@ def hoja_lugar():
     ax.plot(*zip(SW(x0, -0.5), SW(x0, V["W_C"] + 8)), color="k", lw=0.8, ls=(0, (12, 2, 1, 2, 1, 2)), zorder=8)
 
     # --- 4. EL HOTEL: figura clara = planta de cubiertas del modelo (vectorial)
-    for g in getattr(huella, "geoms", [huella]):
+    for g in _polys(huella):
         poly(ax, np.c_[g.exterior.xy], fc="white", ec="none", zorder=3.9)
     LM.L.vista_vectorial(ax, M, z=4)
     import grafismo as GR
     _ax_z = ax                                                          # rampa: contorno + flecha (Ching), sin curvas de nivel
     from matplotlib.patches import Rectangle as _R
-    LM.mascara_rampas(ax, None)
+    LM.mascara_rampas(ax, None, zb=4.5)
     for a_ in ax.patches[-1:]: pass
     GR.rampas(ax, None)
-    for g in getattr(huella, "geoms", [huella]):
+    for g in _polys(huella):
         ax.plot(*g.exterior.xy, color="k", lw=1.3, zorder=7)
     # patio interior de la L (sin foto que lo muestre)
     pat = SP([SW(x0 + V["L_LAD"], V["W_C"]), (0.0, V["W_C"]), (0.0, 45.0), (x0 + 6, 45.0)]).difference(huella)

@@ -45,3 +45,12 @@ Cada punto visible es OK si cae a ≤ 0,6 m de una arista de la foto. Zona = OK 
   Esquina alta del bar vista sobre el testero (2 puntos) → **duda 8**.
 - Nuevo en F01: dientes de sierra sobre una cubierta a la izquierda de la torre (1984) → **duda 9** (se habían quitado).
 Matriz: 60 OK · 27 ≈ · 1 NO · 157 ?.
+
+## Cambios pedidos tras el barrido (26/11)
+- **Método:** las cámaras ajustadas se descartan como prueba (usuario). A partir de ahora la comprobación se hace con geometría descriptiva:
+  proporciones sobre planos conocidos, abatimientos y giros.
+- **Ala larga:** la fachada de ventanas queda 0,80 m por dentro del borde (canto de la terraza y peto vuelan 0,80). Ventanas y marcos se mueven con ella.
+- **Vuelo del bar:** 1,20 m (F47), sin cambio.
+- **Ala corta:** 10 lucernarios en diente de sierra (5 en línea y 5 escalonados) en lugar de las 3 claraboyas (F01, 1984).
+- **Sección L4:** longitudinal por la terraza mirando al bar, con nueva hoja A3 «el bar: sección L4 y alzado 2».
+- **Entorno 1984** (ENTORNO_1984.png/pdf): fuente en media luna al pie de la columna (F01, F14), plaza con autobuses, calle Mazepy, edificio colindante y parque (esquemático).

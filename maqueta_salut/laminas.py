@@ -306,6 +306,7 @@ def _secc():
      ("L1", (xe, -10), (xe, 100), "LONGITUDINAL por el eje de la escalera: escalera, barril, cuello, bar y ala larga entera"),
      ("L2", ((E.W_P + E.W_EXT) / 2, pl["Q"][1] - 6), ((E.W_P + E.W_EXT) / 2, 100), "LONGITUDINAL por la concha: su perfil curvo y la terraza detrás"),
      ("L3", tuple(T - 32 * U), tuple(T + 26 * U), "LONGITUDINAL por el eje de la torre paralela al chaflán: restaurante, columna, hotel y esquina a 90°"),
+     ("L4", (E.W_BAR + E._v["V_BAR"] + 1.6, pl["Q"][1] - 4), (E.W_BAR + E._v["V_BAR"] + 1.6, 100), "LONGITUDINAL por la terraza mirando al bar: el bar, su vuelo y la cubierta inclinada en alzado"),
      ("S1", tuple(T - 18 * N), tuple(T + 32 * N), "por el eje de la torre perpendicular al chaflán: columna, cuello, ménsulas, barril, visera desplazada y escalera"),
      ("S2", E.esc_pt(E.ESC_R1 + 6, 0), E.esc_pt(-8, 0), "por el eje de la escalera, radial al cilindro: caja insertada en la torre y su salida al patio"),
      ("S3", (-8, (pl["Q"][1] + E.Y_CUNA) / 2), (24, (pl["Q"][1] + E.Y_CUNA) / 2), "transversal del ala larga por el bar, la terraza y la concha"),

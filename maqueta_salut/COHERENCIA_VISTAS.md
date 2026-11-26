@@ -11,8 +11,8 @@
 | rampa arriba (superficie) | 7.20 | 7.20 | OK |
 | rampa de acceso a mitad (perfil convexo P2) | 5.41 | 5.40 | OK |
 | largo ala larga L_L (muro, sin porche ni esquina) | 94.80 | 94.80 | OK |
-| vidrio fila alta (MAR_R tras el frente del marco) | 12.66 | 12.66 | OK |
-| vidrio fila baja | 12.66 | 12.66 | OK |
+| vidrio fila alta (MAR_R tras el frente del marco) | 11.86 | 11.86 | OK |
+| vidrio fila baja | 11.86 | 11.86 | OK |
 | sin ventanas donde la rampa es alta | 12.75 | 12.74 | OK |
 | nº ventanas fila alta (tramo tras la rampa) | 11.00 | 11.00 | OK |
 | nº huecos fila baja | 7.00 | 7.00 | OK |
@@ -31,7 +31,7 @@
 | techo del restaurante: a mitad de la rampa | 9.36 | 9.35 | OK |
 | techo del restaurante: llega a la azotea | 11.50 | 11.50 | OK |
 | la cubierta inclinada del restaurante pasa bajo la losa de la escalera sin tocarla (no es de paso) | 1.00 | 1.00 | OK |
-| relieve del marco (frente) | 12.82 | 12.82 | OK |
+| relieve del marco (frente) | 12.74 | 12.82 | OK |
 | huecos del catálogo abiertos en el 3D (ala + torre) | 120.00 | 120.00 | OK |
 | hueco 11 por encima de la concha (concha bajo su alféizar) | 0.79 | 0.79 | OK |
 | barandilla en la cubierta de la visera | 1.00 | 1.00 | OK |

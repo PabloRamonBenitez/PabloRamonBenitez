@@ -250,9 +250,15 @@ def base():
     from shapely.geometry.polygon import orient as _or
     ba = list(_or(_SP(bloque_alto_poligono()).buffer(0), 1.0).exterior.coords)[:-1]
     s.append(prisma(ba, _v["Z_VOL0"], Z_ALTO))
-    for i in range(3):                                      # claraboyas piramidales sobre la cubierta de planta 1, detrás de la línea A [aéreas actuales]
-        x = -L_C + 6.5 + 2.2 * i
-        sc.append(Manifold.extrude(CrossSection.square((1.6, 1.6), True), 0.9, 0, 0, (0.05, 0.05)).translate((x, W_C + 2.0, Z_P1 - 0.01)))
+    # 10 lucernarios en diente de sierra sobre la cubierta de planta 1 del ala corta: 5 en línea y 5 en otra
+    # disposición (escalonados) [F01 1984, usuario 26/11]
+    def diente(x, y):
+        perfil = CrossSection([[(0.0, 0.0), (1.6, 0.0), (0.0, 1.0)]])          # cara vertical acristalada + faldón inclinado
+        if perfil.area() <= 0: perfil = CrossSection([[(0.0, 0.0), (0.0, 1.0), (1.6, 0.0)]])
+        return Manifold.extrude(perfil, 1.6).rotate((90, 0, 0)).translate((x - 0.8, y + 0.8, Z_P1 - 0.01))
+    for i in range(5):
+        sc.append(diente(-L_C + 5.0 + 2.1 * i, W_C + 1.8))
+        sc.append(diente(-L_C + 6.0 + 2.1 * i, W_C + 4.6 + 0.6 * (i % 2)))
     s.append(ROT(Manifold.batch_boolean(sc, OpType.Add)))
     # ala larga: bar en la mitad interior hasta el tramo final; terraza con peto en la mitad exterior [F47, Bing]
     yb0 = pl["Q"][1] + _v["R2_Y0"]                                      # arranca tras el vuelo del cuello (rellano del giro en U delante) [usuario 26/11]
@@ -338,13 +344,15 @@ def base():
     # testero, intereje S_VEN, hueco 0,47 S; marco que sale MAR_P y vidrio MAR_R por detrás del frente del marco
     import ventanas as VT                                # catálogo único de huecos (mismo que planos)
     p_, rr_, bd = _v["MAR_P"], _v["MAR_R"], _v["MAR_B"]
+    XF = W_P - _v["FAC_R"]                                # fachada de ventanas retranqueada 0,80 bajo el canto volado [usuario 26/11]
+    m = m - caja(XF, W_P + 0.05, Y_CUNA - 5.0, L_L - 0.3, -0.1, Z_P1 - _v["FAC_B"])
     marcos = []
     for h in VT.catalogo():
         if not h["grupo"].startswith("ala larga"): continue
         y0_, y1_ = h["p"][1] - h["w"] / 2, h["p"][1] + h["w"] / 2; z0, z1 = h["z0"], h["z1"]
-        marcos.append(caja(W_P - 0.01, W_P + p_, y0_ - bd, y1_ + bd, z0 - bd, z1 + bd))
-        marcos.append(caja(W_P - 0.01, W_P + p_ + 0.06, y0_ - bd - 0.05, y1_ + bd + 0.05, z0 - bd - 0.1, z0 - bd))  # alféizar con goterón
-        hue.append(caja(W_P + p_ - rr_, W_P + 1, y0_, y1_, z0, z1))                 # hueco hasta el vidrio
+        marcos.append(caja(XF - 0.01, XF + p_, y0_ - bd, y1_ + bd, z0 - bd, z1 + bd))
+        marcos.append(caja(XF - 0.01, XF + p_ + 0.06, y0_ - bd - 0.05, y1_ + bd + 0.05, z0 - bd - 0.1, z0 - bd))  # alféizar con goterón
+        hue.append(caja(XF + p_ - rr_, XF + 1, y0_, y1_, z0, z1))                 # hueco hasta el vidrio
     # testero: puerta de servicio con marquesina saliente y ventana encima [F73: a 0,49-0,63 del ancho desde la esquina exterior]
     hue.append(caja(W_P - 0.63 * W_P, W_P - 0.49 * W_P, L_L - 0.3, L_L + 1, 0.0, 2.6))
     hue.append(caja(W_P - 0.55 * W_P, W_P - 0.43 * W_P, L_L - 0.3, L_L + 1, 4.6, 5.3))

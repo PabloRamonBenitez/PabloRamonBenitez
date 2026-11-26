@@ -24,9 +24,9 @@ def catalogo():
     n, nb, w, S = int(V["N_VEN"]), int(V["N_VEN_B"]), V["VEN_W"], V["S_VEN"]
     for i in range(n):
         yc = L_L - V["VEN_FIN"] - i * S - w / 2
-        _h(H, f"VA{i + 1:02d}", "ala larga fila alta", "ventana", (W_P, yc), (0, 1), (1, 0), w, V["VA_0"], V["VA_1"])
+        _h(H, f"VA{i + 1:02d}", "ala larga fila alta", "ventana", (W_P - V["FAC_R"], yc), (0, 1), (1, 0), w, V["VA_0"], V["VA_1"])
         if i < nb:
-            _h(H, f"VB{i + 1:02d}", "ala larga fila baja", "ventana", (W_P, yc), (0, 1), (1, 0), w, V["VB_0"], V["VB_1"])
+            _h(H, f"VB{i + 1:02d}", "ala larga fila baja", "ventana", (W_P - V["FAC_R"], yc), (0, 1), (1, 0), w, V["VB_0"], V["VB_1"])
     # 2. testero: puerta de servicio y ventana encima [F73]
     xa, xb = W_P - 0.63 * W_P, W_P - 0.49 * W_P
     _h(H, "TP1", "testero", "puerta", ((xa + xb) / 2, L_L), (-1, 0), (0, 1), xb - xa, 0.0, 2.6)

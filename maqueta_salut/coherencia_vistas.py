@@ -24,14 +24,14 @@ chk = [
  ("largo ala larga L_L (muro, sin porche ni esquina)", float((m ^ E.caja(0.5, 2, 30, 200, 6, 6.5)).bounding_box()[4]), V["L_L"]),
 ]
 yv = V["L_L"] - V["VEN_FIN"] - V["VEN_W"] + 0.2
-for z, nm, ref in ((V["VA_0"] + 0.5, "vidrio fila alta (MAR_R tras el frente del marco)", V["W_P"] + V["MAR_P"] - V["MAR_R"]), (V["VB_0"] + 0.4, "vidrio fila baja", V["W_P"] + V["MAR_P"] - V["MAR_R"])):
+for z, nm, ref in ((V["VA_0"] + 0.5, "vidrio fila alta (MAR_R tras el frente del marco)", V["W_P"] - V["FAC_R"] + V["MAR_P"] - V["MAR_R"]), (V["VB_0"] + 0.4, "vidrio fila baja", V["W_P"] - V["FAC_R"] + V["MAR_P"] - V["MAR_R"])):
     xs = [hueco(0, yv + k * 0.1, z) for k in range(10)]
     chk.append((nm, min(x for x in xs if x is not None), ref))
 xs = [hueco(0, y0 + 3 + k * 0.25, V["VA_0"] + 0.5) or 99 for k in range(16)]
 chk.append(("sin ventanas donde la rampa es alta", min(x for x in xs if x is not None), V["W_P"] + 0.0))
 # recuento de huecos en la fila alta y la baja a lo largo de toda la fachada exterior
 def contar(z):
-    ys = np.arange(E.Y_CUNA + 0.2 if z < 3 else E._v["Y_CA"] - 1, V["L_L"], 0.1); dentro = [ (hueco(0, y, z) or 99) < V["W_P"] - 0.04 for y in ys ]
+    ys = np.arange(E.Y_CUNA + 0.2 if z < 3 else E._v["Y_CA"] - 1, V["L_L"], 0.1); dentro = [ (hueco(0, y, z) or 99) < V["W_P"] - V["FAC_R"] - 0.04 for y in ys ]
     return sum(1 for a, b in zip(dentro, dentro[1:]) if b and not a)
 chk.append(("nº ventanas fila alta (tramo tras la rampa)", contar((V["VA_0"] + V["VA_1"]) / 2), V["N_VEN"]))
 chk.append(("nº huecos fila baja", contar((V["VB_0"] + V["VB_1"]) / 2), V["N_VEN_B"]))

@@ -152,6 +152,8 @@ if __name__ == "__main__":
     S = {k: (k, p0, p1, t) for k, p0, p1, t in LM.SECC}
     hoja_alz_secc("ALA LARGA – fachada exterior: sección L1 y alzado 2", (-1, 0), "ALZADO 2 – fachada exterior del ala larga",
                   S["L1"], (0, 1), (-16, 110), 500, [("73.webp", "F73 – desde el testero"), ("71.webp", "F71 – rampa de acceso"), ("47.webp", "F47 – 1984")])
+    hoja_alz_secc("ALA LARGA – el bar: sección L4 (mirando al bar) y alzado 2", (-1, 0), "ALZADO 2 – fachada exterior del ala larga",
+                  S["L4"], (0, 1), (-16, 110), 500, [("47.webp", "F47 – bar y terraza (1984)"), ("71.webp", "F71 – cubierta inclinada"), ("73.webp", "F73 – desde el testero")])
     hoja_alz_secc("ALA LARGA – patio: sección L5 y alzado 4", (1, 0), "ALZADO 4 – patio interior de la L",
                   ("L5", (3.1, 100.0), (3.1, -14.0), "por el bar, la escalera y la torre"), (0, -1), (-110, 16), 500,
                   [("75.png", "F75 – escalera desde el patio"), ("8.webp", "F08 – escalera y barril")])

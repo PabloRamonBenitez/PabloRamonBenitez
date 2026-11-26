@@ -57,7 +57,7 @@ def generar():
     W_P, L_L = V["W_P"], V["L_L"]
     for yy in np.arange(Q[1], L_L + 0.01, 2.5):
         add(f"ALA-PET-{yy:05.1f}", "ALA LARGA peto", f"coronación peto exterior y={yy:.1f}", (W_P, yy, E.Z_P1 + V["H_PET"]))
-        add(f"ALA-PIE-{yy:05.1f}", "ALA LARGA pie", f"pie de fachada exterior y={yy:.1f}", (W_P, yy, 0.0))
+        add(f"ALA-PIE-{yy:05.1f}", "ALA LARGA pie", f"pie de fachada exterior y={yy:.1f}", (W_P - V["FAC_R"], yy, 0.0))
         add(f"ALA-INT-{yy:05.1f}", "ALA LARGA patio", f"coronación fachada patio y={yy:.1f}", (0.0, yy, E.Z_P1))
     for nm, p in (("EXT-SUP", (W_P, L_L, E.Z_P1 + V["H_PET"])), ("EXT-0", (W_P, L_L, 0)), ("INT-SUP", (0, L_L, V["Z_FIN"])),
                   ("INT-0", (0, L_L, 0)), ("BAR-SUP", (0, L_L - 0.2, V["Z_FIN"] + 1.1))):

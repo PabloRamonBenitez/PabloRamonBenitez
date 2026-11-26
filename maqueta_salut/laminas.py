@@ -62,10 +62,37 @@ def planta(ax, zc, titulo, aerea=False):
             c = np.array(LS[len(LS) // 2]["c"]); d = c - np.array(E.T); d /= np.linalg.norm(d)
             ax.annotate("lucernarios piramidales\n(vidrio, +7,20 → +8,70)", c, c + d * 6, fontsize=4.5, ha="center", zorder=9,
                         arrowprops=dict(arrowstyle="-", lw=0.3, color="0.3"))
+    mascara_rampas(ax, None if aerea else zc)
     recorridos(ax, None if aerea else zc)
     for tx in ax.texts: tx.set_clip_on(True)           # ningún rótulo fuera de su planta
     ax.set_title(titulo, fontsize=10, loc="left")
 
+
+
+def mascara_rampas(ax, zc=None):
+    """Ching: una rampa o una cubierta inclinada se dibuja en planta con su CONTORNO y la flecha de subida (grafismo.rampas),
+    nunca con las curvas de nivel de la malla (parecían peldaños). Tapa esas líneas en la parte VISTA (por debajo del corte)
+    y redibuja contorno y peto. zc = cota del corte (None = cubiertas / vista aérea)."""
+    from matplotlib.patches import Rectangle
+    V_ = E._v; pl = E.plantas_base()
+    y0 = pl["Q"][1] + V_["D_HOTF"]; YB = E.Y_CUNA; LR = YB - y0
+    if zc is None or zc >= V_["Z_CON"]: ya = y0
+    elif zc <= 0: ya = None
+    else: ya = y0 + LR * (1 - zc / V_["Z_CON"]) ** (1 / V_["RAMPA_P"])
+    if ya is not None:                                            # 1) rampa de acceso (concha)
+        x0, x1 = E.W_P, E.W_EXT
+        ax.add_patch(Rectangle((x0 + 0.02, ya), x1 - x0 - 0.04, YB - ya, fc="white", ec="none", zorder=3.5))
+        ax.plot([x0, x1, x1, x0], [ya, ya, YB, YB], color="k", lw=0.45, zorder=3.6)
+        ax.plot([x1 - 0.25, x1 - 0.25], [ya, YB], color="k", lw=0.35, zorder=3.6)                 # peto
+        if zc is not None and ya > y0 + 0.2:                       # línea de corte de la rampa (Ching: quiebro en diagonal)
+            ax.plot([x0, x1], [ya - 0.6, ya + 0.6], color="k", lw=0.5, zorder=3.7)
+    yb0 = pl["Q"][1] + V_["R2_Y0"]; yr1 = yb0 + V_["R2_L"]; WB = E.W_BAR + V_["V_BAR"]
+    if zc is None or zc >= E.Z_BAR_C: yt = yr1
+    elif zc <= E.Z_P1: yt = None
+    else: yt = yb0 + (zc - E.Z_P1) / (E.Z_BAR_C - E.Z_P1) * (yr1 - yb0)
+    if yt is not None:                                            # 2) techo inclinado del restaurante
+        ax.add_patch(Rectangle((0.02, yb0), WB - 0.04, yt - yb0, fc="white", ec="none", zorder=3.5))
+        ax.plot([0, WB, WB, 0, 0], [yb0, yb0, yt, yt, yb0], color="k", lw=0.45, zorder=3.6)
 
 
 def proyecciones_planta(ax, zc):

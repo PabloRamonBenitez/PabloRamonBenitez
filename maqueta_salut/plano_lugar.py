@@ -141,6 +141,12 @@ def hoja_lugar():
     for g in getattr(huella, "geoms", [huella]):
         poly(ax, np.c_[g.exterior.xy], fc="white", ec="none", zorder=3.9)
     LM.L.vista_vectorial(ax, M, z=4)
+    import grafismo as GR
+    _ax_z = ax                                                          # rampa: contorno + flecha (Ching), sin curvas de nivel
+    from matplotlib.patches import Rectangle as _R
+    LM.mascara_rampas(ax, None)
+    for a_ in ax.patches[-1:]: pass
+    GR.rampas(ax, None)
     for g in getattr(huella, "geoms", [huella]):
         ax.plot(*g.exterior.xy, color="k", lw=1.3, zorder=7)
     # patio interior de la L (sin foto que lo muestre)

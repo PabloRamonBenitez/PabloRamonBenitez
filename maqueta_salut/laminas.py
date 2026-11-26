@@ -405,13 +405,16 @@ def letras_alzado(ax, d):
     """rótulo САЛЮТ dibujado sobre sus 5 letras en cualquier alzado (las letras miran a la cámara de Alamy)"""
     d = np.array(d, float) / np.linalg.norm(d); r_ = np.array([d[1], -d[0]])
     a = math.degrees(math.atan2(d[1], d[0])) - 90.0; ca, sa = math.cos(math.radians(-a)), math.sin(math.radians(-a))
-    for ch, L_ in zip("САЛЮТ", E.letrero()):
+    for L_ in E.letrero():
         nrm = np.array([math.cos(math.radians(L_["rot"])), math.sin(math.radians(L_["rot"]))])
         vis = -(nrm @ d)
         if vis < 0.15: continue
         x = ca * L_["c"][0] - sa * L_["c"][1]
-        ax.text(x, (L_["z0"] + L_["z1"]) / 2, ch, fontsize=9 * max(vis, 0.4), ha="center", va="center", weight="bold", zorder=40,
-                family="DejaVu Sans", color="k")
+        ax.text(x, (L_["z0"] + L_["z1"]) / 2, L_["ch"], fontsize=9 * max(vis, 0.4), ha="center", va="center", weight="bold", zorder=40,
+                family="DejaVu Sans", color="k", clip_on=True)
+    for gx, gy, gz, ga in E.gargolas():                     # gárgolas: una por módulo y planta [F18, F08] (solo en planos)
+        if -(np.array([math.cos(ga), math.sin(ga)]) @ d) < 0.2: continue
+        ax.plot([ca * gx - sa * gy], [gz], "o", ms=1.1, color="k", zorder=41, clip_on=True)
 
 def alzado(ax, d, titulo):
     if np.allclose(d, (0, 1)):                       # alzado a la calle: dibujado pieza a pieza (alzado_calle.py)
@@ -546,14 +549,19 @@ def detalles():
     seccion(ax, p0, p1, "sección radial por un módulo (izquierda = núcleo)")
     ejes(ax, (6, 17), (E.Z_B0 - 3, E.Z_B0 + 3 * E.F + 0.5))
     rf = E.R_B - 1.8
-    for i in range(3):
+    V = E._v; FC, FR, FP = V["FOR_C"], V["FOR_R"], V["FOR_P"]
+    for i in range(1, 3):                                   # plantas de habitaciones: canto, ranura, poyete y ventana [MGF Alamy, F09]
         z = E.Z_B0 + i * E.F
-        L.cota(ax, (E.R_B + 0.6, z), (E.R_B + 0.6, z + 0.45), 0.6, "forjado", fs=5.5)
-        L.cota(ax, (E.R_B + 0.6, z + 0.75), (E.R_B + 0.6, z + 1.45), 0.6, "poyete", fs=5.5)
-        L.cota(ax, (rf - 0.6, z + 1.25 if i else z + 1.1), (rf - 0.6, (z + 2.55) if i else z + 2.3), -0.6, "ventana" if i else "pavés", fs=5.5)
+        L.cota(ax, (E.R_B + 0.6, z), (E.R_B + 0.6, z + FC), 0.6, "canto 0,59", fs=5.5)
+        L.cota(ax, (E.R_B + 0.6, z + FC + FR), (E.R_B + 0.6, z + FC + FR + FP), 0.6, "poyete 0,78", fs=5.5)
+        L.cota(ax, (rf - 0.6, z + FC), (rf - 0.6, z + E.F), -0.6, "ventana", fs=5.5)
+    L.cota(ax, (E.R_B - 0.25, E.Z_B0 + E.F + FC), (E.R_B - 0.25, E.Z_B0 + E.F + FC + FR), -1.2, "ranura 0,27", fs=5.5)
+    # 1.ª planta (pavés): banda continua sin ranura y fondo inclinado [F09, F18]
+    L.cota(ax, (E.R_B + 0.6, V["Z_BI"]), (E.R_B + 0.6, V["Z_BI"] + V["BAN_1"]), 0.6, "banda 1,09 sin ranura", fs=5.5)
+    L.cota(ax, (rf - 0.6, V["Z_BI"] + V["BAN_1"]), (rf - 0.6, E.Z_B0 + E.F), -0.6, "pavés 1,40", fs=5.5)
+    L.cota(ax, (E.R_CU, E.Z_B0 - 0.8), (E.R_B, E.Z_B0 - 0.8), -0.4, "fondo inclinado +%.2f → +%.2f" % (E.Z_CU1, V["Z_BI"]), fs=5.5)
     L.cota(ax, (rf, E.Z_B0 + 3 * E.F + 0.3), (E.R_B, E.Z_B0 + 3 * E.F + 0.3), 0.4, "balcón", fs=6)
-    L.cota(ax, (E.R_B, E.Z_B0 - 1.2), (E.R_AL, E.Z_B0 - 1.2), -0.4, "vuelo aleta", fs=6)
-    L.cota(ax, (E.R_B - 0.25, E.Z_B0 + 0.45), (E.R_B - 0.25, E.Z_B0 + 0.75), -1.2, "ranura", fs=5.5)
+    L.cota(ax, (E.R_B, E.Z_B0 - 1.6), (E.R_AL, E.Z_B0 - 1.6), -0.4, "vuelo aleta", fs=6)
     # alzado de 3 modulos
     ax2 = fig.add_axes([0.47, 0.06, 0.25, 0.86])
     a_ = math.degrees(math.atan2(E.N[1], E.N[0])) - 90.0

@@ -44,9 +44,11 @@ def hoja_triple(titulo, e, u_rng, v_rng, secc, zc, d, t_alz, den, refs):
     """secc = (k, p0, p1, texto) con p1 - p0 en la dirección e; d = dirección de vista del alzado (e = (d_y, -d_x))"""
     fig = IA.pagina(A4L, titulo)
     w, h = fig._mm
-    k = 1000 / den
-    hz = (ZL[1] - ZL[0]) * k; hp = (v_rng[1] - v_rng[0]) * k; wd = (u_rng[1] - u_rng[0]) * k
     x0 = 14; gap = 3.5
+    for den in [d_ for d_ in (den, 1000, 1250, 1500) if d_ >= den]:   # que sección + planta + alzado quepan en el marco (≤ 196 mm)
+        k = 1000 / den
+        hz = (ZL[1] - ZL[0]) * k; hp = (v_rng[1] - v_rng[0]) * k; wd = (u_rng[1] - u_rng[0]) * k
+        if 12 + 2 * hz + hp + 2 * gap <= 196: break
     y_alz = 12; y_pl = y_alz + hz + gap; y_se = y_pl + hp + gap
     # sección
     k_, p0, p1, tx = secc

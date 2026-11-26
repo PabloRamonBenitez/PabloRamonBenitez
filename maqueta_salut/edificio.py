@@ -401,28 +401,55 @@ def lucernarios_cuello():
     return out
 
 def letrero():
-    """letrero САЛЮТ: 5 letras en un plano frente a la cámara de Alamy, delante del remate; la de la izquierda vuela sobre la celosía.
-    Devuelve [dict(c=(x,y) centro en planta, rot=grados de la normal, w, z0, z1)] – lo usan el 3D y todos los planos [Alamy, collage]"""
-    pr = P(_v["OR_X"], _v["OR_Y"])
-    ca = math.radians(_v["VISTA_ALAMY"]); hc = (math.cos(ca), math.sin(ca)); dr = (math.cos(ca + math.pi / 2), math.sin(ca + math.pi / 2))
-    prf = (pr[0] - T[0]) * hc[0] + (pr[1] - T[1]) * hc[1]; dd = prf + R_R + 0.5
-    w = (_v["SIG_S1"] - _v["SIG_S0"]) / 5; out = []
-    for i in range(5):
-        sc = _v["SIG_S0"] + (i + 0.5) * w
-        out.append(dict(c=(T[0] + dd * hc[0] + sc * dr[0], T[1] + dd * hc[1] + sc * dr[1]), rot=math.degrees(ca), w=w - 0.3,
-                        z0=_v["SIG_Z0"], z1=_v["SIG_Z1"]))
+    """letrero САЛЮТ en ARCO alrededor del remate, repetido dos veces (palabra 1 hacia Alamy, palabra 2 hacia F09),
+    letras en planos tangentes a radio R_R + SIG_R [usuario 22/11 «letras circulares alrededor»; Alamy, F09, F08, F01, F19].
+    Devuelve [dict(ch, c=(x,y) centro en planta, rot=grados de la normal (radial hacia fuera), w, z0, z1)] – 3D y planos."""
+    pr = P(_v["OR_X"], _v["OR_Y"]); r = R_R + _v["SIG_R"]; da = _v["SIG_AW"] / 5; out = []
+    for a0 in (_v["SIG_A0"], _v["SIG_A1"]):
+        for i, ch in enumerate("САЛЮТ"):
+            a = math.radians(a0 + (i + 0.5) * da)
+            out.append(dict(ch=ch, c=(pr[0] + r * math.cos(a), pr[1] + r * math.sin(a)), rot=math.degrees(a),
+                            w=2 * r * math.sin(math.radians(da / 2)) - 0.3, z0=_v["SIG_Z0"], z1=_v["SIG_Z1"]))
     return out
+
+
+def gargolas():
+    """gárgolas de los balcones: una por módulo (centrada entre aletas) y por planta, en el canto del forjado bajo la
+    ranura, de la 2.ª planta a la cubierta del barril; fuera del sector de la escalera [F18, F08; usuario 22/11].
+    Solo para planos (Ø 0,12: no sale en el molde). Devuelve [(x, y, z, azimut_rad)]."""
+    out = []
+    for k in range(N_AL):
+        a = 2 * math.pi * (k + 0.5) / N_AL + FASE_AL
+        if abs(math.remainder(a - ESC_ANG, 2 * math.pi)) < ESC_HA + math.radians(4): continue
+        for i in range(1, N_PL + 1):
+            z = Z_B0 + i * F + _v["FOR_C"] - 0.15
+            out.append((T[0] + R_B * math.cos(a), T[1] + R_B * math.sin(a), z, a))
+    return out
+
+
+def fuente():
+    """fuente en media luna al pie de la columna, hacia la plaza (1984) [F01, F14, F15; usuario 26/11]: vaso de radio FU_R
+    con bordillo de 0,3 y altura FU_H, cortado por el plano del eje de la torre (mitad hacia −N)."""
+    r, h = _v["FU_R"], _v["FU_H"]
+    vaso = cil(T, r, 0.0, h) - cil(T, r - 0.3, 0.15, h + 0.1) - cil(T, R_COL + 0.05, -0.1, h + 0.1)
+    ang = math.degrees(math.atan2(N[1], N[0]))
+    medio = Manifold.cube((2 * r + 2, r + 1, h + 1)).translate((-(r + 1), 0, -0.5)).rotate((0, 0, ang - 90 + 180))
+    return vaso ^ medio.translate((T[0], T[1], 0))
+
 
 def torre():
     s = [cil(T, R_COL, 0, Z_CU0 + 0.1),
          Manifold.cylinder(4.0, _v["R_CONO"], R_COL, SEG).translate((T[0], T[1], 0)),   # pie de columna (recto: el 'cono' era un toldo)
          cil(T, R_CU, Z_CU0, Z_CU1 + 0.05),                                             # CUELLO (base del tambor de habitaciones) [F70, F14, F09]
          cil(T, R_CU + 0.6, Z_CU0, Z_CU0 + 0.6)]                       # losa inferior del cuello, volada [F18, F50]
+    s.append(fuente())                                      # fuente en media luna al pie de la columna (1984) [F01, F14, F15]
     # vigas radiales bajo el barril y barril con forjados/poyetes + aletas
-    s.append(cil(T, R_B - 0.1, Z_CU1 - 0.01, Z_ALETA0 + 0.05))   # fondo del barril (sofito plano a la cota de las aletas)
-    for k in range(N_AL):                                   # 19 ménsulas triangulares: de la punta de la aleta al borde del cuello
+    zbi = _v["Z_BI"]                                         # fondo inclinado: sube del cuello (+Z_CU1) al borde exterior (+Z_BI) [F09, F18; usuario]
+    prof = [(0.0, Z_CU1 - 0.01), (R_CU, Z_CU1 - 0.01), (R_B - 0.1, zbi), (R_B - 0.1, Z_ALETA0 + 0.05), (0.0, Z_ALETA0 + 0.05)]
+    s.append(Manifold.revolve(CrossSection([prof]), SEG).translate((T[0], T[1], 0)))
+    for k in range(N_AL):                                   # 19 vigas radiales (ménsulas) 0,4 bajo el fondo, de la punta de la aleta al cuello [F18]
         a = math.degrees(2 * math.pi * k / N_AL + FASE_AL)
-        pts = [(R_CU - 0.3, Z_CU1), (R_CU - 0.3, Z_ALETA0 + 0.05), (R_AL, Z_ALETA0 + 0.05)]
+        pts = [(R_CU - 0.3, Z_CU1 - 0.4), (R_AL, zbi), (R_AL, Z_ALETA0 + 0.05), (R_CU - 0.3, Z_ALETA0 + 0.05)]
         pl_ = Manifold.extrude(CrossSection([pts]), 0.4).translate((0, 0, -0.2)).rotate((90, 0, 0))
         if pl_.volume() <= 0:
             pl_ = Manifold.extrude(CrossSection([pts[::-1]]), 0.4).translate((0, 0, -0.2)).rotate((90, 0, 0))
@@ -430,7 +457,8 @@ def torre():
     rf = R_B - 1.8
     FC, FR, FP = _v["FOR_C"], _v["FOR_R"], _v["FOR_P"]          # sección de planta del barril [MGF Alamy]
     s.append(cil(T, rf, Z_B0, Z_B1 + 0.4))
-    for i in range(N_PL):
+    s.append(cil(T, R_B, _v["Z_BI"], _v["Z_BI"] + _v["BAN_1"]) - cil(T, R_B - 0.25, _v["Z_BI"] - 0.1, _v["Z_BI"] + _v["BAN_1"] + 0.1))  # 1.ª planta: banda continua sin ranura delante del pavés [F09, F18]
+    for i in range(1, N_PL):
         z = Z_B0 + i * F
         s.append(cil(T, R_B, z, z + FC) - cil(T, rf - 0.1, z - 0.1, z + FC + 0.05))          # canto del forjado [MGF Alamy]
         s.append(cil(T, R_B, z + FC + FR, z + FC + FR + FP) - cil(T, R_B - 0.25, z + FC, z + FC + FR + FP + 0.05))  # poyete tras la ranura [MGF Alamy]

@@ -1,5 +1,7 @@
 # Revisión general (26/11): mensajes, fotos y planos
 
+> **Actualizado en RONDA_ABSOLUTA.md (26/11, tarde)**: H1–H4 y P3–P5 comprobados con más fotos y aplicados; nueva duda 7.
+
 181 mensajes tuyos releídos (21/11 → 26/11), las 80 fotos de `images/`, Alamy y las fotos sueltas, y los planos actuales.
 
 ## 1. Lo que pediste a lo largo del proyecto y cómo está

@@ -103,10 +103,13 @@ def hoja_planta(zc, titulo, lista_fotos, nota=""):
 def hoja_alz_secc(titulo, d_alz, t_alz, secc, e, u_rng, den, lista_fotos):
     """alzado (abajo) y sección (arriba) alineados en el mismo eje horizontal e"""
     fig = IA.pagina(A3L, titulo)
-    W, H = fig._mm; k = 1000 / den
+    W, H = fig._mm
     ZL = (-6.0, 52.0)
-    wd = (u_rng[1] - u_rng[0]) * k; hz = (ZL[1] - ZL[0]) * k
-    x0 = 14; y_a = 26; y_s = y_a + hz + 14
+    for den in [d_ for d_ in (den, 500, 600, 750) if d_ >= den]:      # alzado + sección dentro del marco (≤ H − 14)
+        k = 1000 / den
+        wd = (u_rng[1] - u_rng[0]) * k; hz = (ZL[1] - ZL[0]) * k
+        x0 = 14; y_a = 26; y_s = y_a + hz + 14
+        if (y_s + hz + 6 if secc is not None else y_a + hz + 6) <= H - 14: break
     ax_a = fig.add_axes([x0 / W, y_a / H, wd / W, hz / H])
     LM.alzado(ax_a, d_alz, ""); ax_a.set_xlim(*u_rng); ax_a.set_ylim(*ZL); ax_a.set_aspect("equal"); ax_a.axis("off")
     fig.text(x0 / W, (y_a + hz + 2) / H, t_alz, fontsize=8, weight="bold")

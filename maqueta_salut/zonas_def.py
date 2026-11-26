@@ -17,14 +17,14 @@ Y_V = 52.0                              # inicio de las ventanas del ala larga [
 
 ZONAS = [
  # ---------------------------------------------------------------- TORRE
- ("Z01", "Remate, zócalo y letrero САЛЮТ (5 letras planas)", "Torre", "cil", (P(*E.OFF_R), 0, E.R_R + 0.6, E.Z_V1, E.Z_R1 + 0.5)),
+ ("Z01", "Remate, zócalo y letrero САЛЮТ ×2 en arco", "Torre", "cil", (P(*E.OFF_R), 0, E.R_R + 0.6, E.Z_V1, E.Z_R1 + 0.5)),
  ("Z02", "Visera desplazada, barandilla abierta y lucernario", "Torre", "cil", (P(*E.OFF_V), 0, E.R_V, E.Z_G1, E.Z_V1)),
  ("Z03", "Banda acristalada con montantes", "Torre", "cil", (T, 0, E.R_G, E.Z_T1, E.Z_G1)),
  ("Z04", "Tambor: 13 ojos con tubos, lado ciego y puerta", "Torre", "cil", (T, 0, E.R_T + 0.6, E.Z_B1 + 1.1, E.Z_T1)),
  ("Z05", "Cubierta del barril: barandilla abierta, peto cortado en la escalera", "Torre", "cil", (T, E.R_T - 0.5, E.R_B, E.Z_B1, E.Z_B1 + 1.1)),
- ("Z06", "Barril: forjados, canto, poyete, ranura y 19 aletas", "Torre", "cil", (T, 0, E.R_AL, E.Z_B0 + E.F, E.Z_B1)),
- ("Z07", "Barril: 1ª planta", "Torre", "cil", (T, 0, E.R_AL, E.Z_B0, E.Z_B0 + E.F)),
- ("Z08", "Ménsulas y fondo inclinado bajo el barril", "Torre", "cil", (T, E.R_CU, E.R_AL, 12.6, E.Z_B0)),
+ ("Z06", "Barril: forjados, canto, poyete, ranura, 19 aletas y gárgolas", "Torre", "cil", (T, 0, E.R_AL, E.Z_B0 + E.F, E.Z_B1)),
+ ("Z07", "Barril: 1.ª planta (pavés 1,40, banda 1,09 sin ranura)", "Torre", "cil", (T, 0, E.R_AL, E.Z_B0, E.Z_B0 + E.F)),
+ ("Z08", "Ménsulas y fondo inclinado (+13,90 → +14,51)", "Torre", "cil", (T, E.R_CU, E.R_AL, 12.6, E.Z_B0)),
  ("Z09", "Cuello y losa inferior volada", "Torre", "cil", (T, 0, E.R_CU + 0.6, E.Z_CU0, E.Z_B0)),
  ("Z10", "Columna", "Torre", "cil", (T, 0, E.R_COL, 0, E.Z_CU0)),
  # ---------------------------------------------------------------- CHAFLAN
@@ -36,7 +36,7 @@ ZONAS = [
   [([P(E.R_COL, yf), C, pl["Q"], P(E.R_COL, yf + 6)], E.Z_PB, E.Z_P1)]),
  ("Z14", "Chaflán: entrada del hotel en hueco (PB)", "Chaflán", "pri",
   [([P(E.R_COL, yf), C, pl["Q"], P(E.R_COL, yf + 6)], 0, E.Z_PB)]),
- ("Z15", "Pie de columna y fuente", "Chaflán", "pri",
+ ("Z15", "Pie de columna y fuente en media luna", "Chaflán", "pri",
   [([P(-E.R_COL - 1, yf - 7), P(E.R_COL + 1, yf - 7), P(E.R_COL + 1, yf), P(-E.R_COL - 1, yf)], 0, 1.0)]),
  # ---------------------------------------------------------------- ALA CORTA
  ("Z16", "Ala corta P1: logia (medianera, pilar, vidrio) y ladrillo ciego", "Ala corta", "pri",

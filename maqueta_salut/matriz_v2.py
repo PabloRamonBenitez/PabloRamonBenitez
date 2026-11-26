@@ -54,6 +54,10 @@ CONFLICTOS = [
  ("Z33", "Losa de arranque de la escalera", "foto de frente + F78", "RESUELTO 26/11: losa +11,1 → +11,6"),
  ("Z20", "Línea posterior del ala corta", "teoría del usuario + duda 6", "DECIDIDO 26/11: H2, fondo 12,74 (sin foto que lo mida)"),
  ("Z02", "Cara superior de la visera", "Alamy +43,18 / F09 +43,6", "RESUELTO: manda Alamy (código de la verdad de la torre)"),
+ ("Z02 Z01", "Radios de visera y remate", "F01, F02, F09, F14, F23 (0,951 / 0,379) frente a Alamy (0,842 / 0,34)", "RESUELTO 26/11: 5 fotos contra 1 → R_V 12,9, R_R 5,1; alturas de Alamy sin tocar"),
+ ("Z03", "Banda: desplazamiento", "F09 −1,55 · F14 −1,94 · Alamy lateral 2,75", "RESUELTO 26/11: OB (−1,7, −2,26) por dos vistas"),
+ ("Z01", "Letrero", "Alamy, F09, F08, F01, F19 + usuario 22/11", "RESUELTO 26/11: САЛЮТ ×2 en arco (r R_R+1,5; az 90° y 330°, 120° cada una)"),
+ ("Z29", "Coronación de la escalera vista desde F09", "F09 cielo / modelo asoma", "ABIERTO: DUDA 7"),
  ("—", "U de 180° y curva abierta de la rampa", "F78 + maqueta F76 + usuario", "RESUELTO 26/11: peto con curva abierta y final en U"),
 ]
 
@@ -68,6 +72,10 @@ if _os.path.exists("REVISION_VISUAL.json"):             # cierre de interrogacio
         for _c, (_s, _n) in _d.items():
             if _c not in E.get(_z, {}):
                 E.setdefault(_z, {})[_c] = (_s, _n)
+if _os.path.exists("RONDA_ABSOLUTA.json"):              # ronda absoluta 26/11 tarde: medidas nuevas, prevalecen
+    for _z, _d in _js.load(open("RONDA_ABSOLUTA.json")).items():
+        for _c, (_s, _n) in _d.items():
+            E.setdefault(_z, {})[_c] = (_s, _n)
 wb = openpyxl.Workbook(); ws = wb.active; ws.title = "Matriz v2"
 F = {"OK": "B7E1A1", "≈": "FFE699", "NO": "F4A6A6", "?": "E7E6E6", "–": "FFFFFF"}
 hdr = ["Zona", "Descripción", "Grupo"] + [f"{c}\n{f}" for c, f, _ in COLS] + ["OK", "≈", "NO", "?", "visibles", "estado"]

@@ -26,3 +26,9 @@ Todos se regeneran desde los scripts de `maqueta_salut/` (p. ej. `generatrices_e
 | 30 | COLLAGE_ALAMY | **collage**: foto de Alamy al 50 % sobre el alzado del modelo, conjunto y 4 zonas ampliadas (remate y letras, visera y caja de escalera, tambor, barril) |
 | 31 | ESCALERA_FOTOS | caja de escalera: foto lateral (escala por las juntas de las lamas), dron y Alamy frente al modelo |
 | 32 | ESCALERA_FRENTE | escalera de frente: fotos del usuario (16 lamas, bordes del corte con lamas, puerta de ~2 m, remate) junto al alzado del modelo |
+| 49 | HIPOTESIS_TORRE | H1–H3: bordes de tambor, banda, visera y remate medidos en F09, F14 y F23 (cocientes en la misma fila) |
+| 50 | HIPOTESIS_LETRAS | H4: letrero en arco (F09, F23, F10, Alamy) |
+| 51 | PREGUNTAS_P3_P5 | gárgolas (F18, F08), planta de pavés medida en F09, letrero repetido (F19, F08, F70), fuente (F01, F14, F15) |
+| 52 | COLLAGE_F09 | **collage F09** al 50 % sobre el modelo desde 320° (12,9 px/m): visera R 12,9 y remate R 5,1 encajan; base del barril |
+| 53 | DUDA7_ESCALERA_F09 | duda 7: la coronación de la escalera asomaría en F09 a la derecha de la visera (cielo en la foto); hipótesis A/B/C |
+| 54 | MATRIZ_v2 | la tabla zonas × fotos tras la ronda absoluta: 76 OK · 146 ≈ · 1 NO · 0 ? |

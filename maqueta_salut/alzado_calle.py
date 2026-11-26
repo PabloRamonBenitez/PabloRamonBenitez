@@ -112,7 +112,12 @@ def torre(ax, zo=10):
         nrm = np.array([math.cos(math.radians(L_["rot"])), math.sin(math.radians(L_["rot"]))])
         if nrm @ ED > 0.2: continue
         uu = u_of(L_["c"]); ww = L_["w"] * abs(nrm @ ED) + 0.3 * abs(nrm @ EU)
-        rect(ax, uu - ww / 2, uu + ww / 2, L_["z0"], L_["z1"], dict(fc="#d9c36a", ec="k", lw=0.5), zo + 5)
+        rect(ax, uu - ww / 2, uu + ww / 2, L_["z0"], L_["z1"], dict(fc="white", ec="k", lw=0.5), zo + 5)
+        if abs(nrm @ ED) > 0.5: ax.text(uu, (L_["z0"] + L_["z1"]) / 2, L_["ch"], fontsize=6, ha="center", va="center", zorder=zo + 6, clip_on=True)
+    for gx, gy, gz, ga in E.gargolas():                                                   # gárgolas: una por módulo y planta [F18, F08]
+        nrm = np.array([math.cos(ga), math.sin(ga)])
+        if nrm @ ED > -0.2: continue
+        ax.plot([u_of((gx, gy))], [gz], "o", ms=1.2, color="k", zorder=zo + 6, clip_on=True)
     pl = np.array(E.P(V["LUC_X"], V["LUC_Y"])); ul = u_of(pl)
     ax.add_patch(Polygon([(ul - V["LUC_R"], E.Z_V1), (ul + V["LUC_R"], E.Z_V1), (ul, E.Z_V1 + V["LUC_H"] + 0.25)],
                          closed=True, fc="0.8", ec="k", lw=0.5, zorder=zo + 5))

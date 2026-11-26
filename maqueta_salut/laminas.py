@@ -126,6 +126,8 @@ def cadena(ax, pts, off, fs=4.8, color="k"):
 
 
 def cotas_planta(ax):
+    import cotas_rel as CR
+    CR.planta(ax)
     pl = E.plantas_base()
     # cadenas en dos niveles de la fachada exterior del ala larga: huecos (parcial) y total [estándar]
     hs = sorted([h for h in VT.catalogo() if h["grupo"] == "ala larga fila alta"], key=lambda h: h["p"][1])
@@ -275,8 +277,15 @@ def seccion(ax, p0, p1, titulo):
                  (E.Z_B0, "1ª planta hab."), (E.Z_B1, "cubierta hab."), (E.Z_T1, "tambor"), (E.Z_V1, "visera"), (E.Z_R1, "remate")):
         L.nivel(ax, Lg + 1, z, t)
     tramos_escalera(ax, p0, p1)
+    import cotas_rel as CR
+    _d = (np.array(p1, float) - np.array(p0, float)); _d /= np.linalg.norm(_d); _q = np.array(E.T) - np.array(p0, float)
+    _sc = float(_q @ _d); _di = abs(float(_q[0] * _d[1] - _q[1] * _d[0])); _ex = []
+    for _r, _n in ((E.R_COL, "col"), (E.R_CU, "cue"), (E.R_B, "bar"), (E.R_T, "tam")):
+        if _di < _r - 0.05:
+            _h = math.sqrt(_r ** 2 - _di ** 2); _ex += [(_n, _sc - _h), (_n, _sc + _h)]
+    CR.dibujar(ax, p0, _d, -2, Lg, extra=_ex, xl=Lg)
     cruces(ax, p0, p1, titulo.split(':')[0].replace('SECCIÓN ', '').strip())
-    ejes(ax, (-2, Lg + 12), (-2, 53))
+    ejes(ax, (-10, Lg + 12), (-6, 53))
     ax.set_title(titulo, fontsize=9, loc="left")
 
 
@@ -333,11 +342,17 @@ def nucleo_seccion(ax, p0, p1):
     if dist < E.R_B:
         hb = math.sqrt(E.R_B ** 2 - dist ** 2)
         ax.add_patch(Rectangle((sc - hb, E.Z_CU1 - 0.4), 2 * hb, 0.4, fc="white", ec="k", hatch="////", lw=0.9, zorder=6.5))
+    if dist < E.R_T:                                            # forjado de cubierta del barril y suelo de la banda (+pasillo) [usuario 26/11]
+        ht = math.sqrt(E.R_T ** 2 - dist ** 2)
+        ax.add_patch(Rectangle((sc - ht, E.Z_B1 + E._v["FOR_C"] - 0.3), 2 * ht, 0.3, fc="white", ec="k", hatch="////", lw=0.9, zorder=6.5))
+    if dist < E.R_G + 1:
+        hg = math.sqrt(max(E.R_T ** 2 - dist ** 2, 0))
+        ax.add_patch(Rectangle((sc - hg, E.Z_T1 - E._v["H_PT"] - 0.3), 2 * hg, 0.3, fc="white", ec="k", hatch="////", lw=0.9, zorder=6.5))
     if dist >= E.R_COL - 0.05: return
     h = math.sqrt(E.R_COL ** 2 - dist ** 2)
     for sg in (-1, 1):
         x = sc + sg * h
-        ax.add_patch(Rectangle((x - (VT.MURO if sg > 0 else 0), 0), VT.MURO, E.Z_B1, fc="white", ec="k", hatch="////", lw=0.9, zorder=6.5))
+        ax.add_patch(Rectangle((x - (VT.MURO if sg > 0 else 0), 0), VT.MURO, E.Z_G1, fc="white", ec="k", hatch="////", lw=0.9, zorder=6.5))
     ax.text(sc, E.Z_B0 + 1.5 * E.F, "núcleo", fontsize=6, ha="center", rotation=90, zorder=7)
 
 
@@ -383,11 +398,19 @@ def alzado(ax, d, titulo):
     letras_alzado(ax, d)
     V = np.asarray(m.to_mesh().vert_properties)[:, :2]
     x0, x1 = V[:, 0].min(), V[:, 0].max()
+    import cotas_rel as CR
+    _dd = np.array(d, float); _dd /= np.linalg.norm(_dd); _r = np.array([_dd[1], -_dd[0]])        # eje horizontal del alzado
+    _ca, _sa = math.cos(math.radians(-a)), math.sin(math.radians(-a))
+    _o = np.array([0.0, 0.0])                                    # u = ca*x - sa*y  ⇒  dirección (ca, -sa) en planta
+    _dir = np.array([_ca, -_sa])
+    _T = np.array(E.T); _uT = _ca * _T[0] - _sa * _T[1]
+    _ex = [("bar", _uT - E.R_B), ("bar", _uT + E.R_B)]
+    CR.dibujar(ax, _o, _dir, x0, x1, extra=_ex, xl=x1)
     ax.axhline(0, color="k", lw=1.6)
     for z, t in ((E.Z_PB, "techo PB"), (E.Z_P1, "planta 1 / terraza"), (E.Z_ALTO, "cub. bar / bloque alto"), (E.Z_B0, "1ª hab."),
                  (E.Z_B1, "cub. hab."), (E.Z_T1, "tambor"), (E.Z_G1, "banda"), (E.Z_V1, "visera"), (E.Z_R1, "remate")):
         L.nivel(ax, x1 + 1, z, t)
-    ejes(ax, (x0 - 2, x1 + 13), (-2, 52))
+    ejes(ax, (x0 - 10, x1 + 13), (-6, 52))
     ax.set_title(titulo, fontsize=9, loc="left")
     return x0, x1
 

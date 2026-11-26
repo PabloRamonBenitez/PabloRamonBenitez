@@ -43,3 +43,14 @@ G. D. Escobar López, *Normas de graficación para la representación arquitect�
 
 ## Datos
 - Lo que no tiene foto no se dibuja (interiores, diseño de barandillas). El exterior siempre según fotos contrastadas.
+
+## Sistema de cotas relacionadas (cotas_rel.py)
+- **Ejes con nombre**, los mismos en todas las vistas: T y T' (torre, paralelo y perpendicular al chaflán), A y C (chaflán),
+  1 (esquina), 2 (pie de la concha), 3 (fin del bar), 4 (testero), a y b (fachadas del ala larga) y M (medianera).
+  En planta llevan burbuja; en secciones y alzados se proyectan como trazo y punto, con la misma burbuja bajo la rasante.
+- **Cadena horizontal** bajo la rasante en cada sección y alzado: cotas parciales entre ejes y puntos de corte
+  (columna, cuello, barril, tambor) más la total. Son las mismas distancias que en planta.
+- **Cadena vertical de niveles** (parciales + total) en el margen, con todos los niveles del cuadro referidos a ±0,00.
+  Coinciden con las cotas de nivel rotuladas.
+- **Cotas radiales** de la torre en planta (columna, cuello, barril, tambor), que se leen en la sección como los puntos de corte.
+- Las vistas van alineadas: en cada hoja A3 la sección y el alzado comparten eje horizontal, y los ejes 1, 2, 3, 4 y T caen en la misma vertical.

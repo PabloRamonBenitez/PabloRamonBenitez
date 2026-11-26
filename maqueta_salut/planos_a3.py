@@ -104,7 +104,7 @@ def hoja_alz_secc(titulo, d_alz, t_alz, secc, e, u_rng, den, lista_fotos):
     """alzado (abajo) y sección (arriba) alineados en el mismo eje horizontal e"""
     fig = IA.pagina(A3L, titulo)
     W, H = fig._mm; k = 1000 / den
-    ZL = (-1.5, 52.0)
+    ZL = (-6.0, 52.0)
     wd = (u_rng[1] - u_rng[0]) * k; hz = (ZL[1] - ZL[0]) * k
     x0 = 14; y_a = 26; y_s = y_a + hz + 14
     ax_a = fig.add_axes([x0 / W, y_a / H, wd / W, hz / H])

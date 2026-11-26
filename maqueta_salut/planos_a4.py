@@ -14,7 +14,7 @@ import lineas as L
 import imprimir_a4 as IA
 
 A4L = (297, 210)
-ZL = (-1.0, 51.5)                       # rango vertical de alzados y secciones
+ZL = (-6.0, 51.5)                       # rango vertical de alzados y secciones
 
 
 def plan_girada(ax, zc, e):

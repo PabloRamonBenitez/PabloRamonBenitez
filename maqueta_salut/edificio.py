@@ -160,7 +160,8 @@ def plantas_base():
     o_c = (A1[0] + RETR * N[0], A1[1] + RETR * N[1])              # paralela retranqueada al chaflan
     a1 = _inter(o_s, US, o_c, U)
     b1 = _inter(o_c, U, (W_P - RETR, 0.0), (0.0, 1.0))
-    PB = [SWP(-L_C, RETR), a1, b1, (W_P - RETR, Y_CUNA), (W_P, Y_CUNA), (W_P, L_L),
+    y_arc = Q[1] + _v["D_HOTF"] + _v["U_ARC"] * (Y_CUNA - Q[1] - _v["D_HOTF"])   # la PB en sombra solo bajo el arco; después muro ciego [usuario 26/11]
+    PB = [SWP(-L_C, RETR), a1, b1, (W_P - RETR, y_arc), (W_P, y_arc), (W_P, L_L),
           (0.0, L_L), IC, SWP(-L_C, W_C)]
     return dict(P1=P1, PB=PB, Q=Q, IC=IC)
 
@@ -268,8 +269,9 @@ def base():
         return max(0.05, _v["Z_CON"] * (1 - u ** _v["RAMPA_P"]))          # perfil P2 convexo [usuario 26/11, Booking, F24]
     def zs(yy):         # intradós del arco bajo la rampa junto al hotel (paso en planta baja) [F47, F71, F76]
         if yy >= Y_ARC: return 0.0
-        u = (yy - y0) / (Y_ARC - y0)
-        return max(0.0, min(_v["Z_ARC"] * math.sqrt(max(0.0, 1 - u ** 2)), zr(yy) - 0.6))
+        u = (yy - y0) / (Y_ARC - y0); ud = _v["ARC_D"]                 # horizontal hasta ARC_D y curva al suelo [G3, usuario]
+        w = 0.0 if u <= ud else (u - ud) / (1 - ud)
+        return max(0.0, min(_v["Z_ARC"] * math.sqrt(max(0.0, 1 - w ** 2)), zr(yy) - 0.6))
     def f(v):
         x, y, z = v
         yy = y0 + min(max(y, 0.0), 1.0) * LR

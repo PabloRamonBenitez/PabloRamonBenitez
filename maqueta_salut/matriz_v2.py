@@ -37,7 +37,7 @@ E = {  # evidencias documentadas en la conversación (zona -> {col: (estado, not
  "Z19": {"C01": ("OK", "vuelo 1,2"), "C30": ("≈", "")},
  "Z20": {"C01": ("?", "teoría del usuario, sin foto que la confirme")},
  "Z34": {"C17": ("≈", "aéreas actuales")},
- "Z21": {"C29": ("NO", "perfil roja/amarilla/verde por incorporar"), "C22": ("≈", "giro H1 confirmado"), "C20": ("≈", "")},
+ "Z21": {"C29": ("OK", "rojo P2 convexo y verde G3 (usuario 26/11); sin retranqueo de PB tras el arco"), "C22": ("≈", "giro H1 confirmado"), "C20": ("≈", "")},
  "Z24": {"C21": ("OK", "11 + 7 huecos, alturas exactas"), "C01": ("OK", "11/7"), "C19": ("OK", "11/7")},
  "Z25": {"C18": ("OK", "bar 6,21; tramo sin bar 7,81"), "C21": ("≈", ""), "C19": ("≈", ""), "C20": ("≈", "")},
  "Z26": {"C19": ("≈", "")},
@@ -49,7 +49,7 @@ E = {  # evidencias documentadas en la conversación (zona -> {col: (estado, not
 }
 CONFLICTOS = [
  ("Z09", "Base del cuello", "F09 +9,03 · F70 +9,2 · F14 +9,0/9,4", "RESUELTO 26/11: Z_CU0 = 9,20 (DUDA1_BASE_CUELLO.png)"),
- ("Z21", "Perfil de la concha", "Booking (rojo: borde superior; verde: borde inferior; amarillo: subida al techo del restaurante)", "sin incorporar"),
+ ("Z21", "Perfil de la concha", "Booking + F24", "RESUELTO 26/11: P2 convexo (z = 7,2 (1 − u²)) y arco G3 (horizontal 27 %, al suelo 42 %)"),
  ("Z32", "Lucernarios bajo el cuello", "F78 muestra 6; su posición sale de la terraza a +7,20, no de una medida", "contrastar ángulo de la cámara de F78"),
  ("Z33", "Losa de arranque de la escalera", "F78 +11–11,5 frente al paso de la rampa (exige ≥ +12,1)", "decidir"),
  ("Z20", "Línea posterior del ala corta", "teoría del usuario, sin foto", "fondo del ala corta estimado (W_C 12,74)"),

@@ -48,8 +48,7 @@ def planta(ax, zc, titulo, aerea=False):
                         ax.plot(*np.vstack([P, P[:1]]).T, color="0.3", lw=0.6, ls=(0, (5, 3)), zorder=4)
         L.corte(ax, M.slice(zc), huecos=VT.cortados(zc))
         estructura_torre(ax, zc)
-        import interiores as INTR                          # interiores y estructura: solo en planos [usuario]
-        INTR.dibujar(ax, zc, M.slice(zc))
+        # sin interiores inventados: solo lo que sale de fotos (usuario, 26/11)
     if aerea or zc > E.Z_P1:                               # lucernarios piramidales bajo el cuello: base + aristas [F78]
         from matplotlib.patches import Polygon as _Pg
         LS = E.lucernarios_cuello()
@@ -116,22 +115,7 @@ def estructura_torre(ax, zc):
         if zc > E.Z_T1:
             ax.text(*E.esc_ang_pt((E._v["ESC_RS"] + E.ESC_R1) / 2, -HB + 0.12), f"muro de coronación inclinada +{E._v['ESC_ZI']:.2f} → +{E._v['ESC_Z1']:.2f}".replace(".", ","),
                     fontsize=4.5, ha="center", rotation=math.degrees(E.ESC_ANG - HB) - 90, zorder=8)
-    if zc < E.Z_CU0:
-        return
-    ax.add_patch(Circle(T, E.R_COL, fc="none", ec="k", lw=1.3, zorder=7))
-    ax.add_patch(Circle(T, E.R_COL - VT.MURO, fc="white", ec="k", lw=1.0, zorder=7.5))
-    from matplotlib.patches import Wedge
-    ax.add_patch(Wedge(T, E.R_COL, 0, 360, width=VT.MURO, fc="#9a9a9a", ec="none", zorder=7.2))
-    if not (E.Z_B0 < zc < E.Z_B1):
-        return
-    rf = E.R_B - 1.8; rc = E.R_COL + 2.2                         # pasillo anular de 2,2 m alrededor del núcleo
-    ax.add_patch(Wedge(T, rc + VT.PART, 0, 360, width=VT.PART, fc="#bdbdbd", ec="k", lw=0.6, zorder=7.2))
-    for k in range(E._v["N_AL"]):
-        a = 2 * math.pi * k / E._v["N_AL"] + E.FASE_AL; c, s_ = math.cos(a), math.sin(a); n_ = np.array([-s_, c]) * VT.PART / 2
-        if abs((a - E.ESC_ANG + math.pi) % (2 * math.pi) - math.pi) < da_esc: continue          # dentro de la escalera
-        p0, p1 = T + rc * np.array([c, s_]), T + (rf - VT.MURO) * np.array([c, s_])
-        ax.add_patch(Polygon([p0 - n_, p1 - n_, p1 + n_, p0 + n_], closed=True, fc="#bdbdbd", ec="k", lw=0.6, zorder=7.2))
-    ax.text(*T, "núcleo", fontsize=6, ha="center", va="center", zorder=8)
+    return                                             # núcleo interior de la torre: sin datos, no se dibuja
 
 
 def cadena(ax, pts, off, fs=4.8, color="k"):

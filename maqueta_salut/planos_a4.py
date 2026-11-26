@@ -53,6 +53,7 @@ def hoja_triple(titulo, e, u_rng, v_rng, secc, zc, d, t_alz, den, refs):
     # sección
     k_, p0, p1, tx = secc
     p0, p1 = np.array(p0, float), np.array(p1, float)
+    if (p1 - p0) @ np.array(e) < 0: p0, p1 = p1, p0            # mismo sentido que el alzado
     off = float(p0 @ np.array(e))
     ax_s = fig.add_axes([x0 / w, y_se / h, wd / w, hz / h])
     LM.seccion(ax_s, p0, p1, "")

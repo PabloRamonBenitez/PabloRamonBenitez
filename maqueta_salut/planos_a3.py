@@ -116,13 +116,20 @@ def hoja_alz_secc(titulo, d_alz, t_alz, secc, e, u_rng, den, lista_fotos):
     if secc is not None:
         kk, p0, p1, tx = secc
         p0, p1 = np.array(p0, float), np.array(p1, float)
+        if (p1 - p0) @ np.array(e) < 0: p0, p1 = p1, p0            # la sección corre en el mismo sentido que el alzado (si no, sale fuera)
         off = float(p0 @ np.array(e))
         ax_s = fig.add_axes([x0 / W, y_s / H, wd / W, hz / H])
         LM.seccion(ax_s, p0, p1, "")
         ax_s.set_xlim(u_rng[0] - off, u_rng[1] - off); ax_s.set_ylim(*ZL); ax_s.set_aspect("equal"); ax_s.axis("off")
         fig.text(x0 / W, (y_s + hz + 2) / H, f"SECCIÓN {kk} – {tx}", fontsize=8, weight="bold")
     fig.text(x0 / W, 289 / H, titulo, fontsize=10, weight="bold", va="top")
-    xf = x0 + wd + 36                                    # deja sitio a las cotas de nivel rotuladas a la derecha del dibujo
+    # las fotos empiezan donde acaba el último rótulo del dibujo (cotas de nivel incluidas): nunca se pisan
+    fig.canvas.draw(); rr = fig.canvas.get_renderer(); xmax = x0 + wd
+    for a_ in fig.axes:
+        for t_ in a_.texts:
+            if not t_.get_visible() or not t_.get_text().strip(): continue
+            bb = t_.get_window_extent(rr); xmax = max(xmax, bb.x1 / fig.dpi * 25.4)
+    xf = min(xmax + 4, 300)
     fotos(fig, xf, 48, 408 - xf, 232, lista_fotos)
     IA.barra(fig, x0, 14, den, 20)
     IA.cajetin(fig, f"1:{den}")

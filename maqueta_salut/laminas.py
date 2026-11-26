@@ -283,7 +283,7 @@ def seccion(ax, p0, p1, titulo):
     for _r, _n in ((E.R_COL, "col"), (E.R_CU, "cue"), (E.R_B, "bar"), (E.R_T, "tam")):
         if _di < _r - 0.05:
             _h = math.sqrt(_r ** 2 - _di ** 2); _ex += [(_n, _sc - _h), (_n, _sc + _h)]
-    CR.dibujar(ax, p0, _d, -2, Lg, extra=_ex, xl=Lg)
+    CR.dibujar(ax, p0, _d, -12, Lg, extra=_ex, xl=Lg)
     cruces(ax, p0, p1, titulo.split(':')[0].replace('SECCIÓN ', '').strip())
     ejes(ax, (-10, Lg + 12), (-6, 53))
     ax.set_title(titulo, fontsize=9, loc="left")

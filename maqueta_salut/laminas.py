@@ -170,6 +170,9 @@ def cotas_planta(ax):
     # trazas de las secciones
     for k, p0, p1, _ in SECC:
         ax.plot(*zip(p0, p1), "-.", color="crimson", lw=0.7, zorder=65)
+        t_ = (np.array(p1, float) - np.array(p0, float)); t_ /= np.linalg.norm(t_); n_ = np.array([-t_[1], t_[0]])   # sentido de la vista (Ching, p. 70)
+        for q in (np.array(p0, float), np.array(p1, float)):
+            ax.annotate("", tuple(q + n_ * 2.2), tuple(q), arrowprops=dict(arrowstyle="-|>", color="crimson", lw=0.8), zorder=66)
         ax.text(*p0, k, color="crimson", fontsize=8, weight="bold", zorder=66); ax.text(*p1, k, color="crimson", fontsize=8, weight="bold", zorder=66)
     for tx in ax.texts: tx.set_clip_on(True)
 
@@ -253,12 +256,13 @@ def seccion(ax, p0, p1, titulo):
     Lg = math.hypot(p1[0] - p0[0], p1[1] - p0[1])
     m = orientar(M, p0, a)
     mas_alla = m ^ Manifold.cube((BIG, 100, BIG)).translate((-BIG / 2, -50, -BIG))      # z' < 0  (y > 0)
-    L.dibujar_vista(ax, mas_alla)
+    L.dibujar_vista(ax, mas_alla)                                     # visto: aristas con valor según profundidad
     cs = m.slice(0.0)
-    L.corte(ax, cs, huecos=huecos_seccion(p0, p1))
+    L.corte(ax, cs, huecos=huecos_seccion(p0, p1), hatch="////")     # cortado: trazo grueso + rayado a 45° (H.A.)
+    L.terreno(ax, -16, Lg + 2)
+    L.figura(ax, Lg * 0.08 + 1.0, 0.0)
     forjados_seccion(ax, cs, hueco_escalera(p0, p1))
     nucleo_seccion(ax, p0, p1)
-    ax.axhline(0, color="k", lw=1.6)
     for z, t in ((E.Z_PB, "techo PB"), (E.Z_P1, "terraza / planta 1"), (E.Z_BAR, "bar"), (E.Z_ALTO, "bloque alto"),
                  (E.Z_B0, "1ª planta hab."), (E.Z_B1, "cubierta hab."), (E.Z_T1, "tambor"), (E.Z_V1, "visera"), (E.Z_R1, "remate")):
         L.nivel(ax, Lg + 1, z, t)

@@ -78,7 +78,7 @@ def dibujar_vista(ax, m, res=RES, z=0):
         ax.imshow(img, extent=ext, interpolation="antialiased", zorder=z)
 
 
-def corte(ax, cs, z=5, muro=0.30, huecos=(), polys=None):
+def corte(ax, cs, z=5, muro=0.30, huecos=(), polys=None, hatch="......"):
     """corte arquitectónico: muro de 'muro' m (trama + contorno grueso), interior hueco; los huecos del catálogo
     (en coordenadas del dibujo: dict p, t, n, w, e, tipo) abren el muro y llevan su símbolo."""
     from matplotlib.patches import Polygon, Arc
@@ -121,7 +121,7 @@ def corte(ax, cs, z=5, muro=0.30, huecos=(), polys=None):
         muros = muros.difference(unary_union(aberturas))
     for gm in getattr(muros, "geoms", [muros]):
         if gm.is_empty or gm.geom_type != "Polygon": continue
-        ax.add_patch(Polygon(np.array(gm.exterior.coords), closed=True, fc="white", ec="k", lw=0.8, hatch="......", zorder=z))   # muro cortado: blanco con trama punteada (estándar)
+        ax.add_patch(Polygon(np.array(gm.exterior.coords), closed=True, fc="white", ec="k", lw=1.1, hatch=hatch, zorder=z))   # cortado: el valor de línea más grueso   # muro cortado: blanco con trama punteada (estándar)
         for it in gm.interiors:
             ax.add_patch(Polygon(np.array(it.coords), closed=True, fc="white", ec="k", lw=0.9, zorder=z + 0.5))
     for h in huecos:                                     # símbolo
@@ -207,3 +207,19 @@ def vista_vectorial(ax, m, ztop=None, z=1, lw_alto=0.7, lw_bajo=0.3):
             if ln.geom_type in ("LineString", "LinearRing"):
                 ax.plot(*np.array(ln.coords).T, color="k", lw=lw, zorder=z, solid_capstyle="butt")
         cub = g if cub is None else unary_union([cub, g])
+
+
+def terreno(ax, u0, u1, prof=1.2, z=6):
+    """volumen de terreno cortado bajo la rasante: línea gruesa continua y trama de tierra (Ching, pp. 72-73, 86)"""
+    from matplotlib.patches import Rectangle
+    ax.add_patch(Rectangle((u0, -prof), u1 - u0, prof, fc="white", ec="none", hatch="\\\\..", zorder=z - 0.5))
+    ax.plot([u0, u1], [0, 0], color="k", lw=1.8, zorder=z + 5, solid_capstyle="butt")
+
+
+def figura(ax, u, z0=0.0, h=1.75, z=40):
+    """figura humana esquemática para la escala (Ching, p. 71 y 78)"""
+    from matplotlib.patches import Circle, Polygon
+    ax.add_patch(Circle((u, z0 + h - 0.12), 0.12, fc="white", ec="k", lw=0.5, zorder=z))
+    ax.add_patch(Polygon([(u - 0.2, z0 + h - 0.26), (u + 0.2, z0 + h - 0.26), (u + 0.15, z0 + 0.85), (u + 0.12, z0),
+                          (u + 0.02, z0), (u, z0 + 0.8), (u - 0.02, z0), (u - 0.12, z0), (u - 0.15, z0 + 0.85)], closed=True,
+                         fc="white", ec="k", lw=0.5, zorder=z))

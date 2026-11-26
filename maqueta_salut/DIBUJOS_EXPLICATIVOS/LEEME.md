@@ -32,3 +32,4 @@ Todos se regeneran desde los scripts de `maqueta_salut/` (p. ej. `generatrices_e
 | 52 | COLLAGE_F09 | **collage F09** al 50 % sobre el modelo desde 320° (12,9 px/m): visera R 12,9 y remate R 5,1 encajan; base del barril |
 | 53 | DUDA7_ESCALERA_F09 | duda 7: la coronación de la escalera asomaría en F09 a la derecha de la visera (cielo en la foto); hipótesis A/B/C |
 | 54 | MATRIZ_v2 | la tabla zonas × fotos tras la ronda absoluta: 76 OK · 146 ≈ · 1 NO · 0 ? |
+| 55 | DUDA7_VISUAL | duda 7 en visual: opciones actual/A/B/C proyectadas sobre F09, Alamy y la foto de frente de la escalera, con planta y recuento |

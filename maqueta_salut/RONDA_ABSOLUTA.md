@@ -82,7 +82,7 @@ Comprobación interna:
   - A: F09 se tomó desde ≈ 300°.
   - B: el muro está en el lado de la cuña que mira a la plaza.
   - C: la coronación es más corta.
-  - Propongo B: cumple las dos vistas sin tocar nada más.
+  - **Corregido (DUDA7_VISUAL.png):** la foto de frente de la escalera, con tus marcas, pone el bloque inclinado a la izquierda, y eso descarta B. Solo A cumple las cuatro fotos; su coste es rehacer lo medido en F09 (+6 %).
 - **Alamy por encima del tambor**: banda, visera y remate salen un 10 % más estrechos que en las otras cinco fotos. Por debajo del tambor, Alamy coincide con todas. Se mantienen sus alturas.
 - **La fuente en F14** aparece sobre todo a la izquierda de la columna (6,5 m); el lado derecho lo tapa el autobús. Su tamaño (R 5,7 ± 1) es estimado.
 

@@ -55,13 +55,25 @@ def proyectar(p0, d, n, extra=()):
 def dibujar(ax, p0, d, umin, umax, zmax=52.0, extra=(), xl=None):
     """ejes + cadena horizontal bajo rasante + cadena vertical de niveles, en una sección/alzado con eje horizontal u"""
     p0 = np.asarray(p0, float); d = np.asarray(d, float); d = d / np.linalg.norm(d); n = np.array([-d[1], d[0]])
-    E_ = [(nm, u) for nm, u in proyectar(p0, d, n, extra) if umin - 0.5 <= u <= umax + 0.5]
-    E_.sort(key=lambda t: t[1])
-    for nm, u in E_:
-        ax.plot([u, u], [-3.2, zmax], color="k", lw=0.25, ls=(0, (10, 2, 1, 2)), zorder=2)
-        ax.add_patch(__import__("matplotlib.patches", fromlist=["Circle"]).Circle((u, -4.2), 0.85, fc="white", ec="k", lw=0.5, zorder=70))
-        ax.text(u, -4.2, nm, fontsize=5.5, ha="center", va="center", zorder=71)
-    us = [u for _, u in E_]
+    ejes_ = [(nm, u) for nm, u in proyectar(p0, d, n, ()) if umin - 0.5 <= u <= umax + 0.5]
+    ext_ = [(nm, u) for nm, u in extra if umin - 0.5 <= u <= umax + 0.5]
+    E_ = sorted(ejes_ + ext_, key=lambda t: t[1])
+    # ejes con nombre: trazo y punto + burbuja; si dos burbujas se pisan (< 2 m), la segunda baja una fila (Ching: legibilidad)
+    from matplotlib.patches import Circle
+    filas = []
+    for nm, u in sorted(ejes_, key=lambda t: t[1]):
+        f = 0
+        while any(abs(u - u2) < 1.9 and f == f2 for u2, f2 in filas): f += 1
+        filas.append((u, f)); yb = -4.2 - 1.9 * f
+        ax.plot([u, u], [yb + 0.85, zmax], color="k", lw=0.25, ls=(0, (10, 2, 1, 2)), zorder=2)
+        ax.add_patch(Circle((u, yb), 0.85, fc="white", ec="k", lw=0.5, zorder=70))
+        ax.text(u, yb, nm, fontsize=5.5, ha="center", va="center", zorder=71)
+    # puntos de corte de la torre (columna, cuello, barril, tambor): solo un tic en la cadena, sin burbuja
+    for nm, u in ext_:
+        ax.plot([u, u], [-1.9, -1.3], color="k", lw=0.3, zorder=3)
+    us = []
+    for _, u in E_:                                             # cadena sin tramos de menos de 0,3 m (puntos casi iguales)
+        if not us or u - us[-1] > 0.3: us.append(u)
     if len(us) >= 2:
         for a, b in zip(us[:-1], us[1:]):
             if b - a > 0.3: L.cota(ax, (a, -1.6), (b, -1.6), 0.0, "", fs=4.6)

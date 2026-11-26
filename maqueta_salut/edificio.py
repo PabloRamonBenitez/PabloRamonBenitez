@@ -315,12 +315,26 @@ def base():
     # cota de la terraza (+Z_P1) y sube en rampa, en todo el ancho de la cubierta, hasta la cubierta plana (+Z_BARC);
     # debajo, el restaurante con techo inclinado. Se sube a la azotea andando por la propia cubierta.
     WB = W_BAR + _v["V_BAR"]
-    def fw(v):
+    def fw(v):                                   # cuerpo del restaurante bajo el techo inclinado: solo hasta la fachada (W_BAR)
         x, y, z = v
         u = min(max(y, 0.0), 1.0)
         zt = Z_P1 + u * (Z_BAR_C - Z_P1)
-        return (x * WB, yb0 + u * (yr1 - yb0), Z_P1 - 0.01 + z * (zt - Z_P1 + 0.01))
-    cuna = Manifold.cube((1, 1, 1)).refine(30).warp(fw)
+        return (x * W_BAR, yb0 + u * (yr1 - yb0), Z_P1 - 0.01 + z * (zt - Z_P1 + 0.01))
+    eb = Z_BAR_C - Z_BAR                         # canto de la cubierta
+    def fv(v):                                   # vuelo del techo inclinado: LOSA (debajo, terraza abierta), no macizo
+        x, y, z = v
+        u = min(max(y, 0.0), 1.0)
+        zt = Z_P1 + u * (Z_BAR_C - Z_P1)
+        return (W_BAR - 0.01 + x * (WB - W_BAR + 0.01), yb0 + u * (yr1 - yb0), max(Z_P1 - 0.01, zt - eb) + z * (zt - max(Z_P1 - 0.01, zt - eb)))
+    cuna = Manifold.cube((1, 1, 1)).refine(30).warp(fw) + Manifold.cube((1, 1, 1)).refine(30).warp(fv)
+    # el restaurante y su vuelo ACABAN CONTRA EL PIE DE LA CAJA DE ESCALERA (cuña ±ESC_HB hasta la celosía): una línea común,
+    # sin solapes ni astillas entre los dos cuerpos [usuario 26/11: «ese punto es muy raro»]
+    _n = 16
+    _pp = [esc_ang_pt(ESC_RC + 0.3, -ESC_HB + 2 * ESC_HB * k / _n) for k in range(_n + 1)] + \
+          [esc_ang_pt(ESC_R0, ESC_HB - 2 * ESC_HB * k / _n) for k in range(_n + 1)]
+    _cs = CrossSection([_pp]); _cs = _cs if _cs.area() > 0 else CrossSection([_pp[::-1]])
+    PIE_ESC = Manifold.extrude(_cs, 30.0).translate((0, 0, 0.0))
+    cuna = cuna - PIE_ESC
     def barand(x0_):
         def g(v):
             x, y, z = v
@@ -431,7 +445,7 @@ def fuente():
     """fuente en media luna al pie de la columna, hacia la plaza (1984) [F01, F14, F15; usuario 26/11]: vaso de radio FU_R
     con bordillo de 0,3 y altura FU_H, cortado por el plano del eje de la torre (mitad hacia −N)."""
     r, h = _v["FU_R"], _v["FU_H"]
-    vaso = cil(T, r, 0.0, h) - cil(T, r - 0.3, 0.15, h + 0.1) - cil(T, R_COL + 0.05, -0.1, h + 0.1)
+    vaso = cil(T, r, 0.0, h) - cil(T, r - 0.3, 0.15, h + 0.1)                       # el vaso apoya contra la columna (sin rendija)
     ang = math.degrees(math.atan2(N[1], N[0]))
     medio = Manifold.cube((2 * r + 2, r + 1, h + 1)).translate((-(r + 1), 0, -0.5)).rotate((0, 0, ang - 90 + 180))
     return vaso ^ medio.translate((T[0], T[1], 0))

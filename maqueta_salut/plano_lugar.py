@@ -186,13 +186,18 @@ def hoja_lugar():
         if not fil.is_empty:
             ax.add_patch(Polygon(np.c_[fil.exterior.xy], closed=True, fc="white", ec="none", zorder=2.21))
             b_veh = b_veh.union(fil)
-    glorieta = Point(*Cg).buffer(Rg).difference(huella)
-    for g in _polys(glorieta):
+    # EXPLANADA DE MANIOBRA pavimentada junto al testero (en F35 toda esa zona es pavimento): el camión gira dentro, sin isleta
+    expl = SP([(xr - 2.5, Cg[1] - Rg - 0.5), (Cg[0] + Rg + 0.5, Cg[1] - Rg - 0.5), (Cg[0] + Rg + 0.5, Cg[1] + Rg + 0.5),
+               (xr - 2.5 - 9.0, Cg[1] + Rg + 0.5), (xr - 2.5 - 9.0, E.L_L + 6.5), (xr - 2.5, E.L_L + 6.5)]).difference(huella)
+    for g in _polys(expl):
         ax.add_patch(Polygon(np.c_[g.exterior.xy], closed=True, fc="white", ec="k", lw=0.75, zorder=2.25))
-    ax.add_patch(Circle(tuple(Cg), Rg - 0.15, fill=False, ec="k", lw=0.3, zorder=2.3))
-    isleta = Point(*Cg).buffer(Ri)
-    ax.add_patch(Circle(tuple(Cg), Ri, fc="white", ec="k", lw=0.75, zorder=2.4))
-    b_veh = b_veh.union(glorieta)
+    for s_ in np.arange(-40, 40, 3.0):                                       # despiece del pavimento
+        for l_ in (LineString([(Cg[0] + s_, Cg[1] - 30), (Cg[0] + s_, Cg[1] + 30)]), LineString([(Cg[0] - 30, Cg[1] + s_), (Cg[0] + 30, Cg[1] + s_)])):
+            l2 = l_.intersection(expl)
+            for g in getattr(l2, "geoms", [l2]):
+                if g.length > 0.5: ax.plot(*g.xy, color="k", lw=0.12, zorder=2.26)
+    isleta = SP()
+    b_veh = b_veh.union(expl)
     # peatonales (trazado verde del usuario): 2,5 m, losas
     B2 = [(xr + 2.6, 42.0), (xr + 6.0, 34.0), (xr + 13.0, 22.0)]
     H = [(xr - 2.6, yh), (xc, yh)]
@@ -227,8 +232,6 @@ def hoja_lugar():
     testero = SP([(-3.0, E.L_L + 0.3), (xr - 2.5, E.L_L + 0.3), (xr - 2.5, cy), (-3.0, cy)])
     for g in (cesped_ala, parque, testero):
         punteado(ax, g.difference(b_cam).intersection(marco), dens=0.5, z=0.8)
-    punteado(ax, isleta, dens=0.9, z=2.45)
-    arbol(ax, tuple(Cg), 2.8, z=5)
     for c, r in (((xr + 8, 30), 4.5), ((xr + 16, 40), 4.0), ((xr + 26, 34), 5.0), ((xr + 9, 58), 3.5), ((xr + 30, 56), 4.5),
                  ((xr + 14, 74), 5.0), ((xr + 36, 74), 5.5), ((xr + 22, 112), 4.5), ((xr + 44, 96), 5.5), ((xr + 6, 112), 4.0),
                  ((-14, 112), 4.5), ((xr + 40, 40), 5.0), ((xr + 46, 62), 4.5), ((xr + 30, 108), 5.0), ((xr + 6, 86), 3.5)):
@@ -262,15 +265,13 @@ def hoja_lugar():
     rot(SW(x0 - 30, -11.0) + np.array([0, 1.2]), "calle Ivana Mazepy", fontsize=8, ha="center", rotation=math.degrees(E.PHI))
     rot(E.P(16, -31.5), "autobuses (F14, F15, F70)", fontsize=6, ha="center")
     rot((xr + 3.4, 72), "vial de servicio 5,0 m (F47, F73, Google Maps)", fontsize=6.3, rotation=90, va="center")
-    rot(tuple(Cg + np.array([Rg + 1.0, 2.0])), "glorieta de giro\nR 10,0 · isleta R 4,0", fontsize=6, va="center")
+    rot(tuple(Cg + np.array([Rg + 1.2, 0.0])), "explanada de maniobra\n(pavimento, F35)", fontsize=6, va="center")
     rot((xr + 3.4, 50.0), "camión rígido 9 m:\nrecorrido y barrido", fontsize=5.5, ha="left", va="center", style="italic")
     rot((xc - 1.6, yh + 6), "senda peatonal", fontsize=5.3, rotation=90, va="center")
     rot((E.W_P + 5.6, 62), "césped (F47, F73)", fontsize=6.5, rotation=90, va="center")
     rot((xr + 9.6, 30.5), "senda a la plaza", fontsize=5.3, rotation=-60)
     rot((48, 84), "PARQUE\n(arbolado, F01, F23, F47)", fontsize=9, weight="bold", ha="center")
     rot((-8, 30), "patio de la L\n(sin foto)", fontsize=7, ha="center", style="italic")
-    ax.annotate("fuente en media luna (1984)", tuple(T - N * 5.4), tuple(E.P(-4, -15)), fontsize=6.3, zorder=10,
-                arrowprops=dict(arrowstyle="-", lw=0.5), bbox=dict(fc="white", ec="none", pad=0.8))
     for p_, d_, t_ in ((E.P(7.0, yf - 2.2), N, "entrada hotel"), (E.P(-9.0, yf - 2.2), N, "entrada restaurante"),
                        ((E.W_P + 1.4, E.Y_CUNA + 2.6), (0, -1), "rampa")):            # entradas (Ching: flecha llena)
         p_ = np.array(p_, float); d_ = np.array(d_, float); n_ = np.array([-d_[1], d_[0]])

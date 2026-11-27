@@ -276,10 +276,11 @@ def base():
         perfil = CrossSection([[(0.0, 0.0), (1.2, 0.0), (0.0, 0.8)]])
         if perfil.area() <= 0: perfil = CrossSection([[(0.0, 0.0), (0.0, 0.8), (1.2, 0.0)]])
         return Manifold.extrude(perfil, 1.0).rotate((90, 0, 0)).translate((x - 0.5, y + 0.6, Z_ALTO - 0.01))
+    # F01 (1984): DOS FILAS DE 5 PARALELAS A LA MEDIANERA, pegadas a ella, de la fachada de la calle hacia atrás; la segunda fila
+    # a tresbolillo (desplazada media unidad) – «5 en línea y 5 en una distribución no aleatoria pero distinta» [usuario 26/11, 27/11]
     for i in range(5):
-        sc.append(diente(-L_C + 1.0 + 1.3 * i, -_v["VOL_V"] + 1.4))
-    for x, y in ((1.2, 4.2), (2.8, 5.4), (4.4, 4.2), (6.0, 5.4), (3.6, 7.6)):
-        sc.append(diente(-L_C + x, y))
+        sc.append(diente(-L_C + 1.4, 0.6 + 2.0 * i))                         # fila 1, junto a la medianera
+        sc.append(diente(-L_C + 3.4, 1.6 + 2.0 * i))                         # fila 2, a tresbolillo
     s.append(ROT(Manifold.batch_boolean(sc, OpType.Add)))
     # ala larga: bar en la mitad interior hasta el tramo final; terraza con peto en la mitad exterior [F47, Bing]
     yb0 = pl["Q"][1] + _v["R2_Y0"]                                      # arranca tras el vuelo del cuello (rellano del giro en U delante) [usuario 26/11]
@@ -460,6 +461,43 @@ def letrero():
     return out
 
 
+def letras_volumen(pr):
+    """САЛЮТ ×2 en VOLUMEN: cada letra con la forma del glifo (DejaVu Sans Bold), alto SIG_Z1 − SIG_Z0, extruida hacia fuera en su
+    plano tangente al arco [usuario 22/11 «letras circulares», 27/11 «letras en volumen arriba»; Alamy, F09, F08, F19].
+    Detalle: 0,40 de espesor, a R_R + SIG_R (sobre su bastidor). Molde: trazos engrosados a ≥ 0,6 y pegadas al remate (relieve 0,6)."""
+    from matplotlib.textpath import TextPath
+    from matplotlib.font_manager import FontProperties
+    from shapely.geometry import Polygon as SPo
+    from shapely.ops import unary_union
+    from manifold3d import FillRule
+    fp = FontProperties(family="DejaVu Sans", weight="bold")
+    hz = _v["SIG_Z1"] - _v["SIG_Z0"]
+    out = []
+    for L_ in letrero():
+        tp = TextPath((0, 0), L_["ch"], size=1.0, prop=fp)
+        polys = [SPo(p) for p in tp.to_polygons() if len(p) > 2]
+        g = None
+        for p in sorted(polys, key=lambda q: -abs(q.area)):     # contornos exteriores y agujeros (regla par-impar)
+            g = p.buffer(0) if g is None else (g.difference(p) if g.contains(p) else g.union(p.buffer(0)))
+        x0, y0, x1, y1 = g.bounds; k = hz / (y1 - y0)
+        from shapely import affinity
+        g = affinity.translate(affinity.scale(g, k, k, origin=(0, 0)), -k * (x0 + x1) / 2, -k * y0)
+        if MOLDE: g = g.buffer(0.12, join_style=2)               # trazos ≥ 0,6 para que el hormigón no se rompa
+        lw = 2 * (R_R + _v["SIG_R"]) * math.sin(math.radians(_v["SIG_AW"] / 10)) * 0.92
+        if g.bounds[2] - g.bounds[0] > lw:                       # que quepa en su hueco del arco
+            f = lw / (g.bounds[2] - g.bounds[0]); g = affinity.scale(g, f, 1.0, origin=(0, 0))
+        rings = []
+        for gg in getattr(g, "geoms", [g]):
+            rings.append(list(gg.exterior.coords)[:-1]); rings += [list(i.coords)[:-1] for i in gg.interiors]
+        dep = 0.6 if MOLDE else 0.4
+        pr_ = Manifold.extrude(CrossSection(rings, FillRule.EvenOdd), dep)       # letra en XY, espesor en Z
+        a = math.radians(L_["rot"])
+        rb = (R_R - 0.05) if MOLDE else (R_R + _v["SIG_R"] - dep / 2)           # cara trasera de la letra
+        pr_ = pr_.rotate((90, 0, 0)).rotate((0, 0, math.degrees(a) + 90))         # X → tangente (CCW), Z → arriba, −Y → hacia fuera
+        out.append(pr_.translate((pr[0] + rb * math.cos(a), pr[1] + rb * math.sin(a), _v["SIG_Z0"])))
+    return out
+
+
 def gargolas():
     """gárgolas de los balcones: una por módulo (centrada entre aletas) y por planta, en el canto del forjado bajo la
     ranura, de la 2.ª planta a la cubierta del barril; fuera del sector de la escalera [F18, F08; usuario 22/11].
@@ -490,7 +528,7 @@ def torre():
          Manifold.cylinder(4.0, _v["R_CONO"], R_COL, SEG).translate((T[0], T[1], 0)),   # pie de columna (recto: el 'cono' era un toldo)
          cil(T, R_CU, Z_CU0, Z_CU1 + 0.05),                                             # CUELLO (base del tambor de habitaciones) [F70, F14, F09]
          ]                                                   # (sin losa volada: el cuello acaba en ángulo recto) [F18, usuario 26/11]
-    s.append(fuente())                                      # fuente en media luna al pie de la columna (1984) [F01, F14, F15]
+    # (sin fuente: retirada por el usuario 27/11, «está mal»)
     # vigas radiales bajo el barril y barril con forjados/poyetes + aletas
     zbi = _v["Z_BI"]                                         # FONDO PLANO del barril a +Z_BI = +Z_CU1, borde en ángulo recto [F09, F18, F14, usuario]
     s.append(cil(T, R_B, zbi, niveles_suelo()[0] if not MOLDE else max(niveles_suelo()[0], zbi + 0.7)))   # fondo plano = forjado de la 1.ª planta
@@ -536,7 +574,8 @@ def torre():
     s.append(baranda(pv, R_V, Z_V1, 1.0))                  # barandilla abierta de la cubierta de la visera [F08, Alamy]
     s.append(cil(pr, R_R, Z_V1, Z_R1))
     s.append(cil(pr, _v["REM_ZR"], Z_V1 - 0.01, Z_V1 + _v["REM_ZH"]))      # zócalo (poyete) del remate [Alamy]
-    for L_ in letrero():                                     # letrero САЛЮТ (misma función que los planos) [Alamy]
+    s += letras_volumen(pr)                                  # letrero САЛЮТ ×2: letras en volumen con su forma (usuario 27/11)
+    for L_ in ([] if True else letrero()):                    # (antes: placas rectangulares)
         if MOLDE:                                               # molde: letras en relieve de 0,5 sobre el remate (sueltas a 1,5 m se romperían)
             a_ = math.radians(L_["rot"]); rl = R_R + 0.2; wl = 2 * rl * math.sin(math.radians(_v["SIG_AW"] / 10)) - 0.45
             c_ = (pr[0] + rl * math.cos(a_), pr[1] + rl * math.sin(a_))

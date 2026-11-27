@@ -236,3 +236,12 @@ Comprobación interna:
 - **PB del chaflán** (F50, F18): cristaleras de suelo a techo en la fachada retranqueada, bajo la banda del restaurante (4 paños) y del hotel (junto a las puertas).
 - **Garaje del ala corta** (F72): hueco de 2,6 × 3,0 en la PB junto a la medianera, bajo la logia, entre el pilar y el muro final. Fondo supuesto: 6 m (oscuro en la foto).
 
+## 14. Letras, fuente, lucernarios y plano de lugar (27/11)
+- **Letras en volumen**: САЛЮТ ×2 con la forma real de cada letra (glifo extruido 0,40), en arco alrededor del remate, a su cota (+46,3 → +48,5).
+  En el molde, los trazos se engrosan a ≥ 0,6 y las letras van pegadas al remate.
+- **Fuente**: retirada del 3D, de los planos y del plano de lugar.
+- **Lucernarios en diente de sierra** (F01): **dos filas de 5 paralelas a la medianera**, pegadas a ella, desde la fachada de la calle hacia atrás; la segunda a tresbolillo. Antes iban en fila a lo largo de la calle, mal.
+- **Plano de lugar**:
+  - Se compara superpuesto sobre la vista cenital de Google (F35) con un ajuste medido: dirección y ancho del ala larga, y torre (`COMPARAR_LUGAR_F35.png`).
+  - La glorieta ajardinada (inventada) se sustituye por la **explanada de maniobra pavimentada** junto al testero, que es lo que hay en F35.
+

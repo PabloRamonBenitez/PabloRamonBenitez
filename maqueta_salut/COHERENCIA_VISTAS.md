@@ -76,7 +76,7 @@
 | borde izq. del corte sin lamas (vacío = 1) | 1.00 | 1.00 | OK |
 | borde dcho. del corte con lamas | 1.00 | 1.00 | OK |
 | encima del tambor solo el muro: vacío en el eje de la escalera a +40 | 1.00 | 1.00 | OK |
-| letrero: 10 letras (САЛЮТ ×2 en arco) presentes en el 3D | 10.00 | 10.00 | OK |
+| letrero: 10 letras en volumen (САЛЮТ ×2 en arco) presentes en el 3D | 10.00 | 10.00 | OK |
 | zócalo (poyete) del remate | 1.00 | 1.00 | OK |
 | barandilla de la visera abierta: vacío entre pasamanos y travesaño | 1.00 | 1.00 | OK |
 | 1.ª planta: banda continua sin ranura (macizo en la cota de la ranura) | 1.00 | 1.00 | OK |
@@ -87,8 +87,7 @@
 | 2.ª planta: la aleta sí sobresale (macizo en R_B + 0,4) | 1.00 | 1.00 | OK |
 | cuello sin losa volada (vacío en R_CU + 0,3 a +Z_CU0 + 0,3) | 1.00 | 1.00 | OK |
 | fondo plano: macizo junto al cuello sobre +Z_CU1 | 1.00 | 1.00 | OK |
-| fuente en media luna hacia la plaza: bordillo | 1.00 | 1.00 | OK |
-| fuente: nada detrás del eje (lado del edificio) | 1.00 | 1.00 | OK |
+| sin fuente (retirada por el usuario 27/11): vacío delante de la columna | 1.00 | 1.00 | OK |
 | visera/tambor = media de F01, F02, F09, F14, F23 (0,951) | 0.95 | 0.95 | OK |
 | remate/tambor = media de las 5 fotos (0,379) | 0.38 | 0.38 | OK |
 | F09: la visera vuela fuera del peto del barril por la izquierda (0,9 m) | 0.90 | 0.90 | OK |

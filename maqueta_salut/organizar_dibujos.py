@@ -18,6 +18,8 @@ ACTUAL = [  # (n.º, archivo fuente regenerado, título)
  (54, "MATRIZ_v2.png", "MATRIZ_v2 – tabla zonas × fotos"), (56, "DUDA7_RESUELTA.png", "DUDA7_RESUELTA – muro de coronación de la escalera"),
  (57, "PLANO_LUGAR_1984.png", "PLANO_LUGAR_1984 – planta de situación"),
  (58, "COLLAGE_BASE.png", "COLLAGE_BASE – base de la torre en ángulo recto sobre F09 y F14"),
+ (59, "COMPARAR_LUGAR_F35.png", "COMPARAR_LUGAR_F35 – plano de lugar sobre la vista cenital de Google (ajuste medido)"),
+ (60, "MOLDE_COMPARACION.png", "MOLDE_COMPARACION – volumen de detalle y volumen para el molde"),
 ]
 ZON = sorted(glob.glob("zon_*.png"))
 

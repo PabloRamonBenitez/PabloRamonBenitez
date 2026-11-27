@@ -43,7 +43,7 @@ FRASES = [
   "до пізніших огорож. Доріжки й дерева: трасування й положення приблизні (перспективні фото)."),
  ("EDIFICIO COLINDANTE", "СУСІДНЯ БУДІВЛЯ"), ("PARQUE", "ПАРК"), ("PLAZA", "ПЛОЩА"), ("(pavimento)", "(мощення)"), ("arbolado", "дерева"),
  ("calle Ivana Mazepy", "вул. Івана Мазепи"), ("autobuses", "автобуси"), ("vial de servicio: bordillo y eje", "службовий проїзд: бордюр і вісь"),
- ("vial de servicio", "службовий проїзд"), ("glorieta de giro", "розворотне кільце"), ("isleta", "острівець"),
+ ("vial de servicio", "службовий проїзд"), ("explanada de maniobra", "розворотний майданчик"), ("pavimento, F35", "мощення, F35"), ("glorieta de giro", "розворотне кільце"), ("isleta", "острівець"),
  ("camión rígido", "вантажівка"), ("recorrido y barrido del camión", "траєкторія й габарит повороту вантажівки"),
  ("recorrido y barrido", "траєкторія й габарит повороту"), ("senda peatonal (losas)", "пішохідна доріжка (плити)"),
  ("senda peatonal", "пішохідна доріжка"), ("senda a la plaza", "доріжка до площі"), ("césped (punteado)", "газон (крапки)"), ("césped", "газон"),

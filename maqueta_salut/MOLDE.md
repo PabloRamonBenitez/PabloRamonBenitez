@@ -20,7 +20,7 @@
 - Fuente: fuera (sería una lámina de 0,3 en la cara de colada). Muro final de la fachada retranqueada del ala larga y fondo del barril, a 0,6–0,7.
 - Se mantienen: forjados y huecos del barril, ojos (Ø 1,6, 4,7 mm), visera, remate, claraboya, rampa, concha, ventanas del ala larga, dientes de sierra, lucernarios, columna, cuello y vigas.
 
-## Comprobación por cortes (91 detecciones en 32 piezas)
+## Comprobación por cortes (121 detecciones en 44 piezas)
 | tipo | dónde | cortes | área máx. (m²) |
 |---|---|---|---|
 | fino | planta (12.4, 16.6) | 4 | 1.33 |
@@ -34,15 +34,21 @@
 | fino | planta (12.5, 15.1) | 4 | 0.25 |
 | fino | radial 60° (4.5, 2.9) | 1 | 0.22 |
 | fino | radial 240° (-4.5, 2.9) | 1 | 0.22 |
-| fino | planta (-21.8, 2.5) | 1 | 0.21 |
-| fino | planta (-18.6, 2.8) | 1 | 0.21 |
-| fino | planta (-20.5, -2.6) | 2 | 0.21 |
-| fino | planta (-23.1, -2.8) | 2 | 0.21 |
-| fino | planta (-20.1, 1.4) | 1 | 0.21 |
-| fino | planta (-21.2, 4.8) | 1 | 0.21 |
-| fino | planta (-18.0, -2.4) | 1 | 0.21 |
-| fino | planta (-23.3, 1.2) | 1 | 0.21 |
+| fino | planta (12.9, 11.6) | 2 | 0.22 |
+| fino | planta (5.6, 17.5) | 2 | 0.22 |
+| fino | planta (-22.8, -2.4) | 1 | 0.21 |
+| fino | planta (-23.1, 1.6) | 1 | 0.21 |
+| fino | planta (-23.5, 5.6) | 1 | 0.21 |
+| fino | planta (-21.6, 6.7) | 1 | 0.21 |
+| fino | planta (-22.9, -0.4) | 1 | 0.21 |
+| fino | planta (-23.3, 3.6) | 1 | 0.21 |
+| fino | planta (-21.0, 0.8) | 1 | 0.21 |
+| fino | planta (-21.2, 2.8) | 1 | 0.21 |
+| fino | planta (-20.9, -1.2) | 1 | 0.21 |
+| fino | planta (-21.4, 4.7) | 1 | 0.21 |
 | fino | planta (-22.0, 9.5) | 7 | 0.18 |
+| rendija | planta (11.1, 16.4) | 9 | 0.17 |
+| rendija | planta (2.3, 13.5) | 9 | 0.17 |
 | fino | radial 90° (15.5, 11.4) | 1 | 0.15 |
 | fino | radial 270° (-15.5, 11.4) | 1 | 0.15 |
 | rendija | planta (10.5, 14.2) | 2 | 0.15 |
@@ -54,4 +60,10 @@
 | fino | transversal y=30 (14.9, 0.1) | 1 | 0.09 |
 | rendija | radial 90° (15.5, 11.7) | 1 | 0.09 |
 | rendija | radial 270° (-15.5, 11.7) | 1 | 0.09 |
+| rendija | radial 45° (5.0, 47.4) | 1 | 0.08 |
+| rendija | radial 225° (-5.0, 47.4) | 1 | 0.08 |
+| rendija | planta (5.3, 17.6) | 2 | 0.08 |
+| rendija | planta (13.1, 11.8) | 2 | 0.08 |
 | fino | planta (11.9, 37.4) | 3 | 0.05 |
+| rendija | planta (9.9, 17.6) | 1 | 0.04 |
+| rendija | planta (2.0, 11.9) | 1 | 0.04 |

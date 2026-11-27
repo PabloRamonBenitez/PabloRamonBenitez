@@ -1,6 +1,6 @@
 # Método de comprobación (desde el 26/11, tarde)
 
-Nada se entrega sin pasar, **en este orden**, las cinco puertas. Si una falla, se corrige y se vuelve a empezar por la 1.
+Antes de nada se repasa **`ORDENES.md`** (lista viva de órdenes del usuario), línea a línea. Después, nada se entrega sin pasar, **en este orden**, las cinco puertas. Si una falla, se corrige y se vuelve a empezar por la 1.
 
 | # | Puerta | Herramienta | Qué detecta | Criterio para pasar |
 |---|---|---|---|---|

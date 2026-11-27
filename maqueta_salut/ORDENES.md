@@ -62,5 +62,5 @@ Cada orden lleva su fecha y cómo se comprueba. Si una entrega contradice una l�
 | # | Orden | Fecha | Control |
 |---|---|---|---|
 | D1 | Versión paralela del volumen para molde de silicona y colada de hormigón, con el detalle que tenga sentido a 15 cm | 27/11 | A (`molde_stl.py`) |
-| D2 | A proveedores se les comparte **solo** el STL de baja resolución de la carpeta «Stl salyt» de Drive (enlace de solo lectura). Los mensajes de **Etsy los envía el usuario**; yo dejo el texto preparado en `PROVEEDORES_MOLDES.md` | 27/11 | M |
+| D2 | A proveedores se les comparte **solo** STL de baja resolución (el modelo entero o las dos piezas A y B) de la carpeta «Stl salyt» de Drive (enlace de solo lectura). Los mensajes de **Etsy los envía el usuario**; yo dejo el texto preparado en `PROVEEDORES_MOLDES.md` | 27/11 | M |
 | D3 | Ningún STL sale sin pasar `stl_limpio.comprobar`: estanco, 0 aristas no manifold, 0 abiertas, volumen igual al original | 27/11 | A (`molde_stl.py`, `vistas3d.py`) |

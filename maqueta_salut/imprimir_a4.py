@@ -83,7 +83,7 @@ def portada():
     fig.text(15 / 297, 188 / 210, "HOTEL SALUT (Kyiv, 1984)", fontsize=18, weight="bold")
     fig.text(15 / 297, 180 / 210, "Juego de planos para imprimir – A4 (imprimir al 100 %, sin ajustar)", fontsize=9.5)
     fig.text(15 / 297, 174 / 210, "Plantas 1:500 · secciones y alzados 1:750 (alzado 5 1:500) · detalles 1:300", fontsize=7.5)
-    xl, yl = (-30, 34), (-10, 100)
+    xl, yl = (-34, 42), (-10, 100)
     ax, _ = eje_escala(fig, (190, 50), xl, yl, 1000)
     LM.planta(ax, None, "", aerea=True)
     for k, p0, p1, _ in LM.SECC:

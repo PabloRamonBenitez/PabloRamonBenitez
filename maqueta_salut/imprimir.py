@@ -83,15 +83,15 @@ def portada():
     fig.text(20 / 420, 270 / 297, "HOTEL SALUT (Kyiv, 1984)", fontsize=22, weight="bold")
     fig.text(20 / 420, 258 / 297, "Juego de planos para imprimir – A3", fontsize=12)
     fig.text(20 / 420, 250 / 297, "Plantas 1:400 · secciones y alzados 1:500 (alzado 5 1:300) · detalles 1:200", fontsize=9)
-    xl, yl = (-30, 34), (-10, 100)
-    ax, _ = eje_escala(fig, (250, 30), xl, yl, 800)
+    xl, yl = (-34, 42), (-10, 100)
+    ax, _ = eje_escala(fig, (250, 46), xl, yl, 800)                 # por encima del cajetín (x ≥ 288, y ≤ 38)
     LM.planta(ax, None, "", aerea=True)
     for k, p0, p1, _ in LM.SECC:
         ax.plot(*zip(p0, p1), "-.", color="crimson", lw=0.7)
         ax.text(*p0, k, color="crimson", fontsize=7, weight="bold"); ax.text(*p1, k, color="crimson", fontsize=7, weight="bold")
     norte(ax, 26, 88)
     fijar(ax, xl, yl, "situación de secciones (1:800)")
-    barra(fig, 250, 22, 800, 40)
+    barra(fig, 190, 46, 800, 40)
     cajetin(fig, "1:800 (situación)")
     return fig
 

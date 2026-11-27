@@ -108,7 +108,7 @@ def hoja_alz_secc(titulo, d_alz, t_alz, secc, e, u_rng, den, lista_fotos):
     import cotas_rel as CR, lineas as L_
     for den in [d_ for d_ in (den, 500, 600, 750) if d_ >= den]:      # alzado + sección dentro del marco (≤ H − 14)
         k = 1000 / den
-        ZL = (-10.6 * den / 1000, 50.0 + 6.0 * den / 1000)            # bajo rasante: cadenas y burbujas; arriba: letras de los cortes
+        ZL = (-13.4 * den / 1000, 50.0 + 6.0 * den / 1000)            # bajo rasante: cadenas y burbujas; arriba: letras de los cortes
         wd = (u_rng[1] - u_rng[0]) * k; hz = (ZL[1] - ZL[0]) * k
         x0 = 14; y_a = 26; y_s = y_a + hz + 14
         if (y_s + hz + 6 if secc is not None else y_a + hz + 6) <= H - 14: break
@@ -127,7 +127,7 @@ def hoja_alz_secc(titulo, d_alz, t_alz, secc, e, u_rng, den, lista_fotos):
         fig.text(x0 / W, (y_s + hz + 2) / H, f"SECCIÓN {kk} – {tx}", fontsize=8, weight="bold")
     fig.text(x0 / W, 289 / H, titulo, fontsize=10, weight="bold", va="top")
     for ax in fig.axes:                                              # nada se dibuja fuera del marco de su dibujo
-        for a_ in list(ax.texts) + list(ax.lines) + list(ax.patches) + list(ax.collections):
+        for a_ in list(ax.lines) + list(ax.patches) + list(ax.collections):
             a_.set_clip_on(True)
     # las fotos empiezan donde acaba el último rótulo del dibujo (cotas de nivel incluidas): nunca se pisan
     traduccion.traducir(fig)                             # medir los rótulos ya traducidos (son más largos)

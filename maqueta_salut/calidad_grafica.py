@@ -79,7 +79,7 @@ def revisar(fig, salida):
         elif ax is not None and ax.get_aspect() == 1.0:              # dibujo a escala: ningún rótulo se sale de su dibujo
             from shapely.geometry import box
             A = box(*ax.bbox.extents)
-            if A.intersection(P).area < 0.97 * P.area:
+            if A.contains(P.centroid) and A.intersection(P).area < 0.97 * P.area:        # los rótulos de margen (niveles, cadenas) son legítimos
                 out.append({"tipo": "se sale de su dibujo", "texto": s[:50], "x_mm": round(P.centroid.x * mm), "y_mm": round((H - P.centroid.y) * mm)})
         if P.bounds[0] < -1 or P.bounds[1] < -1 or P.bounds[2] > W + 1 or P.bounds[3] > H + 1:
             out.append({"tipo": "fuera de la hoja", "texto": s[:50], "x_mm": round(P.centroid.x * mm), "y_mm": round((H - P.centroid.y) * mm)})
@@ -158,8 +158,11 @@ def _fraccion(P, fondo, W, H):
 def _movil(t):
     s = t.get_text().strip()
     if t.axes is None or t.get_gid() == "fijo" or t in (t.axes.title, t.axes._left_title, t.axes._right_title): return False
+    import re
+    if re.fullmatch(r"[LS]\d", s): return True
     if str(t.get_weight()) in ("bold", "heavy", "700", "800", "900") or t.get_fontsize() > 7.5: return False
-    if len(s) <= 2 and not s.replace(",", "").isdigit(): return False        # burbujas de ejes y letras de corte
+    if re.fullmatch(r"[LS]\d", s): return True                              # letras de los cortes: se pueden apartar un poco de su línea
+    if len(s) <= 2 and not s.replace(",", "").isdigit(): return False        # burbujas de ejes
     bp = t.get_bbox_patch()
     if bp is not None and "Circle" in type(bp.get_boxstyle()).__name__: return False
     return True
@@ -202,7 +205,7 @@ def recolocar(fig):
         bp = t.get_bbox_patch()
         tapa = bp is not None and tuple(bp.get_facecolor()[:3]) == (1.0, 1.0, 1.0)
         fr = 0.0 if tapa else _fraccion(P, fondo, W, H)
-        c += 4.0 * max(0.0, fr - 0.06)
+        c += 8.0 * max(0.0, fr - 0.05)
         return c + 0.05 * d
 
     for t, P in moviles:
@@ -211,7 +214,7 @@ def recolocar(fig):
         h_, w_ = max(b0.height, 1.0), max(b0.width, 1.0)
         a = np.radians(rot); tg = np.array([np.cos(a), np.sin(a)]); nr = np.array([-np.sin(a), np.cos(a)])
         c0 = coste(t, P, 0.0)
-        if c0 < 0.6:
+        if c0 < 0.12:
             colocados.append(P); continue
         tr = t.get_transform(); pos = np.array(tr.transform(t.get_position()), float)
         mejor = (c0, np.zeros(2), P)
@@ -222,6 +225,8 @@ def recolocar(fig):
             c = coste(t, Pq, float(np.hypot(*dv)) / h_)
             if c < mejor[0] - 1e-6: mejor = (c, dv, Pq)
         c, dv, Pn = mejor
+        if c >= 8.0 and (Pn.bounds[0] < 0 or Pn.bounds[1] < 0 or Pn.bounds[2] > W or Pn.bounds[3] > H):
+            t.set_visible(False); continue                                      # rótulo que queda fuera de la hoja: no se dibuja
         if np.hypot(*dv) > 0:
             t.set_position(tuple(tr.inverted().transform(pos + dv)))
             n_mov += 1

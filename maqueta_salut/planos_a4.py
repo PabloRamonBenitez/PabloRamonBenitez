@@ -50,7 +50,7 @@ def hoja_triple(titulo, e, u_rng, v_rng, secc, zc, d, t_alz, den, refs):
     x0 = 14; gap = 2.5
     for den in sorted({d_ for d_ in (den, 750, 800, 1000, 1250, 1500) if d_ >= den}):   # la mayor escala que quepa en el marco
         k = 1000 / den
-        ZL = (-10.6 * den / 1000, 50.0 + 6.0 * den / 1000)       # arriba caben las letras de los cortes; bajo rasante: cadena (1,6 y 3,4 mm) + burbujas (Ø 2,5 mm)
+        ZL = (-13.4 * den / 1000, 50.0 + 6.0 * den / 1000)       # arriba caben las letras de los cortes; bajo rasante: cadena (1,6 y 3,4 mm) + burbujas (Ø 2,5 mm)
         hz = (ZL[1] - ZL[0]) * k; hp = (v_rng[1] - v_rng[0]) * k; wd = (u_rng[1] - u_rng[0]) * k
         if 10 + 2 * hz + hp + 2 * gap <= 194 and x0 + wd <= 190: break
     CR.MM = den / 1000; L.MM = den / 1000                      # burbujas, cadenas y números de cota en mm de papel a esta escala
@@ -100,7 +100,7 @@ def hoja_triple(titulo, e, u_rng, v_rng, secc, zc, d, t_alz, den, refs):
     for u, t in refs:
         ax_s.text(u - off, ZL[1] - 0.3, t, fontsize=4.3, color="0.3", ha="center", va="top", rotation=90)
     for ax in (ax_s, ax_p, ax_a):                                # nada se dibuja fuera del marco de su dibujo
-        for a_ in list(ax.texts) + list(ax.lines) + list(ax.patches) + list(ax.collections):
+        for a_ in list(ax.lines) + list(ax.patches) + list(ax.collections):
             a_.set_clip_on(True)
     # columna derecha: leyenda + niveles + cajetín
     xr = x0 + wd + 8
@@ -122,7 +122,7 @@ def hoja_transversal(den=600):
     """alzado 5 (testero) y secciones S3 y S4 lado a lado, misma escala y mismo eje horizontal (−x)"""
     import cotas_rel as CR
     global ZL
-    CR.MM = den / 1000; L.MM = den / 1000; ZL = (-10.6 * den / 1000, 50.0 + 6.0 * den / 1000)
+    CR.MM = den / 1000; L.MM = den / 1000; ZL = (-13.4 * den / 1000, 50.0 + 6.0 * den / 1000)
     titulo = "Testero y secciones transversales del ala larga (S3, S4)"
     fig = IA.pagina(A4L, titulo)
     w, h = fig._mm; k = 1000 / den

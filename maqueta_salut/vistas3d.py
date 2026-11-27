@@ -9,8 +9,10 @@ m = E.edificio()
 # STL a 15 cm de altura total
 me = m.to_mesh(); Vv = np.asarray(me.vert_properties)[:, :3]; F = np.asarray(me.tri_verts)
 k = 150.0 / E.Z_R1
-trimesh.Trimesh(Vv * k, F).export("Hotel_Salut_15cm_v3.stl")
-print("STL: Hotel_Salut_15cm_v3.stl  escala 1:%d" % round(1000 / k))
+import stl_limpio as SL
+_V2, _mov = SL.separar_contactos(Vv * k, F)                    # sin aristas no manifold para el servicio de impresión
+trimesh.Trimesh(_V2, F, process=False).export("Hotel_Salut_15cm_v3.stl")
+print("STL: Hotel_Salut_15cm_v3.stl  escala 1:%d" % round(1000 / k), SL.comprobar("Hotel_Salut_15cm_v3.stl"))
 def orientar(m, az, el):
     """vista desde la dirección (az grados desde +x, el elevación): devuelve el modelo girado para mirar hacia -z"""
     a, e = math.radians(az), math.radians(el)

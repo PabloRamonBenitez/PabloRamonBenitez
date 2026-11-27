@@ -20,8 +20,19 @@ GM, GR = 0.55, 0.33                                   # umbral de aviso (m reale
 m = E.edificio()
 me = m.to_mesh(); Vv = np.asarray(me.vert_properties)[:, :3]; F = np.asarray(me.tri_verts)
 k = 150.0 / E.Z_R1
-tm = trimesh.Trimesh(Vv * k, F)
+import stl_limpio as SL
+Vm, _mov = SL.separar_contactos(Vv * k, F)                      # sin aristas no manifold: lo que verá el servicio de impresión
+tm = trimesh.Trimesh(Vm, F, process=False)
 tm.export("Hotel_Salut_15cm_MOLDE.stl")
+STL = SL.comprobar("Hotel_Salut_15cm_MOLDE.stl")
+# VERSIÓN DE BAJA RESOLUCIÓN para compartir (límite de 3 MB por subida a Drive y descargas rápidas en Etsy): misma geometría con la malla
+# simplificada a 0,012 mm de maqueta (por debajo de la resolución de cualquier impresora): sin triángulos coplanarios redundantes
+_q = m.set_tolerance(0.004); _mq = _q.to_mesh()
+_Vq, _ = SL.separar_contactos(np.asarray(_mq.vert_properties)[:, :3] * k, np.asarray(_mq.tri_verts))
+trimesh.Trimesh(_Vq, np.asarray(_mq.tri_verts), process=False).export("Hotel_Salut_15cm_MOLDE_baja.stl")
+STL_B = SL.comprobar("Hotel_Salut_15cm_MOLDE_baja.stl")
+print("baja resolución:", STL_B, "%.2f MB" % (os.path.getsize("Hotel_Salut_15cm_MOLDE_baja.stl") / 1e6))
+assert STL_B["no_manifold"] == 0 and STL_B["abiertas"] == 0 and STL_B["estanco"] and abs(STL_B["volumen_cm3"] / STL["volumen_cm3"] - 1) < 0.001
 
 
 def geom(cs):
@@ -83,12 +94,11 @@ fig.suptitle("VOLUMEN: versión de detalle (arriba) y versión para molde de sil
 fig.savefig("MOLDE_COMPARACION.png", dpi=70)
 
 bb = tm.bounds
-tm2 = trimesh.Trimesh(Vv * k, F, process=True); tm2.merge_vertices()
-_u, _inv = trimesh.grouping.unique_rows(tm2.edges_sorted); _c = np.bincount(_inv)
-nab, nnm = int((_c == 1).sum()), int((_c > 2).sum())
+nab, nnm = STL["abiertas"], STL["no_manifold"]
 lines = ["# Versión molde – STL para molde de silicona y colada de hormigón", "",
          f"`Hotel_Salut_15cm_MOLDE.stl` · escala 1:{round(1000 / k)} · caja {bb[1][0] - bb[0][0]:.0f} × {bb[1][1] - bb[0][1]:.0f} × {bb[1][2] - bb[0][2]:.0f} mm · "
-         f"volumen {tm.volume / 1000:.0f} cm³ · una sola pieza: {'sí' if tm.body_count == 1 else 'NO'} · aristas abiertas: {nab} · aristas no manifold: {nnm} · base plana a z = 0", "",
+         f"volumen {tm.volume / 1000:.0f} cm³ · una sola pieza: {'sí' if STL['cuerpos'] == 1 else 'NO'} · estanco: {'sí' if STL['estanco'] else 'NO'} · aristas abiertas: {nab} · aristas no manifold: {nnm} · base plana a z = 0", "",
+         f"`Hotel_Salut_15cm_MOLDE_baja.stl` (para compartir): la misma geometría con la malla simplificada a 0,012 mm de maqueta · {STL_B['caras']} triángulos ({os.path.getsize('Hotel_Salut_15cm_MOLDE_baja.stl') / 1e6:.1f} MB, frente a {STL['caras']} y {os.path.getsize('Hotel_Salut_15cm_MOLDE.stl') / 1e6:.1f} MB) · volumen {STL_B['volumen_cm3']:.0f} cm³ · estanco, sin aristas abiertas ni no manifold", "",
          "## Criterios (1 mm de maqueta = 0,34 m reales)",
          "| criterio | valor real | en la maqueta |", "|---|---|---|",
          f"| grosor mínimo de cualquier elemento | {GM} m | {GM * k:.1f} mm |",

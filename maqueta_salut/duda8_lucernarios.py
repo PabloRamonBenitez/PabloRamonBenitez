@@ -15,7 +15,7 @@ traduccion.ACTIVO = False                                  # hoja de trabajo: en
 V = E._v
 B, S = V["PIR_B"], V["PIR_S"]
 fig = plt.figure(figsize=(16.5, 11.7))
-fig.suptitle("DUDA 8 – ¿Cómo están colocados los 10 lucernarios piramidales del bloque alto?  (solo se ven en F01, 1984)",
+fig.suptitle("DUDA 8 – RESUELTA: H1 (usuario 27/11) · colocación de los 10 lucernarios piramidales del bloque alto (solo se ven en F01, 1984)",
              fontsize=14, weight="bold", x=0.02, ha="left", y=0.975)
 # 1) F01 ampliada (×5) con las pirámides numeradas
 X0, Y0, X1, Y1, K = 0, 430, 260, 560, 5
@@ -51,7 +51,7 @@ def pir(ax, c):
 
 
 x1 = 0.6 + B / 2
-H = {"H1 · 2 filas PARALELAS A LA MEDIANERA, a tresbolillo (provisional)":
+H = {"H1 · 2 filas PARALELAS A LA MEDIANERA, a tresbolillo  ✔ ELEGIDA":
          [(x1, 0.9 + S * i) for i in range(5)] + [(x1 + S, 0.9 + S / 2 + S * i) for i in range(5)],
      "H2 · banda en DIAGONAL desde la esquina medianera–calle":
          [(x1 + S * i * 0.55, 0.3 + S * i * 0.83) for i in range(5)] + [(x1 + S * 0.8 + S * (i + 0.5) * 0.55, 0.3 - S * 0.5 + S * (i + 0.5) * 0.83) for i in range(5)],
@@ -69,6 +69,6 @@ for k, (t, pts) in enumerate(H.items()):
     ax.set_xlim(-6.5, 17.5); ax.set_ylim(-5, V["W_C"] + 1.5)
     ax.set_title(t, fontsize=8.5, loc="left")
     ax.plot([13, 17], [-4.6] * 2, color="k", lw=1.2); ax.text(15, -4.4, "4 m", ha="center", va="bottom", fontsize=6.5)
-fig.text(0.02, 0.22, "PREGUNTA: ¿cuál de las tres se parece a lo que ves en F01 (H1, H2, H3) o cómo es? Si conoces otra foto de esa cubierta, mándamela.\n"
-         "Hasta que contestes, el modelo lleva H1 marcada como provisional (zona Z34 y ORDENES E14).", fontsize=11, weight="bold", va="top")
+fig.text(0.02, 0.22, "RESPUESTA DEL USUARIO (27/11): H1 – dos filas de 5 paralelas a la medianera, la 2.ª a tresbolillo.\n"
+         "Es la que lleva el modelo (cotas PIR_B, PIR_H, PIR_S; zona Z34; ORDENES E14).", fontsize=11, weight="bold", va="top")
 fig.savefig("DUDA8_LUCERNARIOS.png", dpi=110); print("ok")

@@ -43,7 +43,7 @@ FRASES = [
   "до пізніших огорож. Доріжки й дерева: трасування й положення приблизні (перспективні фото)."),
  ("EDIFICIO COLINDANTE", "СУСІДНЯ БУДІВЛЯ"), ("PARQUE", "ПАРК"), ("PLAZA", "ПЛОЩА"), ("(pavimento)", "(мощення)"), ("arbolado", "дерева"),
  ("calle Ivana Mazepy", "вул. Івана Мазепи"), ("autobuses", "автобуси"), ("vial de servicio: bordillo y eje", "службовий проїзд: бордюр і вісь"),
- ("plaza abierta a la calle, sin bordillo", "площа відкрита до вулиці, без бордюру"), ("desde la calle Ivana Mazepy", "з вул. Івана Мазепи"), ("hacia la calle", "на вулицю"), ("pasa bajo el vuelo de la torre", "проходить під виносом вежі"), ("(asfalto)", "(асфальт)"), ("sigue al patio", "продовжується до двору"), ("allí gira o sale", "там розвертається або виїжджає"), ("duda", "питання"), ("entra desde la calle", "в'їжджає з вулиці"), ("por la plaza, sube por el vial y rodea el testero", "через площу, піднімається проїздом і огинає торець"), ("plaza de asfalto: sin bordillo hacia la calle", "асфальтована площа: без бордюру з боку вулиці"), ("vial junto al ala larga", "проїзд біля довгого крила"), ("plaza, vial y parque", "площа, проїзд і парк"), ("plaza abierta a la calle", "площа відкрита до вулиці"), ("vial de servicio", "службовий проїзд"), ("rodea el testero por detrás", "огинає торець ззаду"), ("continúa al patio y al garaje", "продовжується до двору і гаража"), ("vehículo de servicio", "службовий транспорт"), ("recorrido en bucle, sin maniobras", "кільцевий маршрут без маневрів"), ("camión", "вантажівка"), ("explanada de maniobra", "розворотний майданчик"), ("pavimento, F35", "мощення, F35"), ("glorieta de giro", "розворотне кільце"), ("isleta", "острівець"),
+ ("plaza abierta a la calle, sin bordillo", "площа відкрита до вулиці, без бордюру"), ("desde la calle Ivana Mazepy", "з вул. Івана Мазепи"), ("hacia la calle", "на вулицю"), ("pasa bajo el vuelo de la torre", "проходить під виносом вежі"), ("(asfalto)", "(асфальт)"), ("sigue al patio", "продовжується до двору"), ("allí gira o sale", "там розвертається або виїжджає"), ("duda", "питання"), ("entra desde la calle", "в'їжджає з вулиці"), ("por la plaza, sube por el vial y rodea el testero", "через площу, піднімається проїздом і огинає торець"), ("plaza de asfalto: sin bordillo hacia la calle", "асфальтована площа: без бордюру з боку вулиці"), ("vial junto al ala larga", "проїзд біля довгого крила"), ("plaza, vial y parque", "площа, проїзд і парк"), ("plaza abierta a la calle", "площа відкрита до вулиці"), ("entra desde la calle por la plaza,", "в'їжджає з вулиці через площу,"), ("sube por el vial y rodea el testero;", "піднімається проїздом і огинає торець;"), ("vial de servicio", "службовий проїзд"), ("rodea el testero por detrás", "огинає торець ззаду"), ("continúa al patio y al garaje", "продовжується до двору і гаража"), ("vehículo de servicio", "службовий транспорт"), ("recorrido en bucle, sin maniobras", "кільцевий маршрут без маневрів"), ("camión", "вантажівка"), ("explanada de maniobra", "розворотний майданчик"), ("pavimento, F35", "мощення, F35"), ("glorieta de giro", "розворотне кільце"), ("isleta", "острівець"),
  ("camión rígido", "вантажівка"), ("recorrido y barrido del camión", "траєкторія й габарит повороту вантажівки"),
  ("recorrido y barrido", "траєкторія й габарит повороту"), ("senda peatonal (losas)", "пішохідна доріжка (плити)"),
  ("senda peatonal", "пішохідна доріжка"), ("senda a la plaza", "доріжка до площі"), ("césped (punteado)", "газон (крапки)"), ("césped", "газон"),
@@ -148,15 +148,38 @@ def traducir(fig):
     fig._uk = True
 
 
+def halo(fig):
+    """halo blanco alrededor de cada rótulo oscuro (cartografía): ninguna línea atraviesa un texto [usuario 27/11]"""
+    if getattr(fig, "_halo", False): return
+    import matplotlib.patheffects as pe
+    from matplotlib.colors import to_rgb
+    for t in fig.findobj(Text):
+        try:
+            if t.get_path_effects() or sum(to_rgb(t.get_color())) > 1.5: continue
+            t.set_path_effects([pe.withStroke(linewidth=3.0, foreground="white")])
+        except Exception:
+            pass
+    fig._halo = True
+
+
+def _calidad(fig, salida):
+    try:
+        import calidad_grafica
+        calidad_grafica.revisar(fig, os.path.basename(str(salida)))
+    except Exception:
+        pass
+
+
 _sf = Figure.savefig
 def _savefig(self, *a, **k):
-    traducir(self); return _sf(self, *a, **k)
+    traducir(self); halo(self); _calidad(self, a[0] if a else k.get("fname", "figura")); return _sf(self, *a, **k)
 Figure.savefig = _savefig
 _ps = PdfPages.savefig
 def _pdfsave(self, figure=None, **k):
     import matplotlib.pyplot as plt
     f = figure if isinstance(figure, Figure) else (plt.figure(figure) if figure is not None else plt.gcf())
-    traducir(f); return _ps(self, figure, **k)
+    traducir(f); halo(f); _calidad(f, getattr(self, "_filename", None) or getattr(getattr(self, "_file", None), "fh", None) and self._file.fh.name or "pdf")
+    return _ps(self, figure, **k)
 PdfPages.savefig = _pdfsave
 import atexit
 atexit.register(lambda: open("TRADUCCION_RESTOS.txt", "a").write("".join(w + "\n" for w in sorted(RESTOS))) if RESTOS else None)

@@ -59,7 +59,7 @@ COTAS = {
  "PUERTAS_H": (3, "puertas del hotel en planta baja alrededor de la columna (por lado)", "usuario (imagina más entradas) · F18 (puertas bajo la banda del hotel)"),
  "PIR_B": (1.3, "lucernarios del bloque alto: lado de la base de cada pirámide", "F01: ≈ 17 px a ≈ 12,5 px/m (escala del barril a esa profundidad)"),
  "PIR_H": (1.2, "lucernarios del bloque alto: altura de cada pirámide", "F01: alto ≈ ancho, corregido por la vista desde arriba (≈ 33°)"),
- "PIR_S": (1.9, "lucernarios del bloque alto: paso entre pirámides de una fila", "F01: 5 por fila en una banda de ≈ 8 m; la 2.ª fila a tresbolillo"),
+ "PIR_S": (1.9, "lucernarios del bloque alto: paso entre pirámides de una fila", "F01: 5 por fila en una banda de ≈ 8 m; disposición H1 (2 filas paralelas a la medianera, a tresbolillo) DECIDIDA por el usuario 27/11"),
  "LUC_X": (0.0, "lucernario: X (según U)", "F01 / postal: de frente al mirar desde la plaza"),
  "LUC_Y": (-13.06, 'lucernario: Y (según N)', 'Alamy con vista corregida a 179,7° (cuña de escalera en el borde izquierdo; 19 aletas) + componente U de F09: lateral 8,34 m'),
  "LUC_R": (1.6, "radio de la base del lucernario", "Alamy: base 92 px / 28,4 px/m = 3,2 m"),

@@ -271,8 +271,8 @@ def base():
         if perfil.area() <= 0: perfil = CrossSection([[(0.0, 0.0), (0.0, 1.0), (1.6, 0.0)]])
         return Manifold.extrude(perfil, 1.6).rotate((90, 0, 0)).translate((x - 0.8, y + 0.8, Z_P1 - 0.01))
     # 10 LUCERNARIOS PIRAMIDALES sobre la cubierta del bloque alto, junto a la medianera [F01 1984: «se ven distintos», son
-    # pirámides de base cuadrada, no dientes de sierra · usuario 27/11]. Disposición: DUDA 8, PENDIENTE DEL USUARIO
-    # (DUDA8_LUCERNARIOS.png, hipótesis H1/H2/H3). Mientras tanto, H1: dos filas de 5 paralelas a la medianera, la 2.ª a tresbolillo
+    # pirámides de base cuadrada, no dientes de sierra · usuario 27/11]. Disposición H1, DECIDIDA POR EL USUARIO (27/11, duda 8):
+    # dos filas de 5 paralelas a la medianera, la 2.ª a tresbolillo
     def piramide(x, y):
         b_, h_ = _v["PIR_B"], _v["PIR_H"]
         return Manifold.extrude(CrossSection.square((b_, b_), True), h_, 0, 0.0, (0.0, 0.0)).translate((x, y, Z_ALTO - 0.01))

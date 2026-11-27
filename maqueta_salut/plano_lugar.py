@@ -294,28 +294,35 @@ def hoja_lugar():
 
     # --- 5. rótulos
     rot = lambda p, s, **k: ax.text(*p, s, zorder=10, **k)
-    rot((50.0, 8.0), "PLAZA\n(asfalto)", fontsize=9, weight="bold", ha="center")
-    rot(np.array(SW(36, -4.0)) + np.array([0, 0.7]), "plaza abierta a la calle, sin bordillo (F14)", fontsize=5.0, ha="left", rotation=math.degrees(E.PHI), style="italic")
+    caja = dict(fc="white", ec="none", pad=1.2)                       # rótulos grandes: fondo limpio (sin punteado ni líneas debajo)
+    rot((52.0, 9.0), "PLAZA\n(asfalto)", fontsize=9, weight="bold", ha="center", bbox=caja)
+    rot((52.0, 4.2), "autobuses (F14, F15, F70)", fontsize=6, ha="center")
+    rot(np.array(SW(25, -4.0)) + np.array([0, 0.7]), "plaza abierta a la calle, sin bordillo (F14)", fontsize=5.0, ha="left", rotation=math.degrees(E.PHI), style="italic")
     rot(np.array(en_carril(XL[1] - 1)) + np.array([0, -2.6]), "desde la calle Ivana Mazepy", fontsize=6, ha="right", rotation=math.degrees(E.PHI))
     rot(np.array(en_carril2(XL[1] - 1)) + np.array([0, -3.0]), "hacia la calle", fontsize=6, ha="right", rotation=math.degrees(E.PHI))
-    rot(SW(x0 - 30, -15.5) + np.array([0, 0.3]), "calle Ivana Mazepy", fontsize=8, ha="center", rotation=math.degrees(E.PHI))
-    rot(E.P(16, -31.5), "autobuses (F14, F15, F70)", fontsize=6, ha="center")
+    rot(SW(x0 - 18, -15.5) + np.array([0, 0.3]), "calle Ivana Mazepy", fontsize=8, ha="center", rotation=math.degrees(E.PHI))
     rot((xr + 3.4, 72), "vial de servicio 5,0 m (F47, 1984)", fontsize=6.3, rotation=90, va="center")
     rot((xr + 3.4, yA + 6.0), "rodea el testero por detrás (F47)", fontsize=6, va="center")
     rot((xw - 4.4, 62.0), "sigue al patio (sin foto): allí gira o sale – duda", fontsize=5.5, rotation=90, va="center", style="italic")
-    rot((xr + 3.4, 50.0), "vehículo de servicio (camión 9 m): entra desde la calle\npor la plaza, sube por el vial y rodea el testero;\npasa bajo el vuelo de la torre (+14,51)", fontsize=5.5, ha="left", va="center", style="italic")
+    rot((xr + 3.4, 50.0), "vehículo de servicio (camión 9 m):\nentra desde la calle por la plaza,\nsube por el vial y rodea el testero;\npasa bajo el vuelo de la torre (+14,51)", fontsize=5.5, ha="left", va="center", style="italic")
     rot((xc - 1.6, yh + 6), "senda peatonal", fontsize=5.3, rotation=90, va="center")
-    rot((E.W_P + 5.6, 62), "césped (F47, F73)", fontsize=6.5, rotation=90, va="center")
+    rot((E.W_P + 4.73, 62), "césped (F47, F73)", fontsize=6.5, rotation=90, ha="center", va="center")
     rot((xr + 9.6, 30.5), "senda a la plaza", fontsize=5.3, rotation=-60)
-    rot((48, 84), "PARQUE\n(arbolado, F01, F23, F47)", fontsize=9, weight="bold", ha="center")
+    rot((48, 84), "PARQUE\n(arbolado, F01, F23, F47)", fontsize=9, weight="bold", ha="center", bbox=caja)
     rot((-8, 30), "patio de la L\n(sin foto)", fontsize=7, ha="center", style="italic")
-    for p_, d_, t_ in ((E.P(7.0, yf - 2.2), N, "entrada hotel"), (E.P(-9.0, yf - 2.2), N, "entrada restaurante"),
-                       ((E.W_P + 1.4, E.Y_CUNA + 2.6), (0, -1), "rampa")):            # entradas (Ching: flecha llena)
-        p_ = np.array(p_, float); d_ = np.array(d_, float); n_ = np.array([-d_[1], d_[0]])
-        ax.add_patch(Polygon([p_ + d_ * 0.9, p_ - d_ * 0.6 + n_ * 0.6, p_ - d_ * 0.6 - n_ * 0.6], closed=True, fc="k", ec="k", zorder=10))
-    ax.annotate("medianera (linde)", tuple(SW(x0, 4.0)), tuple(SW(x0 - 12, -2.5) + np.array([0, -1])), fontsize=6, zorder=10, arrowprops=dict(arrowstyle="-", lw=0.5))
-    ax.text(*(np.array([6.4, 72.0])), "HOTEL SALUT", fontsize=8, weight="bold", rotation=90, ha="center", va="center", zorder=10)
-    nc = np.array([XL[0] + 9, YL[1] - 10]); nd = np.array([-0.914, 0.407])    # norte (mismo que en todas las plantas)
+    # entradas (Ching: flecha llena). Las del hotel y el restaurante quedan BAJO EL BARRIL (+14,51): en la vista desde arriba no se
+    # dibujan encima de la cubierta (R9); la flecha se pone fuera del borde del barril, en la dirección de la puerta, apuntando a ella
+    TT = np.array(E.T)
+    for p_, t_ in ((E.P(7.0, yf - 2.2), "entrada hotel"), (E.P(-9.0, yf - 2.2), "entrada restaurante")):
+        u_ = np.array(p_, float) - TT; u_ /= np.linalg.norm(u_)
+        c_ = TT + u_ * (E.R_B + 1.3); d_ = -u_; n_ = np.array([-d_[1], d_[0]])
+        ax.add_patch(Polygon([c_ + d_ * 0.9, c_ - d_ * 0.6 + n_ * 0.6, c_ - d_ * 0.6 - n_ * 0.6], closed=True, fc="k", ec="white", lw=0.8, zorder=10))
+    p_ = np.array((E.W_P + 1.4, E.Y_CUNA + 2.6)); d_ = np.array([0.0, -1.0]); n_ = np.array([1.0, 0.0])          # rampa de acceso
+    ax.add_patch(Polygon([p_ + d_ * 0.9, p_ - d_ * 0.6 + n_ * 0.6, p_ - d_ * 0.6 - n_ * 0.6], closed=True, fc="k", ec="white", lw=0.8, zorder=10))
+    ax.annotate("medianera (linde)", tuple(SW(x0, 4.0)), tuple(SW(x0 - 12, -2.5) + np.array([0, -1])), fontsize=6, zorder=10,
+                bbox=dict(fc="white", ec="none", pad=0.8), arrowprops=dict(arrowstyle="-", lw=0.5, shrinkA=0))      # la línea sale del borde del rótulo
+    ax.text(*(np.array([3.7, 66.0])), "HOTEL SALUT", fontsize=8, weight="bold", rotation=90, ha="center", va="center", zorder=10)
+    nc = np.array([XL[0] + 13, YL[1] - 12]); nd = np.array([-0.914, 0.407])    # norte (mismo que en todas las plantas)
     ax.add_patch(Circle(nc, 5.0, fill=False, ec="k", lw=0.8, zorder=10))
     ax.annotate("", tuple(nc + nd * 6.5), tuple(nc - nd * 4.0), arrowprops=dict(arrowstyle="-|>,head_width=0.6,head_length=1.2", lw=1.6, color="k"), zorder=10.1)
     ax.text(*(nc + nd * 9.0), "N", fontsize=12, weight="bold", ha="center", va="center", zorder=10)

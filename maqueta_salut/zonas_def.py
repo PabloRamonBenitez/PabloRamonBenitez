@@ -73,7 +73,7 @@ ZONAS = [
  ("Z32", "Lucernarios piramidales bajo el cuello", "Torre", "cil", (T, E.R_COL, E._v["LUC_CR"] + 1.5, E.Z_P1, E.Z_P1 + E._v["LUC_CH"])),
  ("Z33", "Pie de la escalera: losa blanca, núcleo y celosía baja", "Escalera", "pri",
   [([tuple(E.esc_ang_pt(r, d)) for r, d in ((E.ESC_R0, -E.ESC_HB), (E.ESC_RC, -E.ESC_HB), (E.ESC_RC, E.ESC_HB), (E.ESC_R0, E.ESC_HB))], E.Z_P1, E._v["ESC_Z0"])]),
- ("Z34", "10 lucernarios piramidales junto a la medianera (F01); colocación: duda 8", "Ala corta", "pri",
+ ("Z34", "10 lucernarios piramidales: 2 filas de 5 paralelas a la medianera, a tresbolillo (F01; H1 decidida 27/11)", "Ala corta", "pri",
   [([(-E.L_C + 0.5, -0.5), (-E.L_C + 4.5, -0.5), (-E.L_C + 4.5, 11.5), (-E.L_C + 0.5, 11.5)], E.Z_ALTO, E.Z_ALTO + 1.0)]),
  ("Z35", "Techo del restaurante en rampa (+7,20 → +11,50)", "Ala larga", "pri",
   [([(0, Qy + E._v["R2_Y0"]), (E.W_BAR + E._v["V_BAR"], Qy + E._v["R2_Y0"]), (E.W_BAR + E._v["V_BAR"], Qy + E._v["R2_Y0"] + E._v["R2_L"]), (0, Qy + E._v["R2_Y0"] + E._v["R2_L"])], E.Z_P1, E.Z_BAR_C)]),

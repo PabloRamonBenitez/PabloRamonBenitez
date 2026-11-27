@@ -27,8 +27,8 @@ Los juegos A3 y A4 y el plano de lugar van **en ucraniano** (`traduccion.py`). L
 | Archivo | Contenido |
 |---|---|
 | `MATRIZ_ZONAS_FOTOS_v2.xlsx` / `MATRIZ_v2.png` | Tabla de 35 zonas × 28 fotos: **80 OK · 144 ≈ · 0 NO · 0 ?**. Incluye las hojas Evidencias, Conflictos, Columnas y Juntas. |
-| `COHERENCIA_VISTAS.md` | 94 comprobaciones entre el 3D, el catálogo de huecos y los planos (triangulación A–B, A–C y A–D exactas): 94/94 OK. |
-| `CALIDAD_GRAFICA.md` | Puerta 3b: rótulos que se pisan, caen sobre líneas o se salen del dibujo o de la hoja, en todas las láminas. |
+| `COHERENCIA_VISTAS.md` | 98 comprobaciones entre el 3D, el catálogo de huecos y los planos (triangulación A–B, A–C y A–D exactas): 98/98 OK. |
+| `CALIDAD_GRAFICA.md` | Puerta 3b: en cada hoja guardada se miden los rótulos que se pisan, caen sobre líneas, se cortan, cruzan el marco o se salen. Estado: plano de lugar 0 · A3 2 · A4 2 (cuatro rótulos, legibles con su halo blanco) · láminas de trabajo con restos conocidos. |
 | `ORDENES.md` | **Lista viva de órdenes y mandatos** del usuario, con fecha y control. Se repasa entera antes de cada entrega. |
 | `METODO_COMPROBACION.md` / `AUDITORIA_PLANOS.md` / `AUDITORIA_NUDOS.png` | Las 5 puertas de comprobación. Auditoría automática de todas las plantas y secciones: **0 defectos** (astillas, rendijas, nudos, reglas del usuario y entregables antiguos). Hoja de los encuentros más complejos ampliados. |
 | `RONDA_ABSOLUTA.md` | Informe de la ronda del 26/11: tus indicaciones una por una, las hipótesis H1–H4, las preguntas P3–P5 y la duda 7, con sus pruebas. |

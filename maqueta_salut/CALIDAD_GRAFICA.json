@@ -1,0 +1,806 @@
+{
+ "SALUT_planos_definitivos.pdf": [
+  {
+   "tipo": "fuera de la hoja",
+   "texto": "Datos de planta: ala larga 12,74 / bar 6,21 (Bing)",
+   "x_mm": 431,
+   "y_mm": 229,
+   "pagina": 2
+  },
+  {
+   "tipo": "fuera de la hoja",
+   "texto": "−20",
+   "x_mm": 60,
+   "y_mm": 310,
+   "pagina": 2
+  },
+  {
+   "tipo": "fuera de la hoja",
+   "texto": "30",
+   "x_mm": 422,
+   "y_mm": 189,
+   "pagina": 2
+  },
+  {
+   "tipo": "fuera de la hoja",
+   "texto": "Datos de planta: ala larga 12,74 / bar 6,21 (Bing)",
+   "x_mm": 431,
+   "y_mm": 229,
+   "pagina": 3
+  },
+  {
+   "tipo": "fuera de la hoja",
+   "texto": "−20",
+   "x_mm": 60,
+   "y_mm": 310,
+   "pagina": 3
+  },
+  {
+   "tipo": "fuera de la hoja",
+   "texto": "30",
+   "x_mm": 422,
+   "y_mm": 189,
+   "pagina": 3
+  },
+  {
+   "tipo": "fuera de la hoja",
+   "texto": "Datos de planta: ala larga 12,74 / bar 6,21 (Bing)",
+   "x_mm": 431,
+   "y_mm": 229,
+   "pagina": 4
+  },
+  {
+   "tipo": "fuera de la hoja",
+   "texto": "−20",
+   "x_mm": 60,
+   "y_mm": 310,
+   "pagina": 4
+  },
+  {
+   "tipo": "fuera de la hoja",
+   "texto": "30",
+   "x_mm": 422,
+   "y_mm": 189,
+   "pagina": 4
+  },
+  {
+   "tipo": "fuera de la hoja",
+   "texto": "Datos de planta: ala larga 12,74 / bar 6,21 (Bing)",
+   "x_mm": 431,
+   "y_mm": 229,
+   "pagina": 5
+  },
+  {
+   "tipo": "fuera de la hoja",
+   "texto": "−20",
+   "x_mm": 60,
+   "y_mm": 310,
+   "pagina": 5
+  },
+  {
+   "tipo": "fuera de la hoja",
+   "texto": "30",
+   "x_mm": 422,
+   "y_mm": 189,
+   "pagina": 5
+  },
+  {
+   "tipo": "fuera de la hoja",
+   "texto": "Datos de planta: ala larga 12,74 / bar 6,21 (Bing)",
+   "x_mm": 431,
+   "y_mm": 229,
+   "pagina": 6
+  },
+  {
+   "tipo": "fuera de la hoja",
+   "texto": "−20",
+   "x_mm": 60,
+   "y_mm": 310,
+   "pagina": 6
+  },
+  {
+   "tipo": "fuera de la hoja",
+   "texto": "30",
+   "x_mm": 422,
+   "y_mm": 189,
+   "pagina": 6
+  },
+  {
+   "tipo": "fuera de la hoja",
+   "texto": "Datos de planta: ala larga 12,74 / bar 6,21 (Bing)",
+   "x_mm": 431,
+   "y_mm": 229,
+   "pagina": 7
+  },
+  {
+   "tipo": "fuera de la hoja",
+   "texto": "−20",
+   "x_mm": 60,
+   "y_mm": 310,
+   "pagina": 7
+  },
+  {
+   "tipo": "fuera de la hoja",
+   "texto": "30",
+   "x_mm": 422,
+   "y_mm": 189,
+   "pagina": 7
+  },
+  {
+   "tipo": "fuera de la hoja",
+   "texto": "Datos de planta: ala larga 12,74 / bar 6,21 (Bing)",
+   "x_mm": 431,
+   "y_mm": 229,
+   "pagina": 8
+  },
+  {
+   "tipo": "fuera de la hoja",
+   "texto": "−20",
+   "x_mm": 60,
+   "y_mm": 310,
+   "pagina": 8
+  },
+  {
+   "tipo": "fuera de la hoja",
+   "texto": "30",
+   "x_mm": 422,
+   "y_mm": 189,
+   "pagina": 8
+  },
+  {
+   "tipo": "fuera de la hoja",
+   "texto": "−20",
+   "x_mm": 52,
+   "y_mm": 304,
+   "pagina": 9
+  },
+  {
+   "tipo": "fuera de la hoja",
+   "texto": "120",
+   "x_mm": 52,
+   "y_mm": -24,
+   "pagina": 9
+  },
+  {
+   "tipo": "fuera de la hoja",
+   "texto": "−20",
+   "x_mm": -12,
+   "y_mm": 246,
+   "pagina": 10
+  },
+  {
+   "tipo": "fuera de la hoja",
+   "texto": "140",
+   "x_mm": 455,
+   "y_mm": 246,
+   "pagina": 10
+  },
+  {
+   "tipo": "fuera de la hoja",
+   "texto": "−20",
+   "x_mm": -17,
+   "y_mm": 261,
+   "pagina": 11
+  },
+  {
+   "tipo": "fuera de la hoja",
+   "texto": "120",
+   "x_mm": 461,
+   "y_mm": 261,
+   "pagina": 11
+  },
+  {
+   "tipo": "fuera de la hoja",
+   "texto": "−10",
+   "x_mm": 34,
+   "y_mm": 300,
+   "pagina": 12
+  },
+  {
+   "tipo": "fuera de la hoja",
+   "texto": "60",
+   "x_mm": 34,
+   "y_mm": 0,
+   "pagina": 12
+  },
+  {
+   "tipo": "fuera de la hoja",
+   "texto": "−20",
+   "x_mm": -18,
+   "y_mm": 262,
+   "pagina": 13
+  },
+  {
+   "tipo": "fuera de la hoja",
+   "texto": "120",
+   "x_mm": 469,
+   "y_mm": 262,
+   "pagina": 13
+  },
+  {
+   "tipo": "fuera de la hoja",
+   "texto": "−10",
+   "x_mm": 51,
+   "y_mm": 300,
+   "pagina": 14
+  },
+  {
+   "tipo": "fuera de la hoja",
+   "texto": "60",
+   "x_mm": 52,
+   "y_mm": 0,
+   "pagina": 14
+  },
+  {
+   "tipo": "fuera de la hoja",
+   "texto": "−10",
+   "x_mm": 94,
+   "y_mm": 300,
+   "pagina": 15
+  },
+  {
+   "tipo": "fuera de la hoja",
+   "texto": "60",
+   "x_mm": 95,
+   "y_mm": 0,
+   "pagina": 15
+  },
+  {
+   "tipo": "fuera de la hoja",
+   "texto": "−10",
+   "x_mm": 90,
+   "y_mm": 300,
+   "pagina": 16
+  },
+  {
+   "tipo": "fuera de la hoja",
+   "texto": "60",
+   "x_mm": 90,
+   "y_mm": 0,
+   "pagina": 16
+  },
+  {
+   "tipo": "fuera de la hoja",
+   "texto": "−10",
+   "x_mm": 90,
+   "y_mm": 300,
+   "pagina": 17
+  },
+  {
+   "tipo": "fuera de la hoja",
+   "texto": "60",
+   "x_mm": 90,
+   "y_mm": 0,
+   "pagina": 17
+  },
+  {
+   "tipo": "fuera de la hoja",
+   "texto": "−10",
+   "x_mm": 107,
+   "y_mm": 300,
+   "pagina": 18
+  },
+  {
+   "tipo": "fuera de la hoja",
+   "texto": "60",
+   "x_mm": 107,
+   "y_mm": 0,
+   "pagina": 18
+  },
+  {
+   "tipo": "fuera de la hoja",
+   "texto": "−40",
+   "x_mm": -6,
+   "y_mm": 195,
+   "pagina": 19
+  },
+  {
+   "tipo": "rótulo sobre líneas",
+   "texto": "120",
+   "fraccion": 0.852,
+   "x_mm": 281,
+   "y_mm": 194,
+   "pagina": 20
+  },
+  {
+   "tipo": "rótulos que se pisan",
+   "texto": "HOTEL SALUT (Kyiv, 1984) – ALZADO 3 – CA  ×  60",
+   "x_mm": 13,
+   "y_mm": 7,
+   "pagina": 21
+  },
+  {
+   "tipo": "fuera de la hoja",
+   "texto": "−120",
+   "x_mm": -10,
+   "y_mm": 194,
+   "pagina": 22
+  },
+  {
+   "tipo": "fuera de la hoja",
+   "texto": "−40",
+   "x_mm": -7,
+   "y_mm": 237,
+   "pagina": 23
+  },
+  {
+   "tipo": "rótulos que se pisan",
+   "texto": "HOTEL SALUT (Kyiv, 1984) – ALZADO 5 – TE  ×  60",
+   "x_mm": 13,
+   "y_mm": 7,
+   "pagina": 23
+  },
+  {
+   "tipo": "fuera de la hoja",
+   "texto": "a",
+   "x_mm": -223,
+   "y_mm": 458,
+   "pagina": 24
+  },
+  {
+   "tipo": "fuera de la hoja",
+   "texto": "1",
+   "x_mm": -154,
+   "y_mm": 458,
+   "pagina": 24
+  },
+  {
+   "tipo": "fuera de la hoja",
+   "texto": "T",
+   "x_mm": -75,
+   "y_mm": 458,
+   "pagina": 24
+  },
+  {
+   "tipo": "fuera de la hoja",
+   "texto": "b",
+   "x_mm": 16,
+   "y_mm": 458,
+   "pagina": 24
+  }
+ ],
+ "lam_01.png": [],
+ "lam_02.png": [
+  {
+   "tipo": "fuera de la hoja",
+   "texto": "Datos de planta: ala larga 12,74 / bar 6,21 (Bing)",
+   "x_mm": 431,
+   "y_mm": 229,
+   "pagina": 1
+  },
+  {
+   "tipo": "fuera de la hoja",
+   "texto": "−20",
+   "x_mm": 60,
+   "y_mm": 310,
+   "pagina": 1
+  },
+  {
+   "tipo": "fuera de la hoja",
+   "texto": "30",
+   "x_mm": 422,
+   "y_mm": 189,
+   "pagina": 1
+  }
+ ],
+ "lam_03.png": [
+  {
+   "tipo": "fuera de la hoja",
+   "texto": "Datos de planta: ala larga 12,74 / bar 6,21 (Bing)",
+   "x_mm": 431,
+   "y_mm": 229,
+   "pagina": 1
+  },
+  {
+   "tipo": "fuera de la hoja",
+   "texto": "−20",
+   "x_mm": 60,
+   "y_mm": 310,
+   "pagina": 1
+  },
+  {
+   "tipo": "fuera de la hoja",
+   "texto": "30",
+   "x_mm": 422,
+   "y_mm": 189,
+   "pagina": 1
+  }
+ ],
+ "lam_04.png": [
+  {
+   "tipo": "fuera de la hoja",
+   "texto": "Datos de planta: ala larga 12,74 / bar 6,21 (Bing)",
+   "x_mm": 431,
+   "y_mm": 229,
+   "pagina": 1
+  },
+  {
+   "tipo": "fuera de la hoja",
+   "texto": "−20",
+   "x_mm": 60,
+   "y_mm": 310,
+   "pagina": 1
+  },
+  {
+   "tipo": "fuera de la hoja",
+   "texto": "30",
+   "x_mm": 422,
+   "y_mm": 189,
+   "pagina": 1
+  }
+ ],
+ "lam_05.png": [
+  {
+   "tipo": "fuera de la hoja",
+   "texto": "Datos de planta: ala larga 12,74 / bar 6,21 (Bing)",
+   "x_mm": 431,
+   "y_mm": 229,
+   "pagina": 1
+  },
+  {
+   "tipo": "fuera de la hoja",
+   "texto": "−20",
+   "x_mm": 60,
+   "y_mm": 310,
+   "pagina": 1
+  },
+  {
+   "tipo": "fuera de la hoja",
+   "texto": "30",
+   "x_mm": 422,
+   "y_mm": 189,
+   "pagina": 1
+  }
+ ],
+ "lam_06.png": [
+  {
+   "tipo": "fuera de la hoja",
+   "texto": "Datos de planta: ala larga 12,74 / bar 6,21 (Bing)",
+   "x_mm": 431,
+   "y_mm": 229,
+   "pagina": 1
+  },
+  {
+   "tipo": "fuera de la hoja",
+   "texto": "−20",
+   "x_mm": 60,
+   "y_mm": 310,
+   "pagina": 1
+  },
+  {
+   "tipo": "fuera de la hoja",
+   "texto": "30",
+   "x_mm": 422,
+   "y_mm": 189,
+   "pagina": 1
+  }
+ ],
+ "lam_07.png": [
+  {
+   "tipo": "fuera de la hoja",
+   "texto": "Datos de planta: ala larga 12,74 / bar 6,21 (Bing)",
+   "x_mm": 431,
+   "y_mm": 229,
+   "pagina": 1
+  },
+  {
+   "tipo": "fuera de la hoja",
+   "texto": "−20",
+   "x_mm": 60,
+   "y_mm": 310,
+   "pagina": 1
+  },
+  {
+   "tipo": "fuera de la hoja",
+   "texto": "30",
+   "x_mm": 422,
+   "y_mm": 189,
+   "pagina": 1
+  }
+ ],
+ "lam_08.png": [
+  {
+   "tipo": "fuera de la hoja",
+   "texto": "Datos de planta: ala larga 12,74 / bar 6,21 (Bing)",
+   "x_mm": 431,
+   "y_mm": 229,
+   "pagina": 1
+  },
+  {
+   "tipo": "fuera de la hoja",
+   "texto": "−20",
+   "x_mm": 60,
+   "y_mm": 310,
+   "pagina": 1
+  },
+  {
+   "tipo": "fuera de la hoja",
+   "texto": "30",
+   "x_mm": 422,
+   "y_mm": 189,
+   "pagina": 1
+  }
+ ],
+ "lam_09.png": [
+  {
+   "tipo": "fuera de la hoja",
+   "texto": "−20",
+   "x_mm": 52,
+   "y_mm": 304,
+   "pagina": 1
+  },
+  {
+   "tipo": "fuera de la hoja",
+   "texto": "120",
+   "x_mm": 52,
+   "y_mm": -24,
+   "pagina": 1
+  }
+ ],
+ "lam_10.png": [
+  {
+   "tipo": "fuera de la hoja",
+   "texto": "−20",
+   "x_mm": -12,
+   "y_mm": 246,
+   "pagina": 1
+  },
+  {
+   "tipo": "fuera de la hoja",
+   "texto": "140",
+   "x_mm": 455,
+   "y_mm": 246,
+   "pagina": 1
+  }
+ ],
+ "lam_11.png": [
+  {
+   "tipo": "fuera de la hoja",
+   "texto": "−20",
+   "x_mm": -17,
+   "y_mm": 261,
+   "pagina": 1
+  },
+  {
+   "tipo": "fuera de la hoja",
+   "texto": "120",
+   "x_mm": 461,
+   "y_mm": 261,
+   "pagina": 1
+  }
+ ],
+ "lam_12.png": [
+  {
+   "tipo": "fuera de la hoja",
+   "texto": "−10",
+   "x_mm": 34,
+   "y_mm": 300,
+   "pagina": 1
+  },
+  {
+   "tipo": "fuera de la hoja",
+   "texto": "60",
+   "x_mm": 34,
+   "y_mm": 0,
+   "pagina": 1
+  }
+ ],
+ "lam_13.png": [
+  {
+   "tipo": "fuera de la hoja",
+   "texto": "−20",
+   "x_mm": -18,
+   "y_mm": 262,
+   "pagina": 1
+  },
+  {
+   "tipo": "fuera de la hoja",
+   "texto": "120",
+   "x_mm": 469,
+   "y_mm": 262,
+   "pagina": 1
+  }
+ ],
+ "lam_14.png": [
+  {
+   "tipo": "fuera de la hoja",
+   "texto": "−10",
+   "x_mm": 51,
+   "y_mm": 300,
+   "pagina": 1
+  },
+  {
+   "tipo": "fuera de la hoja",
+   "texto": "60",
+   "x_mm": 52,
+   "y_mm": 0,
+   "pagina": 1
+  }
+ ],
+ "lam_15.png": [
+  {
+   "tipo": "fuera de la hoja",
+   "texto": "−10",
+   "x_mm": 94,
+   "y_mm": 300,
+   "pagina": 1
+  },
+  {
+   "tipo": "fuera de la hoja",
+   "texto": "60",
+   "x_mm": 95,
+   "y_mm": 0,
+   "pagina": 1
+  }
+ ],
+ "lam_16.png": [
+  {
+   "tipo": "fuera de la hoja",
+   "texto": "−10",
+   "x_mm": 90,
+   "y_mm": 300,
+   "pagina": 1
+  },
+  {
+   "tipo": "fuera de la hoja",
+   "texto": "60",
+   "x_mm": 90,
+   "y_mm": 0,
+   "pagina": 1
+  }
+ ],
+ "lam_17.png": [
+  {
+   "tipo": "fuera de la hoja",
+   "texto": "−10",
+   "x_mm": 90,
+   "y_mm": 300,
+   "pagina": 1
+  },
+  {
+   "tipo": "fuera de la hoja",
+   "texto": "60",
+   "x_mm": 90,
+   "y_mm": 0,
+   "pagina": 1
+  }
+ ],
+ "lam_18.png": [
+  {
+   "tipo": "fuera de la hoja",
+   "texto": "−10",
+   "x_mm": 107,
+   "y_mm": 300,
+   "pagina": 1
+  },
+  {
+   "tipo": "fuera de la hoja",
+   "texto": "60",
+   "x_mm": 107,
+   "y_mm": 0,
+   "pagina": 1
+  }
+ ],
+ "lam_19.png": [
+  {
+   "tipo": "fuera de la hoja",
+   "texto": "−40",
+   "x_mm": -6,
+   "y_mm": 195,
+   "pagina": 1
+  }
+ ],
+ "lam_20.png": [
+  {
+   "tipo": "rótulo sobre líneas",
+   "texto": "120",
+   "fraccion": 0.852,
+   "x_mm": 281,
+   "y_mm": 194,
+   "pagina": 1
+  }
+ ],
+ "lam_21.png": [
+  {
+   "tipo": "rótulos que se pisan",
+   "texto": "HOTEL SALUT (Kyiv, 1984) – ALZADO 3 – CA  ×  60",
+   "x_mm": 13,
+   "y_mm": 7,
+   "pagina": 1
+  }
+ ],
+ "lam_22.png": [
+  {
+   "tipo": "fuera de la hoja",
+   "texto": "−120",
+   "x_mm": -10,
+   "y_mm": 194,
+   "pagina": 1
+  }
+ ],
+ "lam_23.png": [
+  {
+   "tipo": "fuera de la hoja",
+   "texto": "−40",
+   "x_mm": -7,
+   "y_mm": 237,
+   "pagina": 1
+  },
+  {
+   "tipo": "rótulos que se pisan",
+   "texto": "HOTEL SALUT (Kyiv, 1984) – ALZADO 5 – TE  ×  60",
+   "x_mm": 13,
+   "y_mm": 7,
+   "pagina": 1
+  }
+ ],
+ "lam_24.png": [
+  {
+   "tipo": "fuera de la hoja",
+   "texto": "a",
+   "x_mm": -223,
+   "y_mm": 458,
+   "pagina": 1
+  },
+  {
+   "tipo": "fuera de la hoja",
+   "texto": "1",
+   "x_mm": -154,
+   "y_mm": 458,
+   "pagina": 1
+  },
+  {
+   "tipo": "fuera de la hoja",
+   "texto": "T",
+   "x_mm": -75,
+   "y_mm": 458,
+   "pagina": 1
+  },
+  {
+   "tipo": "fuera de la hoja",
+   "texto": "b",
+   "x_mm": 16,
+   "y_mm": 458,
+   "pagina": 1
+  }
+ ],
+ "lam_25.png": [],
+ "lam_26.png": [],
+ "SALUT_planos_A4.pdf": [
+  {
+   "tipo": "rótulo sobre líneas",
+   "texto": "план 2-го поверху / майданчик (вище)",
+   "fraccion": 0.141,
+   "x_mm": 65,
+   "y_mm": 99,
+   "pagina": 4
+  },
+  {
+   "tipo": "rótulo sobre líneas",
+   "texto": "L 95°",
+   "fraccion": 0.128,
+   "x_mm": 132,
+   "y_mm": 230,
+   "pagina": 11
+  }
+ ],
+ "SALUT_planos_A3_presentacion.pdf": [
+  {
+   "tipo": "rótulo sobre líneas",
+   "texto": "ядро",
+   "fraccion": 0.146,
+   "x_mm": 58,
+   "y_mm": 108,
+   "pagina": 8
+  },
+  {
+   "tipo": "rótulo sobre líneas",
+   "texto": "ядро",
+   "fraccion": 0.146,
+   "x_mm": 61,
+   "y_mm": 108,
+   "pagina": 9
+  }
+ ],
+ "AUDITORIA_NUDOS.png": []
+}

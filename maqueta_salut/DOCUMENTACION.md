@@ -34,6 +34,8 @@ Los juegos A3 y A4 y el plano de lugar van **en ucraniano** (`traduccion.py`). L
 | `HISTORICO/` | Juegos de planos, PDF y STL de días anteriores (no usar). |
 
 ## Pendiente
+- **Duda 8**: colocación de los 10 lucernarios piramidales del bloque alto (`DUDA8_LUCERNARIOS.png`). El modelo lleva H1 como provisional.
+- **Patio de la L**: no sale en ninguna foto. No se sabe si el vial de servicio sale por él o da allí la vuelta (en el plano de lugar va a trazos con «?»).
 - 4 zonas sin ningún OK, porque no hay foto que las mida: PB del ala corta, línea posterior, fachada del patio y patio.
 - En las secciones, lo visto tras el corte sigue siendo una imagen, no líneas.
 - Por encima del tambor, Alamy no coincide con las demás fotos (≈ 10 %): se usan sus alturas, no sus anchos.

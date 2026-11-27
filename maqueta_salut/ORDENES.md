@@ -25,6 +25,8 @@ Cada orden lleva su fecha y cómo se comprueba. Si una entrega contradice una l�
 | R4 | Escalera en planta y sección de ida y vuelta: rellano de vuelta en el cono, rellanos de planta = forjados, paso libre, acaba en la última planta | 26/11, 27/11 | A + M |
 | R5 | Carpintería dibujada como en arquitectura (marco, hoja, vidrio, vierteaguas) | 26/11 | M |
 | R6 | Textos de los juegos A3/A4 y del plano de lugar en **ucraniano** | 26/11 | A (0 palabras en español) |
+| R8 | Sin símbolos repetidos: un solo camión, como referencia de tamaño | 27/11 | M |
+| R9 | En planta, lo que queda **debajo** de un elemento más alto se oculta: la cubierta del restaurante y la rampa bajo el barril, incluidos sus rótulos. Los rótulos caben en la parte que se ve | 27/11 | M (`laminas.oculta`) |
 | R7 | Sin interiores inventados, salvo lo autorizado: núcleo 0,45, pasillo 1,20, muros radiales en el eje de las aletas (solo en planos) | 26/11 | M |
 
 ## Edificio: decisiones cerradas (no se pueden perder)
@@ -43,7 +45,7 @@ Cada orden lleva su fecha y cómo se comprueba. Si una entrega contradice una l�
 | E11 | Garaje en la PB del ala corta junto a la medianera, bajo la logia (F72) | 27/11 | A |
 | E12 | **Sin fuente** | 27/11 | A |
 | E13 | 6 lucernarios pequeños bajo el cuello (≈ 75°), en el camino de la rampa | 26/11 | A |
-| E14 | 10 lucernarios del bloque alto: **pirámides** (como se ven en F01), junto a la medianera; colocación exacta pendiente de la duda 8 | 26/11, 27/11 | F (duda 8) |
+| E14 | 10 lucernarios del bloque alto: **pirámides** de base cuadrada (1,30 × 1,20, `PIR_*` en el cuadro), junto a la medianera. Colocación: **duda 8 pendiente** (`DUDA8_LUCERNARIOS.png`, H1/H2/H3); el modelo lleva H1 como provisional | 26/11, 27/11 | F (duda 8) |
 | E15 | Gárgolas: una por módulo y planta (solo en planos) | 26/11 | A |
 
 ## Entorno (plano de lugar, foto histórica)

@@ -270,17 +270,16 @@ def base():
         perfil = CrossSection([[(0.0, 0.0), (1.6, 0.0), (0.0, 1.0)]])          # cara vertical acristalada + faldón inclinado
         if perfil.area() <= 0: perfil = CrossSection([[(0.0, 0.0), (0.0, 1.0), (1.6, 0.0)]])
         return Manifold.extrude(perfil, 1.6).rotate((90, 0, 0)).translate((x - 0.8, y + 0.8, Z_P1 - 0.01))
-    # 10 lucernarios en diente de sierra sobre la cubierta del bloque alto, junto a la medianera, en la parte que sale
-    # a la calle: 5 en línea y 5 en otra disposición [F01 1984, usuario 26/11]
-    def diente(x, y):
-        perfil = CrossSection([[(0.0, 0.0), (1.2, 0.0), (0.0, 0.8)]])
-        if perfil.area() <= 0: perfil = CrossSection([[(0.0, 0.0), (0.0, 0.8), (1.2, 0.0)]])
-        return Manifold.extrude(perfil, 1.0).rotate((90, 0, 0)).translate((x - 0.5, y + 0.6, Z_ALTO - 0.01))
-    # F01 (1984): DOS FILAS DE 5 PARALELAS A LA MEDIANERA, pegadas a ella, de la fachada de la calle hacia atrás; la segunda fila
-    # a tresbolillo (desplazada media unidad) – «5 en línea y 5 en una distribución no aleatoria pero distinta» [usuario 26/11, 27/11]
+    # 10 LUCERNARIOS PIRAMIDALES sobre la cubierta del bloque alto, junto a la medianera [F01 1984: «se ven distintos», son
+    # pirámides de base cuadrada, no dientes de sierra · usuario 27/11]. Disposición: DUDA 8, PENDIENTE DEL USUARIO
+    # (DUDA8_LUCERNARIOS.png, hipótesis H1/H2/H3). Mientras tanto, H1: dos filas de 5 paralelas a la medianera, la 2.ª a tresbolillo
+    def piramide(x, y):
+        b_, h_ = _v["PIR_B"], _v["PIR_H"]
+        return Manifold.extrude(CrossSection.square((b_, b_), True), h_, 0, 0.0, (0.0, 0.0)).translate((x, y, Z_ALTO - 0.01))
+    x1_ = -L_C + 0.6 + _v["PIR_B"] / 2; S_ = _v["PIR_S"]
     for i in range(5):
-        sc.append(diente(-L_C + 1.4, 0.6 + 2.0 * i))                         # fila 1, junto a la medianera
-        sc.append(diente(-L_C + 3.4, 1.6 + 2.0 * i))                         # fila 2, a tresbolillo
+        sc.append(piramide(x1_, 0.9 + S_ * i))                                # fila 1, junto a la medianera
+        sc.append(piramide(x1_ + S_, 0.9 + S_ / 2 + S_ * i))                 # fila 2, a tresbolillo
     s.append(ROT(Manifold.batch_boolean(sc, OpType.Add)))
     # ala larga: bar en la mitad interior hasta el tramo final; terraza con peto en la mitad exterior [F47, Bing]
     yb0 = pl["Q"][1] + _v["R2_Y0"]                                      # arranca tras el vuelo del cuello (rellano del giro en U delante) [usuario 26/11]

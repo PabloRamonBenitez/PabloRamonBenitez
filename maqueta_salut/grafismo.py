@@ -20,7 +20,30 @@ def cota_nivel(ax, p, z, z_=82):
             bbox=dict(boxstyle="square,pad=0.15", fc="white", ec=K, lw=0.5), zorder=z_)
 
 
-def eje_rampa(ax, pts, z0, z1, rotulo, discont=False, z_=81, ancho=None):
+def _ocl(zc):
+    """lo que tapa el barril (vista aérea o plantas del barril); None si no tapa nada"""
+    try:
+        import laminas as _LM
+        return _LM.oculta(zc)
+    except Exception:
+        return None
+
+
+def _visible(p, ocl):
+    from shapely.geometry import Point as _Pt
+    return ocl is None or not ocl.contains(_Pt(float(p[0]), float(p[1])))
+
+
+def _plot_vis(ax, P, Q, ocl, **k):
+    if ocl is None:
+        ax.plot([P[0], Q[0]], [P[1], Q[1]], **k); return
+    from shapely.geometry import LineString as _LS
+    s = _LS([tuple(P), tuple(Q)]).difference(ocl)
+    for g in getattr(s, "geoms", [s]):
+        if g.geom_type == "LineString" and g.length > 0.05: ax.plot(*g.xy, **k)
+
+
+def eje_rampa(ax, pts, z0, z1, rotulo, discont=False, z_=81, ancho=None, ocl=None):
     """RAMPA en planta (convención del usuario): triángulo muy fino y claro con la base en el ARRANQUE (abajo, z0) y el vértice en el
     EXTREMO SUPERIOR (z1), donde confluyen las dos líneas (sin marcar ningún punto).
     pts: eje de abajo (pts[0]) a arriba (pts[-1]); ancho: ancho de la rampa (si no, 2,4 m)."""
@@ -29,19 +52,22 @@ def eje_rampa(ax, pts, z0, z1, rotulo, discont=False, z_=81, ancho=None):
     d = b - a; d /= np.linalg.norm(d); n = np.array([-d[1], d[0]]); w = (ancho or 2.4) / 2
     ls = (0, (5, 3)) if discont else "-"
     for s in (-1, 1):
-        ax.plot([a[0] + s * n[0] * w, b[0]], [a[1] + s * n[1] * w, b[1]], color="0.45", lw=0.3, ls=ls, zorder=z_)
-    ax.plot([a[0] - n[0] * w, a[0] + n[0] * w], [a[1] - n[1] * w, a[1] + n[1] * w], color="0.45", lw=0.3, ls=ls, zorder=z_)
+        _plot_vis(ax, a + s * n * w, b, ocl, color="0.45", lw=0.3, ls=ls, zorder=z_)
+    _plot_vis(ax, a - n * w, a + n * w, ocl, color="0.45", lw=0.3, ls=ls, zorder=z_)
     m = a + (b - a) * 0.45
+    if not _visible(m, ocl):                                        # rótulo en la parte visible
+        for f in np.linspace(0.45, 1.0, 12):
+            if _visible(a + (b - a) * f, ocl): m = a + (b - a) * f; break
     ang = _ang(a, b)
     if ang > 90: ang -= 180
     if ang < -90: ang += 180
     ax.text(m[0] + n[0] * (w + 0.5), m[1] + n[1] * (w + 0.5), rotulo, fontsize=4.6, rotation=ang, rotation_mode="anchor", ha="center",
             va="bottom", zorder=z_, color="0.25")
-    cota_nivel(ax, a - d * 1.2, z0)
-    cota_nivel(ax, b + d * 1.2, z1)
+    if _visible(a - d * 1.2, ocl): cota_nivel(ax, a - d * 1.2, z0)
+    if _visible(b + d * 1.2, ocl): cota_nivel(ax, b + d * 1.2, z1)
 
 
-def rampas(ax, zc):
+def rampas(ax, zc, breve=False):
     V = E._v
     pl = E.plantas_base(); y0 = pl["Q"][1] + V["D_HOTF"]
     xr = (E.W_P + E.W_EXT) / 2
@@ -50,19 +76,28 @@ def rampas(ax, zc):
     pmax = V["Z_CON"] * V["RAMPA_P"] / (E.Y_CUNA - y0) * 100          # pendiente al pie (perfil 1 − u^p)
     pmin = 0.0                                                         # junto al hotel, casi plana
     xr = (E.W_P + E.W_EXT - 0.25) / 2                                # eje entre fachada y peto
+    ocl = _ocl(zc)
     eje_rampa(ax, [(xr, E.Y_CUNA - 0.3), (xr, y0 + 0.3)], 0.0, V["Z_CON"],
-              f"rampa de acceso · sube a +{V['Z_CON']:.2f}".replace(".", ","), discont=arriba, ancho=E.W_EXT - E.W_P - 0.45)
+              f"rampa de acceso · sube a +{V['Z_CON']:.2f}".replace(".", ","), discont=arriba, ancho=E.W_EXT - E.W_P - 0.45, ocl=ocl)
     import cotas as KK
     g = KK.planta(); C = np.array(g["C"]); E90 = np.array(g["E90"])
     yb0 = E.plantas_base()["Q"][1] + V["R2_Y0"]; xb = (E.W_BAR + V["V_BAR"]) / 2
-    ax.text((E90[0] + C[0]) / 2 + 1.2, (E90[1] + C[1]) / 2 + 3.0, "meseta +7,20\n(hotel debajo)", fontsize=4.4, style="italic", zorder=81)
-    ax.text(C[0] - 1.0, C[1] - 1.6, "final del giro\n(peto en U)", fontsize=4.4, style="italic", zorder=81)
+    pm = ((E90[0] + C[0]) / 2 + 1.2, (E90[1] + C[1]) / 2 + 3.0); pg_ = (C[0] - 1.0, C[1] - 1.6)
+    if _visible(pm, ocl): ax.text(*pm, "meseta +7,20\n(hotel debajo)", fontsize=4.4, style="italic", zorder=81)
+    if _visible(pg_, ocl): ax.text(*pg_, "final del giro\n(peto en U)", fontsize=4.4, style="italic", zorder=81)       # bajo el barril: no se ve
     # 2) techo del restaurante en rampa: +7,2 → +11,5
     p2 = (E.Z_BAR_C - V["Z_P1"]) / V["R2_L"] * 100
     if zc is None or zc > E.Z_BAR_C:                               # cubierta inclinada (no es rampa de paso): solo en cubiertas
-        ax.annotate("", (xb, yb0 + V["R2_L"] - 0.5), (xb, yb0 + 0.5), arrowprops=dict(arrowstyle="-|>", lw=0.6, color="0.2"), zorder=81)
-        ax.text(xb + 0.5, yb0 + V["R2_L"] / 2, f"cubierta inclinada del restaurante +7,20 → +{E.Z_BAR_C:.2f} ({p2:.0f} %)".replace(".", ","),
-                fontsize=4.6, rotation=90, va="center", zorder=81)
+        ya_, yb_ = yb0 + 0.5, yb0 + V["R2_L"] - 0.5                # flecha y rótulo solo en la parte VISTA (lo de bajo el barril se oculta)
+        if ocl is not None:
+            from shapely.geometry import LineString as _LS
+            s = _LS([(xb, ya_), (xb, yb_)]).difference(ocl)
+            s = max([q for q in getattr(s, "geoms", [s]) if q.geom_type == "LineString"], key=lambda q: q.length)
+            ya_, yb_ = min(s.coords[0][1], s.coords[-1][1]) + 0.5, max(s.coords[0][1], s.coords[-1][1])
+        ax.annotate("", (xb, yb_), (xb, ya_), arrowprops=dict(arrowstyle="-|>", lw=0.6, color="0.2"), zorder=81)
+        # rótulo que CABE en la parte vista (antes invadía el barril): en el plano de lugar (1:750) basta la pendiente
+        t_ = f"{p2:.0f} %" if breve else f"cubierta del restaurante\n+7,20 → +{E.Z_BAR_C:.2f} · {p2:.0f} %".replace(".", ",")
+        ax.text(xb + 0.4, (ya_ + yb_) / 2, t_, fontsize=4.6, rotation=90, ha="left" if breve else "center", va="center", zorder=81)
 
 
 def escalera(ax, zc):

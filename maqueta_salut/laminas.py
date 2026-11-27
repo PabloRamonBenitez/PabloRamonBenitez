@@ -15,6 +15,31 @@ import ventanas as VT
 
 IMG = '/tmp/claude-0/-home-user-PabloRamonBenitez/6aecfee3-0e37-5370-9a32-0a87a530abec/images/'
 M = E.edificio()
+
+
+_OCL = {}
+
+
+def ocluyente_torre():
+    """huella en planta de todo lo que está por encima del fondo del barril (Z_BI): en las cubiertas y en las plantas del barril
+    TAPA lo que queda debajo (cubierta inclinada del restaurante, rampa, rótulos) [usuario 27/11: la rampa se veía por encima]"""
+    if "g" not in _OCL:
+        from shapely.geometry import Polygon as _SP
+        from shapely.ops import unary_union as _uu
+        top = M.trim_by_plane((0, 0, 1), E._v["Z_BI"] - 0.05)
+        _OCL["g"] = _uu([_SP(p).buffer(0) for p in top.project().to_polygons() if len(p) > 2]).buffer(0.02)
+    return _OCL["g"]
+
+
+def oculta(zc):
+    """ocluyente si el barril tapa lo de debajo (vista aérea o corte por encima de su fondo); None si queda por encima del corte"""
+    return ocluyente_torre() if (zc is None or zc >= E._v["Z_BI"]) else None
+
+
+def _visibles(geom, ocl):
+    from shapely.geometry import Polygon as _SP, LineString as _LS
+    g = geom if ocl is None else geom.difference(ocl)
+    return [x for x in getattr(g, "geoms", [g]) if not x.is_empty and x.geom_type in ("Polygon", "LineString")]
 BIG = 400.0
 OUT = []
 
@@ -80,20 +105,30 @@ def mascara_rampas(ax, zc=None, zb=3.5):
     if zc is None or zc >= V_["Z_CON"]: ya = y0
     elif zc <= 0: ya = None
     else: ya = y0 + LR * (1 - zc / V_["Z_CON"]) ** (1 / V_["RAMPA_P"])
+    from shapely.geometry import Polygon as _SP, LineString as _LS
+    ocl = oculta(zc)
+
+    def _rect(x0, y0_, w, h):
+        for g in _visibles(_SP([(x0, y0_), (x0 + w, y0_), (x0 + w, y0_ + h), (x0, y0_ + h)]), ocl):
+            if g.geom_type == "Polygon": ax.add_patch(plt.Polygon(np.c_[g.exterior.xy], closed=True, fc="white", ec="none", zorder=zb))
+
+    def _lin(xs, ys, **k):
+        for g in _visibles(_LS(list(zip(xs, ys))), ocl):
+            if g.geom_type == "LineString" and g.length > 0.05: ax.plot(*g.xy, **k)
     if ya is not None:                                            # 1) rampa de acceso (concha)
         x0, x1 = E.W_P, E.W_EXT
-        ax.add_patch(Rectangle((x0 + 0.02, ya), x1 - x0 - 0.04, YB - ya, fc="white", ec="none", zorder=zb))
-        ax.plot([x0, x1, x1, x0], [ya, ya, YB, YB], color="k", lw=0.45, zorder=zb + 0.1)
-        ax.plot([x1 - 0.25, x1 - 0.25], [ya, YB], color="k", lw=0.35, zorder=zb + 0.1)                 # peto
+        _rect(x0 + 0.02, ya, x1 - x0 - 0.04, YB - ya)
+        _lin([x0, x1, x1, x0, x0], [ya, ya, YB, YB, ya], color="k", lw=0.45, zorder=zb + 0.1)
+        _lin([x1 - 0.25, x1 - 0.25], [ya, YB], color="k", lw=0.35, zorder=zb + 0.1)                 # peto
         if zc is not None and ya > y0 + 0.2:                       # línea de corte de la rampa (Ching: quiebro en diagonal)
-            ax.plot([x0, x1], [ya - 0.6, ya + 0.6], color="k", lw=0.5, zorder=zb + 0.2)
+            _lin([x0, x1], [ya - 0.6, ya + 0.6], color="k", lw=0.5, zorder=zb + 0.2)
     yb0 = pl["Q"][1] + V_["R2_Y0"]; yr1 = yb0 + V_["R2_L"]; WB = E.W_BAR + V_["V_BAR"]
     if zc is None or zc >= E.Z_BAR_C: yt = yr1
     elif zc <= E.Z_P1: yt = None
     else: yt = yb0 + (zc - E.Z_P1) / (E.Z_BAR_C - E.Z_P1) * (yr1 - yb0)
-    if yt is not None:                                            # 2) techo inclinado del restaurante
-        ax.add_patch(Rectangle((0.02, yb0), WB - 0.04, yt - yb0, fc="white", ec="none", zorder=zb))
-        ax.plot([0, WB, WB, 0, 0], [yb0, yb0, yt, yt, yb0], color="k", lw=0.45, zorder=zb + 0.1)
+    if yt is not None:                                            # 2) techo inclinado del restaurante (la parte bajo el barril, oculta)
+        _rect(0.02, yb0, WB - 0.04, yt - yb0)
+        _lin([0, WB, WB, 0, 0], [yb0, yb0, yt, yt, yb0], color="k", lw=0.45, zorder=zb + 0.1)
 
 
 def proyecciones_planta(ax, zc):

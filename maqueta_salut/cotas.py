@@ -57,6 +57,9 @@ COTAS = {
  "LOG_D": (1.8, "profundidad de la logia de planta 1 bajo el vuelo (vidrio retranqueado)", "foto frontal · croquis del usuario"),
  "LOG_PX": (3.2, "pilar intermedio de la logia", "foto frontal: a 0,4 del ancho de la logia"),
  "PUERTAS_H": (3, "puertas del hotel en planta baja alrededor de la columna (por lado)", "usuario (imagina más entradas) · F18 (puertas bajo la banda del hotel)"),
+ "PIR_B": (1.3, "lucernarios del bloque alto: lado de la base de cada pirámide", "F01: ≈ 17 px a ≈ 12,5 px/m (escala del barril a esa profundidad)"),
+ "PIR_H": (1.2, "lucernarios del bloque alto: altura de cada pirámide", "F01: alto ≈ ancho, corregido por la vista desde arriba (≈ 33°)"),
+ "PIR_S": (1.9, "lucernarios del bloque alto: paso entre pirámides de una fila", "F01: 5 por fila en una banda de ≈ 8 m; la 2.ª fila a tresbolillo"),
  "LUC_X": (0.0, "lucernario: X (según U)", "F01 / postal: de frente al mirar desde la plaza"),
  "LUC_Y": (-13.06, 'lucernario: Y (según N)', 'Alamy con vista corregida a 179,7° (cuña de escalera en el borde izquierdo; 19 aletas) + componente U de F09: lateral 8,34 m'),
  "LUC_R": (1.6, "radio de la base del lucernario", "Alamy: base 92 px / 28,4 px/m = 3,2 m"),
@@ -284,7 +287,7 @@ def niveles():
 
 # Margen (±) de cada cota: medido en varias fotos ≈ 0,3-0,6 · una foto ≈ 1 · estimado ≈ 1,5-2 · satélite ≈ 1
 RANGOS = {
- "Z_PB": 0.3, "Z_P1": 0.3, "Z_BAR": 0.8, "Z_BARC": 0.8, "Z_ALTO": 1.0, "Z_LAD0": 0.5, "Z_FIN": 0.9, "H_PET": 0.6, "VA_0": 0.5, "VA_1": 0.6, "VB_0": 0.3, "VB_1": 0.4, "L_HOR": 2.0, "VOL_L": 0.3, "AC_TRI": 0.3, "VOL_V": 0.3, "Z_VOL0": 0.4, "R_AC": 1.5, "LOG_D": 0.5, "LOG_PX": 0.8, "LOG_X0": 0.5, "LOG_X1": 0.8, "LUC_X": 1.5, "LUC_Y": 1.5, "LUC_R": 0.5, "LUC_H": 0.5,
+ "Z_PB": 0.3, "Z_P1": 0.3, "Z_BAR": 0.8, "Z_BARC": 0.8, "Z_ALTO": 1.0, "Z_LAD0": 0.5, "Z_FIN": 0.9, "H_PET": 0.6, "VA_0": 0.5, "VA_1": 0.6, "VB_0": 0.3, "VB_1": 0.4, "L_HOR": 2.0, "VOL_L": 0.3, "AC_TRI": 0.3, "VOL_V": 0.3, "Z_VOL0": 0.4, "R_AC": 1.5, "LOG_D": 0.5, "LOG_PX": 0.8, "LOG_X0": 0.5, "LOG_X1": 0.8, "PIR_B": 0.3, "PIR_H": 0.4, "PIR_S": 0.4, "LUC_X": 1.5, "LUC_Y": 1.5, "LUC_R": 0.5, "LUC_H": 0.5,
  "FASE_AL": 1.0, "ESC_ZI": 0.4, "ESC_ZL": 0.5, "LAMA_E": 0.04, "LAMA_N": 0, "LUC_CR": 0.8, "LUC_A0": 5.0, "FAC_R": 0.1, "FAC_B": 0.2, "ESC_LE": 0.1, "GIRO_W": 0.4, "GIRO_L": 1.0, "CR_PB": 0, "R2_Y0": 1.0, "LUC_A1": 5.0, "LUC_CL": 0.4, "LUC_CH": 0.4, "ESC_NU": 0.15, "ESC_CB": 0.5, "TP_ANG": 3.0, "TP_W": 0.2, "TP_H": 0.2, "CR_Z1": 0.4, "LAMA_P": 0.1, "ESC_RS": 0.8, "SIG_S0": 0.5, "SIG_S1": 0.5, "SIG_R": 0.6, "ESC_MO": 0.3, "SIG_A0": 10.0, "SIG_A1": 10.0, "SIG_AW": 15.0, "Z_BI": 0.3, "BAN_1": 0.15, "VIG_H": 0.2, "BAL_P": 0.3, "NUC_E": 0.1, "PAS_A": 0.2, "TAB_E": 0.05, "PAR_E": 0.1, "GAR_W": 0.5, "GAR_H": 0.3, "GAR_P": 2.0, "GAR_D": 0.05, "FU_R": 1.0, "FU_H": 0.2, "SIG_Z0": 0.2, "SIG_Z1": 0.2, "REM_ZR": 0.3, "REM_ZH": 0.15, "VISTA_ALAMY": 2.0, "FOR_C": 0.05, "FOR_R": 0.05, "FOR_P": 0.05, "BAR_B": 0.15, "OJO_D": 0.1, "OJO_V": 0.3, "OJO_Z": 0.2, "OJO_C0": 10.0, "OJO_C1": 6.0, "OJO_DP": 2.0, "Z_LAD1": 1.0, "Z_CON": 0.8, "Z_CU0": 0.6, "Z_CU1": 0.6, "Z_ALE": 0.6, "Z_B0": 0.4, "F": 0.05, "N_PL": 0,
  "Z_T1": 0.5, "Z_G1": 0.5, "Z_V1": 0.5, "Z_R1": 0.6, "R_COL": 0.3, "R_CONO": 0.3, "R_CU": 0.5, "R_B": 0.3,
  "R_AL": 0.3, "R_T": 0.5, "R_G": 0.5, "R_V": 0.3, "R_R": 0.15, "OV_X": 1.0, "OV_Y": 1.5, "OR_X": 0.5, "OR_Y": 0.5, "OB_X": 0.4, "OB_Y": 0.6, "N_AL": 0,

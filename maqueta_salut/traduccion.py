@@ -89,7 +89,7 @@ FRASES = [
  ("chaflán: restaurante, columna, hotel", "зрізаний кут: ресторан, колона, готель"), ("calle desde el ala corta", "вулиця з боку короткого крила"),
  ("escalera desde el patio", "сходи з двору"), ("escalera y aletas", "сходи й ребра"), ("escalera y barril", "сходи й циліндр"),
  ("huecos del ala y rampa", "отвори крила й пандус"), ("bar y terraza", "бар і тераса"), ("desde el testero", "з боку торця"),
- ("cubierta inclinada del restaurante", "похила покрівля ресторану"), ("cubierta inclinada", "похила покрівля"), ("actual", "сучасний стан"),
+ ("cubierta inclinada del restaurante", "похила покрівля ресторану"), ("cubierta del restaurante", "покрівля ресторану"), ("cubierta inclinada", "похила покрівля"), ("actual", "сучасний стан"),
  # ---- rótulos de plantas y secciones
  ("rampa de acceso · sube a", "вхідний пандус · підйом до"), ("rampa de acceso", "вхідний пандус"), ("(hotel debajo)", "(під ним готель)"),
  ("final del giro", "кінець повороту"), ("(peto en U)", "(U-подібний парапет)"), ("lucernarios piramidales", "пірамідальні ліхтарі"),

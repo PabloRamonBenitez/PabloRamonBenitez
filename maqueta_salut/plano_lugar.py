@@ -256,8 +256,7 @@ def hoja_lugar():
     for dd in (4.0, 30.0, 60.0, 95.0, 125.0): flecha(eje, dd)
     for dd in (L2 + 12.0, L2 + 40.0, L2 + 75.0, eje_b2.length - 30.0, eje_b2.length - 8.0): flecha(eje_b2, dd)
     ag = eje.project(Point(xs_, 40.0)); pc_ = np.array(eje.interpolate(ag).coords[0]); camion(ax, pc_, np.array(eje.interpolate(ag + 1).coords[0]) - pc_)
-    ag = eje.project(Point(xr - Rc * 0.3, yA + Rc * 1.1)); p2 = np.array(eje.interpolate(ag).coords[0]); camion(ax, p2, np.array(eje.interpolate(ag + 1).coords[0]) - p2)
-    ag = eje.project(Point(*en_carril(40.0))); p3 = np.array(eje.interpolate(ag).coords[0]); camion(ax, p3, np.array(eje.interpolate(ag + 1).coords[0]) - p3)
+    # un solo camión: basta como referencia de tamaño (usuario 27/11: «no necesitas dibujar 4 camiones»)
     Cg = np.array([xr, yA + 4.0]); Rg = 9.0                                     # (posición de rótulos)
     # césped y parque (el resto del lado exterior)
     cy = E.L_L + 6.0
@@ -287,7 +286,7 @@ def hoja_lugar():
     from matplotlib.patches import Rectangle as _R
     LM.mascara_rampas(ax, None, zb=4.5)
     for a_ in ax.patches[-1:]: pass
-    GR.rampas(ax, None)
+    GR.rampas(ax, None, breve=True)
     for g in _polys(huella):
         ax.plot(*g.exterior.xy, color="k", lw=1.3, zorder=7)
     # patio interior de la L (sin foto que lo muestre)

@@ -98,11 +98,11 @@ lines = ["# Versión molde – STL para molde de silicona y colada de hormigón"
          "- Balcones: canto, ranura de 0,27 (0,8 mm) y poyete en **una sola banda** de 1,64. El hueco de 1,46 entre bandas se mantiene, a 1,2 de fondo (3,5 mm).",
          "- Aletas y vigas radiales de 0,40 → 0,70 (2,1 mm).",
          "- Tambor macizo hasta la banda: sin el pasillo de servicio ni el peto de 0,25. Banda acristalada sin montantes.",
-         "- Letrero САЛЮТ: placas en relieve de 0,5 pegadas al remate. Separadas a 1,5 m se romperían.",
+         "- Letrero САЛЮТ: letras en volumen de 0,6 de fondo (trazo engrosado 0,12), pegadas al remate. Separadas a 1,5 m, como en la versión de detalle, se romperían al desmoldar.",
          "- Escalera: la pantalla de lamas (0,08 cada 0,35) se cuela como volumen macizo. El muro de coronación, el peto y los forjados vistos pasan a 0,60.",
          "- Petos de la terraza, la rampa y la meseta: 0,25–0,30 → 0,60. Sin marcos de ventana (relieve de 0,08) ni montantes del chaflán.",
-         "- Fuente: fuera (sería una lámina de 0,3 en la cara de colada). Muro final de la fachada retranqueada del ala larga y fondo del barril, a 0,6–0,7.",
-         "- Se mantienen: forjados y huecos del barril, ojos (Ø 1,6, 4,7 mm), visera, remate, claraboya, rampa, concha, ventanas del ala larga, dientes de sierra, lucernarios, columna, cuello y vigas.",
+         "- Muro final de la fachada retranqueada del ala larga y fondo del barril, a 0,6–0,7. (La fuente ya no está en ninguna de las dos versiones: la quitó el usuario el 27/11.)",
+         "- Se mantienen: forjados y huecos del barril, ojos (Ø 1,6, 4,7 mm), visera, remate, claraboya, rampa, concha, ventanas del ala larga, los 10 lucernarios piramidales del bloque alto (base 3,8 mm, alto 3,5 mm), los 6 lucernarios bajo el cuello, columna, cuello y vigas.",
          "", f"## Comprobación por cortes ({len(hall)} detecciones en {len(grupos)} piezas)",
          "| tipo | dónde | cortes | área máx. (m²) |", "|---|---|---|---|"]
 for g in sorted(grupos, key=lambda g: -max(h[5] for h in g))[:60]:

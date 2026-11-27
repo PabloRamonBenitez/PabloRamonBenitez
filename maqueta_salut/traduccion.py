@@ -172,13 +172,20 @@ def _calidad(fig, salida):
 
 _sf = Figure.savefig
 def _savefig(self, *a, **k):
-    traducir(self); halo(self); _calidad(self, a[0] if a else k.get("fname", "figura")); return _sf(self, *a, **k)
+    traducir(self); halo(self)
+    dest = a[0] if a else k.get("fname", "figura")
+    if not isinstance(dest, PdfPages) and type(dest).__name__ != "PdfPages": _calidad(self, dest)   # las páginas de PdfPages ya se revisan en _pdfsave
+    return _sf(self, *a, **k)
 Figure.savefig = _savefig
 _ps = PdfPages.savefig
 def _pdfsave(self, figure=None, **k):
     import matplotlib.pyplot as plt
     f = figure if isinstance(figure, Figure) else (plt.figure(figure) if figure is not None else plt.gcf())
-    traducir(f); halo(f); _calidad(f, getattr(self, "_filename", None) or getattr(getattr(self, "_file", None), "fh", None) and self._file.fh.name or "pdf")
+    nom = getattr(self, "_filename", None)
+    if not isinstance(nom, str):
+        try: nom = self._file.fh.name
+        except Exception: nom = "pdf"
+    traducir(f); halo(f); _calidad(f, nom)
     return _ps(self, figure, **k)
 PdfPages.savefig = _pdfsave
 import atexit

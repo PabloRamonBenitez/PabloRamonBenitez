@@ -388,9 +388,8 @@ def seccion(ax, p0, p1, titulo):
     L.figura(ax, Lg * 0.08 + 1.0, 0.0)
     forjados_seccion(ax, cs, hueco_escalera(p0, p1))
     nucleo_seccion(ax, p0, p1)
-    for z, t in ((E.Z_PB, "techo PB"), (E.Z_P1, "terraza / planta 1"), (E.Z_BAR, "bar"), (E.Z_ALTO, "bloque alto"),
-                 (E.niveles_suelo()[0], "1ª planta hab."), (E.Z_B1, "cubierta hab."), (E.Z_T1, "tambor"), (E.Z_V1, "visera"), (E.Z_R1, "remate")):
-        L.nivel(ax, Lg + 1, z, t)
+    L.niveles(ax, Lg + 1, [(E.Z_PB, "techo PB"), (E.Z_P1, "terraza / planta 1"), (E.Z_BAR, "bar"), (E.Z_ALTO, "bloque alto"),
+                           (E.niveles_suelo()[0], "1ª planta hab."), (E.Z_B1, "cubierta hab."), (E.Z_T1, "tambor"), (E.Z_V1, "visera"), (E.Z_R1, "remate")])
     tramos_escalera(ax, p0, p1)
     import cotas_rel as CR
     _d = (np.array(p1, float) - np.array(p0, float)); _d /= np.linalg.norm(_d); _q = np.array(E.T) - np.array(p0, float)
@@ -582,9 +581,8 @@ def alzado(ax, d, titulo):
     _ex = [("bar", _uT - E.R_B), ("bar", _uT + E.R_B)]
     CR.dibujar(ax, _o, _dir, x0, x1, extra=_ex, xl=x1)
     ax.axhline(0, color="k", lw=1.6)
-    for z, t in ((E.Z_PB, "techo PB"), (E.Z_P1, "planta 1 / terraza"), (E.Z_ALTO, "cub. bar / bloque alto"), (E.niveles_suelo()[0], "1ª hab."),
-                 (E.Z_B1, "cub. hab."), (E.Z_T1, "tambor"), (E.Z_G1, "banda"), (E.Z_V1, "visera"), (E.Z_R1, "remate")):
-        L.nivel(ax, x1 + 1, z, t)
+    L.niveles(ax, x1 + 1, [(E.Z_PB, "techo PB"), (E.Z_P1, "planta 1 / terraza"), (E.Z_ALTO, "cub. bar / bloque alto"), (E.niveles_suelo()[0], "1ª hab."),
+                           (E.Z_B1, "cub. hab."), (E.Z_T1, "tambor"), (E.Z_G1, "banda"), (E.Z_V1, "visera"), (E.Z_R1, "remate")])
     ejes(ax, (x0 - 10, x1 + 13), (-6, 52))
     ax.set_title(titulo, fontsize=9, loc="left")
     return x0, x1

@@ -181,6 +181,21 @@ def nivel(ax, x, z, txt):
 MM = 0.5            # metros por mm de papel (lo fija cada juego); el número de la cota va 0,5 mm por encima de su línea
 
 
+def niveles(ax, x, lista, sep_mm=3.0):
+    """cotas de nivel a la derecha de un alzado o sección: cada marca en su cota real y cada rótulo a su altura SIN pisar al anterior
+    (separación mínima en mm de papel); si el rótulo sube, lo une a su marca una línea guía fina. lista = [(z, texto)]"""
+    sep = sep_mm * MM
+    zs = sorted(lista, key=lambda p: p[0]); ys = [z for z, _ in zs]
+    for i in range(1, len(ys)):
+        if ys[i] - ys[i - 1] < sep: ys[i] = ys[i - 1] + sep
+    for (z, t), y in zip(zs, ys):
+        ax.plot([x, x + 1.2], [z, z], color="k", lw=0.6, gid="nivel")
+        ax.plot([x + 0.3, x + 0.6, x + 0.9, x + 0.3], [z + 0.6, z, z + 0.6, z + 0.6], color="k", lw=0.6, gid="nivel")
+        if abs(y - z) > 0.05:
+            ax.plot([x + 1.2, x + 1.45], [z, y + 0.35 * MM], color="0.35", lw=0.25, gid="nivel")
+        ax.text(x + 1.5, y + 0.1, f"+{z:.2f} {t}".replace(".", ","), fontsize=6.5, va="bottom", gid="nivel")
+
+
 def cota(ax, p0, p1, off, txt="", fs=6.5, color="k", rotulo=True):
     p0, p1 = np.array(p0, float), np.array(p1, float)
     d = p1 - p0; L = np.linalg.norm(d)
@@ -198,7 +213,7 @@ def cota(ax, p0, p1, off, txt="", fs=6.5, color="k", rotulo=True):
     if ang <= -90: ang += 180
     mid = (a + b) / 2 + n * max(0.25, 0.5 * MM) * np.sign(off if off else 1)
     if not rotulo: return                                     # tramo demasiado corto para su número (se lee en la lista de niveles)
-    ax.text(*mid, (txt + " " if txt else "") + f"{L:.2f}".replace(".", ","), fontsize=fs, ha="center",
+    ax.text(*mid, (txt + " " if txt else "") + f"{L:.2f}".replace(".", ","), fontsize=fs, ha="center", zorder=80,
             va="bottom" if off >= 0 else "top", rotation=ang, rotation_mode="anchor", color=color)
 
 

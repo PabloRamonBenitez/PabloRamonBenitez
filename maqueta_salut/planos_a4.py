@@ -43,14 +43,18 @@ def referencias(axes, us, etiquetas):
 
 def hoja_triple(titulo, e, u_rng, v_rng, secc, zc, d, t_alz, den, refs):
     """secc = (k, p0, p1, texto) con p1 - p0 en la dirección e; d = dirección de vista del alzado (e = (d_y, -d_x))"""
+    import cotas_rel as CR
+    global ZL
     fig = IA.pagina(A4L, titulo)
     w, h = fig._mm
-    x0 = 14; gap = 3.5
-    for den in [d_ for d_ in (den, 1000, 1250, 1500) if d_ >= den]:   # que sección + planta + alzado quepan en el marco (≤ 196 mm)
+    x0 = 14; gap = 2.5
+    for den in sorted({d_ for d_ in (den, 750, 800, 1000, 1250, 1500) if d_ >= den}):   # la mayor escala que quepa en el marco
         k = 1000 / den
+        ZL = (-10.6 * den / 1000, 50.0 + 6.0 * den / 1000)       # arriba caben las letras de los cortes; bajo rasante: cadena (1,6 y 3,4 mm) + burbujas (Ø 2,5 mm)
         hz = (ZL[1] - ZL[0]) * k; hp = (v_rng[1] - v_rng[0]) * k; wd = (u_rng[1] - u_rng[0]) * k
-        if 12 + 2 * hz + hp + 2 * gap <= 196: break
-    y_alz = 12; y_pl = y_alz + hz + gap; y_se = y_pl + hp + gap
+        if 10 + 2 * hz + hp + 2 * gap <= 194 and x0 + wd <= 190: break
+    CR.MM = den / 1000; L.MM = den / 1000                      # burbujas, cadenas y números de cota en mm de papel a esta escala
+    y_alz = 10; y_pl = y_alz + hz + gap; y_se = y_pl + hp + gap
     # sección
     k_, p0, p1, tx = secc
     p0, p1 = np.array(p0, float), np.array(p1, float)
@@ -59,8 +63,11 @@ def hoja_triple(titulo, e, u_rng, v_rng, secc, zc, d, t_alz, den, refs):
     ax_s = fig.add_axes([x0 / w, y_se / h, wd / w, hz / h])
     LM.seccion(ax_s, p0, p1, "")
     [t_.remove() for t_ in list(ax_s.texts) if t_.get_text().startswith('+')]; [l_.remove() for l_ in list(ax_s.lines) if (len(l_.get_xdata()) == 4 or (len(l_.get_xdata()) == 2 and abs(max(l_.get_xdata()) - min(l_.get_xdata()) - 1.2) < 0.05))]
-    ax_s.set_xlim(u_rng[0] - off, u_rng[1] - off); ax_s.set_ylim(*ZL); ax_s.set_aspect("equal"); ax_s.axis("off")
-    ax_s.text(u_rng[0] - off + 0.5, ZL[1] - 1, f"SECCIÓN {k_}", fontsize=6.5, weight="bold", va="top")
+    ax_s.set_xlim(u_rng[0] - off, u_rng[1] - off); ax_s.set_ylim(*ZL); ax_s.set_aspect("equal"); ax_s.axis("off"); CR.reubicar_niveles(ax_s)
+    ut = float(np.array(E.T) @ np.array(e)); izq = (ut - u_rng[0]) > (u_rng[1] - ut)        # torre más a la derecha → títulos a la izquierda
+    xt_ = (u_rng[0] + 0.8) if izq else (u_rng[1] - 0.8); ha_ = "left" if izq else "right"
+    xc_ = ((ut - 16.0 + u_rng[0]) / 2) if izq else ((ut + 16.0 + u_rng[1]) / 2)      # centro del hueco entre la torre (R 14,4) y el extremo
+    ax_s.text(xc_ - off, 30.0, f"SECCIÓN {k_}", fontsize=6.5, weight="bold", va="center", ha="center", bbox=dict(fc="white", ec="none", pad=1))   # en el hueco sobre el ala
     # planta
     ax_p = fig.add_axes([x0 / w, y_pl / h, wd / w, hp / h])
     plan_girada(ax_p, zc, e)
@@ -72,7 +79,7 @@ def hoja_triple(titulo, e, u_rng, v_rng, secc, zc, d, t_alz, den, refs):
                   arrowprops=dict(arrowstyle="-|>", lw=0.7))                          # dirección de vista del alzado
     ax_p.set_xlim(*u_rng); ax_p.set_ylim(*v_rng); ax_p.set_aspect("equal"); ax_p.axis("off")
     ax_p.add_patch(plt.Rectangle((u_rng[0], v_rng[0]), u_rng[1] - u_rng[0], v_rng[1] - v_rng[0], fill=False, lw=0.3, ec="0.6"))
-    ax_p.text(u_rng[0] + 0.5, v_rng[1] - 1, f"PLANTA a +{zc:.2f}".replace(".", ","), fontsize=6.5, weight="bold", va="top")
+    ax_p.text(xt_, v_rng[1] - 1, f"PLANTA a +{zc:.2f}".replace(".", ","), fontsize=6.5, weight="bold", va="top", ha=ha_, bbox=dict(fc="white", ec="none", pad=1))
     # alzado
     ax_a = fig.add_axes([x0 / w, y_alz / h, wd / w, hz / h])
     if titulo.startswith("ALA CORTA"):
@@ -81,8 +88,8 @@ def hoja_triple(titulo, e, u_rng, v_rng, secc, zc, d, t_alz, den, refs):
     else:
         LM.alzado(ax_a, d, "")
     [t_.remove() for t_ in list(ax_a.texts) if t_.get_text().startswith('+')]; [l_.remove() for l_ in list(ax_a.lines) if (len(l_.get_xdata()) == 4 or (len(l_.get_xdata()) == 2 and abs(max(l_.get_xdata()) - min(l_.get_xdata()) - 1.2) < 0.05))]
-    ax_a.set_xlim(*u_rng); ax_a.set_ylim(*ZL); ax_a.set_aspect("equal"); ax_a.axis("off")
-    ax_a.text(u_rng[0] + 0.5, ZL[1] - 1, t_alz, fontsize=6.5, weight="bold", va="top")
+    ax_a.set_xlim(*u_rng); ax_a.set_ylim(*ZL); ax_a.set_aspect("equal"); ax_a.axis("off"); CR.reubicar_niveles(ax_a)
+    ax_a.text(xc_, 30.0, t_alz, fontsize=6.5, weight="bold", va="center", ha="center", bbox=dict(fc="white", ec="none", pad=1))
     # referencias comunes (en coordenada mundo u para planta/alzado; desplazada en la sección)
     us = [r[0] for r in refs]
     for ax in (ax_p, ax_a):
@@ -92,6 +99,9 @@ def hoja_triple(titulo, e, u_rng, v_rng, secc, zc, d, t_alz, den, refs):
         ax_s.axvline(u - off, color="0.55", lw=0.35, ls=(0, (6, 3)), zorder=0.5)
     for u, t in refs:
         ax_s.text(u - off, ZL[1] - 0.3, t, fontsize=4.3, color="0.3", ha="center", va="top", rotation=90)
+    for ax in (ax_s, ax_p, ax_a):                                # nada se dibuja fuera del marco de su dibujo
+        for a_ in list(ax.texts) + list(ax.lines) + list(ax.patches) + list(ax.collections):
+            a_.set_clip_on(True)
     # columna derecha: leyenda + niveles + cajetín
     xr = x0 + wd + 8
     fig.text(xr / w, (h - 18) / h, titulo, fontsize=8, weight="bold", va="top", wrap=True)
@@ -110,6 +120,9 @@ def hoja_triple(titulo, e, u_rng, v_rng, secc, zc, d, t_alz, den, refs):
 
 def hoja_transversal(den=600):
     """alzado 5 (testero) y secciones S3 y S4 lado a lado, misma escala y mismo eje horizontal (−x)"""
+    import cotas_rel as CR
+    global ZL
+    CR.MM = den / 1000; L.MM = den / 1000; ZL = (-10.6 * den / 1000, 50.0 + 6.0 * den / 1000)
     titulo = "Testero y secciones transversales del ala larga (S3, S4)"
     fig = IA.pagina(A4L, titulo)
     w, h = fig._mm; k = 1000 / den

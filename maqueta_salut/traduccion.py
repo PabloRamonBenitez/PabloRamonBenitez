@@ -165,6 +165,8 @@ def halo(fig):
 def _calidad(fig, salida):
     try:
         import calidad_grafica
+        if not getattr(fig, "_recolocado", False):
+            calidad_grafica.recolocar(fig); fig._recolocado = True
         calidad_grafica.revisar(fig, os.path.basename(str(salida)))
     except Exception:
         pass

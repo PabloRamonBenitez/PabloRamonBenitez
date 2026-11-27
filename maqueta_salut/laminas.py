@@ -520,8 +520,15 @@ def letras_alzado(ax, d):
         vis = -(nrm @ d)
         if vis < 0.15: continue
         x = ca * L_["c"][0] - sa * L_["c"][1]
-        ax.text(x, (L_["z0"] + L_["z1"]) / 2, L_["ch"], fontsize=9 * max(vis, 0.4), ha="center", va="center", weight="bold", zorder=40,
-                family="DejaVu Sans", color="k", clip_on=True)
+        # letra a su TAMAÑO REAL proyectado (alto z1 − z0; ancho escorzado por el giro sobre el remate), no un texto de tamaño fijo
+        from matplotlib.textpath import TextPath
+        from matplotlib.font_manager import FontProperties
+        from matplotlib.patches import PathPatch
+        from matplotlib.transforms import Affine2D as _Af
+        tp = TextPath((0, 0), L_["ch"], size=1.0, prop=FontProperties(family="DejaVu Sans", weight="bold"))
+        bb = tp.get_extents(); hz_ = L_["z1"] - L_["z0"]; s_ = hz_ / max(bb.height, 1e-6)
+        trf = _Af().translate(-(bb.x0 + bb.x1) / 2, -(bb.y0 + bb.y1) / 2).scale(s_ * vis, s_).translate(x, (L_["z0"] + L_["z1"]) / 2)
+        ax.add_patch(PathPatch(trf.transform_path(tp), fc="k", ec="none", zorder=40, clip_on=True))
     for gx, gy, gz, ga in E.gargolas():                     # gárgolas: una por módulo y planta [F18, F08] (solo en planos)
         if -(np.array([math.cos(ga), math.sin(ga)]) @ d) < 0.2: continue
         ax.plot([ca * gx - sa * gy], [gz], "o", ms=1.1, color="k", zorder=41, clip_on=True)
@@ -609,6 +616,7 @@ SECC = _secc()
 def cruces(ax, p0, p1, k0, ytop=50):
     """marca en la seccion k0 donde la cortan las demas secciones (relacion entre secciones)"""
     p0, p1 = np.array(p0, float), np.array(p1, float); d = p1 - p0; L_ = np.linalg.norm(d); t = d / L_
+    _marcas = []
     for k, q0, q1, _ in SECC:
         if k == k0: continue
         q0, q1 = np.array(q0, float), np.array(q1, float); e = q1 - q0
@@ -617,8 +625,13 @@ def cruces(ax, p0, p1, k0, ytop=50):
         s = ((q0[0] - p0[0]) * e[1] - (q0[1] - p0[1]) * e[0]) / den
         u = ((q0[0] - p0[0]) * t[1] - (q0[1] - p0[1]) * t[0]) / den
         if 0 <= s <= L_ and 0 <= u <= 1:
+            import cotas_rel as _CR
+            fila = 0
+            while any(abs(s - s2) < 7.0 * _CR.MM and fila == f2 for s2, f2 in _marcas): fila += 1     # letras de cortes que no se pisan
+            _marcas.append((s, fila)); yl = ytop + 0.5 - fila * 4.0 * _CR.MM
             ax.plot([s, s], [-1, ytop], color="k", lw=0.7, ls="-.", zorder=60)
-            ax.text(s, ytop + 0.5, k, color="k", fontsize=8, weight="bold", ha="center", zorder=60)
+            ax.text(s, yl, k, color="k", fontsize=8, weight="bold", ha="center", zorder=60, va="top" if fila else "bottom",
+                    bbox=dict(fc="white", ec="none", pad=0.5) if fila else None)
 
 
 

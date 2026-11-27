@@ -105,14 +105,16 @@ def hoja_alz_secc(titulo, d_alz, t_alz, secc, e, u_rng, den, lista_fotos):
     """alzado (abajo) y sección (arriba) alineados en el mismo eje horizontal e"""
     fig = IA.pagina(A3L, titulo)
     W, H = fig._mm
-    ZL = (-6.0, 52.0)
+    import cotas_rel as CR, lineas as L_
     for den in [d_ for d_ in (den, 500, 600, 750) if d_ >= den]:      # alzado + sección dentro del marco (≤ H − 14)
         k = 1000 / den
+        ZL = (-10.6 * den / 1000, 50.0 + 6.0 * den / 1000)            # bajo rasante: cadenas y burbujas; arriba: letras de los cortes
         wd = (u_rng[1] - u_rng[0]) * k; hz = (ZL[1] - ZL[0]) * k
         x0 = 14; y_a = 26; y_s = y_a + hz + 14
         if (y_s + hz + 6 if secc is not None else y_a + hz + 6) <= H - 14: break
+    CR.MM = den / 1000; L_.MM = den / 1000                           # burbujas, cadenas y números de cota en mm de papel
     ax_a = fig.add_axes([x0 / W, y_a / H, wd / W, hz / H])
-    LM.alzado(ax_a, d_alz, ""); ax_a.set_xlim(*u_rng); ax_a.set_ylim(*ZL); ax_a.set_aspect("equal"); ax_a.axis("off")
+    LM.alzado(ax_a, d_alz, ""); ax_a.set_xlim(*u_rng); ax_a.set_ylim(*ZL); ax_a.set_aspect("equal"); ax_a.axis("off"); CR.reubicar_niveles(ax_a)
     fig.text(x0 / W, (y_a + hz + 2) / H, t_alz, fontsize=8, weight="bold")
     if secc is not None:
         kk, p0, p1, tx = secc
@@ -121,9 +123,12 @@ def hoja_alz_secc(titulo, d_alz, t_alz, secc, e, u_rng, den, lista_fotos):
         off = float(p0 @ np.array(e))
         ax_s = fig.add_axes([x0 / W, y_s / H, wd / W, hz / H])
         LM.seccion(ax_s, p0, p1, "")
-        ax_s.set_xlim(u_rng[0] - off, u_rng[1] - off); ax_s.set_ylim(*ZL); ax_s.set_aspect("equal"); ax_s.axis("off")
+        ax_s.set_xlim(u_rng[0] - off, u_rng[1] - off); ax_s.set_ylim(*ZL); ax_s.set_aspect("equal"); ax_s.axis("off"); CR.reubicar_niveles(ax_s)
         fig.text(x0 / W, (y_s + hz + 2) / H, f"SECCIÓN {kk} – {tx}", fontsize=8, weight="bold")
     fig.text(x0 / W, 289 / H, titulo, fontsize=10, weight="bold", va="top")
+    for ax in fig.axes:                                              # nada se dibuja fuera del marco de su dibujo
+        for a_ in list(ax.texts) + list(ax.lines) + list(ax.patches) + list(ax.collections):
+            a_.set_clip_on(True)
     # las fotos empiezan donde acaba el último rótulo del dibujo (cotas de nivel incluidas): nunca se pisan
     traduccion.traducir(fig)                             # medir los rótulos ya traducidos (son más largos)
     fig.canvas.draw(); rr = fig.canvas.get_renderer(); xmax = x0 + wd

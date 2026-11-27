@@ -52,6 +52,8 @@ def eje_escala(fig, rect_mm, xl, yl, den):
     w, h = fig._mm
     aw, ah = (xl[1] - xl[0]) * 1000 / den, (yl[1] - yl[0]) * 1000 / den
     ax = fig.add_axes([rect_mm[0] / w, rect_mm[1] / h, aw / w, ah / h])
+    import cotas_rel as _CR, lineas as _L
+    _CR.MM = den / 1000; _L.MM = den / 1000          # burbujas, cadenas y números de cota en mm de papel a esta escala
     return ax, (aw, ah)
 
 

@@ -178,7 +178,10 @@ def nivel(ax, x, z, txt):
     ax.text(x + 1.5, z + 0.1, f"+{z:.2f} {txt}".replace(".", ","), fontsize=6.5, va="bottom")
 
 
-def cota(ax, p0, p1, off, txt="", fs=6.5, color="k"):
+MM = 0.5            # metros por mm de papel (lo fija cada juego); el número de la cota va 0,5 mm por encima de su línea
+
+
+def cota(ax, p0, p1, off, txt="", fs=6.5, color="k", rotulo=True):
     p0, p1 = np.array(p0, float), np.array(p1, float)
     d = p1 - p0; L = np.linalg.norm(d)
     if L < 1e-6:
@@ -193,7 +196,8 @@ def cota(ax, p0, p1, off, txt="", fs=6.5, color="k"):
     ang = math.degrees(math.atan2(t[1], t[0]))
     if ang > 90: ang -= 180
     if ang <= -90: ang += 180
-    mid = (a + b) / 2 + n * 0.25 * np.sign(off if off else 1)
+    mid = (a + b) / 2 + n * max(0.25, 0.5 * MM) * np.sign(off if off else 1)
+    if not rotulo: return                                     # tramo demasiado corto para su número (se lee en la lista de niveles)
     ax.text(*mid, (txt + " " if txt else "") + f"{L:.2f}".replace(".", ","), fontsize=fs, ha="center",
             va="bottom" if off >= 0 else "top", rotation=ang, rotation_mode="anchor", color=color)
 

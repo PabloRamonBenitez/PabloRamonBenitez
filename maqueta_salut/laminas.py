@@ -604,7 +604,7 @@ def _secc():
      ("L4", (E.W_BAR + E._v["V_BAR"] + 1.6, pl["Q"][1] - 4), (E.W_BAR + E._v["V_BAR"] + 1.6, 100), "LONGITUDINAL por la terraza mirando al bar: el bar, su vuelo y la cubierta inclinada en alzado"),
      ("S1", tuple(T - 18 * N), tuple(T + 32 * N), "por el eje de la torre perpendicular al chaflán: columna, cuello, ménsulas, barril, visera desplazada y escalera"),
      ("S2", E.esc_pt(E.ESC_R1 + 6, 0), E.esc_pt(-8, 0), "por el eje de la escalera, radial al cilindro: caja insertada en la torre y su salida al patio"),
-     ("S3", (-8, (pl["Q"][1] + E.Y_CUNA) / 2), (24, (pl["Q"][1] + E.Y_CUNA) / 2), "transversal del ala larga por el bar, la terraza y la concha"),
+     ("S3", (-8, (pl["Q"][1] + E.Y_CUNA) / 2 + 2.5), (24, (pl["Q"][1] + E.Y_CUNA) / 2 + 2.5), "transversal del ala larga por el bar, la terraza y la concha"),
      ("S4", (-8, E.L_L - E._v["VEN_FIN"] - E._v["S_VEN"] - E._v["VEN_W"] / 2), (24, E.L_L - E._v["VEN_FIN"] - E._v["S_VEN"] - E._v["VEN_W"] / 2), "transversal del ala larga por el eje del hueco 2 (tramo final sin bar): huecos alto y bajo cortados"),
      ("S5", tuple(E.SWP(-14, -6)), tuple(E.SWP(-14, 18)), "transversal del ala corta: banda del restaurante, bloque alto y patio"),
     ]

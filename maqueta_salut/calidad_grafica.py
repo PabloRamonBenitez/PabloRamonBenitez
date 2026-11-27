@@ -15,7 +15,8 @@ _PAG = {}
 def _poligono(t, r):
     """rectángulo girado del texto en píxeles de pantalla (centro = centro de su caja alineada)"""
     from shapely.geometry import Polygon
-    bb = t.get_window_extent(r)
+    from matplotlib.text import Text as _T
+    bb = _T.get_window_extent(t, r)                      # solo el texto (una Annotation sumaría su flecha)
     ang = t.get_rotation() % 360
     if abs(math.sin(math.radians(ang))) < 1e-3:
         return Polygon([(bb.x0, bb.y0), (bb.x1, bb.y0), (bb.x1, bb.y1), (bb.x0, bb.y1)]), bb
@@ -76,7 +77,7 @@ def revisar(fig, salida):
             if A.intersection(P).area < 0.97 * P.area:
                 out.append({"tipo": "cortado por el marco", "texto": s[:50], "x_mm": round(P.centroid.x * mm), "y_mm": round((H - P.centroid.y) * mm)})
                 P = A.intersection(P)
-        elif ax is not None and ax.get_aspect() == 1.0:              # dibujo a escala: ningún rótulo se sale de su dibujo
+        elif ax is not None and getattr(ax, "_marco", False):       # dibujo con marco visible: ningún rótulo lo cruza
             from shapely.geometry import box
             A = box(*ax.bbox.extents)
             if A.contains(P.centroid) and A.intersection(P).area < 0.97 * P.area:        # los rótulos de margen (niveles, cadenas) son legítimos
@@ -160,7 +161,7 @@ def _movil(t):
     if t.axes is None or t.get_gid() == "fijo" or t in (t.axes.title, t.axes._left_title, t.axes._right_title): return False
     import re
     if re.fullmatch(r"[LS]\d", s): return True
-    if str(t.get_weight()) in ("bold", "heavy", "700", "800", "900") or t.get_fontsize() > 7.5: return False
+    if t.get_fontsize() > 7.5: return False
     if re.fullmatch(r"[LS]\d", s): return True                              # letras de los cortes: se pueden apartar un poco de su línea
     if len(s) <= 2 and not s.replace(",", "").isdigit(): return False        # burbujas de ejes
     bp = t.get_bbox_patch()
@@ -210,7 +211,7 @@ def recolocar(fig):
 
     for t, P in moviles:
         rot = t.get_rotation(); t.set_rotation(0)
-        b0 = t.get_window_extent(r); t.set_rotation(rot)
+        b0 = __import__('matplotlib.text', fromlist=['Text']).Text.get_window_extent(t, r); t.set_rotation(rot)
         h_, w_ = max(b0.height, 1.0), max(b0.width, 1.0)
         a = np.radians(rot); tg = np.array([np.cos(a), np.sin(a)]); nr = np.array([-np.sin(a), np.cos(a)])
         c0 = coste(t, P, 0.0)

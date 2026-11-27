@@ -137,7 +137,7 @@ def camion(ax, p, d, L=9.0, W=2.5, z=9):
 def hoja_lugar():
     fig = IA.pagina(A3L, "PLANO DE LUGAR 1984 – situación del hotel y entorno según las fotos de la época")
     ax, (aw, ah) = IA.eje_escala(fig, (14, 36), XL, YL, DEN)
-    ax.set_xlim(*XL); ax.set_ylim(*YL); ax.set_aspect("equal"); ax.axis("off")
+    ax.set_xlim(*XL); ax.set_ylim(*YL); ax.set_aspect("equal"); ax.axis("off"); ax._marco = True
     marco = SP([(XL[0], YL[0]), (XL[1], YL[0]), (XL[1], YL[1]), (XL[0], YL[1])])
 
     # --- 1. calle Ivana Mazepy (a lo largo del ala corta) y plaza ante el chaflán

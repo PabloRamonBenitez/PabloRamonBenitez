@@ -2,7 +2,7 @@
 alzado (abajo) a la MISMA escala y alineados en el mismo eje horizontal, con líneas de referencia que cruzan
 los tres dibujos. Plantas completas en hojas aparte. Todo sale de la misma geometría (edificio.py / cotas.py)."""
 import traduccion  # textos de los planos en ucraniano (usuario 26/11)
-import math
+import math, textwrap
 import numpy as np
 import matplotlib
 matplotlib.use("Agg")
@@ -77,7 +77,7 @@ def hoja_triple(titulo, e, u_rng, v_rng, secc, zc, d, t_alz, den, refs):
     ax_p.text(q0, v + 0.8, k_, color="crimson", fontsize=6, weight="bold", zorder=61)
     ax_p.annotate("", xy=(u_rng[1] - 3, v_rng[0] + 0.5), xytext=(u_rng[1] - 3, v_rng[0] + 5),
                   arrowprops=dict(arrowstyle="-|>", lw=0.7))                          # dirección de vista del alzado
-    ax_p.set_xlim(*u_rng); ax_p.set_ylim(*v_rng); ax_p.set_aspect("equal"); ax_p.axis("off")
+    ax_p.set_xlim(*u_rng); ax_p.set_ylim(*v_rng); ax_p.set_aspect("equal"); ax_p.axis("off"); ax_p._marco = True
     ax_p.add_patch(plt.Rectangle((u_rng[0], v_rng[0]), u_rng[1] - u_rng[0], v_rng[1] - v_rng[0], fill=False, lw=0.3, ec="0.6"))
     ax_p.text(xt_, v_rng[1] - 1, f"PLANTA a +{zc:.2f}".replace(".", ","), fontsize=6.5, weight="bold", va="top", ha=ha_, bbox=dict(fc="white", ec="none", pad=1))
     # alzado
@@ -107,7 +107,7 @@ def hoja_triple(titulo, e, u_rng, v_rng, secc, zc, d, t_alz, den, refs):
     fig.text(xr / w, (h - 18) / h, titulo, fontsize=8, weight="bold", va="top", wrap=True)
     fig.text(xr / w, (h - 26) / h,
              "Los tres dibujos están a la misma escala y alineados:\nla misma vertical de puntos cruza sección, planta y alzado.\n"
-             f"Sección {k_}: {tx[:60]}\nPlanta: corte a +{zc:.2f}; flecha = vista del alzado.\n"
+             f"Sección {k_}: {textwrap.fill(traduccion.tr(tx), 58)}\nPlanta: corte a +{zc:.2f}; flecha = vista del alzado.\n"
              "Trazo grueso con trama: cortado · fino: visto ·\ndiscontinuo: por encima.".replace(".", ",", 0), fontsize=5.3, va="top")
     niv = [(0, "±0,00"), (E.Z_PB, "techo PB"), (E.Z_P1, "terraza / planta 1"), (E.Z_BAR_C, "cub. bar / bloque alto"),
            (E.niveles_suelo()[0], "1ª planta hab."), (E.Z_B1, "cubierta hab."), (E.Z_T1, "tambor"), (E.Z_V1, "visera"), (E.Z_R1, "remate")]

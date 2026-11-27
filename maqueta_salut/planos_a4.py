@@ -151,7 +151,7 @@ def hoja_transversal(den=600):
         for xw, tt in ((0.0, "fachada patio"), (E.W_P, "fachada ext."), (E.W_EXT, "concha")):
             ax.axvline(-xw - off, color="0.55", lw=0.35, ls=(0, (6, 3)), zorder=0.5)
             ax.text(-xw - off, ZL[1] - 0.3, tt, fontsize=4.3, color="0.3", ha="center", va="top", rotation=90)
-        ax.text(u_rng[0] - off + 0.5, ZL[1] - 1, t, fontsize=6.5, weight="bold", va="top")
+        fig.text(x0 / w, (60 + hz + 1.5) / h, t, fontsize=6.5, weight="bold", va="bottom")      # título sobre el dibujo, no encima de la torre
     fig.text(14 / w, 50 / h, "Los tres dibujos tienen el mismo eje horizontal (−x): las verticales discontinuas son las mismas fachadas en los tres.",
              fontsize=5.5)
     IA.barra(fig, 14, 40, den, 20)

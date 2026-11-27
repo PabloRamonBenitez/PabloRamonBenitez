@@ -125,7 +125,7 @@ def hoja_alz_secc(titulo, d_alz, t_alz, secc, e, u_rng, den, lista_fotos):
         LM.seccion(ax_s, p0, p1, "")
         ax_s.set_xlim(u_rng[0] - off, u_rng[1] - off); ax_s.set_ylim(*ZL); ax_s.set_aspect("equal"); ax_s.axis("off"); CR.reubicar_niveles(ax_s); CR.podar_burbujas(ax_s)
         fig.text(x0 / W, (y_s + hz + 2) / H, f"SECCIÓN {kk} – {tx}", fontsize=8, weight="bold")
-    fig.text(x0 / W, 289 / H, titulo, fontsize=10, weight="bold", va="top")
+    fig.text(x0 / W, 283 / H, titulo, fontsize=10, weight="bold", va="top")
     for ax in fig.axes:                                              # nada se dibuja fuera del marco de su dibujo
         for a_ in list(ax.lines) + list(ax.patches) + list(ax.collections):
             a_.set_clip_on(True)

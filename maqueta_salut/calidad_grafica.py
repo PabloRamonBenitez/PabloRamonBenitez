@@ -39,6 +39,15 @@ def revisar(fig, salida):
     W, H = fig.bbox.width, fig.bbox.height
     mm = 25.4 / fig.dpi
     items, out = [], []
+    from matplotlib.patches import Rectangle as _Rect
+    from shapely.geometry import box as _box
+    marco = None
+    for p_ in list(fig.patches) + list(fig.artists):
+        try:
+            if isinstance(p_, _Rect) and p_.get_width() * W > 0.0 and p_.get_transform() == fig.transFigure and p_.get_width() > 0.9 and p_.get_height() > 0.9:
+                bb_ = p_.get_window_extent(r); marco = _box(bb_.x0, bb_.y0, bb_.x1, bb_.y1).exterior.buffer(0.6); break
+        except Exception:
+            pass
     textos = list(fig.texts)
     for ax_ in fig.axes:
         if not ax_.get_visible(): continue
@@ -100,6 +109,8 @@ def revisar(fig, salida):
                     if fr > 0.12:                                  # con halo blanco, solo cuenta un fondo muy denso
                         out.append({"tipo": "rótulo sobre líneas", "texto": s[:50], "fraccion": round(fr, 3),
                                     "x_mm": round(P.centroid.x * mm), "y_mm": round((H - P.centroid.y) * mm)})
+        if marco is not None and P.intersects(marco):
+            out.append({"tipo": "cruza el marco de la hoja", "texto": s[:50], "x_mm": round(P.centroid.x * mm), "y_mm": round((H - P.centroid.y) * mm)})
         items.append((t, s, P))
     for i in range(len(items)):
         for j in range(i + 1, len(items)):
@@ -252,10 +263,10 @@ def _guardar():
     old.update(REG)
     json.dump(old, open(f, "w"), ensure_ascii=False, indent=1)
     L = ["# Calidad gráfica (puerta 3b): rótulos que se pisan, cortados o fuera de la hoja", "",
-         "| Salida | Se pisan | Sobre líneas | Cortados | Se salen del dibujo | Fuera de la hoja | Total |", "|---|---|---|---|---|---|---|"]
+         "| Salida | Se pisan | Sobre líneas | Cortados | Se salen del dibujo | Cruzan el marco | Fuera de la hoja | Total |", "|---|---|---|---|---|---|---|---|"]
     for k in sorted(old):
         v = old[k]; n = lambda t: sum(1 for d in v if d["tipo"] == t)
-        L.append(f"| `{k}` | {n('rótulos que se pisan')} | {n('rótulo sobre líneas')} | {n('cortado por el marco')} | {n('se sale de su dibujo')} | {n('fuera de la hoja')} | {len(v)} |")
+        L.append(f"| `{k}` | {n('rótulos que se pisan')} | {n('rótulo sobre líneas')} | {n('cortado por el marco')} | {n('se sale de su dibujo')} | {n('cruza el marco de la hoja')} | {n('fuera de la hoja')} | {len(v)} |")
     open("CALIDAD_GRAFICA.md", "w").write("\n".join(L) + "\n")
 
 

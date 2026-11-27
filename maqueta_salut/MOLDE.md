@@ -1,6 +1,6 @@
 # Versión molde – STL para molde de silicona y colada de hormigón
 
-`Hotel_Salut_15cm_MOLDE.stl` · escala 1:339 · caja 142 × 299 × 150 mm · volumen 865 cm³ · una sola pieza: sí · aristas abiertas: 0 · aristas no manifold: 61 · base plana a z = 0
+`Hotel_Salut_15cm_MOLDE.stl` · escala 1:339 · caja 142 × 299 × 150 mm · volumen 862 cm³ · una sola pieza: sí · aristas abiertas: 0 · aristas no manifold: 61 · base plana a z = 0
 
 ## Criterios (1 mm de maqueta = 0,34 m reales)
 | criterio | valor real | en la maqueta |
@@ -20,7 +20,7 @@
 - Fuente: fuera (sería una lámina de 0,3 en la cara de colada). Muro final de la fachada retranqueada del ala larga y fondo del barril, a 0,6–0,7.
 - Se mantienen: forjados y huecos del barril, ojos (Ø 1,6, 4,7 mm), visera, remate, claraboya, rampa, concha, ventanas del ala larga, dientes de sierra, lucernarios, columna, cuello y vigas.
 
-## Comprobación por cortes (88 detecciones en 31 piezas)
+## Comprobación por cortes (91 detecciones en 32 piezas)
 | tipo | dónde | cortes | área máx. (m²) |
 |---|---|---|---|
 | fino | planta (12.4, 16.6) | 4 | 1.33 |
@@ -54,3 +54,4 @@
 | fino | transversal y=30 (14.9, 0.1) | 1 | 0.09 |
 | rendija | radial 90° (15.5, 11.7) | 1 | 0.09 |
 | rendija | radial 270° (-15.5, 11.7) | 1 | 0.09 |
+| fino | planta (11.9, 37.4) | 3 | 0.05 |

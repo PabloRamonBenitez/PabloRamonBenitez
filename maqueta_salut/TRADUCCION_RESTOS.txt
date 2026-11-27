@@ -103,3 +103,8 @@ sobre
 teleobjetivo
 vigas
 volada
+tipo
+tipo
+tipo
+tipo
+tipo

@@ -310,18 +310,19 @@ def tramos_escalera(ax, p0, p1):
     run = (nst - 1) * t
     uB = uout - s * LR; uA = uB - s * run
     CUT = dict(fc="white", ec="k", lw=1.1, hatch="////", zorder=31)
-    z_fin = E.Z_B1                                              # última planta: salida a la cubierta del barril
+    NS = E.niveles_suelo()                                      # FUENTE ÚNICA: los rellanos de planta son los forjados (mismas cotas)
+    z_fin = NS[-1]                                              # última planta: salida a la cubierta del barril
     muro_cortado = abs(off) < 0.2
-    zz0 = E.Z_B0
+    zz0 = NS[0]
     if muro_cortado:                                            # muro central cortado entre los tramos
         ax.add_patch(Rectangle((min(uA, uB), zz0), abs(uB - uA), z_fin - zz0, **CUT))
     else:                                                       # muro central visto detrás del tramo cortado
         ax.add_patch(Rectangle((min(uA, uB), zz0), abs(uB - uA), z_fin - zz0, fc="none", ec="k", lw=0.45, zorder=29))
     cosa = t / math.hypot(t, h)
-    z = zz0
-    while z < z_fin - 0.01:
-        zi = z + E.F / 2
-        for k, (ua_, ub_, za, zb) in enumerate(((uA, uB, z, zi), (uB, uA, zi, z + E.F))):
+    for z, zsig in zip(NS[:-1], NS[1:]):                      # una vuelta por planta, de suelo a suelo (la 1.ª es más baja: 2,49)
+        hp = zsig - z; h = hp / (2 * nst); cosa = t / math.hypot(t, h)
+        zi = z + hp / 2
+        for k, (ua_, ub_, za, zb) in enumerate(((uA, uB, z, zi), (uB, uA, zi, zsig))):
             sg = np.sign(ub_ - ua_)
             top = [(ua_, za)]
             for i_ in range(nst):
@@ -334,8 +335,7 @@ def tramos_escalera(ax, p0, p1):
                 ax.plot(*np.array(top).T, color="k", lw=0.3, ls=(0, (3, 2)), zorder=28)
         # rellanos cortados (abarcan todo el ancho): intermedio contra el muro exterior y de planta = forjado del barril
         ax.add_patch(Rectangle((min(uB, uout), zi - 0.20), abs(uout - uB), 0.20, **CUT))
-        ax.add_patch(Rectangle((min(uin, uA), z + E.F - 0.20), abs(uA - uin), 0.20, **CUT))
-        z += E.F
+        ax.add_patch(Rectangle((min(uin, uA), zsig - 0.20), abs(uA - uin), 0.20, **CUT))
     ax.add_patch(Rectangle((min(uin, uA), zz0 - 0.20), abs(uA - uin), 0.20, **CUT))
     # paso libre de cabeza sobre el último rellano hasta el forjado superior
     zt = V["ESC_ZL"] - 0.3
@@ -354,7 +354,7 @@ def seccion(ax, p0, p1, titulo):
     forjados_seccion(ax, cs, hueco_escalera(p0, p1))
     nucleo_seccion(ax, p0, p1)
     for z, t in ((E.Z_PB, "techo PB"), (E.Z_P1, "terraza / planta 1"), (E.Z_BAR, "bar"), (E.Z_ALTO, "bloque alto"),
-                 (E.Z_B0, "1ª planta hab."), (E.Z_B1, "cubierta hab."), (E.Z_T1, "tambor"), (E.Z_V1, "visera"), (E.Z_R1, "remate")):
+                 (E.niveles_suelo()[0], "1ª planta hab."), (E.Z_B1, "cubierta hab."), (E.Z_T1, "tambor"), (E.Z_V1, "visera"), (E.Z_R1, "remate")):
         L.nivel(ax, Lg + 1, z, t)
     tramos_escalera(ax, p0, p1)
     import cotas_rel as CR
@@ -388,7 +388,7 @@ def forjados_seccion(ax, cs, hueco_u=None):
     from matplotlib.patches import Polygon
     from shapely.geometry import Polygon as SP, box
     # forjados del barril con la cara superior en la del canto: el suelo del balcón y el de la habitación a la misma cota (usuario 26/11)
-    niveles = [E.Z_PB] + [E.Z_B0 + i * E.F + E._v["FOR_C"] for i in range(1, E._v["N_PL"])]
+    niveles = [E.Z_PB] + E.niveles_suelo()[1:-1]               # FUENTE ÚNICA (la 1.ª es el fondo plano y la última la cubierta)
     for P in cs.to_polygons():
         sp = SP(np.array(P)).buffer(0)
         if sp.is_empty: continue
@@ -421,7 +421,7 @@ def nucleo_seccion(ax, p0, p1):
         ax.add_patch(Rectangle((sc - hc + 0.4, E.Z_CU0), 2 * hc - 0.8, 0.4, fc="white", ec="k", hatch="////", lw=0.9, zorder=6.5))   # fondo del cuello entre muros (esquina en L, sin vuelo)
     if dist < E.R_B:
         hb = math.sqrt(E.R_B ** 2 - dist ** 2)
-        ax.add_patch(Rectangle((sc - hb, E.Z_CU1), 2 * hb, 0.5, fc="white", ec="k", hatch="////", lw=0.9, zorder=6.5))       # fondo plano del barril (ángulo recto)
+        ax.add_patch(Rectangle((sc - hb, E._v["Z_BI"]), 2 * hb, E.niveles_suelo()[0] - E._v["Z_BI"], fc="white", ec="k", hatch="////", lw=0.9, zorder=6.5))   # fondo plano = forjado de la 1.ª planta
     # ALETA + VIGA proyectadas (muro visto tras el corte), según el croquis del usuario: la aleta sobresale de la 2.ª planta arriba y acaba
     # con escalón en ángulo recto; en la 1.ª planta queda enrasada con la banda y sigue por debajo como viga de canto hasta el cuello
     V_ = E._v; zf = V_["Z_BI"] - V_["VIG_H"]
@@ -471,7 +471,7 @@ def huecos_seccion(p0, p1):
         if 0 <= s <= Lg and abs(u) <= h["w"] / 2:
             sg = 1.0 if np.dot(n, tl) > 0 else -1.0
             out.append(dict(p=(s, (h["z0"] + h["z1"]) / 2), t=(0.0, 1.0), n=(sg, 0.0), w=h["z1"] - h["z0"], e=h["e"],
-                            tipo="ventana" if h["tipo"] != "puerta" else "puerta_sec"))
+                            tipo="garaje" if h["tipo"] == "garaje" else ("ventana" if h["tipo"] != "puerta" else "puerta_sec")))
     return out
 
 
@@ -540,7 +540,7 @@ def alzado(ax, d, titulo):
     _ex = [("bar", _uT - E.R_B), ("bar", _uT + E.R_B)]
     CR.dibujar(ax, _o, _dir, x0, x1, extra=_ex, xl=x1)
     ax.axhline(0, color="k", lw=1.6)
-    for z, t in ((E.Z_PB, "techo PB"), (E.Z_P1, "planta 1 / terraza"), (E.Z_ALTO, "cub. bar / bloque alto"), (E.Z_B0, "1ª hab."),
+    for z, t in ((E.Z_PB, "techo PB"), (E.Z_P1, "planta 1 / terraza"), (E.Z_ALTO, "cub. bar / bloque alto"), (E.niveles_suelo()[0], "1ª hab."),
                  (E.Z_B1, "cub. hab."), (E.Z_T1, "tambor"), (E.Z_G1, "banda"), (E.Z_V1, "visera"), (E.Z_R1, "remate")):
         L.nivel(ax, x1 + 1, z, t)
     ejes(ax, (x0 - 10, x1 + 13), (-6, 52))

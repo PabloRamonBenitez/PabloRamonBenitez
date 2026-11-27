@@ -189,6 +189,12 @@ _ab = 2 * math.pi * (_k + 0.5) / V["N_AL"] + E.FASE_AL; _zb = E.Z_B0 + 3 * E.F +
 _pb = lambda r: (E.T[0] + r * math.cos(_ab), E.T[1] + r * math.sin(_ab))
 chk.append(("balcón de BAL_P: vacío entre la fachada de ventanas y el poyete", float(not _hay3(_pb(E.RF + 0.6), _zb)), 1.0))
 chk.append(("fachada de ventanas en R_B − BAL_P", float(_hay3(_pb(E.RF - 0.4), _zb - 1.7)), 1.0))
+# ---- 27/11: muro de ventanas del ala larga hasta el testero (sin tacón), garaje del ala corta, cristaleras de PB del chaflán
+chk.append(("ala larga: fachada retranqueada hasta el testero (vacío en la esquina bajo la banda)", float(not _hay3((V["W_P"] - 0.3, V["L_L"] - 0.15), 3.0)), 1.0))
+_ga = [h for h in _cat if h["grupo"] == "ala corta garaje"][0]
+_gi = np.array(_ga["p"]) - np.array(_ga["n"]) * 2.0
+chk.append(("ala corta: hueco de garaje (vacío 2 m dentro, a 1,5 m)", float(not _hay3(tuple(_gi), 1.5)), 1.0))
+chk.append(("chaflán: cristaleras de PB en el catálogo (restaurante + hotel)", float(sum(1 for h in _cat if h["grupo"] == "chaflán PB cristalera") >= 4), 1.0))
 for n, a, b in chk:
     ok = abs(a - b) < (2.0 if "tolerancia 2" in n else 0.1 if ("A–D" in n) else 0.25 if ("curva" in n or "X:" in n) else 0.12) or (("|cos|" in n or "|sen|" in n) and a < 0.02) or (n.startswith("sin ventanas") and a > V["W_P"] - 0.05) or ("1,5 %" in n and a <= 0.015)
     out.append(f"| {n} | {a:.2f} | {b:.2f} | {'OK' if ok else 'NO'} |")

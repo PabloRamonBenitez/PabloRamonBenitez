@@ -32,7 +32,7 @@ def ejes():
 
 def niveles():
     return sorted({0.0: "±0,00", E.Z_PB: "techo PB", E.Z_P1: "terraza / planta 1", E.Z_ALTO: "bar / bloque alto",
-                   V["Z_CU0"]: "base del cuello", E.Z_B0: "1.ª planta hab.", E.Z_B1: "cubierta del barril", E.Z_T1: "tambor",
+                   V["Z_CU0"]: "base del cuello", E.niveles_suelo()[0]: "1.ª planta hab.", E.Z_B1: "cubierta del barril", E.Z_T1: "tambor",
                    E.Z_G1: "banda / intradós visera", E.Z_V1: "visera", E.Z_R1: "remate"}.items())
 
 

@@ -98,3 +98,6 @@
 | F09: el extremo del muro no asoma a la derecha de la visera (lateral − borde visera ≤ 0,25) | 0.11 | 0.00 | OK |
 | balcón de BAL_P: vacío entre la fachada de ventanas y el poyete | 1.00 | 1.00 | OK |
 | fachada de ventanas en R_B − BAL_P | 1.00 | 1.00 | OK |
+| ala larga: fachada retranqueada hasta el testero (vacío en la esquina bajo la banda) | 1.00 | 1.00 | OK |
+| ala corta: hueco de garaje (vacío 2 m dentro, a 1,5 m) | 1.00 | 1.00 | OK |
+| chaflán: cristaleras de PB en el catálogo (restaurante + hotel) | 1.00 | 1.00 | OK |

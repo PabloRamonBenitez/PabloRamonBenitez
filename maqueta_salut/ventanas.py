@@ -5,6 +5,7 @@ coinciden porque salen de la misma lista.
 Cada hueco: dict(id, grupo, tipo, p=(x,y) centro en la cara exterior del muro, t=(tx,ty) dirección de la fachada,
 n=(nx,ny) normal hacia fuera, w ancho, z0, z1, e espesor de muro dibujado)."""
 import math
+import numpy as np
 import edificio as E
 
 V = E._v
@@ -81,6 +82,16 @@ def catalogo():
     for i in range(int(V["PUERTAS_H"])):
         X = E.R_COL + 1.2 + i * 2.6
         _h(H, f"HP{i + 1}", "hotel puertas PB", "puerta", E.P(X, yfp), U, out, 1.8, 0.0, 2.5)
+    # 6d-bis. CRISTALERAS de suelo a techo en la fachada retranqueada de la PB del chaflán, bajo la banda del hotel (tras las puertas,
+    #         hasta la esquina) y bajo la del restaurante (de la columna a la calle), paños de M_CH [F50, F18, F15; usuario 27/11]
+    xd1 = E.R_COL + 1.2 + (int(V["PUERTAS_H"]) - 1) * 2.6 + 0.9 + 0.3
+    for nm, xa, xb in (("CPH", xd1, E.R_COL + V["HOT_L"] - 0.6), ("CPR", -(E._k - 1.6), -(E.R_COL + 0.4))):
+        n_ = max(int(round((xb - xa) / V["M_CH"])), 1); wm = (xb - xa) / n_
+        for i in range(n_):
+            _h(H, f"{nm}{i + 1}", "chaflán PB cristalera", "ventana", E.P(xa + (i + 0.5) * wm, yfp), U, out, wm - 0.15, 0.1, E.Z_PB - 0.35)
+    # 6d-ter. HUECO DE GARAJE en la PB del ala corta junto a la medianera, bajo la logia, entre el pilar y el muro final [F72, usuario 27/11]
+    gx0 = -V["L_C"] + V["LOG_PX"] + 0.35; gx1 = gx0 + V["GAR_W"]
+    _h(H, "GA1", "ala corta garaje", "garaje", E.SWP((gx0 + gx1) / 2, 0.0), tuple(-np.array(E.US)), tuple(-np.array(E.NS)), gx1 - gx0, 0.0, V["GAR_H"])
     # 6e. ventanas de la fachada posterior del bloque alto (línea A) [croquis del usuario]
     for i, xx in enumerate((1.5, 3.0, 7.5, 10.5)):
         a, b = R(-E.L_C + xx, E.W_C), R(-E.L_C + xx + 1.2, E.W_C)

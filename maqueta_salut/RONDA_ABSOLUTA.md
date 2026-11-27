@@ -224,3 +224,15 @@ Comprobación interna:
 - **Comprobado**: ninguna palabra en español en los tres PDF.
 - **En español**: las hojas de trabajo (láminas definitivas, planos 2D con el cuadro de cotas), los dibujos explicativos y los informes, que sirven para revisar.
 
+## 13. Escalera y forjados, final del ala larga, PB del chaflán y garaje (27/11)
+- **Escalera ≠ forjado**:
+  - Causa: había dos definiciones del nivel de suelo; al subir los forjados al canto, la escalera se quedó en la cota antigua.
+  - Arreglo: una sola fuente, `E.niveles_suelo()`, que leen forjados, rellanos, 3D y rótulos. La 1.ª planta, sobre el fondo plano, mide 2,49.
+  - La auditoría nueva dibuja cada sección que corta la escalera (L1, L4, S2) y compara rellano con forjado. Con el fallo antiguo daba 57 avisos; ahora 0.
+- **Final del ala larga** (la línea que el usuario marcó varias veces):
+  - El muro de ventanas retranqueado empezaba a 53,9, dejando una línea vertical sobre la rampa, y acababa 0,30 antes del testero, dejando un muro de canto en la esquina (el «tacón»).
+  - Ahora empieza donde la rampa ya lo tapa y llega hasta el testero; la banda superior vuela también en la esquina.
+  - La rampa apoya en el muro retranqueado, sin rendija.
+- **PB del chaflán** (F50, F18): cristaleras de suelo a techo en la fachada retranqueada, bajo la banda del restaurante (4 paños) y del hotel (junto a las puertas).
+- **Garaje del ala corta** (F72): hueco de 2,6 × 3,0 en la PB junto a la medianera, bajo la logia, entre el pilar y el muro final. Fondo supuesto: 6 m (oscuro en la foto).
+

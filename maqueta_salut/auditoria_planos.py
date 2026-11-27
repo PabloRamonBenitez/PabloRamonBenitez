@@ -121,6 +121,29 @@ def reglas():
     return [("reglas",) + x for x in r]
 
 
+def escalera_vs_forjados():
+    """Ningún rellano de planta puede quedar a otra cota que su forjado: dibuja cada sección que corta la escalera y compara la
+    cara superior de cada rellano cortado (losa de 0,20) con E.niveles_suelo() y con el rellano intermedio [usuario 27/11]."""
+    import matplotlib.pyplot as plt
+    from matplotlib.patches import Rectangle
+    out = []
+    NS = E.niveles_suelo(); mid = [(a + b) / 2 for a, b in zip(NS[:-1], NS[1:])]
+    for k, p0, p1, _ in LM.SECC:
+        if LM.hueco_escalera(p0, p1) is None: continue
+        fig = plt.figure(figsize=(4, 4)); ax = fig.add_axes([0, 0, 1, 1])
+        LM.tramos_escalera(ax, p0, p1)
+        tops = sorted({round(p.get_y() + p.get_height(), 3) for p in ax.patches if isinstance(p, Rectangle) and abs(p.get_height() - 0.20) < 0.01})
+        plt.close(fig)
+        if not tops: continue
+        for zt in tops:
+            d = min(abs(zt - z) for z in NS + mid)
+            if d > 0.02: out.append(("reglas", "D escalera ≠ forjado", (0, zt), f"sección {k}: rellano a +{zt:.2f}, el forjado más próximo está a {d:.2f} m"))
+        for z in NS[1:]:
+            if not any(abs(zt - z) < 0.02 for zt in tops):
+                out.append(("reglas", "D escalera ≠ forjado", (0, z), f"sección {k}: el forjado +{z:.2f} no tiene rellano de planta"))
+    return out
+
+
 if __name__ == "__main__":
     res = []
     import ventanas as VT
@@ -134,6 +157,7 @@ if __name__ == "__main__":
         exs = unary_union([box(-500, -1, 500, 0.25), box(-500, V["SIG_Z0"] - 0.1, 500, V["SIG_Z1"] + 0.1)])   # rasante y letras
         res += auditar(f"sección {k}", g, exs)
     res += reglas()
+    res += escalera_vs_forjados()
     graves = [x for x in res if not x[1].startswith("e ")]
     lines = ["# Auditoría gráfica de la planimetría", "", f"Cortes: {', '.join(n for n, _ in CORTES)} · secciones {', '.join(k for k, *_ in LM.SECC)}",
              "", f"**Defectos: {len(graves)}** (A astillas · B rendijas · C nudos · D reglas del usuario) · "

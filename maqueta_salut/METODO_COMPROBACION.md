@@ -12,6 +12,7 @@ Nada se entrega sin pasar, **en este orden**, las cinco puertas. Si una falla, s
 
 ## Reglas de representación que se comprueban a mano en la hoja de nudos
 - Rampas: contorno y triángulo muy fino. La base en el arranque y el vértice en el extremo superior, sin punto. Nunca curvas de nivel.
+- Una cota, una fuente: los suelos del barril salen solo de `E.niveles_suelo()`. Forjados, rellanos de la escalera, 3D y rótulos de nivel la leen de ahí, y la auditoría dibuja cada sección que corta la escalera y comprueba que cada rellano de planta coincide con su forjado.
 - Dos cuerpos que se encuentran comparten **una** línea; ninguno atraviesa al otro (p. ej. el restaurante contra el pie de la escalera).
 - Burbujas de ejes que no se pisan: si dos están a menos de 2 m, una baja de fila. Los puntos de corte de la torre solo llevan un tic.
 - Solo líneas, sin colores; cortado grueso con trama, visto fino, por encima discontinuo.

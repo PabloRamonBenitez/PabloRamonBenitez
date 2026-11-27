@@ -100,7 +100,7 @@ def hoja_triple(titulo, e, u_rng, v_rng, secc, zc, d, t_alz, den, refs):
              f"Sección {k_}: {tx[:60]}\nPlanta: corte a +{zc:.2f}; flecha = vista del alzado.\n"
              "Trazo grueso con trama: cortado · fino: visto ·\ndiscontinuo: por encima.".replace(".", ",", 0), fontsize=5.3, va="top")
     niv = [(0, "±0,00"), (E.Z_PB, "techo PB"), (E.Z_P1, "terraza / planta 1"), (E.Z_BAR_C, "cub. bar / bloque alto"),
-           (E.Z_B0, "1ª planta hab."), (E.Z_B1, "cubierta hab."), (E.Z_T1, "tambor"), (E.Z_V1, "visera"), (E.Z_R1, "remate")]
+           (E.niveles_suelo()[0], "1ª planta hab."), (E.Z_B1, "cubierta hab."), (E.Z_T1, "tambor"), (E.Z_V1, "visera"), (E.Z_R1, "remate")]
     fig.text(xr / w, (h - 62) / h, "Niveles:\n" + "\n".join(f"+{z:5.2f}  {t}".replace(".", ",") for z, t in niv), fontsize=5.2,
              va="top", family="monospace")
     IA.barra(fig, xr, 40, den, 20)

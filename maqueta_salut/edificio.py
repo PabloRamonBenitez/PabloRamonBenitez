@@ -56,7 +56,15 @@ Z_CU0, Z_CU1, Z_ALETA0, Z_B0, F, N_PL = _v["Z_CU0"], _v["Z_CU1"], _v["Z_ALE"], _
 Z_B1 = Z_B0 + N_PL * F
 Z_T1, Z_G1, Z_V1, Z_R1 = _v["Z_T1"], _v["Z_G1"], _v["Z_V1"], _v["Z_R1"]
 R_COL, R_CU, R_B, R_AL, R_T, R_G, R_V, R_R = _v["R_COL"], _v["R_CU"], _v["R_B"], _v["R_AL"], _v["R_T"], _v["R_G"], _v["R_V"], _v["R_R"]
-RF = R_B - _v["BAL_P"]                     # fachada de ventanas de las habitaciones (balcón de BAL_P) [usuario 26/11]
+RF = R_B - _v["BAL_P"]
+
+
+def niveles_suelo():
+    """FUENTE ÚNICA de las cotas de suelo del barril (cara superior de cada forjado = suelo de habitación y de balcón):
+    1.ª planta sobre el fondo plano (Z_BI + canto), resto sobre cada canto (Z_B0 + i·F + canto), la última es la cubierta.
+    La usan los forjados de las secciones, la escalera (rellanos de planta), el 3D y la auditoría [usuario 26/11]."""
+    FC_ = _v["FOR_C"]
+    return [_v["Z_BI"] + FC_] + [Z_B0 + i * F + FC_ for i in range(1, N_PL + 1)]                     # fachada de ventanas de las habitaciones (balcón de BAL_P) [usuario 26/11]
 OFF_V, OFF_R, N_AL = (_v["OV_X"], _v["OV_Y"]), (_v["OR_X"], _v["OR_Y"]), int(_v["N_AL"])
 FASE_AL = math.radians(_v.get("FASE_AL", 0.0))   # giro del módulo radial [MGF Alamy]
 OFF_B = (_v["OB_X"], _v["OB_Y"])
@@ -305,7 +313,8 @@ def base():
         x, y, z = v
         yy = y0 + min(max(y, 0.0), 1.0) * LR
         lo, hi = zs(yy), zr(yy)
-        return (W_P - 0.02 + x * WR, yy, lo + z * (hi - lo))
+        xi = W_P - _v["FAC_R"] - 0.02                    # la rampa apoya en la fachada de ventanas retranqueada (sin rendija)
+        return (xi + x * (W_EXT - xi), yy, lo + z * (hi - lo))
     rampa = Manifold.cube((1, 1, 1)).refine(60).warp(f)
     yp = y0                                                                       # el peto de la rampa sigue al de la curva
     def fp(v):
@@ -364,16 +373,22 @@ def base():
     m = m + ROT(caja(lx0, lx1, 0, GM or 0.25, Z_PB, Z_PB + 1.0))                                 # antepecho / poyete
     # puertas del hotel en planta baja junto a la columna [usuario, F18]
     for hh in __import__("ventanas").catalogo():
-        if hh["grupo"] in ("hotel puertas PB", "bloque alto posterior", "cristalera PB concha"):
+        if hh["grupo"] in ("hotel puertas PB", "bloque alto posterior", "cristalera PB concha", "chaflán PB cristalera", "ala corta garaje"):
+            if MOLDE and hh["grupo"] == "chaflán PB cristalera": continue          # molde: vidrio a 0,12 no se cuela
             a = math.degrees(math.atan2(hh["n"][1], hh["n"][0]))
-            b = Manifold.cube((1.2, hh["w"], hh["z1"] - hh["z0"])).translate((-0.6, -hh["w"] / 2, hh["z0"]))
+            pr_ = {"chaflán PB cristalera": 0.12, "ala corta garaje": _v["GAR_P"]}.get(hh["grupo"], 0.6)   # fondo del hueco hacia dentro
+            b = Manifold.cube((pr_ + 0.6, hh["w"], hh["z1"] - hh["z0"])).translate((-pr_, -hh["w"] / 2, hh["z0"]))
             hue.append(b.rotate((0, 0, a)).translate((hh["p"][0], hh["p"][1], 0)))
     # HUECOS DEL ALA LARGA (pasada 11, proporciones F73/F01/F47): 11 arriba, 7 abajo bajo los 7 más cercanos al
     # testero, intereje S_VEN, hueco 0,47 S; marco que sale MAR_P y vidrio MAR_R por detrás del frente del marco
     import ventanas as VT                                # catálogo único de huecos (mismo que planos)
     p_, rr_, bd = _v["MAR_P"], _v["MAR_R"], _v["MAR_B"]
     XF = W_P - _v["FAC_R"]                                # fachada de ventanas retranqueada 0,80 bajo el canto volado [usuario 26/11]
-    m = m - caja(XF, W_P + 0.05, Y_CUNA - 5.0, L_L - (GM or 0.3), -0.1, Z_P1 - _v["FAC_B"])
+    # empieza donde la rampa ya tapa toda la altura bajo la banda (sin línea vertical sobre la rampa) y llega hasta el testero:
+    # sin muro de canto ni «tacón» en la esquina; la banda superior vuela FAC_R también en la esquina [usuario 22/11, 23/11, 27/11]
+    _y0r = plantas_base()["Q"][1] + _v["D_HOTF"]
+    _yrc = _y0r + (Y_CUNA - _y0r) * (1 - (Z_P1 - _v["FAC_B"]) / _v["Z_CON"]) ** (1 / _v["RAMPA_P"])
+    m = m - caja(XF, W_P + 0.05, _yrc, L_L + 0.05, -0.1, Z_P1 - _v["FAC_B"])
     marcos = []
     for h in VT.catalogo():
         if not h["grupo"].startswith("ala larga"): continue
@@ -478,7 +493,7 @@ def torre():
     s.append(fuente())                                      # fuente en media luna al pie de la columna (1984) [F01, F14, F15]
     # vigas radiales bajo el barril y barril con forjados/poyetes + aletas
     zbi = _v["Z_BI"]                                         # FONDO PLANO del barril a +Z_BI = +Z_CU1, borde en ángulo recto [F09, F18, F14, usuario]
-    s.append(cil(T, R_B, zbi, zbi + (0.7 if MOLDE else 0.5)))
+    s.append(cil(T, R_B, zbi, niveles_suelo()[0] if not MOLDE else max(niveles_suelo()[0], zbi + 0.7)))   # fondo plano = forjado de la 1.ª planta
     for k in range(N_AL):                                   # 19 vigas radiales rectas bajo el fondo, del cuello a la banda [F18, F14, usuario]
         a = math.degrees(2 * math.pi * k / N_AL + FASE_AL)
         vw = 0.7 if MOLDE else 0.4
@@ -568,8 +583,9 @@ def torre():
         esc.append(sector(ESC_R0, RR, Z_CU1, Z_B1 + FC, d0, d1))                     #    fachada retranqueada (macizo detrás)
         for i in range(N_PL + 1):                                                       #    forjados vistos con barandilla [F08, F11]
             z = Z_B0 + i * F
-            esc.append(sector(RR, rf, z, z + (GM or 0.3), d0, d1))
-            esc.append(sector(rf - (GM or 0.08), rf, z + (GM or 0.3), z + 1.3, d0, d1))
+            zs_ = z + FC                                                     # cara superior = suelo (niveles_suelo)
+            esc.append(sector(RR, rf, z, max(zs_, z + (GM or 0)), d0, d1))
+            esc.append(sector(rf - (GM or 0.08), rf, zs_, zs_ + 1.0, d0, d1))
     m = m + (Manifold.batch_boolean(esc, OpType.Add) - CORTE_ESC)
     # MURO de coronación: radial en el eje de la cuña, apoyado en la cubierta del tambor, de RS hasta el borde del tambor
     # (las lamas siguen por fuera, más bajas); coronación inclinada que vierte hacia dentro: ZI en RS → ZO en el borde

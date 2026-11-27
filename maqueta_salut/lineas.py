@@ -127,6 +127,8 @@ def corte(ax, cs, z=5, muro=0.30, huecos=(), polys=None, hatch="......"):
     for h in huecos:                                     # símbolo
         p, t, n, w, e = np.array(h["p"]), np.array(h["t"]), np.array(h["n"]), h["w"], h.get("e", muro)
         a0, a1 = p - t * w / 2, p + t * w / 2
+        if h["tipo"] == "garaje":                        # hueco de paso: solo la abertura y el dintel por encima (discontinuo)
+            ax.plot(*zip(a0 - n * e / 2, a1 - n * e / 2), color="k", lw=0.35, ls=(0, (5, 3)), zorder=z + 2); continue
         if h["tipo"] == "puerta":
             ax.plot(*zip(a0, a1), color="k", lw=0.5, zorder=z + 2)
             q = a0 - n * e; ax.plot(*zip(q, q - n * w), color="k", lw=0.9, zorder=z + 2)

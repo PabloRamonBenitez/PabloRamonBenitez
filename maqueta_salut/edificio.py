@@ -46,6 +46,10 @@ A_CH = math.radians(float(os.environ.get("ACH", "57")))   # angulo del chaflan c
 TH_L = math.radians(float(os.environ.get("THL", "112")))   # angulo interior de la L (calle - ala larga) [FASE 2: F35/F58 ~102]
 # ====== FUENTE UNICA: todas las cotas se leen del CUADRO DE COTAS (cotas.py); lo de arriba queda como historial
 import cotas as _K
+# VERSIÓN MOLDE (SALUT_MOLDE=1): mismo edificio con el detalle que admite un molde de silicona para colar hormigón a 1:339
+# (1 mm = 0,34 m): grosores ≥ 0,6 m, rendijas ≥ 0,35 m, relieves ≥ 0,25 m; sin barandillas abiertas ni lamas sueltas
+MOLDE = os.environ.get("SALUT_MOLDE") == "1"
+GM = 0.6 if MOLDE else None                 # grosor mínimo en la versión molde
 _v = _K.V
 Z_PB, Z_P1, Z_BAR, Z_BAR_C, Z_ALTO = _v["Z_PB"], _v["Z_P1"], _v["Z_BAR"], _v["Z_BARC"], _v["Z_ALTO"]
 Z_CU0, Z_CU1, Z_ALETA0, Z_B0, F, N_PL = _v["Z_CU0"], _v["Z_CU1"], _v["Z_ALE"], _v["Z_B0"], _v["F"], int(_v["N_PL"])
@@ -139,6 +143,7 @@ def cil(c, r, z0, z1, seg=SEG):
 
 def baranda(c, r, z0, h, paso=2.0):
     """barandilla ABIERTA (transparente en las fotos): pasamanos + travesaño + postes cada ~2 m [Alamy: se ve a través]"""
+    if MOLDE: return Manifold()                                 # molde: una barandilla abierta no se puede colar en hormigón
     n = max(int(2 * math.pi * r / paso), 8)
     ps = [Manifold.cube((0.09, 0.09, h)).translate((r - 0.1, -0.045, z0)).rotate((0, 0, 360 * k / n)) for k in range(n)]
     anillo = lambda za, ha: cil(c, r, za, za + ha) - cil(c, r - 0.07, za - 0.1, za + ha + 0.1)
@@ -218,7 +223,7 @@ def plataforma_curva():
     P = orient(SP(poly).buffer(0), 1.0)
     out = []
     for side in (True, False):
-        g = LineString(borde).buffer(0.25 if side else -0.25, single_sided=True).intersection(P)
+        g = LineString(borde).buffer((GM or 0.25) if side else -(GM or 0.25), single_sided=True).intersection(P)
         if g.area > 1.0:
             for gm in getattr(g, "geoms", [g]):
                 if gm.geom_type == "Polygon" and gm.area > 0.05:
@@ -274,9 +279,9 @@ def base():
     yr1 = yb0 + _v["R2_L"]                                              # fin de la rampa-cubierta
     s += [caja(0, W_BAR, yr1 - 0.01, yb1, Z_P1 - 0.01, Z_BAR),
           caja(0, W_BAR + _v["V_BAR"], yr1 - 0.01, yb1 + _v["V_BAR"], Z_BAR, Z_BAR_C),     # cubierta plana volada en frente y extremo
-          caja(0, 0.1, yb1, L_L, Z_P1 - 0.01, Z_P1 + 1.1),                         # barandilla borde patio de la terraza abierta [F47]
-          caja(W_P - 0.3, W_P, pl["Q"][1] + _v["D_HOTF"], L_L, Z_P1 - 0.01, Z_P1 + _v["H_PET"]),  # peto exterior [F73 +8,5] (la meseta de la esquina abre a la terraza)
-          caja(0, W_P - 0.3, L_L - 0.25, L_L - 0.15, _v["Z_FIN"] - 0.01, _v["Z_FIN"] + 1.1)]   # testero a cota terraza + barandilla [F73]
+          *([] if MOLDE else [caja(0, 0.1, yb1, L_L, Z_P1 - 0.01, Z_P1 + 1.1)]),   # barandilla borde patio de la terraza abierta [F47]
+          caja(W_P - (GM or 0.3), W_P, pl["Q"][1] + _v["D_HOTF"], L_L, Z_P1 - 0.01, Z_P1 + _v["H_PET"]),  # peto exterior [F73 +8,5] (la meseta de la esquina abre a la terraza)
+          *([] if MOLDE else [caja(0, W_P - 0.3, L_L - 0.25, L_L - 0.15, _v["Z_FIN"] - 0.01, _v["Z_FIN"] + 1.1)])]   # testero a cota terraza + barandilla [F73]
     # concha: franja exterior que se estrecha de W_EXT a W_P hasta Y_CUNA; alta junto al hotel (+7,3) y baja en
     # curva al suelo; debajo, planta baja hundida [F47, F09, Bing]
     y0 = pl["Q"][1] + _v["D_HOTF"]          # la concha empieza tras la banda del hotel sobre la fachada del ala [C04]
@@ -306,7 +311,8 @@ def base():
     def fp(v):
         x, y, z = v
         yy = yp + min(max(y, 0.0), 1.0) * (YB - yp)
-        return (W_P + WR - 0.25 + x * 0.25, yy, zr(yy) - 0.01 + z * _v["H_PET"])   # peto como el de la terraza (+8,50 junto al hotel)
+        pe_ = GM or 0.25
+        return (W_P + WR - pe_ + x * pe_, yy, zr(yy) - 0.01 + z * _v["H_PET"])   # peto como el de la terraza (+8,50 junto al hotel)
     peto = Manifold.cube((1, 1, 1)).refine(40).warp(fp)
     s += [rampa, peto]
     # ESQUINA [usuario, F09, F18]: la rampa abre hacia fuera en curva y llega a 90° al chaflán prolongado (E90);
@@ -343,10 +349,10 @@ def base():
             zt = Z_P1 + u * (Z_BAR_C - Z_P1)
             return (x0_ + x * 0.1, yb0 + u * (yr1 - yb0), zt - 0.01 + z * 1.0)
         return Manifold.cube((1, 1, 1)).refine(20).warp(g)
-    s += [cuna, barand(WB - 0.1), barand(0.0),
+    s += [cuna] + ([] if MOLDE else [barand(WB - 0.1), barand(0.0),
           caja(0, WB, yb1 + _v["V_BAR"] - 0.1, yb1 + _v["V_BAR"], Z_BAR_C - 0.01, Z_BAR_C + 1.0),    # barandilla azotea (extremo)
           caja(WB - 0.1, WB, yr1 - 0.01, yb1 + _v["V_BAR"], Z_BAR_C - 0.01, Z_BAR_C + 1.0),           # lado largo (F73 barandilla roja)
-          caja(0, 0.1, yr1 - 0.01, yb1 + _v["V_BAR"], Z_BAR_C - 0.01, Z_BAR_C + 1.0)]                 # lado patio
+          caja(0, 0.1, yr1 - 0.01, yb1 + _v["V_BAR"], Z_BAR_C - 0.01, Z_BAR_C + 1.0)])                # lado patio
     m = Manifold.batch_boolean(s, OpType.Add)
     # huecos de ventanas (franjas continuas casi a paño) [F09, F14]
     hue = []
@@ -355,7 +361,7 @@ def base():
     lx0, lx1 = x0l + _v["LOG_X0"], x0l + _v["LOG_X1"]
     m = m - ROT(caja(lx0, lx1, -1, ld, Z_PB + 0.01, Z_P1 - 0.01))
     m = m + ROT(caja(x0l + lx - 0.35, x0l + lx + 0.35, 0, ld, Z_PB, Z_P1))                       # pilar intermedio
-    m = m + ROT(caja(lx0, lx1, 0, 0.25, Z_PB, Z_PB + 1.0))                                       # antepecho / poyete
+    m = m + ROT(caja(lx0, lx1, 0, GM or 0.25, Z_PB, Z_PB + 1.0))                                 # antepecho / poyete
     # puertas del hotel en planta baja junto a la columna [usuario, F18]
     for hh in __import__("ventanas").catalogo():
         if hh["grupo"] in ("hotel puertas PB", "bloque alto posterior", "cristalera PB concha"):
@@ -367,22 +373,22 @@ def base():
     import ventanas as VT                                # catálogo único de huecos (mismo que planos)
     p_, rr_, bd = _v["MAR_P"], _v["MAR_R"], _v["MAR_B"]
     XF = W_P - _v["FAC_R"]                                # fachada de ventanas retranqueada 0,80 bajo el canto volado [usuario 26/11]
-    m = m - caja(XF, W_P + 0.05, Y_CUNA - 5.0, L_L - 0.3, -0.1, Z_P1 - _v["FAC_B"])
+    m = m - caja(XF, W_P + 0.05, Y_CUNA - 5.0, L_L - (GM or 0.3), -0.1, Z_P1 - _v["FAC_B"])
     marcos = []
     for h in VT.catalogo():
         if not h["grupo"].startswith("ala larga"): continue
         y0_, y1_ = h["p"][1] - h["w"] / 2, h["p"][1] + h["w"] / 2; z0, z1 = h["z0"], h["z1"]
-        marcos.append(caja(XF - 0.01, XF + p_, y0_ - bd, y1_ + bd, z0 - bd, z1 + bd))
-        marcos.append(caja(XF - 0.01, XF + p_ + 0.06, y0_ - bd - 0.05, y1_ + bd + 0.05, z0 - bd - 0.1, z0 - bd))  # alféizar con goterón
+        if not MOLDE: marcos.append(caja(XF - 0.01, XF + p_, y0_ - bd, y1_ + bd, z0 - bd, z1 + bd))   # molde: sin marcos (relieve 0,08)
+        if not MOLDE: marcos.append(caja(XF - 0.01, XF + p_ + 0.06, y0_ - bd - 0.05, y1_ + bd + 0.05, z0 - bd - 0.1, z0 - bd))  # alféizar con goterón
         hue.append(caja(XF + p_ - rr_, XF + 1, y0_, y1_, z0, z1))                 # hueco hasta el vidrio
     # testero: puerta de servicio con marquesina saliente y ventana encima [F73: a 0,49-0,63 del ancho desde la esquina exterior]
     hue.append(caja(W_P - 0.63 * W_P, W_P - 0.49 * W_P, L_L - 0.3, L_L + 1, 0.0, 2.6))
     hue.append(caja(W_P - 0.55 * W_P, W_P - 0.43 * W_P, L_L - 0.3, L_L + 1, 4.6, 5.3))
-    px0, px1, pd, pe = _v["POR_X0"], _v["POR_X1"], _v["POR_D"], _v["POR_E"]
+    px0, px1, pd, pe = _v["POR_X0"], _v["POR_X1"], _v["POR_D"], max(_v["POR_E"], GM or 0)
     marcos += [caja(px0, px0 + pe, L_L - 0.01, L_L + pd, 0.0, 4.4),                  # porche: muros a los lados de la puerta [usuario, F73]
                caja(px1 - pe, px1, L_L - 0.01, L_L + pd, 0.0, 4.4),
                caja(px0, px1, L_L - 0.01, L_L + pd, 4.0, 4.4),                         # marquesina sobre los muros
-               caja(W_P - 0.3, W_P, L_L - 0.01, L_L + _v["ESQ_D"], 0.0, _v["Z_FIN"] + 1.1)]   # muro de esquina en toda la altura [F73]
+               *([caja(W_P - 0.3, W_P, L_L - 0.01, L_L + _v["ESQ_D"], 0.0, _v["Z_FIN"] + 1.1)] if _v["ESQ_D"] > 0.01 else [])]   # muro de esquina (quitado: ESQ_D = 0)
     m = m + Manifold.batch_boolean(marcos, OpType.Add)
     m = m - Manifold.batch_boolean(hue, OpType.Add)
     # chaflan (coordenadas de torre): franjas de ventanas restaurante / hotel
@@ -400,7 +406,7 @@ def base():
     xh1 = R_COL + _v["HOT_L"]                                                                      # hotel: de la columna a E90 [F09, F18]
     m = m + en_torre(caja(xh0, xh1, yf - 0.3, yf + 2.0, 3.1, 4.3))
     hue_t.append(caja(xh0 + 0.3, xh1 - 0.4, yf - 1, yf + 0.3, 4.35, 6.0))
-    m = m - en_torre(caja(xh0 + 0.5, xh1 - 0.3, yf - 1, yf + RETR, -1, 3.1))                       # entrada del hotel bajo la banda
+    m = m - en_torre(caja(xh0 + 0.5, xh1 - 0.3, yf - 1, yf + RETR, -1, 3.12))                      # entrada del hotel bajo la banda (sin caras coplanarias)
     m = m - en_torre(Manifold.batch_boolean(hue_t, OpType.Add))
     # montantes entre paños: se leen las 5 y pico ventanas del restaurante y las 4 y pico del hotel [F09, F18, usuario]
     import ventanas as VTc
@@ -412,7 +418,7 @@ def base():
             c_ = p_ + t_ * s_ * (hh["w"] / 2 + 0.075) - n_ * 0.15
             mt = Manifold.cube((0.15, 0.3, hh["z1"] - hh["z0"])).translate((-0.075, -0.15, hh["z0"]))
             mont.append(mt.rotate((0, 0, math.degrees(math.atan2(t_[1], t_[0])))).translate((c_[0], c_[1], 0)))
-    return m + Manifold.batch_boolean(mont, OpType.Add)
+    return m if MOLDE else m + Manifold.batch_boolean(mont, OpType.Add)
 
 
 
@@ -458,6 +464,7 @@ def fuente():
     con bordillo de 0,3 y altura FU_H, cortado por el plano del eje de la torre (mitad hacia −N)."""
     r, h = _v["FU_R"], _v["FU_H"]
     vaso = cil(T, r, 0.0, h) - cil(T, r - 0.3, 0.15, h + 0.1)                       # el vaso apoya contra la columna (sin rendija)
+    if MOLDE: return Manifold()                                # molde: fuera (una lámina de 0,3 en la cara de colada se rompería)
     ang = math.degrees(math.atan2(N[1], N[0]))
     medio = Manifold.cube((2 * r + 2, r + 1, h + 1)).translate((-(r + 1), 0, -0.5)).rotate((0, 0, ang - 90 + 180))
     return vaso ^ medio.translate((T[0], T[1], 0))
@@ -471,29 +478,33 @@ def torre():
     s.append(fuente())                                      # fuente en media luna al pie de la columna (1984) [F01, F14, F15]
     # vigas radiales bajo el barril y barril con forjados/poyetes + aletas
     zbi = _v["Z_BI"]                                         # FONDO PLANO del barril a +Z_BI = +Z_CU1, borde en ángulo recto [F09, F18, F14, usuario]
-    s.append(cil(T, R_B, zbi, zbi + 0.5))
+    s.append(cil(T, R_B, zbi, zbi + (0.7 if MOLDE else 0.5)))
     for k in range(N_AL):                                   # 19 vigas radiales rectas bajo el fondo, del cuello a la banda [F18, F14, usuario]
         a = math.degrees(2 * math.pi * k / N_AL + FASE_AL)
-        vg = Manifold.cube((R_B - 0.05 - (R_CU - 0.3), 0.4, _v["VIG_H"] + 0.01)).translate((R_CU - 0.3, -0.2, zbi - _v["VIG_H"]))
+        vw = 0.7 if MOLDE else 0.4
+        vg = Manifold.cube((R_B - 0.05 - (R_CU - 0.3), vw, _v["VIG_H"] + 0.01)).translate((R_CU - 0.3, -vw / 2, zbi - _v["VIG_H"]))
         s.append(vg.rotate((0, 0, a)).translate((T[0], T[1], 0)))
     rf = RF                                                  # fachada de ventanas tras el balcón de BAL_P [usuario 26/11]
     FC, FR, FP = _v["FOR_C"], _v["FOR_R"], _v["FOR_P"]          # sección de planta del barril [MGF Alamy]
     s.append(cil(T, rf, _v["Z_BI"], Z_B1 + 0.4))
-    s.append(cil(T, R_B, _v["Z_BI"], _v["Z_BI"] + _v["BAN_1"]) - cil(T, R_B - 0.25, _v["Z_BI"] - 0.1, _v["Z_BI"] + _v["BAN_1"] + 0.1))  # 1.ª planta: banda continua sin ranura delante del pavés [F09, F18]
+    s.append(cil(T, R_B, _v["Z_BI"], _v["Z_BI"] + _v["BAN_1"]) - cil(T, R_B - (GM or 0.25), _v["Z_BI"] - 0.1, _v["Z_BI"] + _v["BAN_1"] + 0.1))  # 1.ª planta: banda continua sin ranura delante del pavés [F09, F18]
     for i in range(1, N_PL):
         z = Z_B0 + i * F
+        if MOLDE:                                               # molde: canto + ranura (0,27 = 0,8 mm) + poyete en una sola banda maciza
+            s.append(cil(T, R_B, z, z + FC + FR + FP) - cil(T, rf - 0.1, z - 0.1, z + FC + FR + FP + 0.05)); continue
         s.append(cil(T, R_B, z, z + FC) - cil(T, rf - 0.1, z - 0.1, z + FC + 0.05))          # canto del forjado [MGF Alamy]
         s.append(cil(T, R_B, z + FC + FR, z + FC + FR + FP) - cil(T, R_B - 0.25, z + FC, z + FC + FR + FP + 0.05))  # poyete tras la ranura [MGF Alamy]
     s.append(cil(T, R_B, Z_B1, Z_B1 + FC))
     s.append(baranda(T, R_B - 0.05, Z_B1 + FC, _v["BAR_B"]))   # peto + barandilla 1,1 m de la cubierta del barril [F09, F08]
     for k in range(N_AL):
         a = 2 * math.pi * k / N_AL + FASE_AL
-        al = Manifold.cube((R_B - rf + 0.1, 0.4, Z_B1 + FC - _v["Z_BI"])).translate((rf - 0.1, -0.2, _v["Z_BI"]))      # dentro de la banda, desde el fondo
-        al = al + Manifold.cube((R_AL - R_B + 0.05, 0.4, Z_B1 + FC - Z_ALETA0)).translate((R_B - 0.05, -0.2, Z_ALETA0))  # fuera: escalón en ángulo recto en la 2.ª planta
+        aw = 0.7 if MOLDE else 0.4
+        al = Manifold.cube((R_B - rf + 0.1, aw, Z_B1 + FC - _v["Z_BI"])).translate((rf - 0.1, -aw / 2, _v["Z_BI"]))      # dentro de la banda, desde el fondo
+        al = al + Manifold.cube((R_AL - R_B + 0.05, aw, Z_B1 + FC - Z_ALETA0)).translate((R_B - 0.05, -aw / 2, Z_ALETA0))  # fuera: escalón en ángulo recto en la 2.ª planta
         s.append(al.rotate((0, 0, math.degrees(a))).translate((T[0], T[1], 0)))
     # tambor de ojos, banda, visera, remate
     zp = Z_T1 - _v["H_PT"]                                  # pasillo de servicio entre tambor y banda [F08]
-    s.append(cil(T, R_T, Z_B1, zp) + (cil(T, R_T, zp - 0.01, Z_T1) - cil(T, R_T - 0.25, zp, Z_T1 + 0.1)))   # tambor + peto
+    s.append(cil(T, R_T, Z_B1, Z_T1) if MOLDE else cil(T, R_T, Z_B1, zp) + (cil(T, R_T, zp - 0.01, Z_T1) - cil(T, R_T - 0.25, zp, Z_T1 + 0.1)))   # tambor + peto (molde: macizo)
     import ventanas as VT0
     for oj in [h for h in VT0.catalogo() if h["tipo"] == "ojo"]:
         a = math.degrees(math.atan2(oj["n"][1], oj["n"][0]))
@@ -503,7 +514,7 @@ def torre():
     pb_ = P(*OFF_B)                                       # banda descentrada hacia la plaza [Alamy]
     s.append(cil(pb_, R_G - 0.3, Z_T1 - _v["H_PT"], Z_G1))
     nm = int(2 * math.pi * R_G / 2.4)
-    for k in range(nm):                                     # montantes de la banda acristalada [F10, F17]
+    for k in (range(0) if MOLDE else range(nm)):                # montantes de la banda acristalada [F10, F17] (molde: no)
         mt = Manifold.cube((0.5, 0.25, Z_G1 - Z_T1 + _v["H_PT"])).translate((R_G - 0.45, -0.125, Z_T1 - _v["H_PT"]))
         s.append(mt.rotate((0, 0, 360 * k / nm)).translate((pb_[0], pb_[1], 0)))
     s.append(cil(pv, R_V, Z_G1, Z_V1))
@@ -511,6 +522,11 @@ def torre():
     s.append(cil(pr, R_R, Z_V1, Z_R1))
     s.append(cil(pr, _v["REM_ZR"], Z_V1 - 0.01, Z_V1 + _v["REM_ZH"]))      # zócalo (poyete) del remate [Alamy]
     for L_ in letrero():                                     # letrero САЛЮТ (misma función que los planos) [Alamy]
+        if MOLDE:                                               # molde: letras en relieve de 0,5 sobre el remate (sueltas a 1,5 m se romperían)
+            a_ = math.radians(L_["rot"]); rl = R_R + 0.2; wl = 2 * rl * math.sin(math.radians(_v["SIG_AW"] / 10)) - 0.45
+            c_ = (pr[0] + rl * math.cos(a_), pr[1] + rl * math.sin(a_))
+            _l = Manifold.cube((0.6, wl, L_["z1"] - L_["z0"])).translate((-0.3, -wl / 2, L_["z0"]))
+            s.append(_l.rotate((0, 0, L_["rot"])).translate((c_[0], c_[1], 0))); continue
         _l = Manifold.cube((0.3, L_["w"], L_["z1"] - L_["z0"])).translate((-0.15, -L_["w"] / 2, L_["z0"]))
         s.append(_l.rotate((0, 0, L_["rot"])).translate((L_["c"][0], L_["c"][1], 0)))
     pl_ = P(_v["LUC_X"], _v["LUC_Y"])                        # lucernario piramidal de 12 costillas sobre la visera [fotos 25/11]
@@ -529,11 +545,18 @@ def torre():
     RS, ZI, ZO = _v["ESC_RS"], _v["ESC_ZI"], _v["ESC_Z1"]
     m = m - sector(ESC_R0 + 0.3, R_AL + 1.0, Z_CU1, Z_T1 + 0.01, -ESC_HA + 0.01, ESC_HA - 0.01)
     m = m - sector(RS, R_AL + 1.0, Z_T1, ZO + 0.5, -ESC_HA + 0.01, ESC_HA - 0.01)
+    if MOLDE:                                                   # molde: las dos aletas que flanquean el hueco de la escalera, enteras (el corte las dejaba en 0,35)
+        for kk in range(N_AL):
+            a = 2 * math.pi * kk / N_AL + FASE_AL
+            if abs(abs(math.remainder(a - ESC_ANG, 2 * math.pi)) - ESC_HA) < math.radians(1.5):
+                al = Manifold.cube((R_AL - (R_B - 1.3) + 0.05, 0.7, Z_B1 + _v["FOR_C"] - Z_ALETA0)).translate((R_B - 1.3, -0.35, Z_ALETA0))
+                al = al + Manifold.cube((R_B - RF + 0.1, 0.7, Z_B1 + _v["FOR_C"] - _v["Z_BI"])).translate((RF - 0.1, -0.35, _v["Z_BI"]))
+                m = m + al.rotate((0, 0, math.degrees(a))).translate((T[0], T[1], 0))
     # 2) cuerpo en cuña; por debajo pasa la rampa. Por encima del tambor la caja solo llega hasta RS (cielo hasta la banda)
     #    y su cubierta baja de ZO (fuera) a ZI (dentro) [Alamy, collage]
     esc = [sector(ESC_R0, ESC_RC, _v["ESC_Z0"], Z_T1, -ESC_HB, ESC_HB),
            # (el muro de coronación va aparte, sobre la cubierta del tambor: ver MURO_ESC más abajo)
-           sector(ESC_RC - 0.2, ESC_RC, Z_T1 - 0.01, Z_T1 + 1.1, -ESC_HB, ESC_HB)]      # peto bajo sobre el cuerpo
+           sector(ESC_RC - (GM or 0.2), ESC_RC, Z_T1 - 0.01, Z_T1 + 1.1, -ESC_HB, ESC_HB)]      # peto bajo sobre el cuerpo
     # cubierta inclinada de la caja de escalera: plano de ESC_ZI (en ESC_RS) a ESC_Z1 (en ESC_R1 + 0,3); corta cuerpo y lamas [Alamy]
     _ri, _ro = _v["ESC_RS"] - 1.0, ESC_R1 + 1.5
     _sl = (_v["ESC_Z1"] - _v["ESC_ZI"]) / (ESC_R1 + 0.3 - _v["ESC_RS"])
@@ -545,8 +568,8 @@ def torre():
         esc.append(sector(ESC_R0, RR, Z_CU1, Z_B1 + FC, d0, d1))                     #    fachada retranqueada (macizo detrás)
         for i in range(N_PL + 1):                                                       #    forjados vistos con barandilla [F08, F11]
             z = Z_B0 + i * F
-            esc.append(sector(RR, rf, z, z + 0.3, d0, d1))
-            esc.append(sector(rf - 0.08, rf, z + 0.3, z + 1.3, d0, d1))
+            esc.append(sector(RR, rf, z, z + (GM or 0.3), d0, d1))
+            esc.append(sector(rf - (GM or 0.08), rf, z + (GM or 0.3), z + 1.3, d0, d1))
     m = m + (Manifold.batch_boolean(esc, OpType.Add) - CORTE_ESC)
     # MURO de coronación: radial en el eje de la cuña, apoyado en la cubierta del tambor, de RS hasta el borde del tambor
     # (las lamas siguen por fuera, más bajas); coronación inclinada que vierte hacia dentro: ZI en RS → ZO en el borde
@@ -555,7 +578,7 @@ def torre():
     _ro_m = R_T + _v["ESC_MO"]
     _pm = [(RS, Z_T1 - 0.01), (_ro_m, Z_T1 - 0.01), (_ro_m, ZO), (RS, ZI)]
     _cm = CrossSection([_pm]); _cm = _cm if _cm.area() > 0 else CrossSection([_pm[::-1]])
-    MURO_ESC = Manifold.extrude(_cm, 0.3).translate((0, 0, -0.15)).rotate((90, 0, 0)).rotate((0, 0, math.degrees(ESC_ANG))).translate((T[0], T[1], 0))
+    MURO_ESC = Manifold.extrude(_cm, GM or 0.3).translate((0, 0, -(GM or 0.3) / 2)).rotate((90, 0, 0)).rotate((0, 0, math.degrees(ESC_ANG))).translate((T[0], T[1], 0))
     m = m + MURO_ESC
     m = m + sector(ESC_R0, ESC_RC, _v["ESC_ZL"] - 0.3, _v["ESC_ZL"], -ESC_HB, ESC_HB)     # forjado superior de la escalera (sin hueco visto) [usuario 26/11]
     # pie de la escalera: núcleo de hormigón bajo la losa blanca y celosía baja de lamas sobre la terraza [F78, foto de frente]
@@ -564,7 +587,7 @@ def torre():
     m = m + sector(ESC_R0, ESC_RC + 0.3, _v["ESC_Z0"] - _v["ESC_LE"], _v["ESC_Z0"], -ESC_HB, ESC_HB)   # losa blanca [foto de frente]
     # cristalera suelo-techo con dintel entre tambor y escalera (lado izquierdo) y puerta del tambor [foto de frente, usuario]
     _zb = Z_B1 + FC; _d0, _d1 = -ESC_HA, -ESC_HB
-    m = m + sector(_v["ESC_RR"] - 0.05, _v["ESC_RR"], _zb, _v["CR_Z1"], _d0, _d1) + sector(_v["ESC_RR"] - 0.3, _v["ESC_RR"] + 0.2, _v["CR_Z1"], Z_T1, _d0, _d1)
+    m = m + sector(_v["ESC_RR"] - (GM or 0.05), _v["ESC_RR"], _zb, _v["CR_Z1"], _d0, _d1) + sector(_v["ESC_RR"] - 0.3, _v["ESC_RR"] + 0.2, _v["CR_Z1"], Z_T1, _d0, _d1)
     import ventanas as VTp
     for hh in VTp.catalogo():
         if hh["grupo"] == "tambor puerta":
@@ -584,7 +607,7 @@ def torre():
             h = Manifold.cube((1.2, hh["w"], hh["z1"] - hh["z0"])).translate((_v["ESC_RC"] - 0.6, -hh["w"] / 2, hh["z0"]))
             hue.append(h.rotate((0, 0, a)).translate((T[0], T[1], 0)))
             continue
-        if hh["grupo"] != "escalera retranqueo": continue
+        if hh["grupo"] != "escalera retranqueo" or MOLDE: continue      # molde: sin estas ventanas (dejaban una lámina de 0,25 junto a la cuña)
         a = math.degrees(math.atan2(hh["n"][1], hh["n"][0]))
         h = Manifold.cube((0.8, hh["w"], hh["z1"] - hh["z0"])).translate((_v["ESC_RR"] - 0.5, -hh["w"] / 2, hh["z0"]))
         hue.append(h.rotate((0, 0, a)).translate((T[0], T[1], 0)))
@@ -618,6 +641,12 @@ def torre():
     nlc = int(2 * ESC_HB * ESC_RC / _v["LAMA_P"])
     for k in range(nlc + 1):                                    # celosía baja al pie de la escalera
         lam.append(lama(ESC_RC + 0.1, -ESC_HB + 2 * ESC_HB * k / nlc, z0=Z_P1, z1=Z_P1 + _v["ESC_CB"]))
+    if MOLDE:                                                   # molde: la pantalla de lamas (0,08 cada 0,35) se cuela como un volumen macizo
+        z0l, z1l = _v["ESC_Z0"] + 0.3, _v["ESC_ZL"]; dl = math.atan2(0.6, ESC_RC)
+        lam = [sector(ESC_RC - 0.01, ESC_R1, z0l, z1l, -ESC_HB, ESC_HB),                          # frente
+               sector(rf, ESC_R1, z0l, z1l, -ESC_HB - dl, -ESC_HB + 0.01), sector(rf, ESC_R1, z0l, z1l, ESC_HB - 0.01, ESC_HB + dl),   # costados
+               sector(_v["ESC_RR"] + 0.1, R_B, Z_B0, Z_T1, ESC_HA - math.atan2(0.6, R_B), ESC_HA),                                # borde dcho. del corte
+               sector(ESC_RC - 0.6, ESC_RC + 0.25, Z_P1, Z_P1 + _v["ESC_CB"], -ESC_HB, ESC_HB)]                                 # celosía baja
     m = m + (Manifold.batch_boolean(lam, OpType.Add) - CORTE_ESC)
     for L_ in lucernarios_cuello():                             # lucernarios piramidales bajo el cuello [F78]
         pir = Manifold.cylinder(L_["h"], L_["l"] / math.sqrt(2), 0.0, 4).rotate((0, 0, 45 + math.degrees(L_["a"])))

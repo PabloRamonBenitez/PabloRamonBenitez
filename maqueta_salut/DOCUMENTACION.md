@@ -17,6 +17,7 @@ Los juegos A3 y A4 y el plano de lugar van **en ucraniano** (`traduccion.py`). L
 ## Modelo
 | Archivo | Contenido |
 |---|---|
+| `Hotel_Salut_15cm_MOLDE.stl` | **Versión para el molde de silicona y la colada de hormigón**, a la misma escala. Grosores ≥ 0,6 m (1,8 mm), rendijas ≥ 0,35 m (1 mm), sin barandillas abiertas, lamas macizas, letras en relieve sobre el remate. Una sola pieza con base plana. Ver `MOLDE.md` y `MOLDE_COMPARACION.png`. |
 | `Hotel_Salut_15cm_v3.stl` | STL para el molde de silicona: 15 cm de alto, escala ≈ 1:339. Las gárgolas no van en el STL (medirían 0,3 mm). |
 | `VISTA3D_1…4.png` | Vistas del 3D junto a la foto equivalente. |
 

@@ -114,7 +114,7 @@ def hoja_alz_secc(titulo, d_alz, t_alz, secc, e, u_rng, den, lista_fotos):
         if (y_s + hz + 6 if secc is not None else y_a + hz + 6) <= H - 14: break
     CR.MM = den / 1000; L_.MM = den / 1000                           # burbujas, cadenas y números de cota en mm de papel
     ax_a = fig.add_axes([x0 / W, y_a / H, wd / W, hz / H])
-    LM.alzado(ax_a, d_alz, ""); ax_a.set_xlim(*u_rng); ax_a.set_ylim(*ZL); ax_a.set_aspect("equal"); ax_a.axis("off"); CR.reubicar_niveles(ax_a)
+    LM.alzado(ax_a, d_alz, ""); ax_a.set_xlim(*u_rng); ax_a.set_ylim(*ZL); ax_a.set_aspect("equal"); ax_a.axis("off"); CR.reubicar_niveles(ax_a); CR.podar_burbujas(ax_a)
     fig.text(x0 / W, (y_a + hz + 2) / H, t_alz, fontsize=8, weight="bold")
     if secc is not None:
         kk, p0, p1, tx = secc
@@ -123,7 +123,7 @@ def hoja_alz_secc(titulo, d_alz, t_alz, secc, e, u_rng, den, lista_fotos):
         off = float(p0 @ np.array(e))
         ax_s = fig.add_axes([x0 / W, y_s / H, wd / W, hz / H])
         LM.seccion(ax_s, p0, p1, "")
-        ax_s.set_xlim(u_rng[0] - off, u_rng[1] - off); ax_s.set_ylim(*ZL); ax_s.set_aspect("equal"); ax_s.axis("off"); CR.reubicar_niveles(ax_s)
+        ax_s.set_xlim(u_rng[0] - off, u_rng[1] - off); ax_s.set_ylim(*ZL); ax_s.set_aspect("equal"); ax_s.axis("off"); CR.reubicar_niveles(ax_s); CR.podar_burbujas(ax_s)
         fig.text(x0 / W, (y_s + hz + 2) / H, f"SECCIÓN {kk} – {tx}", fontsize=8, weight="bold")
     fig.text(x0 / W, 289 / H, titulo, fontsize=10, weight="bold", va="top")
     for ax in fig.axes:                                              # nada se dibuja fuera del marco de su dibujo

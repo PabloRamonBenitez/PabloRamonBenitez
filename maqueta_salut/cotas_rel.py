@@ -95,6 +95,16 @@ def dibujar(ax, p0, d, umin, umax, zmax=52.0, extra=(), xl=None):
         except Exception: pass
 
 
+def podar_burbujas(ax):
+    """quita la letra de las burbujas de ejes que caen fuera de los límites visibles del dibujo (su círculo ya queda recortado y la
+    letra sola parecía una errata: «T», «M» sueltas)"""
+    x0, x1 = sorted(ax.get_xlim())
+    for t in list(ax.texts):
+        if t.get_gid() == "fijo":
+            x, y = t.get_position()
+            if x < x0 or x > x1: t.remove()
+
+
 def reubicar_niveles(ax, margen_mm=7.0):
     """lleva la cadena vertical de niveles al borde izquierdo VISIBLE del dibujo (una vez fijados los límites), para que no
     quede fuera de la hoja ni se corte [usuario 27/11]"""

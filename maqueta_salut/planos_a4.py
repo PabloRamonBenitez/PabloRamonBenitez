@@ -69,7 +69,7 @@ def hoja_triple(titulo, e, u_rng, v_rng, secc, zc, d, t_alz, den, refs):
     ax_s = fig.add_axes([x0 / w, y_se / h, wd / w, hz / h])
     LM.seccion(ax_s, p0, p1, "")
     _sin_niveles(ax_s); [t_.remove() for t_ in list(ax_s.texts) if t_.get_text().startswith('+')]; [l_.remove() for l_ in list(ax_s.lines) if (len(l_.get_xdata()) == 4 or (len(l_.get_xdata()) == 2 and abs(max(l_.get_xdata()) - min(l_.get_xdata()) - 1.2) < 0.05))]
-    ax_s.set_xlim(u_rng[0] - off, u_rng[1] - off); ax_s.set_ylim(*ZL); ax_s.set_aspect("equal"); ax_s.axis("off"); CR.reubicar_niveles(ax_s)
+    ax_s.set_xlim(u_rng[0] - off, u_rng[1] - off); ax_s.set_ylim(*ZL); ax_s.set_aspect("equal"); ax_s.axis("off"); CR.reubicar_niveles(ax_s); CR.podar_burbujas(ax_s)
     ut = float(np.array(E.T) @ np.array(e)); izq = (ut - u_rng[0]) > (u_rng[1] - ut)        # torre más a la derecha → títulos a la izquierda
     xt_ = (u_rng[0] + 0.8) if izq else (u_rng[1] - 0.8); ha_ = "left" if izq else "right"
     xc_ = ((ut - 16.0 + u_rng[0]) / 2) if izq else ((ut + 16.0 + u_rng[1]) / 2)      # centro del hueco entre la torre (R 14,4) y el extremo
@@ -94,7 +94,7 @@ def hoja_triple(titulo, e, u_rng, v_rng, secc, zc, d, t_alz, den, refs):
     else:
         LM.alzado(ax_a, d, "")
     _sin_niveles(ax_a); [t_.remove() for t_ in list(ax_a.texts) if t_.get_text().startswith('+')]; [l_.remove() for l_ in list(ax_a.lines) if (len(l_.get_xdata()) == 4 or (len(l_.get_xdata()) == 2 and abs(max(l_.get_xdata()) - min(l_.get_xdata()) - 1.2) < 0.05))]
-    ax_a.set_xlim(*u_rng); ax_a.set_ylim(*ZL); ax_a.set_aspect("equal"); ax_a.axis("off"); CR.reubicar_niveles(ax_a)
+    ax_a.set_xlim(*u_rng); ax_a.set_ylim(*ZL); ax_a.set_aspect("equal"); ax_a.axis("off"); CR.reubicar_niveles(ax_a); CR.podar_burbujas(ax_a)
     ax_a.text(xc_, 30.0, t_alz, fontsize=6.5, weight="bold", va="center", ha="center", bbox=dict(fc="white", ec="none", pad=1))
     # referencias comunes (en coordenada mundo u para planta/alzado; desplazada en la sección)
     us = [r[0] for r in refs]
@@ -147,7 +147,7 @@ def hoja_transversal(den=600):
             off = -p1[0]
         _sin_niveles(ax); [t_.remove() for t_ in list(ax.texts) if t_.get_text().startswith('+')]; [l_.remove() for l_ in list(ax.lines) if (len(l_.get_xdata()) == 4 or (len(l_.get_xdata()) == 2 and abs(max(l_.get_xdata()) - min(l_.get_xdata()) - 1.2) < 0.05))]
         ax.set_xlim(u_rng[0] - off, u_rng[1] - off); ax.set_ylim(*ZL); ax.set_aspect("equal"); ax.axis("off")
-        CR.reubicar_niveles(ax)
+        CR.reubicar_niveles(ax); CR.podar_burbujas(ax)
         for xw, tt in ((0.0, "fachada patio"), (E.W_P, "fachada ext."), (E.W_EXT, "concha")):
             ax.axvline(-xw - off, color="0.55", lw=0.35, ls=(0, (6, 3)), zorder=0.5)
             ax.text(-xw - off, ZL[1] - 0.3, tt, fontsize=4.3, color="0.3", ha="center", va="top", rotation=90)

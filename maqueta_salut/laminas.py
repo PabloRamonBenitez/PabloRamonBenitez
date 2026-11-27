@@ -388,7 +388,7 @@ def seccion(ax, p0, p1, titulo):
     L.figura(ax, Lg * 0.08 + 1.0, 0.0)
     forjados_seccion(ax, cs, hueco_escalera(p0, p1))
     nucleo_seccion(ax, p0, p1)
-    L.niveles(ax, Lg + 1, [(E.Z_PB, "techo PB"), (E.Z_P1, "terraza / planta 1"), (E.Z_BAR, "bar"), (E.Z_ALTO, "bloque alto"),
+    L.niveles(ax, Lg + 3.5, [(E.Z_PB, "techo PB"), (E.Z_P1, "terraza / planta 1"), (E.Z_BAR, "bar"), (E.Z_ALTO, "bloque alto"),
                            (E.niveles_suelo()[0], "1ª planta hab."), (E.Z_B1, "cubierta hab."), (E.Z_T1, "tambor"), (E.Z_V1, "visera"), (E.Z_R1, "remate")])
     tramos_escalera(ax, p0, p1)
     import cotas_rel as CR
@@ -581,7 +581,7 @@ def alzado(ax, d, titulo):
     _ex = [("bar", _uT - E.R_B), ("bar", _uT + E.R_B)]
     CR.dibujar(ax, _o, _dir, x0, x1, extra=_ex, xl=x1)
     ax.axhline(0, color="k", lw=1.6)
-    L.niveles(ax, x1 + 1, [(E.Z_PB, "techo PB"), (E.Z_P1, "planta 1 / terraza"), (E.Z_ALTO, "cub. bar / bloque alto"), (E.niveles_suelo()[0], "1ª hab."),
+    L.niveles(ax, x1 + 3.5, [(E.Z_PB, "techo PB"), (E.Z_P1, "planta 1 / terraza"), (E.Z_ALTO, "cub. bar / bloque alto"), (E.niveles_suelo()[0], "1ª hab."),
                            (E.Z_B1, "cub. hab."), (E.Z_T1, "tambor"), (E.Z_G1, "banda"), (E.Z_V1, "visera"), (E.Z_R1, "remate")])
     ejes(ax, (x0 - 10, x1 + 13), (-6, 52))
     ax.set_title(titulo, fontsize=9, loc="left")

@@ -78,3 +78,22 @@ No he encontrado ninguna empresa española que anuncie moldes de silicona a medi
 - Para la impresión, preguntar si el precio incluye lavado y poscurado, y la resolución (25–50 µm es lo normal para un máster).
 
 Qué falta: el ordenador no se ha reconectado (no he podido pegar nada en Etsy) y las webs de los proveedores nuevos no se pueden leer desde esta sesión.
+
+## Búsqueda ordenada de posibilidades (reconocimiento del 28/11, sin enviar nada)
+No he mandado correos nuevos. Esto es lo que hay por ruta; **ningún precio es real todavía**, salvo el «desde» que publica JLC3DP.
+
+| Ruta | Quién | Lo que sé (de qué fuente) | Lo que falta |
+|---|---|---|---|
+| **A. Molde completo, hecho por un proveedor** | MinghuiLink (China) | Pide molde partido con carcasa; propuesta de dos moldes enviada el 27/11 | Precio, plazo, envío |
+| | BK Silicone | Rechazó por complejidad | Cerrado |
+| | moldesilicona.com, Modelarte, Milab3D, Flossy Candle | Sin respuesta | Reenviar con la versión de dos piezas si no contestan en 48 h |
+| | Tiendas de Etsy (PLAybelope, HOUSEOFMOLDS, MoldeSilicona, 3DDeluxeStore) | Piden el STL | Que se les escriba (texto en el borrador de Gmail) |
+| **B. Solo el máster impreso en resina** (el molde de silicona lo haces tú) | **JLC3DP** | SLA desde 0,30 $, 2 días, **tolerancia ±0,2 mm** según su web, presupuesto inmediato subiendo el STL, envío mundial sin tarifa a España confirmada | Precio de las piezas A y B. **Ojo: ±0,2 mm no basta para un encaje de 0,1 mm por lado**; el encaje lo ajustarías lijando |
+| | **Hubs** (Protolabs Network), **Craftcloud** (compara proveedores de 36 países), **3DEXPERIENCE Make** (más de 130 proveedores) | Presupuesto inmediato subiendo el STL | Precio, tolerancia de cada proveedor, plazo y envío |
+| | España: **Innovatia3D**, **Additium3D**, **Dynamical 3D** (resina Carbon), **Aitiip**, **CSIC** (SLA de 335 × 200 × 300 mm) | Existen y trabajan con SLA | **Correo de contacto de cada uno** (no he podido abrir sus webs) |
+| **C. Silicona y carcasa** | **FormX** (distribuidor de Smooth-On en España, precios con IVA) | Mold Max, silicona de estaño, mezcla 100A:10B por peso; Mold Star 20T, de platino, Shore 20A, 1A:1B por volumen | Precio y formato de kit. Cantidad de partida: unos 6 L para los dos bloques (estimación por las cajas, no un cálculo) |
+| | Carcasa en PLA o PETG | La imprimes tú | — |
+
+Siguiente paso cuando los modelos y el encaje estén aprobados: pedir presupuesto de las piezas A y B a JLC3DP, Hubs y Craftcloud con el mismo STL, y escribir a los españoles con su correo ya comprobado.
+
+**Bloqueo:** esta sesión no puede abrir las webs de los proveedores (solo tiene salida a paquetes y a herramientas conectadas). Hay creado un entorno personal, `pabloramonbenitez-proveedores`, con esas webs permitidas, pero esta sesión no pasa a él; hay que usarlo en una sesión nueva.

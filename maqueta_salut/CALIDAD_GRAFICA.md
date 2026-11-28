@@ -3,6 +3,7 @@
 | Salida | Se pisan | Sobre líneas | Cortados | Se salen del dibujo | Cruzan el marco | Fuera de la hoja | Total |
 |---|---|---|---|---|---|---|---|
 | `AUDITORIA_NUDOS.png` | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| `DESMONTABLE_DIVISION.png` | 0 | 2 | 0 | 0 | 0 | 0 | 2 |
 | `SALUT_planos_A3_presentacion.pdf` | 0 | 2 | 0 | 0 | 0 | 0 | 2 |
 | `SALUT_planos_A4.pdf` | 0 | 2 | 0 | 0 | 0 | 0 | 2 |
 | `SALUT_planos_definitivos.pdf` | 2 | 1 | 0 | 0 | 0 | 48 | 51 |

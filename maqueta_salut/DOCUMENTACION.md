@@ -20,6 +20,7 @@ Los juegos A3 y A4 y el plano de lugar van **en ucraniano** (`traduccion.py`). L
 | `Hotel_Salut_15cm_MOLDE.stl` | **Versión para el molde de silicona y la colada de hormigón**, a la misma escala. Grosores ≥ 0,6 m (1,8 mm), rendijas ≥ 0,35 m (1 mm), sin barandillas abiertas, lamas macizas, letras en relieve sobre el remate. Una sola pieza con base plana. Ver `MOLDE.md` y `MOLDE_COMPARACION.png`. |
 | `Hotel_Salut_15cm_MOLDE_baja.stl` | El mismo STL de molde con la malla simplificada a 0,012 mm de maqueta (23 064 triángulos, 1,2 MB). Es el que se comparte con los proveedores (enlace de Drive). Estanco y sin aristas no manifold. |
 | `Hotel_Salut_MOLDE_A_torre.stl`, `Hotel_Salut_MOLDE_B_ala.stl` (y sus `_baja`) | El STL de molde partido en dos piezas por el pie de la concha: A (torre, 142 × 190 × 150 mm) y B (ala, 38 × 109 × 34 mm). Cada una estanca y sin aristas no manifold. Ver `PARTIR_MOLDE.md`. |
+| `DESMONTABLE_DIVISION.png` | Propuesta (a revisar) de dividir la maqueta en dos piezas encajables: tambor con cilindro y base con hueco circular. Aún no hay modelos: se generan tras el visto bueno. |
 | `PROVEEDORES_MOLDES.md` | Estado de las consultas a proveedores de molde de silicona (correo y Etsy), con lo que han contestado y los textos para Etsy. |
 | `Hotel_Salut_15cm_v3.stl` | STL para el molde de silicona: 15 cm de alto, escala ≈ 1:339. Las gárgolas no van en el STL (medirían 0,3 mm). |
 | `VISTA3D_1…4.png` | Vistas del 3D junto a la foto equivalente. |

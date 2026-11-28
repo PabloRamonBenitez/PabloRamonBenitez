@@ -802,5 +802,23 @@
    "pagina": 9
   }
  ],
- "AUDITORIA_NUDOS.png": []
+ "AUDITORIA_NUDOS.png": [],
+ "DESMONTABLE_DIVISION.png": [
+  {
+   "tipo": "rótulo sobre líneas",
+   "texto": "9,00",
+   "fraccion": 0.174,
+   "x_mm": 347,
+   "y_mm": 83,
+   "pagina": 1
+  },
+  {
+   "tipo": "rótulo sobre líneas",
+   "texto": "9,30",
+   "fraccion": 0.174,
+   "x_mm": 347,
+   "y_mm": 103,
+   "pagina": 1
+  }
+ ]
 }

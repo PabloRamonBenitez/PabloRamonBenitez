@@ -175,7 +175,11 @@ def plantas_base():
     a1 = _inter(o_s, US, o_c, U)
     b1 = _inter(o_c, U, (W_P - RETR, 0.0), (0.0, 1.0))
     y_arc = Q[1] + _v["D_HOTF"] + _v["U_ARC"] * (Y_CUNA - Q[1] - _v["D_HOTF"])   # la PB en sombra solo bajo el arco; después muro ciego [usuario 26/11]
-    PB = [SWP(-L_C, RETR), a1, b1, (W_P - RETR, y_arc), (W_P, y_arc), (W_P, L_L),
+    # LOCAL BAJO LA RAMPA: su ventanal está metido solo el grueso del muro de la rampa (W_EXT − peto) y dobla la esquina
+    # por la diagonal de la planta baja del hotel (sigue la línea retranqueada del chaflán hasta ese plano) [usuario 28/11, F24, F76]
+    xv = W_EXT - (GM or 0.25)
+    d1 = _inter(o_c, U, (xv, 0.0), (0.0, 1.0))
+    PB = [SWP(-L_C, RETR), a1, d1, (xv, y_arc), (W_P, y_arc), (W_P, L_L),
           (0.0, L_L), IC, SWP(-L_C, W_C)]
     return dict(P1=P1, PB=PB, Q=Q, IC=IC)
 
@@ -303,17 +307,20 @@ def base():
     Y_ARC = y0 + _v["U_ARC"] * (Y_CUNA - y0)
     def zr(yy):
         u = min(max((yy - y0) / LR, 0.0), 1.0)
-        return max(0.05, _v["Z_CON"] * (1 - u))                            # rampa RECTA: pendiente constante por donde suben los coches [usuario 28/11]
+        return max(0.05, _v["Z_CON"] * (1 - u ** _v["RAMPA_P"]))          # perfil P2 convexo [usuario 26/11, Booking, F24]
     def zs(yy):         # intradós del arco bajo la rampa junto al hotel (paso en planta baja) [F47, F71, F76]
         if yy >= Y_ARC: return 0.0
         u = (yy - y0) / (Y_ARC - y0); ud = _v["ARC_D"]                 # horizontal hasta ARC_D y curva al suelo [G3, usuario]
         w = 0.0 if u <= ud else (u - ud) / (1 - ud)
-        return max(0.0, min(_v["Z_ARC"] * (1 - w), zr(yy) - 0.6))          # intradós recto (antes curvo): la rampa no tiene línea curva [usuario 28/11]
+        return max(0.0, min(_v["Z_ARC"] * math.sqrt(max(0.0, 1 - w ** 2)), zr(yy) - 0.6))
+    def zc(yy):         # FIRME por donde suben los coches: diagonal recta de +Z_CON (hotel) al suelo (pie) [usuario 28/11]
+        u = min(max((yy - y0) / LR, 0.0), 1.0)
+        return max(0.05, _v["Z_CON"] * (1 - u))
     def f(v):
         x, y, z = v
         yy = y0 + min(max(y, 0.0), 1.0) * LR
-        lo, hi = zs(yy), zr(yy)
-        xi = W_P - _v["FAC_R"] - 0.3                     # la rampa entra 0,3 en la fachada de ventanas retranqueada: unida al edificio, sin rendija [usuario 28/11]
+        lo, hi = zs(yy), max(zs(yy) + 0.05, zc(yy))    # el firme es recto y llega al suelo en el pie; la curva del alzado la lleva el muro exterior (peto)
+        xi = W_P - _v["FAC_R"] - 0.02                    # la rampa apoya en la fachada de ventanas retranqueada (sin rendija)
         return (xi + x * (W_EXT - xi), yy, lo + z * (hi - lo))
     rampa = Manifold.cube((1, 1, 1)).refine(60).warp(f)
     yp = y0                                                                       # el peto de la rampa sigue al de la curva
@@ -321,7 +328,8 @@ def base():
         x, y, z = v
         yy = yp + min(max(y, 0.0), 1.0) * (YB - yp)
         pe_ = GM or 0.25
-        return (W_P + WR - pe_ + x * pe_, yy, zr(yy) - 0.01 + z * _v["H_PET"])   # peto como el de la terraza (+8,50 junto al hotel)
+        lo_ = zs(yy) if yy < Y_ARC else 0.0                          # muro exterior entero, del arco (o del suelo) a la curva del alzado + peto
+        return (W_P + WR - pe_ + x * pe_, yy, lo_ + z * (zr(yy) + _v["H_PET"] - lo_))   # la curva del alzado NO cambia [usuario 28/11]
     peto = Manifold.cube((1, 1, 1)).refine(40).warp(fp)
     s += [rampa, peto]
     # ESQUINA [usuario, F09, F18]: la rampa abre hacia fuera en curva y llega a 90° al chaflán prolongado (E90);
@@ -373,8 +381,8 @@ def base():
     m = m + ROT(caja(lx0, lx1, 0, GM or 0.25, Z_PB, Z_PB + 1.0))                                 # antepecho / poyete
     # puertas del hotel en planta baja junto a la columna [usuario, F18]
     for hh in __import__("ventanas").catalogo():
-        if hh["grupo"] in ("hotel puertas PB", "bloque alto posterior", "cristalera PB concha", "chaflán PB cristalera", "ala corta garaje"):
-            if hh["grupo"] == "chaflán PB cristalera": continue                    # cristalera a paño que hace esquina: sin hueco, ni en molde ni en detalle [usuario 28/11]
+        if hh["grupo"] in ("hotel puertas PB", "bloque alto posterior", "chaflán PB cristalera", "ala corta garaje"):   # (la cristalera bajo la rampa la da el propio local: PB hasta W_EXT − peto)
+            if MOLDE and hh["grupo"] == "chaflán PB cristalera": continue          # molde: vidrio a 0,12 no se cuela
             a = math.degrees(math.atan2(hh["n"][1], hh["n"][0]))
             pr_ = {"chaflán PB cristalera": 0.12, "ala corta garaje": _v["GAR_P"]}.get(hh["grupo"], 0.6)   # fondo del hueco hacia dentro
             b = Manifold.cube((pr_ + 0.6, hh["w"], hh["z1"] - hh["z0"])).translate((-pr_, -hh["w"] / 2, hh["z0"]))
@@ -388,11 +396,12 @@ def base():
     # sin muro de canto ni «tacón» en la esquina; la banda superior vuela FAC_R también en la esquina [usuario 22/11, 23/11, 27/11]
     _y0r = plantas_base()["Q"][1] + _v["D_HOTF"]
     _yrc = _y0r + (Y_CUNA - _y0r) * (1 - (Z_P1 - _v["FAC_B"]) / _v["Z_CON"]) ** (1 / _v["RAMPA_P"])
-    # sin retranqueo en el extremo del hotel: el muro es recto y las ventanas son hendiduras; el encaje y el voladizo falsos se quitan [usuario 28/11]
+    if _v["FAC_R"] > 0.01: m = m - caja(XF, W_P + 0.05, _yrc, L_L + 0.05, -0.1, Z_P1 - _v["FAC_B"])   # FAC_R = 0: muro recto, sin encaje ni voladizo [usuario 28/11]
     marcos = []
     for h in VT.catalogo():
         if not h["grupo"].startswith("ala larga"): continue
         y0_, y1_ = h["p"][1] - h["w"] / 2, h["p"][1] + h["w"] / 2; z0, z1 = h["z0"], h["z1"]
+        XF = h["p"][0]                                    # plano de la fachada donde está la ventana (catálogo único)
         if not MOLDE: marcos.append(caja(XF - 0.01, XF + p_, y0_ - bd, y1_ + bd, z0 - bd, z1 + bd))   # molde: sin marcos (relieve 0,08)
         if not MOLDE: marcos.append(caja(XF - 0.01, XF + p_ + 0.06, y0_ - bd - 0.05, y1_ + bd + 0.05, z0 - bd - 0.1, z0 - bd))  # alféizar con goterón
         hue.append(caja(XF + p_ - rr_, XF + 1, y0_, y1_, z0, z1))                 # hueco hasta el vidrio
@@ -403,7 +412,7 @@ def base():
     marcos += [caja(px0, px0 + pe, L_L - 0.01, L_L + pd, 0.0, 4.4),                  # porche: muros a los lados de la puerta [usuario, F73]
                caja(px1 - pe, px1, L_L - 0.01, L_L + pd, 0.0, 4.4),
                caja(px0, px1, L_L - 0.01, L_L + pd, 4.0, 4.4),                         # marquesina sobre los muros
-               *([caja(W_P - 0.3, W_P, L_L - 0.01, L_L + _v["ESQ_D"], 0.0, _v["Z_FIN"] + 1.1)] if _v["ESQ_D"] > 0.01 else [])]   # muro de esquina (quitado: ESQ_D = 0)
+               *([caja(W_P - (GM or 0.3), W_P, L_L - 0.3, L_L + _v["ESQ_D"], 0.0, Z_P1 + _v["H_PET"])] if _v["ESQ_D"] > 0.01 else [])]   # saliente recto del muro de ventanas pasado el testero, sentido contrario a la rampa [usuario 28/11, F73]
     m = m + Manifold.batch_boolean(marcos, OpType.Add)
     m = m - Manifold.batch_boolean(hue, OpType.Add)
     # chaflan (coordenadas de torre): franjas de ventanas restaurante / hotel
@@ -430,19 +439,10 @@ def base():
         if not hh["grupo"].startswith("chaflán"): continue
         t_ = np.array(hh["t"]); n_ = np.array(hh["n"]); p_ = np.array(hh["p"])
         for s_ in (-1, 1):
-            c_ = p_ + t_ * s_ * (hh["w"] / 2 + 0.075)              # montante sobre el paño: sale 0,15 y entra 0,15 en el muro
+            c_ = p_ + t_ * s_ * (hh["w"] / 2 + 0.075) - n_ * 0.15
             mt = Manifold.cube((0.15, 0.3, hh["z1"] - hh["z0"])).translate((-0.075, -0.15, hh["z0"]))
             mont.append(mt.rotate((0, 0, math.degrees(math.atan2(t_[1], t_[0])))).translate((c_[0], c_[1], 0)))
-    # cristalera PB del chaflán: no hay hueco; la vidriera es una piel de 0,12 a paño de la fachada que hace esquina [usuario 28/11]
-    glas = []
-    if not MOLDE:                                               # molde: el vidrio no se cuela (como antes)
-        for hh in VTc.catalogo():
-            if hh["grupo"] != "chaflán PB cristalera": continue
-            a = math.degrees(math.atan2(hh["n"][1], hh["n"][0]))
-            # de suelo a +3,20: la planta baja llega a +3,10 bajo el canto del hotel (cotas: PB hasta +3,1); solapa 0,1 con el canto
-            g_ = Manifold.cube((0.12, hh["w"] + 0.3, 3.2 + 0.05)).translate((-0.12, -(hh["w"] + 0.3) / 2, -0.05))
-            glas.append(g_.rotate((0, 0, a)).translate((hh["p"][0], hh["p"][1], 0)))
-    return m if MOLDE else m + Manifold.batch_boolean(mont + glas, OpType.Add)
+    return m if MOLDE else m + Manifold.batch_boolean(mont, OpType.Add)
 
 
 
@@ -616,7 +616,8 @@ def torre():
                 m = m + al.rotate((0, 0, math.degrees(a))).translate((T[0], T[1], 0))
     # 2) cuerpo en cuña; por debajo pasa la rampa. Por encima del tambor la caja solo llega hasta RS (cielo hasta la banda)
     #    y su cubierta baja de ZO (fuera) a ZI (dentro) [Alamy, collage]
-    esc = [sector(ESC_R0, ESC_RC, _v["ESC_Z0"], Z_T1, -ESC_HB, ESC_HB),
+    esc = [sector(ESC_R0, ESC_RC, _v["ESC_Z0"], zp, -ESC_HB, ESC_HB),                  # dentro del anillo del tambor, a la cota del pasillo: se anda alrededor [usuario 28/11]
+           sector(R_T - 0.25, ESC_RC, zp - 0.01, Z_T1, -ESC_HB, ESC_HB),               # desde la línea del peto del tambor hacia fuera, hasta su coronación
            # (el muro de coronación va aparte, sobre la cubierta del tambor: ver MURO_ESC más abajo)
            sector(ESC_RC - (GM or 0.2), ESC_RC, Z_T1 - 0.01, Z_T1 + 1.1, -ESC_HB, ESC_HB)]      # peto bajo sobre el cuerpo
     # cubierta inclinada de la caja de escalera: plano de ESC_ZI (en ESC_RS) a ESC_Z1 (en ESC_R1 + 0,3); corta cuerpo y lamas [Alamy]
@@ -631,6 +632,10 @@ def torre():
         for i in range(N_PL + 1):                                                       #    forjados vistos con barandilla [F08, F11]
             z = Z_B0 + i * F
             zs_ = z + FC                                                     # cara superior = suelo (niveles_suelo)
+            if i == N_PL:                                                   # nivel de CUBIERTA: transitable alrededor, sin huecos;
+                esc.append(sector(RR, R_B, z, max(zs_, z + (GM or 0)), d0, d1))    # el forjado llega al borde de los balcones [usuario 28/11]
+                esc.append(sector(R_B - (GM or 0.08), R_B, zs_, zs_ + 1.0, d0, d1))   # barandilla en el borde, como la del barril
+                continue
             esc.append(sector(RR, rf, z, max(zs_, z + (GM or 0)), d0, d1))
             esc.append(sector(rf - (GM or 0.08), rf, zs_, zs_ + 1.0, d0, d1))
     m = m + (Manifold.batch_boolean(esc, OpType.Add) - CORTE_ESC)
@@ -639,18 +644,26 @@ def torre():
     # [dron 26/11 del usuario: muro sobre la terraza del tambor, acaba en su borde, «caída de agua hacia el interior»;
     #  foto de frente: bloque a la izquierda de las lamas subiendo hacia fuera; F09: no asoma a la derecha de la visera; alturas Alamy]
     _ro_m = R_T + _v["ESC_MO"]
-    _pm = [(RS, Z_T1 - 0.01), (_ro_m, Z_T1 - 0.01), (_ro_m, ZO), (RS, ZI)]
+    _pm = [(RS, zp - 0.01), (_ro_m, zp - 0.01), (_ro_m, ZO), (RS, ZI)]                  # apoyado en el suelo de la cubierta del tambor
     _cm = CrossSection([_pm]); _cm = _cm if _cm.area() > 0 else CrossSection([_pm[::-1]])
     MURO_ESC = Manifold.extrude(_cm, GM or 0.3).translate((0, 0, -(GM or 0.3) / 2)).rotate((90, 0, 0)).rotate((0, 0, math.degrees(ESC_ANG))).translate((T[0], T[1], 0))
     m = m + MURO_ESC
-    m = m + sector(ESC_R0, ESC_RC, _v["ESC_ZL"] - 0.3, _v["ESC_ZL"], -ESC_HB, ESC_HB)     # forjado superior de la escalera (sin hueco visto) [usuario 26/11]
+    # CUBIERTA DEL TAMBOR TRANSITABLE alrededor, también sobre las dos franjas junto a la caja de escalera (antes, dos huecos
+    # abiertos hasta la cubierta del barril): macizo del tambor detrás de la cristalera (RR), forjado a la cota del pasillo (zp)
+    # sobre el hueco RR–R_T y peto del tambor continuo [usuario 28/11: «tienes dos huecos… cierra ya la cubierta»]
+    for d0, d1 in ((-ESC_HA, -ESC_HB + 0.005), (ESC_HB - 0.005, ESC_HA)):
+        zt_ = Z_T1 if MOLDE else zp                                   # molde: el tambor es macizo hasta Z_T1
+        m = m + sector(ESC_R0, RR - 0.06, Z_B1 + FC - 0.01, zt_, d0, d1)          # solapa con el núcleo (sin cara coincidente con el corte)
+        m = m + sector(RR - 0.31, R_T, zp - 0.3, zt_, d0, d1)
+        if not MOLDE: m = m + sector(R_T - 0.25, R_T, zp - 0.01, Z_T1, d0, d1)
+    m = m + sector(R_T - 0.25, ESC_RC, _v["ESC_ZL"] - 0.3, _v["ESC_ZL"], -ESC_HB, ESC_HB)     # forjado superior de la escalera (sin hueco visto) [usuario 26/11]; dentro del anillo manda la cubierta transitable
     # pie de la escalera: núcleo de hormigón bajo la losa blanca y celosía baja de lamas sobre la terraza [F78, foto de frente]
     _hn = ESC_HB * _v["ESC_NU"]
     m = m + sector(ESC_R0 + 1.0, ESC_RC - 0.6, Z_P1 - 0.01, _v["ESC_Z0"] + 0.01, -_hn, _hn)
     m = m + sector(ESC_R0, ESC_RC + 0.3, _v["ESC_Z0"] - _v["ESC_LE"], _v["ESC_Z0"], -ESC_HB, ESC_HB)   # losa blanca [foto de frente]
     # cristalera suelo-techo con dintel entre tambor y escalera (lado izquierdo) y puerta del tambor [foto de frente, usuario]
     _zb = Z_B1 + FC; _d0, _d1 = -ESC_HA, -ESC_HB
-    m = m + sector(_v["ESC_RR"] - (GM or 0.05), _v["ESC_RR"], _zb, _v["CR_Z1"], _d0, _d1) + sector(_v["ESC_RR"] - 0.3, _v["ESC_RR"] + 0.2, _v["CR_Z1"], Z_T1, _d0, _d1)
+    m = m + sector(_v["ESC_RR"] - (GM or 0.05), _v["ESC_RR"], _zb, _v["CR_Z1"], _d0, _d1) + sector(_v["ESC_RR"] - 0.3, _v["ESC_RR"] + 0.2, _v["CR_Z1"], Z_T1 - _v["H_PT"], _d0, _d1)
     import ventanas as VTp
     for hh in VTp.catalogo():
         if hh["grupo"] == "tambor puerta":
@@ -713,7 +726,7 @@ def torre():
     for sg in (1,):                                            # solo el borde derecho: el izquierdo está libre (puerta y cristalera) [foto de frente]
         r = _v["ESC_RR"] + 0.2
         while r < R_B:
-            lam.append(lama(r, sg * (ESC_HA - math.atan2(0.2, r)), rot_r=False, z0=Z_B0, z1=Z_T1))
+            lam.append(lama(r, sg * (ESC_HA - math.atan2(0.2, r)), rot_r=False, z0=Z_B0, z1=Z_T1 - _v["H_PT"]))   # hasta el suelo de la cubierta: el pasillo queda libre [usuario 28/11]
             r += _v["LAMA_P"]
     nlc = int(2 * ESC_HB * ESC_RC / _v["LAMA_P"])
     for k in range(nlc + 1):                                    # celosía baja al pie de la escalera

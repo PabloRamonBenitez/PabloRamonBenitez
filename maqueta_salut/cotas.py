@@ -49,7 +49,7 @@ COTAS = {
  "POR_X1": (8.27, "porche del testero: cara exterior del muro derecho", "croquis del usuario · F73"),
  "POR_D":  (1.3,  "vuelo del porche (muros y marquesina) delante del testero", "croquis del usuario (65 px / 49 px/m)"),
  "POR_E":  (0.35, "espesor de los muros del porche", "croquis del usuario"),
- "ESQ_D":  (0.0, "muro de esquina del testero: QUITADO (el ala acaba sin ángulo ni «tacón»)", "usuario 22/11 (zapato), 23/11 (tacón), 26/11 tarde: «como acaba el edificio quitando el ángulo»"),
+ "ESQ_D":  (0.6, "saliente del muro largo pasado el testero (sentido contrario a la rampa), recto, sin ángulo", "usuario 28/11: «pusimos 60 cm que salía ese muro» (F73); antes quitado"),
  "VOL_L": (7.3, "cuerpo volado: frente A–B desde la medianera (perpendicular al colindante)", "triangulación satélite A–B = 7,3 (usuario marca A y B en la planta)"),
  "VOL_V": (1.2, "vuelo del cuerpo volado sobre la alineación de fachada (colindante)", "usuario · foto frontal del ala corta"),
  "Z_VOL0": (6.6, "cara inferior del cuerpo volado", "foto frontal (proporción vertical)"),
@@ -122,7 +122,7 @@ COTAS = {
  "GIRO_W": (1.2, "final del giro del peto: ancho de la U (∩)", "F78, curvas azules del usuario (26/11)"),
  "GIRO_L": (2.5, "final del giro del peto: largo del tramo de vuelta", "F78"),
  "CR_PB": (1, "cristalera de la PB bajo el arco de la concha (sí se construyó)", "usuario 26/11, F76/F24"),
- "FAC_R": (0.8, "la fachada de ventanas del ala larga está 0,80 m por dentro del borde superior (canto de la terraza y peto vuelan 0,80)", "usuario 26/11 (F01: el pie de fachada sale por dentro)"),
+ "FAC_R": (0.0, "fachada de ventanas del ala larga A PAÑO: muro recto, sin voladizo ni encaje; en el plano del muro de la rampa", "usuario 28/11 (F73: «eso es un muro recto, no hay ese pequeño voladizo»); antes 0,80"),
  "FAC_B": (0.7, "banda superior a paño del borde (canto de forjado + arranque del peto) sobre la fachada retranqueada", "proporción F73/F01"),
  "LUC_A0": (33.0, "primer lucernario (ángulo absoluto, lado del hotel, donde llega la rampa de la concha)", "usuario 26/11"),
  "LUC_A1": (100.0, "último lucernario (bajo la escalera)", "usuario 26/11: los 6 juntos ocupan 70–80°"),
@@ -232,11 +232,11 @@ def planta():
     R = V["R_RAMPA"]; gr = V["GIRO_R"]; yS = C[1] + V["D_HOTF"]; cen = np.array([V["W_EXT"] + R, yS])
     ARC = [cen + R * np.array([math.cos(math.pi + gr * (1 - t)), math.sin(math.pi + gr * (1 - t))]) for t in np.linspace(0, 1, 13)]
     IC = inter(SWP(-V["L_C"], V["W_C"]), U, np.array([0.0, 0.0]), np.array([0.0, 1.0]))   # línea posterior paralela al chaflán [usuario]
+    YC = V["Y_CA"] + V["R_FIN"]
     P1 = [SWP(-V["L_C"], 0), A1, C] + ARC + [np.array([V["W_P"], yS]), np.array([V["W_P"], V["L_L"]]),
           np.array([0, V["L_L"]]), IC, SWP(-V["L_C"], V["W_C"])]
     o_s = KC + V["RETR"] * NS; o_c = A1 + V["RETR"] * N
     a1 = inter(o_s, US, o_c, U); b1 = inter(o_c, U, np.array([V["W_P"] - V["RETR"], 0]), np.array([0.0, 1.0]))
-    YC = V["Y_CA"] + V["R_FIN"]
     PB = [SWP(-V["L_C"], V["RETR"]), a1, b1, np.array([V["W_P"] - V["RETR"], YC]),
           np.array([V["W_P"], YC]), np.array([V["W_P"], V["L_L"]]), np.array([0, V["L_L"]]), IC,
           SWP(-V["L_C"], V["W_C"])]

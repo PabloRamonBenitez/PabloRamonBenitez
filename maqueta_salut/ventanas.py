@@ -25,9 +25,10 @@ def catalogo():
     n, nb, w, S = int(V["N_VEN"]), int(V["N_VEN_B"]), V["VEN_W"], V["S_VEN"]
     for i in range(n):
         yc = L_L - V["VEN_FIN"] - i * S - w / 2
-        _h(H, f"VA{i + 1:02d}", "ala larga fila alta", "ventana", (W_P - V["FAC_R"], yc), (0, 1), (1, 0), w, V["VA_0"], V["VA_1"])
+        xw = W_P - V["FAC_R"]                                              # FAC_R = 0: ventanas a paño del muro recto [usuario 28/11]
+        _h(H, f"VA{i + 1:02d}", "ala larga fila alta", "ventana", (xw, yc), (0, 1), (1, 0), w, V["VA_0"], V["VA_1"])
         if i < nb:
-            _h(H, f"VB{i + 1:02d}", "ala larga fila baja", "ventana", (W_P - V["FAC_R"], yc), (0, 1), (1, 0), w, V["VB_0"], V["VB_1"])
+            _h(H, f"VB{i + 1:02d}", "ala larga fila baja", "ventana", (xw, yc), (0, 1), (1, 0), w, V["VB_0"], V["VB_1"])
     # 2. testero: puerta de servicio y ventana encima [F73]
     xa, xb = W_P - 0.63 * W_P, W_P - 0.49 * W_P
     _h(H, "TP1", "testero", "puerta", ((xa + xb) / 2, L_L), (-1, 0), (0, 1), xb - xa, 0.0, 2.6)
@@ -109,10 +110,11 @@ def catalogo():
         a, b = R(xa, ld), R(xb, ld)
         tt = ((b[0] - a[0]) / math.dist(a, b), (b[1] - a[1]) / math.dist(a, b))
         _h(H, nm, "logia", "ventana", ((a[0] + b[0]) / 2, (a[1] + b[1]) / 2), tt, (-tt[1], tt[0]), math.dist(a, b), E.Z_PB + 0.3, E.Z_P1 - 0.3)
-    # 6i. cristalera de la PB bajo el arco de la concha (fachada retranqueada RETR) [usuario 26/11, F76, F24]
-    pl = E.plantas_base(); y0_ = pl["Q"][1] + V["D_HOTF"]; ya = y0_ + 0.6
-    yb = y0_ + V["U_ARC"] * V["ARC_D"] * (E.Y_CUNA - y0_) - 0.1           # solo bajo el tramo horizontal del arco: 3 paños [usuario 26/11 tarde]
-    xr = E.W_P - V["RETR"]; nm = max(round((yb - ya) / 2.4), 1); wm = (yb - ya) / nm
+    # 6i. VENTANAL DEL LOCAL BAJO LA RAMPA: metido solo el grueso del muro de la rampa (W_EXT − peto), desde la esquina en diagonal
+    #     con la planta baja del hotel hasta donde el arco baja; antes estaba 5,5 m dentro (RETR), «eso no existe» [usuario 28/11, F24, F76]
+    pl = E.plantas_base(); y0_ = pl["Q"][1] + V["D_HOTF"]; ya = pl["PB"][2][1] + 0.3
+    yb = y0_ + V["U_ARC"] * V["ARC_D"] * (E.Y_CUNA - y0_) - 0.1           # hasta donde el arco empieza a bajar
+    xr = V["W_EXT"] - 0.25; nm = max(round((yb - ya) / 2.4), 1); wm = (yb - ya) / nm
     for i in range(nm):
         _h(H, f"CP{i + 1}", "cristalera PB concha", "ventana", (xr, ya + (i + 0.5) * wm), (0, 1), (1, 0), wm - 0.15, 0.15, V["Z_ARC"] - 0.25)
     # 7. tambor: 19 ojos circulares [F01, F09]

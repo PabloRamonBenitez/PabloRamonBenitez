@@ -30,21 +30,21 @@ ax.text(2.5, 63.5, "Tener la maqueta del Hotel Salut en cuatro modelos (original
 
 # ---- CORREO
 caja(1, 30, 47, 25, "CORREO (Gmail)")
-fila(2, 50, "MinghuiLink (China): propuesta de dos piezas enviada 28/11. Espera precio y plazo.", "ESPERA")
-fila(2, 46.5, "BK Silicone: rechazó (demasiado complejo). Cerrado.", "CERRADO")
-fila(2, 43, "Flossy Candle: sin respuesta (25/11 y seguimiento 27/11).", "ESPERA")
-fila(2, 39.5, "moldesilicona.com: sin respuesta (25/11 y seguimiento 27/11).", "ESPERA")
-fila(2, 36, "Modelarte: sin respuesta (25/11 y seguimiento 27/11).", "ESPERA")
-fila(2, 32.5, "Milab3D: sin respuesta (25/11 y seguimiento 27/11).", "ESPERA")
+fila(2, 50, "MinghuiLink (China): propuesta de dos piezas enviada 28/11. Espera precio y plazo.", "ESPERA", w=44)
+fila(2, 46.5, "BK Silicone: rechazó (demasiado complejo). Cerrado.", "CERRADO", w=44)
+fila(2, 43, "Flossy Candle: sin respuesta (25/11 y seguimiento 27/11).", "ESPERA", w=44)
+fila(2, 39.5, "moldesilicona.com: sin respuesta (25/11 y seguimiento 27/11).", "ESPERA", w=44)
+fila(2, 36, "Modelarte: sin respuesta (25/11 y seguimiento 27/11).", "ESPERA", w=44)
+fila(2, 32.5, "Milab3D: sin respuesta (25/11 y seguimiento 27/11).", "ESPERA", w=44)
 
 # ---- ETSY
 caja(52, 30, 47, 25, "ETSY (lo envía la sesión local)")
-fila(53, 50, "MoldeSilicona (Alfredo y Karina): revisaron el STL. Texto 1.", "PENDIENTE")
-fila(53, 46.5, "HOUSEOFMOLDS (Tania): pidió el archivo. Texto 2.", "PENDIENTE")
-fila(53, 43, "3DDeluxeStore (Scott): pidió imagen o modelo. Texto 3.", "PENDIENTE")
-fila(53, 39.5, "PLAybelope (Razieh): pidió el STL en Drive. Texto 4 (inglés).", "PENDIENTE")
-fila(53, 36, "StudioRollins: pide imagen. Texto 5. Hay que mandar renders.", "PENDIENTE")
-fila(53, 32.5, "Sesión de Etsy iniciada por Pablo. Nada enviado todavía.", "HECHO")
+fila(53, 50, "MoldeSilicona (Alfredo y Karina): revisaron el STL. Texto 1.", "PENDIENTE", w=42)
+fila(53, 46.5, "HOUSEOFMOLDS (Tania): pidió el archivo. Texto 2.", "PENDIENTE", w=42)
+fila(53, 43, "3DDeluxeStore (Scott): pidió imagen o modelo. Texto 3.", "PENDIENTE", w=42)
+fila(53, 39.5, "PLAybelope (Razieh): pidió el STL en Drive. Texto 4 (inglés).", "PENDIENTE", w=42)
+fila(53, 36, "StudioRollins: pide imagen. Texto 5. Hay que mandar renders.", "PENDIENTE", w=42)
+fila(53, 32.5, "Sesión de Etsy iniciada por Pablo. Nada enviado todavía.", "HECHO", w=42)
 
 # ---- WEB / PRESUPUESTOS
 caja(1, 2, 98, 25, "PRESUPUESTOS EN WEB (sin contacto todavía)")
@@ -61,7 +61,7 @@ ax.text(2, 0.6, "Orden: 1) confirmar división (DESMONTABLE_DIVISION.png)  2) en
 ax.add_patch(FancyBboxPatch((1, 60.2), 1, 1, boxstyle="square", fc="none", ec="none"))
 leyenda = [("ESPERA", "esperando respuesta"), ("PENDIENTE", "falta hacerlo"), ("CERRADO", "cerrado"), ("HECHO", "hecho")]
 for i, (k, t) in enumerate(leyenda):
-    ax.add_patch(FancyBboxPatch((70 + i * 7.5, 73.8), 1.6, 1.3, boxstyle="square", fc=COL[k], ec="0.3"))
-    ax.text(72 + i * 7.5 + 0.8, 74.4, t, fontsize=8, va="center")
+    ax.add_patch(FancyBboxPatch((58 + i * 11, 73.8), 1.6, 1.3, boxstyle="square", fc=COL[k], ec="0.3"))
+    ax.text(60 + i * 11 + 0.8, 74.4, t, fontsize=8.5, va="center")
 
 fig.savefig("PLAN_COMUNICACIONES.png", dpi=120, bbox_inches="tight"); print("ok")

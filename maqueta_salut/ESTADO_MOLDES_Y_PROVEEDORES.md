@@ -7,7 +7,7 @@ Documento único para el proyecto Hotel Salut. Se actualiza a mano cuando cambie
 - **Desmontable:** la maqueta se parte en dos piezas que encajan. Pieza 1, tambor (torre redonda y su cilindro); pieza 2, base (cuello con hueco circular, columna, alas, concha y restaurante).
 - **Encaje:** cilindro Ø 9,0 m × 3,0 m, holgura 0,1 mm por lado en resina (en el modelo impreso), llave de orientación con surco de entrada y canal.
 - **Orden de trabajo:** primero imprimir los másters en resina; después el molde de silicona (lo haces tú o lo encarga un proveedor).
-- **Pendiente de confirmar por Pablo:** la división (corte a z = 13,71 m, llave, surco y canal). Ver DESMONTABLE_DIVISION.png.
+- **División:** Pablo aprueba el corte a z = 13,71 m (28/11). Falta fijar la holgura (ver §5.4) antes de generar los desmontables.
 
 ## 2. Archivos (Drive, carpeta «Stl salyt»)
 - Pieza A, torre (142 × 190 × 150 mm, 762 cm³): Hotel_Salut_MOLDE_A_torre_baja.stl. Enlace de solo lectura: https://drive.google.com/file/d/1topn7aZmwcl3bnqjx9znnLregA_Co2gm/view?usp=drivesdk
@@ -50,11 +50,12 @@ Enviar en Etsy tal cual o adaptados. No mandar nada sin revisarlo.
 > Hi Aaron, we have decided to split the model into two interlocking parts (drum and base) rather than the two moulds we proposed. We will send the final files soon. Could you tell us whether a mould for each part would be feasible, and the price and lead time for both? Thank you, Pablo
 
 ## 5. Pendientes de Pablo
-1. Confirmar la división (tambor y base) con el dibujo DESMONTABLE_DIVISION.png.
+1. ~~Confirmar la división~~: corte aprobado el 28/11. Falta la holgura (punto 4).
 2. Revisar los textos antes de enviarlos en Etsy.
 3. Decidir si este documento se comparte con el otro proyecto (está privado en Drive).
 4. **Holgura del encaje:** DESMONTABLE_DIVISION.png dice 0,15 m real (≈ 0,44 mm por lado en maqueta); HANDOVER y §1 dicen 0,1 mm por lado en resina (≈ 0,034 m real). Hay que elegir una antes de generar los desmontables.
-5. Confirmar si ha contestado algún hilo fuera de Gmail (Etsy, WhatsApp, teléfono).
+5. ~~¿Ha contestado algún hilo?~~ Pablo, 28/11: no ha contestado ninguno. Los cinco hilos de Etsy siguen pendientes.
 
 ## 6. Registro de cambios
 - 28/11 (sesión nueva): revisado Gmail. moldesilicona.com rechazó el 27/11 (no constaba). El texto 5 a MinghuiLink ya se envió el 28/11. Preguntas a Pablo en PREGUNTAS_29NOV.png.
+- 28/11: Pablo aprueba el corte y confirma que no ha contestado ningún hilo. Recibe para verlos en un visor los modelos 1 (Hotel_Salut_15cm_v3.stl: estanco, 0 aristas no manifold, 43 cuerpos, 836,7 cm³) y 2 (Hotel_Salut_15cm_MOLDE.stl: estanco, 1 cuerpo, 862,5 cm³).

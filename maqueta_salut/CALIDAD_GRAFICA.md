@@ -6,6 +6,7 @@
 | `DESMONTABLE_DIVISION.png` | 0 | 2 | 0 | 0 | 0 | 0 | 2 |
 | `ESQUEMA_DONDE_ESTA_CADA_COSA.png` | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | `ESTADO_MOLDES_GRAFICO.png` | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| `PLAN_COMUNICACIONES.png` | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | `SALUT_planos_A3_presentacion.pdf` | 0 | 2 | 0 | 0 | 0 | 0 | 2 |
 | `SALUT_planos_A4.pdf` | 0 | 2 | 0 | 0 | 0 | 0 | 2 |
 | `SALUT_planos_definitivos.pdf` | 2 | 1 | 0 | 0 | 0 | 48 | 51 |

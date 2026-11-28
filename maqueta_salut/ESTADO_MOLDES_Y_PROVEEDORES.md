@@ -1,4 +1,4 @@
-# Estado de los moldes y de los proveedores (28/11/2026)
+# Estado de los moldes y de los proveedores (28/11/2026, revisado con Gmail)
 
 Documento único para el proyecto Hotel Salut. Se actualiza a mano cuando cambie algo. Lo que sigue va en este orden: planteamiento, archivos, proveedores, textos de respuesta, pendientes.
 
@@ -7,7 +7,7 @@ Documento único para el proyecto Hotel Salut. Se actualiza a mano cuando cambie
 - **Desmontable:** la maqueta se parte en dos piezas que encajan. Pieza 1, tambor (torre redonda y su cilindro); pieza 2, base (cuello con hueco circular, columna, alas, concha y restaurante).
 - **Encaje:** cilindro Ø 9,0 m × 3,0 m, holgura 0,1 mm por lado en resina (en el modelo impreso), llave de orientación con surco de entrada y canal.
 - **Orden de trabajo:** primero imprimir los másters en resina; después el molde de silicona (lo haces tú o lo encarga un proveedor).
-- **Pendiente de confirmar por Pablo:** la división (corte a z = 13,71 m, llave, surco y canal). Ver DESMONTABLE_DIVISION.png.
+- **División:** Pablo aprueba el corte a z = 13,71 m (28/11). Falta fijar la holgura (ver §5.4) antes de generar los desmontables.
 
 ## 2. Archivos (Drive, carpeta «Stl salyt»)
 - Pieza A, torre (142 × 190 × 150 mm, 762 cm³): Hotel_Salut_MOLDE_A_torre_baja.stl. Enlace de solo lectura: https://drive.google.com/file/d/1topn7aZmwcl3bnqjx9znnLregA_Co2gm/view?usp=drivesdk
@@ -18,10 +18,11 @@ Documento único para el proyecto Hotel Salut. Se actualiza a mano cuando cambie
 ## 3. Proveedores: estado y próxima acción
 | Proveedor | Canal | Estado | Próxima acción |
 |---|---|---|---|
-| MinghuiLink (China) | correo | Propuesta de dos moldes enviada el 27/11. Sin precio. | Contestar con el cambio a desmontable |
+| MinghuiLink (China) | correo | 27/11: propuesta de dos moldes (A y B). **28/11 11:50: ya enviado el cambio a desmontable (texto 5).** Sin precio. | Esperar precio y plazo |
 | BK Silicone | correo | Rechazó (demasiado complejo) | Ninguna |
-| moldesilicona.com, Modelarte, Milab3D, Flossy Candle | correo | Sin respuesta | Reenviar con el cambio si no contestan en 48 h |
-| MoldeSilicona (Alfredo y Karina) | Etsy | Revisaron el STL, dicen que comentan | **Contestar** (texto 1) |
+| moldesilicona.com (Alfredo Bueno, Cadrete, Zaragoza) | correo | **27/11 17:39: rechaza** («no puedo ofrecerle el servicio solicitado») | Ninguna. Cerrado |
+| Modelarte, Milab3D, Flossy Candle | correo | Sin respuesta (25/11 y 27/11) | Reenviar con el cambio si no contestan en 48 h |
+| MoldeSilicona (Alfredo y Karina) | Etsy | Revisaron el STL, dicen que comentan. *Supuesto sin confirmar: podría ser el mismo Alfredo que rechazó por correo* | **Contestar** (texto 1) |
 | HOUSEOFMOLDS (Tania) | Etsy | Pidió el archivo | **Contestar** (texto 2) |
 | 3DDeluxeStore (Scott) | Etsy | Pidió imagen o modelo | **Contestar** (texto 3) |
 | PLAybelope (Razieh) | Etsy | Pidió el STL en Drive | **Contestar** (texto 2 en inglés, adaptado) |
@@ -45,10 +46,16 @@ Enviar en Etsy tal cual o adaptados. No mandar nada sin revisarlo.
 **Texto 4 (StudioRollins, en inglés; revisar antes)**
 > Hi, thank you for your message. I will send you images of the model shortly. The piece is a 3D model of a hotel building, which we plan to cast in concrete. We are changing the plan into two parts, so the final images will follow once that is settled. Thank you, Pablo
 
-**Texto 5 (MinghuiLink, en inglés, para el hilo de la propuesta)**
+**Texto 5 (MinghuiLink, en inglés): ENVIADO el 28/11 (versión con IVA y aranceles)**
 > Hi Aaron, we have decided to split the model into two interlocking parts (drum and base) rather than the two moulds we proposed. We will send the final files soon. Could you tell us whether a mould for each part would be feasible, and the price and lead time for both? Thank you, Pablo
 
 ## 5. Pendientes de Pablo
-1. Confirmar la división (tambor y base) con el dibujo DESMONTABLE_DIVISION.png.
+1. ~~Confirmar la división~~: corte aprobado el 28/11. Falta la holgura (punto 4).
 2. Revisar los textos antes de enviarlos en Etsy.
 3. Decidir si este documento se comparte con el otro proyecto (está privado en Drive).
+4. **Holgura del encaje:** DESMONTABLE_DIVISION.png dice 0,15 m real (≈ 0,44 mm por lado en maqueta); HANDOVER y §1 dicen 0,1 mm por lado en resina (≈ 0,034 m real). Hay que elegir una antes de generar los desmontables.
+5. ~~¿Ha contestado algún hilo?~~ Pablo, 28/11: no ha contestado ninguno. Los cinco hilos de Etsy siguen pendientes.
+
+## 6. Registro de cambios
+- 28/11 (sesión nueva): revisado Gmail. moldesilicona.com rechazó el 27/11 (no constaba). El texto 5 a MinghuiLink ya se envió el 28/11. Preguntas a Pablo en PREGUNTAS_29NOV.png.
+- 28/11: Pablo aprueba el corte y confirma que no ha contestado ningún hilo. Recibe para verlos en un visor los modelos 1 (Hotel_Salut_15cm_v3.stl: estanco, 0 aristas no manifold, 43 cuerpos, 836,7 cm³) y 2 (Hotel_Salut_15cm_MOLDE.stl: estanco, 1 cuerpo, 862,5 cm³).

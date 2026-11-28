@@ -6,7 +6,7 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 from matplotlib.patches import FancyBboxPatch
 
-fig, ax = plt.subplots(figsize=(16, 10.5)); ax.set_xlim(0, 100); ax.set_ylim(0, 70); ax.axis("off")
+fig, ax = plt.subplots(figsize=(16, 10.5)); ax.set_xlim(0, 100); ax.set_ylim(0, 77); ax.axis("off")
 fig.suptitle("Hotel Salut · comunicaciones y objetivos · 28/11/2026", fontsize=17, weight="bold", x=0.02, ha="left", y=0.985)
 
 COL = {"ESPERA": "#fde7b0", "PENDIENTE": "#cfe3f7", "CERRADO": "#f2c6c6", "HECHO": "#cfeccf"}

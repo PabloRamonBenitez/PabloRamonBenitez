@@ -491,7 +491,7 @@ def letras_volumen(pr):
         dep = 0.6 if MOLDE else 0.4
         pr_ = Manifold.extrude(CrossSection(rings, FillRule.EvenOdd), dep)       # letra en XY, espesor en Z
         a = math.radians(L_["rot"])
-        rb = (R_R - 0.05) if MOLDE else (R_R + _v["SIG_R"] - dep / 2)           # cara trasera de la letra
+        rb = R_R - 0.05          # cara trasera de la letra: pegada al remate en detalle y en molde (antes, en detalle, flotaba 1,3 m sobre un bastidor nunca modelado)
         pr_ = pr_.rotate((90, 0, 0)).rotate((0, 0, math.degrees(a) + 90))         # X → tangente (CCW), Z → arriba, −Y → hacia fuera
         out.append(pr_.translate((pr[0] + rb * math.cos(a), pr[1] + rb * math.sin(a), _v["SIG_Z0"])))
     return out

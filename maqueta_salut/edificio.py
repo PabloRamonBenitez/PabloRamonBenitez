@@ -673,19 +673,33 @@ def torre():
         z0 = _v["ESC_Z0"] + 0.3 if z0 is None else z0; z1 = _v["ESC_ZL"] if z1 is None else z1
         return (caja(-0.125, 0.125, -_e, _e, z0, z1) if rot_r else caja(-_e, _e, -0.125, 0.125, z0, z1)) \
             .translate((r, 0, 0)).rotate((0, 0, math.degrees(ESC_ANG + da))).translate((T[0], T[1], 0))
-    nl = int(_v["LAMA_N"]) - 1                                  # 16 lamas en el frente [usuario]
-    for k in range(nl + 1):
-        lam.append(lama(ESC_R1 - 0.25, -ESC_HB + 2 * ESC_HB * k / nl))
-    for hh in VT.catalogo():                                   # las lamas se abren delante de las puertas
-        if hh["grupo"] == "escalera puertas":
-            a = math.degrees(math.atan2(hh["n"][1], hh["n"][0]))
-            corte = Manifold.cube((1.5, hh["w"] + 0.4, hh["z1"] - hh["z0"])).translate((ESC_RC - 0.1, -hh["w"] / 2 - 0.2, hh["z0"]))
-            lam = [l_ - corte.rotate((0, 0, a)).translate((T[0], T[1], 0)) for l_ in lam]
-    for sg in (-1, 1):
-        r = rf + 0.2
-        while r < ESC_R1 - 0.3:
-            lam.append(lama(r, sg * (ESC_HB + math.atan2(0.45, r)), rot_r=False))
-            r += _v["LAMA_P"]
+    nl = int(_v["LAMA_N"]) - 1                                  # 16 surcos en el frente [usuario]
+    zg0, zg1 = _v["ESC_Z0"] + 0.3, _v["ESC_ZL"] - 0.3           # los surcos van de la losa a 0,3 bajo la cubierta: la cubierta queda maciza [usuario 28/11]
+    dl = math.atan2(0.6, ESC_RC)
+    if not MOLDE:                                               # detalle: la pantalla es un bloque macizo con surcos, no lamas sueltas [usuario 28/11]
+        _e = _v["LAMA_E"] / 2
+        bloque = [sector(ESC_RC - 0.01, ESC_R1, _v["ESC_Z0"] + 0.3, _v["ESC_ZL"], -ESC_HB, ESC_HB),
+                  sector(rf, ESC_R1, _v["ESC_Z0"] + 0.3, _v["ESC_ZL"], -ESC_HB - dl, -ESC_HB + 0.01),
+                  sector(rf, ESC_R1, _v["ESC_Z0"] + 0.3, _v["ESC_ZL"], ESC_HB - 0.01, ESC_HB + dl)]
+        surcos = []
+        for k in range(nl + 1):                                 # frente: surcos finos (0,04) a paso de 0,07
+            da = -ESC_HB + 2 * ESC_HB * k / nl
+            surcos.append(caja(ESC_R1 - 0.25, ESC_R1 + 0.1, -_e / 2, _e / 2, zg0, zg1)
+                          .rotate((0, 0, math.degrees(ESC_ANG + da))).translate((T[0], T[1], 0)))
+        for sg in (-1, 1):                                      # costados: surcos de 0,08 cada LAMA_P, 0,25 hacia dentro desde la cara exterior
+            t0, t1 = (-0.1, 0.25) if sg < 0 else (-0.25, 0.1)
+            r = rf + 0.2
+            while r < ESC_R1 - 0.3:
+                surcos.append(caja(r - _e, r + _e, t0, t1, zg0, zg1)
+                              .rotate((0, 0, math.degrees(ESC_ANG + sg * (ESC_HB + dl)))).translate((T[0], T[1], 0)))
+                r += _v["LAMA_P"]
+        cortes = []
+        for hh in VT.catalogo():                                # delante de las puertas el bloque se abre
+            if hh["grupo"] == "escalera puertas":
+                a = math.degrees(math.atan2(hh["n"][1], hh["n"][0]))
+                corte = Manifold.cube((1.5, hh["w"] + 0.4, hh["z1"] - hh["z0"])).translate((ESC_RC - 0.1, -hh["w"] / 2 - 0.2, hh["z0"]))
+                cortes.append(corte.rotate((0, 0, a)).translate((T[0], T[1], 0)))
+        lam.append(Manifold.batch_boolean(bloque, OpType.Add) - Manifold.batch_boolean(cortes + surcos, OpType.Add))
     # los dos bordes del corte del barril, cerrados con lamas de la coronación del tambor hacia abajo [fotos 25/11, usuario]
     for sg in (1,):                                            # solo el borde derecho: el izquierdo está libre (puerta y cristalera) [foto de frente]
         r = _v["ESC_RR"] + 0.2

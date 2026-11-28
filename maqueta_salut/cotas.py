@@ -126,7 +126,7 @@ COTAS = {
  "FAC_B": (0.7, "banda superior a paño del borde (canto de forjado + arranque del peto) sobre la fachada retranqueada", "proporción F73/F01"),
  "LUC_A0": (33.0, "primer lucernario (ángulo absoluto, lado del hotel, donde llega la rampa de la concha)", "usuario 26/11"),
  "LUC_A1": (100.0, "último lucernario (bajo la escalera)", "usuario 26/11: los 6 juntos ocupan 70–80°"),
- "LUC_CR": (4.7, 'lucernarios bajo el cuello: radio a su centro (pegados a la columna, por dentro del arranque de la escalera)', 'usuario 26/11: pequeños, 6, en el camino de la rampa; F78'),
+ "LUC_CR": (3.25, 'lucernarios bajo el cuello: radio a su centro = cara de la columna, pegados a ella y dentro del edificio [usuario 28/11: antes 4,7, caían fuera]', 'usuario 26/11: pequeños, 6, en el camino de la rampa; F78'),
  "LUC_CL": (1.0, 'lucernarios del cuello: lado de la base', 'usuario 26/11: pequeños (≈ opción A)'),
  "LUC_CH": (0.9, 'lucernarios del cuello: altura', 'proporción de F78'),
  "ESC_NU": (0.45, "núcleo bajo la escalera: fracción del ancho de la cuña", "foto de frente (pie): pilar de hormigón bajo la losa blanca"),

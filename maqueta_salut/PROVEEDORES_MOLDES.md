@@ -66,3 +66,15 @@ Ideas que abaratan, de más a menos probable que funcione. Los precios no los co
 
 ## Siguiente consulta a los de correo que no han contestado
 moldesilicona.com, Modelarte, Milab3D y Flossy Candle recibieron la petición el 25/11 y un seguimiento el 27/11. No les he escrito una tercera vez el mismo día. Si no contestan en 48 h, se les envía la versión con las dos piezas.
+
+## Más proveedores (búsqueda del 27/11)
+No he encontrado ninguna empresa española que anuncie moldes de silicona a medida para maquetas de arquitectura. Lo que sí hay, **sin precios publicados** (se piden por presupuesto):
+- **Impresión 3D en resina (SLA) del máster**, para la vía más barata (el molde de silicona lo haces tú):
+  - Additium3D y Aitiip (España): trabajan con SLA. No he podido leer sus webs desde aquí, así que **no tengo su correo de contacto**: hay que sacarlo de su web.
+  - Protolabs, Hubs, 3DEXPERIENCE Make y Craftcloud: presupuesto online inmediato subiendo el STL. Cada pieza (A y B) se cotiza por separado. Se hace desde su web con tu cuenta.
+  - El CSIC describe una impresora SLA con volumen máximo de 335 × 200 × 300 mm: la pieza A (142 × 190 × 150 mm) cabe.
+- **Fiverr**: hay un vendedor de moldes de silicona a medida con pared impresa de soporte. Una reseña de un cliente español avisa de que le llegó algo distinto de lo pedido: conviene fijar medidas y pedir una foto del máster antes de pagar.
+- **Modelfusa (Manresa)**: moldes industriales de inyección y de hormigón. Probablemente demasiado grande para una pieza única.
+- Para la impresión, preguntar si el precio incluye lavado y poscurado, y la resolución (25–50 µm es lo normal para un máster).
+
+Qué falta: el ordenador no se ha reconectado (no he podido pegar nada en Etsy) y las webs de los proveedores nuevos no se pueden leer desde esta sesión.

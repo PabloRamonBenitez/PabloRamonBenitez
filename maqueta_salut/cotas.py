@@ -178,7 +178,7 @@ COTAS = {
  "D_HOTF": (0.0, "de C al arranque recto de la rampa (DERIVADA: la esquina curva ocupa este tramo)", "geometría de la curva"),
  "RET":    (1.5,  "lo que asoma la columna delante de la planta primera", "F09/F18"),
  "RETR":   (2.5,  "retranqueo de la planta baja bajo la planta primera", "F09, F14, F47"),
- "L_C": (23.85, "ala corta: KC → medianera; X (medianera → arranque del chaflán) = 22,75", "DERIVADA de la triangulación del usuario: A–B 7,3 · A–C 16,66 · A–D 106,69 exactas; D–C 93,8 frente a 95,17 (1,4 %, dentro del 1,5 % admitido por el usuario). Antes 23,4 (X 22,29, valor antiguo)"),
+ "L_C": (18.87, "ala corta: KC → medianera; X (medianera → arranque del chaflán) = 17,76", "COMPROBADA CON FOTOS 28/11 (usuario: «X demasiado larga»): F09 y F15 (frontales al chaflán, la banda del restaurante coincide ±0,4 m) sitúan el extremo del bloque alto a 9,5 / 9,3 m de la columna → X 16,8 / 18,7, media 17,8; satélite A→barril 19,08 corregido de la inclinación (15,5–17,8) → coherente (modelo 15,8). Antes 23,85 (X 22,75), deducida forzando A–D = 106,69 con D mal puesto en W_EXT; A–D y D–C del satélite quedan ~2 m cortos: revisar el largo del ala larga (L_L)"),
  "W_C": (12.74, "fondo del ala corta (igual que el ala larga)", "DECIDIDO 26/11 (usuario, duda 6): H2 = ancho del ala larga; ninguna foto lo mide; H1 haría volar el bloque alto sobre el patio"),
  "L_LAD":  (5.0,  "largo de la caja de ladrillo", "F01"),
 }

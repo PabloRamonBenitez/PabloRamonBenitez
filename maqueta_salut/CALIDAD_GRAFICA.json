@@ -823,5 +823,56 @@
  ],
  "ESQUEMA_DONDE_ESTA_CADA_COSA.png": [],
  "ESTADO_MOLDES_GRAFICO.png": [],
- "PLAN_COMUNICACIONES.png": []
+ "PLAN_COMUNICACIONES.png": [],
+ "comprobar_x_f09.png": [
+  {
+   "tipo": "fuera de la hoja",
+   "texto": "A",
+   "x_mm": 74,
+   "y_mm": 181,
+   "pagina": 1
+  },
+  {
+   "tipo": "fuera de la hoja",
+   "texto": "a",
+   "x_mm": 87,
+   "y_mm": 181,
+   "pagina": 1
+  },
+  {
+   "tipo": "fuera de la hoja",
+   "texto": "T'",
+   "x_mm": 202,
+   "y_mm": 181,
+   "pagina": 1
+  },
+  {
+   "tipo": "fuera de la hoja",
+   "texto": "b",
+   "x_mm": 245,
+   "y_mm": 181,
+   "pagina": 1
+  },
+  {
+   "tipo": "fuera de la hoja",
+   "texto": "C",
+   "x_mm": 246,
+   "y_mm": 192,
+   "pagina": 1
+  },
+  {
+   "tipo": "fuera de la hoja",
+   "texto": "1",
+   "x_mm": 246,
+   "y_mm": 203,
+   "pagina": 1
+  },
+  {
+   "tipo": "fuera de la hoja",
+   "texto": "2",
+   "x_mm": 702,
+   "y_mm": 181,
+   "pagina": 1
+  }
+ ]
 }

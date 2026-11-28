@@ -10,6 +10,7 @@
 | `SALUT_planos_A3_presentacion.pdf` | 0 | 2 | 0 | 0 | 0 | 0 | 2 |
 | `SALUT_planos_A4.pdf` | 0 | 2 | 0 | 0 | 0 | 0 | 2 |
 | `SALUT_planos_definitivos.pdf` | 2 | 1 | 0 | 0 | 0 | 48 | 51 |
+| `comprobar_x_f09.png` | 0 | 0 | 0 | 0 | 0 | 7 | 7 |
 | `lam_01.png` | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | `lam_02.png` | 0 | 0 | 0 | 0 | 0 | 3 | 3 |
 | `lam_03.png` | 0 | 0 | 0 | 0 | 0 | 3 | 3 |

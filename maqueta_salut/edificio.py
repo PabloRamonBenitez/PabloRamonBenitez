@@ -303,17 +303,17 @@ def base():
     Y_ARC = y0 + _v["U_ARC"] * (Y_CUNA - y0)
     def zr(yy):
         u = min(max((yy - y0) / LR, 0.0), 1.0)
-        return max(0.05, _v["Z_CON"] * (1 - u ** _v["RAMPA_P"]))          # perfil P2 convexo [usuario 26/11, Booking, F24]
+        return max(0.05, _v["Z_CON"] * (1 - u))                            # rampa RECTA: pendiente constante por donde suben los coches [usuario 28/11]
     def zs(yy):         # intradós del arco bajo la rampa junto al hotel (paso en planta baja) [F47, F71, F76]
         if yy >= Y_ARC: return 0.0
         u = (yy - y0) / (Y_ARC - y0); ud = _v["ARC_D"]                 # horizontal hasta ARC_D y curva al suelo [G3, usuario]
         w = 0.0 if u <= ud else (u - ud) / (1 - ud)
-        return max(0.0, min(_v["Z_ARC"] * math.sqrt(max(0.0, 1 - w ** 2)), zr(yy) - 0.6))
+        return max(0.0, min(_v["Z_ARC"] * (1 - w), zr(yy) - 0.6))          # intradós recto (antes curvo): la rampa no tiene línea curva [usuario 28/11]
     def f(v):
         x, y, z = v
         yy = y0 + min(max(y, 0.0), 1.0) * LR
         lo, hi = zs(yy), zr(yy)
-        xi = W_P - _v["FAC_R"] - 0.02                    # la rampa apoya en la fachada de ventanas retranqueada (sin rendija)
+        xi = W_P - _v["FAC_R"] - 0.3                     # la rampa entra 0,3 en la fachada de ventanas retranqueada: unida al edificio, sin rendija [usuario 28/11]
         return (xi + x * (W_EXT - xi), yy, lo + z * (hi - lo))
     rampa = Manifold.cube((1, 1, 1)).refine(60).warp(f)
     yp = y0                                                                       # el peto de la rampa sigue al de la curva
@@ -374,7 +374,7 @@ def base():
     # puertas del hotel en planta baja junto a la columna [usuario, F18]
     for hh in __import__("ventanas").catalogo():
         if hh["grupo"] in ("hotel puertas PB", "bloque alto posterior", "cristalera PB concha", "chaflán PB cristalera", "ala corta garaje"):
-            if MOLDE and hh["grupo"] == "chaflán PB cristalera": continue          # molde: vidrio a 0,12 no se cuela
+            if hh["grupo"] == "chaflán PB cristalera": continue                    # cristalera a paño que hace esquina: sin hueco, ni en molde ni en detalle [usuario 28/11]
             a = math.degrees(math.atan2(hh["n"][1], hh["n"][0]))
             pr_ = {"chaflán PB cristalera": 0.12, "ala corta garaje": _v["GAR_P"]}.get(hh["grupo"], 0.6)   # fondo del hueco hacia dentro
             b = Manifold.cube((pr_ + 0.6, hh["w"], hh["z1"] - hh["z0"])).translate((-pr_, -hh["w"] / 2, hh["z0"]))
@@ -388,7 +388,7 @@ def base():
     # sin muro de canto ni «tacón» en la esquina; la banda superior vuela FAC_R también en la esquina [usuario 22/11, 23/11, 27/11]
     _y0r = plantas_base()["Q"][1] + _v["D_HOTF"]
     _yrc = _y0r + (Y_CUNA - _y0r) * (1 - (Z_P1 - _v["FAC_B"]) / _v["Z_CON"]) ** (1 / _v["RAMPA_P"])
-    m = m - caja(XF, W_P + 0.05, _yrc, L_L + 0.05, -0.1, Z_P1 - _v["FAC_B"])
+    m = m - (caja(XF, W_P + 0.05, _yrc, L_L + 0.05, -0.1, Z_P1 - _v["FAC_B"]) - rampa)   # el retranqueo corta el muro, no la rampa: sin rendija junto al edificio [usuario 28/11]
     marcos = []
     for h in VT.catalogo():
         if not h["grupo"].startswith("ala larga"): continue
@@ -430,10 +430,19 @@ def base():
         if not hh["grupo"].startswith("chaflán"): continue
         t_ = np.array(hh["t"]); n_ = np.array(hh["n"]); p_ = np.array(hh["p"])
         for s_ in (-1, 1):
-            c_ = p_ + t_ * s_ * (hh["w"] / 2 + 0.075) - n_ * 0.15
+            c_ = p_ + t_ * s_ * (hh["w"] / 2 + 0.075)              # montante sobre el paño: sale 0,15 y entra 0,15 en el muro
             mt = Manifold.cube((0.15, 0.3, hh["z1"] - hh["z0"])).translate((-0.075, -0.15, hh["z0"]))
             mont.append(mt.rotate((0, 0, math.degrees(math.atan2(t_[1], t_[0])))).translate((c_[0], c_[1], 0)))
-    return m if MOLDE else m + Manifold.batch_boolean(mont, OpType.Add)
+    # cristalera PB del chaflán: no hay hueco; la vidriera es una piel de 0,12 a paño de la fachada que hace esquina [usuario 28/11]
+    glas = []
+    if not MOLDE:                                               # molde: el vidrio no se cuela (como antes)
+        for hh in VTc.catalogo():
+            if hh["grupo"] != "chaflán PB cristalera": continue
+            a = math.degrees(math.atan2(hh["n"][1], hh["n"][0]))
+            # de suelo a +3,20: la planta baja llega a +3,10 bajo el canto del hotel (cotas: PB hasta +3,1); solapa 0,1 con el canto
+            g_ = Manifold.cube((0.12, hh["w"] + 0.3, 3.2 + 0.05)).translate((-0.12, -(hh["w"] + 0.3) / 2, -0.05))
+            glas.append(g_.rotate((0, 0, a)).translate((hh["p"][0], hh["p"][1], 0)))
+    return m if MOLDE else m + Manifold.batch_boolean(mont + glas, OpType.Add)
 
 
 

@@ -235,7 +235,7 @@ def plataforma_curva():
     P = orient(SP(poly).buffer(0), 1.0)
     out = []
     for side in (True, False):
-        g = LineString(borde).buffer((GM or 0.25) if side else -(GM or 0.25), single_sided=True).intersection(P)
+        g = LineString(borde).buffer((GM or 0.6) if side else -(GM or 0.6), single_sided=True).intersection(P)   # peto de 0,6 (F78: petos macizos, persona como escala) [usuario 28/11]
         if g.area > 1.0:
             for gm in getattr(g, "geoms", [g]):
                 if gm.geom_type == "Polygon" and gm.area > 0.05:
@@ -250,7 +250,7 @@ def plataforma_curva():
     cen = C_ + n * w / 2
     arco = [tuple(cen - n * (w / 2) * math.cos(t) - d * (w / 2) * math.sin(t)) for t in th]
     lin = _LS(arco + [tuple(C_ + n * w + d * _v["GIRO_L"])])
-    u_ = orient(lin.buffer(0.125, cap_style=2), 1.0)
+    u_ = orient(lin.buffer(0.3, cap_style=2), 1.0)                       # muros de la U de 0,6 (F78) [usuario 28/11]
     out.append(prisma(list(u_.exterior.coords)[:-1], Z_P1 - 0.01, Z_P1 + 1.0))
     return out
 

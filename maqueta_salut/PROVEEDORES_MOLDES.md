@@ -97,3 +97,21 @@ No he mandado correos nuevos. Esto es lo que hay por ruta; **ningún precio es r
 Siguiente paso cuando los modelos y el encaje estén aprobados: pedir presupuesto de las piezas A y B a JLC3DP, Hubs y Craftcloud con el mismo STL, y escribir a los españoles con su correo ya comprobado.
 
 **Bloqueo:** esta sesión no puede abrir las webs de los proveedores (solo tiene salida a paquetes y a herramientas conectadas). Hay creado un entorno personal, `pabloramonbenitez-proveedores`, con esas webs permitidas, pero esta sesión no pasa a él; hay que usarlo en una sesión nueva.
+
+## Ronda 2 (28/11): proveedores encontrados en buscadores
+Solo lo que aparece en resultados de búsqueda. **No he comprobado correos, precios ni envíos a España**: eso lo hace la sesión del entorno `pabloramonbenitez-proveedores`, que sí puede abrir webs.
+
+**Prioridad ahora: imprimir los másters en resina.**
+- **España:** Innovatia3D, Additium3D, Dynamical 3D (resina Carbon), Aitiip (SLA), Pantur (impresión 3D con 30 años de experiencia, acabados de pulido y pintura), CSIC (SLA, más orientado a investigación).
+- **Presupuesto online (subes el STL, precio al instante):** Hubs (Protolabs Network), Protolabs (SLA), JLC3DP (SLA desde 0,30 $), Craftcloud (compara proveedores; en una prueba de All3DP fue el más barato en resina estándar, en dólares), 3DEXPERIENCE Make (más de 130 proveedores), Xometry Europe (precio sin IVA, sin envío ni aduanas), Sculpteo, Materialise (Bélgica) y Shapeways (su estado actual hay que comprobarlo).
+- **Búsqueda local en Madrid o Barcelona:** no encontré ningún servicio para particulares. Haría falta buscar FabLabs o makerspaces.
+
+**Silicona, si haces tú el molde.**
+- **FormX** (distribuidor de Smooth-On en España, precios con IVA, carrito de compra). Tiene silicona de platino (Smooth-Sil, Mold Star 20T) y de estaño (Mold Max). Hay que confirmar envíos a Badajoz.
+- **ProSilicones64** (España, silicona técnica): no sé si vende o hace moldes para maquetas.
+
+**Molde hecho por otro.**
+- **Moldtech SL** (Sevilla, según un directorio): moldes tecnológicos para hormigón. Es el más cercano a lo que pides, aunque es industrial. Preguntar si hacen moldes de silicona para piezas pequeñas.
+- **Siocast** (presentó moldes flexibles de silicona en Equiplast 2026): sin datos de contacto en los resultados.
+
+**Pendiente de respuesta:** moldesilicona.com, Modelarte, Milab3D, Flossy Candle y MinghuiLink (correos); PLAybelope, HOUSEOFMOLDS, MoldeSilicona y 3DDeluxeStore (Etsy, a enviar por el usuario). BK Silicone rechazó.

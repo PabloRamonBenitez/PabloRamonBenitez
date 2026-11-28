@@ -388,7 +388,7 @@ def base():
     # sin muro de canto ni «tacón» en la esquina; la banda superior vuela FAC_R también en la esquina [usuario 22/11, 23/11, 27/11]
     _y0r = plantas_base()["Q"][1] + _v["D_HOTF"]
     _yrc = _y0r + (Y_CUNA - _y0r) * (1 - (Z_P1 - _v["FAC_B"]) / _v["Z_CON"]) ** (1 / _v["RAMPA_P"])
-    m = m - (caja(XF, W_P + 0.05, _yrc, L_L + 0.05, -0.1, Z_P1 - _v["FAC_B"]) - rampa)   # el retranqueo corta el muro, no la rampa: sin rendija junto al edificio [usuario 28/11]
+    # sin retranqueo en el extremo del hotel: el muro es recto y las ventanas son hendiduras; el encaje y el voladizo falsos se quitan [usuario 28/11]
     marcos = []
     for h in VT.catalogo():
         if not h["grupo"].startswith("ala larga"): continue
